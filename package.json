@@ -22,7 +22,7 @@
     "build": "npm run clean && tsc -p tsconfig.build.json",
     "build:nextjs": "npm run build --prefix=examples/nextjs",
     "build:examples": "npm run build:nextjs",
-    "dev:nextjs": "npm run dev --prefix=examples/basic-example"
+    "dev:nextjs": "npm run dev --prefix=examples/nextjs"
   },
   "repository": {
     "type": "git",
