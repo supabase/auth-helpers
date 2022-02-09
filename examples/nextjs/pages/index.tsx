@@ -21,7 +21,7 @@ const Home: NextPage = () => {
   return (
     <>
       <button onClick={() => supabase.auth.signOut()}>Sign out</button>
-      <pre>{JSON.stringify(user, null, 2)}</pre>;
+      <pre>{JSON.stringify(user, null, 2)}</pre>
     </>
   );
 };

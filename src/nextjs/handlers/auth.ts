@@ -23,7 +23,7 @@ export default function handleAuth(
       case 'callback':
         return handelCallback(req, res, cookieOptions);
       case 'user':
-        return handleUser(req, res, cookieOptions);
+        return await handleUser(req, res, cookieOptions);
       default:
         res.status(404).end();
     }

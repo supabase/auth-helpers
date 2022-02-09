@@ -61,7 +61,7 @@ export default async function handleUser(
             sameSite: cookieOptions.sameSite
           }))
         );
-        res.status(200).json(user);
+        res.status(200).json(data.user);
       }
     }
     res.status(200).json(user);
