@@ -56,6 +56,15 @@ export const UserProvider = (props: Props) => {
   }, [profileUrl]);
 
   useEffect(() => {
+    async function init() {
+      setIsLoading(true);
+      await checkSession();
+      setIsLoading(false);
+    }
+    init();
+  }, []);
+
+  useEffect(() => {
     const { data: authListener } = supabaseClient.auth.onAuthStateChange(
       async (event, session) => {
         setIsLoading(true);
