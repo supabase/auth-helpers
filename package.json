@@ -1,0 +1,57 @@
+{
+  "name": "supabase-auth-helpers",
+  "version": "0.0.1",
+  "description": "A collection of framework specific Auth utilities for working with Supabase.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "engines": {
+    "node": "^10.13.0 || >=12.0.0"
+  },
+  "scripts": {
+    "clean": "rimraf dist",
+    "pretty": "prettier --write \"src/**/*.{ts,tsx}\" \"src/*.ts\"",
+    "lint": "tsc --noEmit && eslint --fix --ext .ts ./src",
+    "docs": "typedoc --options typedoc.js src",
+    "prepack": "npm run build",
+    "install:nextjs": "npm i --prefix=examples/nextjs --no-package-lock",
+    "install:examples": "npm run install:nextjs",
+    "build": "npm run clean && tsc -p tsconfig.build.json",
+    "build:nextjs": "npm run build --prefix=examples/nextjs",
+    "build:examples": "npm run build:nextjs",
+    "dev:nextjs": "npm run dev --prefix=examples/basic-example"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/supabase-community/supabase-auth-helpers.git"
+  },
+  "keywords": [
+    "Supabase",
+    "Auth",
+    "Nextjs",
+    "Remix"
+  ],
+  "author": "Supabase Community",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/supabase-community/supabase-auth-helpers/issues"
+  },
+  "homepage": "https://github.com/supabase-community/supabase-auth-helpers#readme",
+  "devDependencies": {
+    "@types/node": "^14.14.20",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-import-resolver-typescript": "^2.3.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-prettier": "^3.3.1",
+    "eslint-plugin-react": "^7.22.0",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "prettier": "^2.2.1",
+    "rimraf": "^3.0.2",
+    "typedoc": "^0.22.11",
+    "typescript": "^4.1.3"
+  }
+}
