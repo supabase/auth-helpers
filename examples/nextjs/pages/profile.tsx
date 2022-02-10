@@ -1,6 +1,5 @@
 // pages/profile.js
-import { withAuthRequired } from '@supabase/supabase-auth-helpers/nextjs';
-import { User } from '@supabase/supabase-js';
+import { withAuthRequired, User } from '@supabase/supabase-auth-helpers/nextjs';
 
 export default function Profile({ user }: { user: User }) {
   return (
