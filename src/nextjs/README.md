@@ -27,6 +27,14 @@ This library supports the following tooling versions:
 
 ### Configuration
 
+Set up the fillowing env vars. For local development you can set them in a `.env.local` file. See an example [here](../../examples/nextjs/.env.local.example)).
+
+```bash
+# Find these in your Supabase project settings > API
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+```
+
 ### Basic Setup
 
 - Create an `auth` directory under the `/pages/api/` directory.
@@ -43,7 +51,7 @@ export default handleAuth();
 
 Executing `handleAuth()` creates the following route handlers under the hood that perform different parts of the authentication flow:
 
-- `/api/auth/callback`: Your Identity Provider redirects users to this route after they successfully log in.
+- `/api/auth/callback`: The `UserProvider` forwards the session details here every time `onAuthStateChange` fires on the client side. This is needed to set up the cookies for your application so that SSR works seamlessly.
 
 - `/api/auth/user`: You can fetch user profile information in JSON format.
 
@@ -64,26 +72,4 @@ export default function App({ Component, pageProps }) {
 }
 ```
 
-You can now determine if a user is authenticated by checking that the `user` object returned by the `useUser()` hook is defined. You can also log in or log out your users from the frontend layer of your Next.js application by redirecting them to the appropriate automatically-generated route:
-
-```jsx
-// pages/index.js
-import { useUser } from '@auth0/nextjs-auth0';
-
-export default function Index() {
-  const { user, error, isLoading } = useUser();
-
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>{error.message}</div>;
-
-  if (user) {
-    return (
-      <div>
-        Welcome {user.name}! <a href="/api/auth/logout">Logout</a>
-      </div>
-    );
-  }
-
-  return <a href="/api/auth/login">Login</a>;
-}
-```
+You can now determine if a user is authenticated by checking that the `user` object returned by the `useUser()` hook is defined.
