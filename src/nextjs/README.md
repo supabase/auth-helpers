@@ -60,12 +60,12 @@ Wrap your `pages/_app.js` component with the `UserProvider` component:
 ```jsx
 // pages/_app.js
 import React from 'react';
-import { supabase } from '../utils/initSupabase';
 import { UserProvider } from '@supabase/supabase-auth-helpers/react';
+import { supabaseClient } from '@supabase/supabase-auth-helpers/nextjs';
 
 export default function App({ Component, pageProps }) {
   return (
-    <UserProvider supabaseClient={supabase}>
+    <UserProvider supabaseClient={supabaseClient}>
       <Component {...pageProps} />
     </UserProvider>
   );

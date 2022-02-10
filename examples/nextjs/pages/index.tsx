@@ -1,6 +1,6 @@
 import { useUser, Auth } from '@supabase/supabase-auth-helpers/react';
+import { supabaseClient } from '@supabase/supabase-auth-helpers/nextjs';
 import type { NextPage } from 'next';
-import { supabase } from '../utils/initSupabase';
 
 const Home: NextPage = () => {
   const { user, error } = useUser();
@@ -10,7 +10,7 @@ const Home: NextPage = () => {
       <>
         {error && <p>{error.message}</p>}
         <Auth
-          supabaseClient={supabase}
+          supabaseClient={supabaseClient}
           providers={['google', 'github']}
           socialLayout="horizontal"
           socialButtonSize="xlarge"
@@ -20,7 +20,7 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <button onClick={() => supabase.auth.signOut()}>Sign out</button>
+      <button onClick={() => supabaseClient.auth.signOut()}>Sign out</button>
       <pre>{JSON.stringify(user, null, 2)}</pre>
     </>
   );
