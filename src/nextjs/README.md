@@ -73,3 +73,127 @@ export default function App({ Component, pageProps }) {
 ```
 
 You can now determine if a user is authenticated by checking that the `user` object returned by the `useUser()` hook is defined.
+
+## Client-side data fetching with RLS
+
+For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row-level-security) to work properly when fetching data client-side, you need to make sure to import the `{ supabaseClient }` from `# @supabase/supabase-auth-helpers/nextjs` and only run your query once the user is defined client-side in the `useUser()` hook:
+
+```js
+import { useUser, Auth } from '@supabase/supabase-auth-helpers/react';
+import { supabaseClient } from '@supabase/supabase-auth-helpers/nextjs';
+import { useEffect, useState } from 'react';
+
+const LoginPage = () => {
+  const { user, error } = useUser();
+  const [data, setData] = useState();
+
+  useEffect(() => {
+    async function loadData() {
+      const { data } = await supabaseClient.from('test').select('*');
+      setData(data);
+    }
+    // Only run query once user is logged in.
+    if (user) loadData();
+  }, [user]);
+
+  if (!user)
+    return (
+      <>
+        {error && <p>{error.message}</p>}
+        <Auth
+          supabaseClient={supabaseClient}
+          providers={['google', 'github']}
+          socialLayout="horizontal"
+          socialButtonSize="xlarge"
+        />
+      </>
+    );
+
+  return (
+    <>
+      <button onClick={() => supabaseClient.auth.signOut()}>Sign out</button>
+      <p>user:</p>
+      <pre>{JSON.stringify(user, null, 2)}</pre>
+      <p>client-side data fetching with RLS</p>
+      <pre>{JSON.stringify(data, null, 2)}</pre>
+    </>
+  );
+};
+
+export default LoginPage;
+```
+
+### Server-side rendering (SSR) - withAuthRequired
+
+If you wrap your `getServerSideProps` with `withAuthRequired` your props object will be augmented with the user object.
+
+```js
+// pages/profile.js
+import { withAuthRequired } from '@supabase/supabase-auth-helpers/nextjs';
+
+export default function Profile({ user }) {
+  return <div>Hello {user.name}</div>;
+}
+
+export const getServerSideProps = withAuthRequired({ redirectTo: '/login' });
+```
+
+If there is no authenticated user, they will be redirect to your home page, unless you specify the `redirectTo` option.
+
+You can pass in your own `getServerSideProps` method, the props returned from this will be merged with the
+user props. You can also access the user session data by calling `getUser` inside of this method, eg:
+
+```js
+// pages/protected-page.js
+import { withAuthRequired, getUser } from '@supabase/supabase-auth-helpers/nextjs';
+
+export default function ProtectedPage({ user, customProp }) {
+  return <div>Protected content</div>;
+}
+
+export const getServerSideProps = withAuthRequired({
+  redirectTo: '/foo',
+  async getServerSideProps(ctx) {
+    // Access the user object
+    const { user, accessToken } = await getUser(ctx);
+    return { props: { email: user!.email } };
+  }
+});
+```
+
+### Server-side data fetching with RLS
+
+For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row-level-security) to work in a server environment, you need to inject the request context into the supabase client:
+
+```js
+import {
+  User,
+  withAuthRequired,
+  supabaseServerClient
+} from '@supabase/supabase-auth-helpers/nextjs';
+
+export default function ProtectedPage({
+  user,
+  data
+}: {
+  user: User,
+  data: any
+}) {
+  return (
+    <>
+      <div>Protected content for {user.email}</div>
+      <pre>{JSON.stringify(data, null, 2)}</pre>
+      <pre>{JSON.stringify(user, null, 2)}</pre>
+    </>
+  );
+}
+
+export const getServerSideProps = withAuthRequired({
+  redirectTo: '/',
+  async getServerSideProps(ctx) {
+    // Run queries with RLS on the server
+    const { data } = await supabaseServerClient(ctx).from('test').select('*');
+    return { props: { data } };
+  }
+});
+```

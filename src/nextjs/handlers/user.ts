@@ -61,12 +61,16 @@ export default async function handleUser(
             sameSite: cookieOptions.sameSite
           }))
         );
-        res.status(200).json(data.user);
+        res
+          .status(200)
+          .json({ user: data.user, accessToken: data.access_token });
       }
     }
-    res.status(200).json(user);
+    res.status(200).json({ user: user, accessToken: access_token });
   } catch (e) {
     const error = e as ApiError;
-    res.status(400).json({ error: error.message });
+    res
+      .status(400)
+      .json({ user: null, accessToken: null, error: error.message });
   }
 }

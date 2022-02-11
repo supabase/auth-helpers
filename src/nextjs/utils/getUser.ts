@@ -18,7 +18,7 @@ export default async function getUser(
     path: '/',
     sameSite: 'lax'
   }
-): Promise<User | null> {
+): Promise<{ user: User | null; accessToken: string | null }> {
   try {
     if (
       !process.env.NEXT_PUBLIC_SUPABASE_URL ||
@@ -74,11 +74,11 @@ export default async function getUser(
             sameSite: cookieOptions.sameSite
           }))
         );
-        return data.user!;
+        return { user: data.user!, accessToken: data.access_token };
       }
     }
-    return user!;
+    return { user: user!, accessToken: access_token };
   } catch (e) {
-    return null;
+    return { user: null, accessToken: null };
   }
 }

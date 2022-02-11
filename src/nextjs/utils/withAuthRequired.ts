@@ -1,5 +1,4 @@
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
-import { User } from '@supabase/supabase-js';
 import getUser from './getUser';
 
 /**
@@ -33,8 +32,8 @@ import getUser from './getUser';
  * export const getServerSideProps = withAuthRequired({
  *   redirectTo: '/foo',
  *   async getServerSideProps(ctx) {
- *     // access the user object
- *     const user = await getUser(ctx);
+ *     // Access the user object
+ *     const { user, accessToken } = await getUser(ctx);
  *     return { props: { email: user!.email } };
  *   }
  * });
@@ -50,7 +49,7 @@ export default function withAuthRequired(
 ) {
   const { getServerSideProps, redirectTo = '/' } = options;
   return async (context: GetServerSidePropsContext) => {
-    const user: User | null = await getUser(context);
+    const { user } = await getUser(context);
 
     if (!user) {
       return {

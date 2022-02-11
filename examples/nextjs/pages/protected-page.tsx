@@ -2,31 +2,22 @@
 import {
   User,
   withAuthRequired,
-  getUser,
-  supabaseClient,
   supabaseServerClient
 } from '@supabase/supabase-auth-helpers/nextjs';
-import { useEffect } from 'react';
 
 export default function ProtectedPage({
   user,
-  email,
   data
 }: {
   user: User;
-  email: string;
   data: any;
 }) {
-  useEffect(() => {
-    async function init() {
-      await supabaseClient.from('test').select('*');
-    }
-    init();
-  }, []);
   return (
     <>
-      <div>Protected content for {email}</div>
+      <div>Protected content for {user.email}</div>
+      <p>server-side fetched data with RLS:</p>
       <pre>{JSON.stringify(data, null, 2)}</pre>
+      <p>user:</p>
       <pre>{JSON.stringify(user, null, 2)}</pre>
     </>
   );
@@ -35,10 +26,8 @@ export default function ProtectedPage({
 export const getServerSideProps = withAuthRequired({
   redirectTo: '/',
   async getServerSideProps(ctx) {
-    // access the user object
-    const user = await getUser(ctx);
     // Run queries with RLS on the server
     const { data } = await supabaseServerClient(ctx).from('test').select('*');
-    return { props: { email: user!.email, data } };
+    return { props: { data } };
   }
 });
