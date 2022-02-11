@@ -8,20 +8,22 @@ import React, {
 import { SupabaseClient, User } from '@supabase/supabase-js';
 
 export type UserState = {
-  user?: User;
+  user: User | null;
   error?: Error;
   isLoading: boolean;
 };
 
 const UserContext = createContext<UserState>({
-  user: undefined,
+  user: null,
   isLoading: false
 });
 
-type UserFetcher = (url: string) => Promise<User | undefined>;
+type UserFetcher = (
+  url: string
+) => Promise<{ user: User | null; accessToken: string | null }>;
 const userFetcher: UserFetcher = async (url) => {
   const response = await fetch(url);
-  return response.ok ? response.json() : undefined;
+  return response.ok ? response.json() : { user: null, accessToken: null };
 };
 
 export interface Props {
@@ -38,16 +40,17 @@ export const UserProvider = (props: Props) => {
     supabaseClient,
     callbackUrl = '/api/auth/callback',
     profileUrl = '/api/auth/user',
-    user: initialUser,
+    user: initialUser = null,
     fetcher = userFetcher
   } = props;
-  const [user, setUser] = useState<User | undefined>(initialUser);
+  const [user, setUser] = useState<User | null>(initialUser);
   const [isLoading, setIsLoading] = useState<boolean>(!initialUser);
   const [error, setError] = useState<Error>();
 
   const checkSession = useCallback(async (): Promise<void> => {
     try {
-      const user = await fetcher(profileUrl);
+      const { user, accessToken } = await fetcher(profileUrl);
+      if (accessToken) supabaseClient.auth.setAuth(accessToken);
       setUser(user);
     } catch (_e) {
       const error = new Error(`The request to ${profileUrl} failed`);
