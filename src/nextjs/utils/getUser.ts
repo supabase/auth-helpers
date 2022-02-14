@@ -6,18 +6,13 @@ import {
 import { User, createClient } from '@supabase/supabase-js';
 import { CookieOptions } from '../types';
 import { setCookies } from '../../shared/utils/cookies';
+import { COOKIE_OPTIONS } from './constants';
 
 export default async function getUser(
   context:
     | GetServerSidePropsContext
     | { req: NextApiRequest; res: NextApiResponse },
-  cookieOptions: CookieOptions = {
-    name: 'sb',
-    lifetime: 60 * 60 * 8,
-    domain: '',
-    path: '/',
-    sameSite: 'lax'
-  }
+  cookieOptions: CookieOptions = COOKIE_OPTIONS
 ): Promise<{ user: User | null; accessToken: string | null }> {
   try {
     if (
