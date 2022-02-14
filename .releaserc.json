@@ -1,0 +1,23 @@
+{
+  "plugins": [
+    [
+      "semantic-release-plugin-update-version-in-files",
+      {
+        "files": ["src/version.ts", "dist/version.js", "dist/version.d.ts"],
+        "placeholder": "0.0.0"
+      }
+    ],
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    [
+      "@semantic-release/github",
+      {
+        "successComment": false,
+        "releasedLabels": false,
+        "failTitle": false,
+        "addReleases": false
+      }
+    ],
+    "@semantic-release/npm"
+  ]
+}
