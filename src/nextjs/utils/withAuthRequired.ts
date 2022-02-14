@@ -94,7 +94,8 @@ export default function withAuthRequired(
         identities: [],
         created_at: null,
         updated_at: null,
-        note: 'This user payload is retrieved from the cached JWT and might be stale. If you need up to date user data, please call the `getUser` method in a server-side context!'
+        'supabase-auth-helpers-note':
+          'This user payload is retrieved from the cached JWT and might be stale. If you need up to date user data, please call the `getUser` method in a server-side context!'
       };
       const mergedUser = { ...user, ...jwtUser };
       user = mergedUser;
