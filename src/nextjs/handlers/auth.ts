@@ -2,15 +2,10 @@ import { CookieOptions } from '../types';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import handelCallback from './callback';
 import handleUser from './user';
+import { COOKIE_OPTIONS } from '../utils/constants';
 
 export default function handleAuth(
-  cookieOptions: CookieOptions = {
-    name: 'sb',
-    lifetime: 60 * 60 * 8,
-    domain: '',
-    path: '/',
-    sameSite: 'lax'
-  }
+  cookieOptions: CookieOptions = COOKIE_OPTIONS
 ) {
   return async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
     let {
