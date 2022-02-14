@@ -2,13 +2,6 @@
 
 This submodule provides convenience helpers for implementing user authentication in Next.js applications.
 
-## Table of Contents
-
-- [Installation](#installation)
-- [Getting Started](#getting-started)
-  - [Configuration](#configuration)
-  - [Basic Setup](#basic-setup)
-
 ## Installation
 
 Using [npm](https://npmjs.org):
