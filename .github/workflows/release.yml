@@ -28,7 +28,7 @@ jobs:
           npm run build
 
       - name: Create a release
-        - run: |
+        run: |
           cd dist
           npm ci
           npm run publish
