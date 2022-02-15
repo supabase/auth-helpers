@@ -28,8 +28,6 @@
     "install:nextjs": "npm i --prefix=examples/nextjs --no-package-lock",
     "install:examples": "npm run install:nextjs",
     "build": "npm run clean && tsc -p tsconfig.build.json",
-    "semantic-release": "semantic-release",
-    "publish": "cd dist && npm run semantic-release",
     "build:nextjs": "npm run build --prefix=examples/nextjs",
     "build:examples": "npm run build:nextjs",
     "dev:nextjs": "npm run dev --prefix=examples/nextjs"
@@ -66,8 +64,6 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "rimraf": "^3.0.2",
-    "semantic-release": "^19.0.2",
-    "semantic-release-plugin-update-version-in-files": "^1.1.0",
     "typedoc": "^0.22.11",
     "typescript": "^4.1.3"
   },

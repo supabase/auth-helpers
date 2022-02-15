@@ -1,0 +1,42 @@
+{
+  "name": "@supabase/supabase-auth-helpers",
+  "version": "0.0.0",
+  "description": "A collection of framework specific Auth utilities for working with Supabase.",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "release": {
+    "branches": [
+      "main"
+    ]
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "publish": "semantic-release"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/supabase-community/supabase-auth-helpers.git"
+  },
+  "keywords": [
+    "Supabase",
+    "Auth",
+    "Nextjs",
+    "Remix"
+  ],
+  "author": "Supabase Community",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/supabase-community/supabase-auth-helpers/issues"
+  },
+  "homepage": "https://github.com/supabase-community/supabase-auth-helpers#readme",
+  "devDependencies": {
+    "semantic-release": "^19.0.2",
+    "semantic-release-plugin-update-version-in-files": "^1.1.0"
+  }
+}
