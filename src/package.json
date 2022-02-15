@@ -4,10 +4,6 @@
   "description": "A collection of framework specific Auth utilities for working with Supabase.",
   "main": "index.js",
   "types": "index.d.ts",
-  "files": [
-    "dist",
-    "src"
-  ],
   "release": {
     "branches": [
       "main"
