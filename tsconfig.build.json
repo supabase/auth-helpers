@@ -4,5 +4,10 @@
     "rootDir": "./src",
     "incremental": false
   },
-  "include": ["./src", "./src/.releaserc.json", "./src/package.json"]
+  "include": [
+    "./src",
+    "./src/.releaserc.json",
+    "./src/package.json",
+    "./src/package-lock.json"
+  ]
 }
