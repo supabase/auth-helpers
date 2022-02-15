@@ -34,5 +34,9 @@
   "devDependencies": {
     "semantic-release": "^19.0.2",
     "semantic-release-plugin-update-version-in-files": "^1.1.0"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^1.30.0",
+    "@supabase/ui": "^0.36.3"
   }
 }

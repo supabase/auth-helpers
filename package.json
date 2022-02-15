@@ -11,6 +11,7 @@
     "lint": "tsc --noEmit && eslint --fix --ext .ts ./src",
     "docs": "typedoc --options typedoc.js src",
     "prepack": "npm run build",
+    "postinstall": "npm i --prefix=src",
     "install:nextjs": "npm i --prefix=examples/nextjs --no-package-lock",
     "install:examples": "npm run install:nextjs",
     "build": "npm run clean && tsc -p tsconfig.build.json",
