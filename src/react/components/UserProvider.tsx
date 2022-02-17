@@ -10,7 +10,7 @@ import { SupabaseClient, User } from '@supabase/supabase-js';
 
 export type UserState = {
   user: User | null;
-  data: any | null;
+  onUserLoadedData: any | null;
   accessToken: string | null;
   error?: Error;
   isLoading: boolean;
@@ -18,7 +18,7 @@ export type UserState = {
 
 const UserContext = createContext<UserState>({
   user: null,
-  data: null,
+  onUserLoadedData: null,
   accessToken: null,
   isLoading: true
 });
@@ -130,7 +130,7 @@ export const UserProvider = (props: Props) => {
   const value = {
     isLoading,
     user,
-    data: onUserLoadedData,
+    onUserLoadedData,
     accessToken,
     error
   };

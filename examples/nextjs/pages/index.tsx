@@ -4,7 +4,7 @@ import type { NextPage } from 'next';
 import Link from 'next/link';
 
 const LoginPage: NextPage = () => {
-  const { user, data, error } = useUser();
+  const { user, onUserLoadedData, error } = useUser();
 
   if (!user)
     return (
@@ -30,7 +30,7 @@ const LoginPage: NextPage = () => {
       <p>user:</p>
       <pre>{JSON.stringify(user, null, 2)}</pre>
       <p>client-side data fetching with RLS</p>
-      <pre>{JSON.stringify(data, null, 2)}</pre>
+      <pre>{JSON.stringify(onUserLoadedData, null, 2)}</pre>
     </>
   );
 };
