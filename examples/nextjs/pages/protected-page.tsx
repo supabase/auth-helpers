@@ -4,6 +4,7 @@ import {
   withAuthRequired,
   supabaseServerClient
 } from '@supabase/supabase-auth-helpers/nextjs';
+import Link from 'next/link';
 
 export default function ProtectedPage({
   user,
@@ -14,6 +15,10 @@ export default function ProtectedPage({
 }) {
   return (
     <>
+      <p>
+        [<Link href="/">Home</Link>] | [
+        <Link href="/profile">withAuthRequired</Link>]
+      </p>
       <div>Protected content for {user.email}</div>
       <p>server-side fetched data with RLS:</p>
       <pre>{JSON.stringify(data, null, 2)}</pre>

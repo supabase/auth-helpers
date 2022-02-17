@@ -5,17 +5,22 @@ import React, {
   useContext,
   useCallback
 } from 'react';
+import { useRouter } from 'next/router';
 import { SupabaseClient, User } from '@supabase/supabase-js';
 
 export type UserState = {
   user: User | null;
+  onUserLoadedData: any | null;
+  accessToken: string | null;
   error?: Error;
   isLoading: boolean;
 };
 
 const UserContext = createContext<UserState>({
   user: null,
-  isLoading: false
+  onUserLoadedData: null,
+  accessToken: null,
+  isLoading: true
 });
 
 type UserFetcher = (
@@ -32,6 +37,7 @@ export interface Props {
   profileUrl?: string;
   user?: User;
   fetcher?: UserFetcher;
+  onUserLoaded?: (supabaseClient: SupabaseClient) => Promise<any>;
   [propName: string]: any;
 }
 
@@ -41,16 +47,23 @@ export const UserProvider = (props: Props) => {
     callbackUrl = '/api/auth/callback',
     profileUrl = '/api/auth/user',
     user: initialUser = null,
-    fetcher = userFetcher
+    fetcher = userFetcher,
+    onUserLoaded
   } = props;
   const [user, setUser] = useState<User | null>(initialUser);
+  const [accessToken, setAccessToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(!initialUser);
   const [error, setError] = useState<Error>();
+  const [onUserLoadedData, setOnUserLoadedData] = useState<any>(null);
+  const { pathname } = useRouter();
 
   const checkSession = useCallback(async (): Promise<void> => {
     try {
       const { user, accessToken } = await fetcher(profileUrl);
-      if (accessToken) supabaseClient.auth.setAuth(accessToken);
+      if (accessToken) {
+        supabaseClient.auth.setAuth(accessToken);
+        setAccessToken(accessToken);
+      }
       setUser(user);
     } catch (_e) {
       const error = new Error(`The request to ${profileUrl} failed`);
@@ -58,14 +71,32 @@ export const UserProvider = (props: Props) => {
     }
   }, [profileUrl]);
 
+  // Get cached user on every page render.
   useEffect(() => {
-    async function init() {
+    console.log(pathname);
+    async function runOnPathChange() {
       setIsLoading(true);
       await checkSession();
       setIsLoading(false);
     }
-    init();
-  }, []);
+    runOnPathChange();
+  }, [pathname]);
+
+  // Only load user Data when the access token changes.
+  useEffect(() => {
+    async function loadUserData() {
+      console.log(onUserLoaded, !onUserLoadedData, onUserLoadedData);
+      if (onUserLoaded && !onUserLoadedData) {
+        try {
+          const response = await onUserLoaded(supabaseClient);
+          setOnUserLoadedData(response);
+        } catch (error) {
+          console.log('Error in your `onUserLoaded` method:', error);
+        }
+      }
+    }
+    if (user) loadUserData();
+  }, [user, accessToken]);
 
   useEffect(() => {
     const { data: authListener } = supabaseClient.auth.onAuthStateChange(
@@ -99,6 +130,8 @@ export const UserProvider = (props: Props) => {
   const value = {
     isLoading,
     user,
+    onUserLoadedData,
+    accessToken,
     error
   };
   return <UserContext.Provider value={value} {...props} />;
