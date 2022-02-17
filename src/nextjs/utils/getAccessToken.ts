@@ -3,6 +3,8 @@ import {
   NextApiRequest,
   NextApiResponse
 } from 'next';
+import getUser from './getUser';
+import { jwtDecoder } from '../../shared/utils/jwt';
 import { CookieOptions } from '../types';
 
 export default async function getAccessToken(
@@ -23,5 +25,17 @@ export default async function getAccessToken(
     throw new Error('No cookie found!');
   }
 
-  return access_token;
+  // Get payload from access token.
+  const jwtUser = jwtDecoder(access_token);
+  if (!jwtUser?.exp) {
+    throw new Error('Not able to parse JWT payload!');
+  }
+  const timeNow = Math.round(Date.now() / 1000);
+  if (jwtUser.exp < timeNow) {
+    // JWT is expired, let's refresh from Gotrue
+    const { accessToken } = await getUser(context, cookieOptions);
+    return accessToken;
+  } else {
+    return access_token;
+  }
 }
