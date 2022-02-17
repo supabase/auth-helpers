@@ -1,20 +1,10 @@
 import { useUser, Auth } from '@supabase/supabase-auth-helpers/react';
 import { supabaseClient } from '@supabase/supabase-auth-helpers/nextjs';
 import type { NextPage } from 'next';
-import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
 const LoginPage: NextPage = () => {
-  const { user, error } = useUser();
-  const [data, setData] = useState<any>({});
-
-  useEffect(() => {
-    async function loadData() {
-      const { data } = await supabaseClient.from('test').select('*');
-      setData(data);
-    }
-    // Only run query once user is logged in.
-    if (user) loadData();
-  }, [user]);
+  const { user, data, error } = useUser();
 
   if (!user)
     return (
@@ -32,6 +22,10 @@ const LoginPage: NextPage = () => {
 
   return (
     <>
+      <p>
+        [<Link href="/profile">withAuthRequired</Link>] | [
+        <Link href="/protected-page">supabaseServerClient</Link>]
+      </p>
       <button onClick={() => supabaseClient.auth.signOut()}>Sign out</button>
       <p>user:</p>
       <pre>{JSON.stringify(user, null, 2)}</pre>
