@@ -1,3 +1,5 @@
+import { RequestAdapter, ResponseAdapter } from '../adapters/types';
+
 type Cookie = {
   name: string;
   value: string;
@@ -113,14 +115,14 @@ function serialize(
 /**
  * Based on the environment and the request we know if a secure cookie can be set.
  */
-function isSecureEnvironment(req: any) {
-  if (!req || !req.headers || !req.headers.host) {
+function isSecureEnvironment(req: RequestAdapter) {
+  if (!req || !req.getHeader('host')) {
     throw new Error('The "host" request header is not available');
   }
 
+  const headerHost = req.getHeader('host') as string;
   const host =
-    (req.headers.host.indexOf(':') > -1 && req.headers.host.split(':')[0]) ||
-    req.headers.host;
+    (headerHost.indexOf(':') > -1 && headerHost.split(':')[0]) || headerHost;
   if (
     ['localhost', '127.0.0.1'].indexOf(host) > -1 ||
     host.endsWith('.local')
@@ -150,8 +152,8 @@ function serializeCookie(cookie: Cookie, secure: boolean) {
  * Get Cookie Header strings.
  */
 export function getCookieString(
-  req: any,
-  res: any,
+  req: RequestAdapter,
+  res: ResponseAdapter,
   cookies: Array<Cookie>
 ): string[] {
   const strCookies = cookies.map((c) =>
@@ -171,18 +173,30 @@ export function getCookieString(
 /**
  * Set one or more cookies.
  */
-export function setCookies(req: any, res: any, cookies: Array<Cookie>) {
+export function setCookies(
+  req: RequestAdapter,
+  res: ResponseAdapter,
+  cookies: Array<Cookie>
+) {
   res.setHeader('Set-Cookie', getCookieString(req, res, cookies));
 }
 
 /**
  * Set one or more cookies.
  */
-export function setCookie(req: any, res: any, cookie: Cookie) {
+export function setCookie(
+  req: RequestAdapter,
+  res: ResponseAdapter,
+  cookie: Cookie
+) {
   setCookies(req, res, [cookie]);
 }
 
-export function deleteCookie(req: any, res: any, name: string) {
+export function deleteCookie(
+  req: RequestAdapter,
+  res: ResponseAdapter,
+  name: string
+) {
   setCookie(req, res, {
     name,
     value: '',

@@ -8,6 +8,10 @@ import { CookieOptions } from '../types';
 import { setCookies } from '../../shared/utils/cookies';
 import { COOKIE_OPTIONS } from './constants';
 import { jwtDecoder } from '../../shared/utils/jwt';
+import {
+  NextRequestAdapter,
+  NextResponseAdapter
+} from '../../shared/adapters/NextAdapter';
 
 export default async function getUser(
   context:
@@ -55,8 +59,8 @@ export default async function getUser(
         throw error;
       } else {
         setCookies(
-          context.req,
-          context.res,
+          new NextRequestAdapter(context.req),
+          new NextResponseAdapter(context.res),
           [
             { key: 'access-token', value: data!.access_token },
             { key: 'refresh-token', value: data!.refresh_token! }
