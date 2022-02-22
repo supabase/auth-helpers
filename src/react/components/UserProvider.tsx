@@ -10,18 +10,12 @@ import { SupabaseClient, User } from '@supabase/supabase-js';
 
 export type UserState = {
   user: User | null;
-  onUserLoadedData: any | null;
   accessToken: string | null;
   error?: Error;
   isLoading: boolean;
 };
 
-const UserContext = createContext<UserState>({
-  user: null,
-  onUserLoadedData: null,
-  accessToken: null,
-  isLoading: true
-});
+const UserContext = createContext<UserState | undefined>(undefined);
 
 type UserFetcher = (
   url: string
@@ -37,7 +31,6 @@ export interface Props {
   profileUrl?: string;
   user?: User;
   fetcher?: UserFetcher;
-  onUserLoaded?: (supabaseClient: SupabaseClient) => Promise<any>;
   [propName: string]: any;
 }
 
@@ -47,14 +40,12 @@ export const UserProvider = (props: Props) => {
     callbackUrl = '/api/auth/callback',
     profileUrl = '/api/auth/user',
     user: initialUser = null,
-    fetcher = userFetcher,
-    onUserLoaded
+    fetcher = userFetcher
   } = props;
   const [user, setUser] = useState<User | null>(initialUser);
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(!initialUser);
   const [error, setError] = useState<Error>();
-  const [onUserLoadedData, setOnUserLoadedData] = useState<any>(null);
   const { pathname } = useRouter();
 
   const checkSession = useCallback(async (): Promise<void> => {
@@ -65,6 +56,7 @@ export const UserProvider = (props: Props) => {
         setAccessToken(accessToken);
       }
       setUser(user);
+      if (!user) setIsLoading(false);
     } catch (_e) {
       const error = new Error(`The request to ${profileUrl} failed`);
       setError(error);
@@ -76,32 +68,10 @@ export const UserProvider = (props: Props) => {
     async function runOnPathChange() {
       setIsLoading(true);
       await checkSession();
-      if (onUserLoadedData || !onUserLoaded) {
-        setIsLoading(false);
-      }
+      setIsLoading(false);
     }
     runOnPathChange();
   }, [pathname]);
-
-  // Only load user Data the first time after user is loaded.
-  useEffect(() => {
-    async function loadUserData() {
-      if (onUserLoaded && !onUserLoadedData) {
-        try {
-          const response = await onUserLoaded(supabaseClient);
-          setOnUserLoadedData(response);
-          setIsLoading(false);
-        } catch (error) {
-          console.log('Error in your `onUserLoaded` method:', error);
-        }
-      }
-    }
-    if (user) {
-      loadUserData();
-    } else {
-      setOnUserLoadedData(null);
-    }
-  }, [user, accessToken]);
 
   useEffect(() => {
     const { data: authListener } = supabaseClient.auth.onAuthStateChange(
@@ -135,7 +105,6 @@ export const UserProvider = (props: Props) => {
   const value = {
     isLoading,
     user,
-    onUserLoadedData,
     accessToken,
     error
   };

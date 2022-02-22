@@ -67,38 +67,6 @@ export default function App({ Component, pageProps }) {
 
 You can now determine if a user is authenticated by checking that the `user` object returned by the `useUser()` hook is defined.
 
-## Loading additional user data
-
-The `user` object from the `useUser()` hook is only meant to be used as an indicator that the user is signed in, you're not meant to store additional user information in this object but rather you're meant to store additional information in your `public.users` table. See [the "Managing User Data" docs](https://supabase.com/docs/guides/auth/managing-user-data) for more details on this.
-
-You can conveniently make your additional user data available in the `useUser()` hook but setting the `onUserDataLoaded` prop on the `UserProvider` components:
-
-```js
-import type { AppProps } from 'next/app';
-import { UserProvider } from '@supabase/supabase-auth-helpers/react';
-import {
-  supabaseClient,
-  SupabaseClient
-} from '@supabase/supabase-auth-helpers/nextjs';
-
-// You can pass an onUserLoaded method to fetch additional data from your public schema.
-// This data will be available as the `onUserLoadedData` prop in the `useUser` hook.
-function MyApp({ Component, pageProps }: AppProps) {
-  return (
-    <UserProvider
-      supabaseClient={supabaseClient}
-      onUserLoaded={async (supabaseClient) =>
-        (await supabaseClient.from('users').select('*').single()).data
-      }
-    >
-      <Component {...pageProps} />
-    </UserProvider>
-  );
-}
-
-export default MyApp;
-```
-
 ## Client-side data fetching with RLS
 
 For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row-level-security) to work properly when fetching data client-side, you need to make sure to import the `{ supabaseClient }` from `# @supabase/supabase-auth-helpers/nextjs` and only run your query once the user is defined client-side in the `useUser()` hook:

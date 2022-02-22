@@ -2,14 +2,25 @@ import { useUser, Auth } from '@supabase/supabase-auth-helpers/react';
 import { supabaseClient } from '@supabase/supabase-auth-helpers/nextjs';
 import type { NextPage } from 'next';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 const LoginPage: NextPage = () => {
-  const { isLoading, user, onUserLoadedData, error } = useUser();
+  const { isLoading, user, error } = useUser();
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    async function loadData() {
+      const { data } = await supabaseClient.from('test').select('*').single();
+      setData(data);
+    }
+    if (user) loadData();
+  }, [user]);
 
   if (!user)
     return (
       <>
         {error && <p>{error.message}</p>}
+        {isLoading ? <h1>Loading...</h1> : <h1>Loaded!</h1>}
         <Auth
           // view="update_password"
           supabaseClient={supabaseClient}
@@ -31,7 +42,7 @@ const LoginPage: NextPage = () => {
       <p>user:</p>
       <pre>{JSON.stringify(user, null, 2)}</pre>
       <p>client-side data fetching with RLS</p>
-      <pre>{JSON.stringify(onUserLoadedData, null, 2)}</pre>
+      <pre>{JSON.stringify(data, null, 2)}</pre>
     </>
   );
 };
