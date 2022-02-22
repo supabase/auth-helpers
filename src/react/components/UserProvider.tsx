@@ -73,29 +73,34 @@ export const UserProvider = (props: Props) => {
 
   // Get cached user on every page render.
   useEffect(() => {
-    console.log(pathname);
     async function runOnPathChange() {
       setIsLoading(true);
       await checkSession();
-      setIsLoading(false);
+      if (onUserLoadedData || !onUserLoaded) {
+        setIsLoading(false);
+      }
     }
     runOnPathChange();
   }, [pathname]);
 
-  // Only load user Data when the access token changes.
+  // Only load user Data the first time after user is loaded.
   useEffect(() => {
     async function loadUserData() {
-      console.log(onUserLoaded, !onUserLoadedData, onUserLoadedData);
       if (onUserLoaded && !onUserLoadedData) {
         try {
           const response = await onUserLoaded(supabaseClient);
           setOnUserLoadedData(response);
+          setIsLoading(false);
         } catch (error) {
           console.log('Error in your `onUserLoaded` method:', error);
         }
       }
     }
-    if (user) loadUserData();
+    if (user) {
+      loadUserData();
+    } else {
+      setOnUserLoadedData(null);
+    }
   }, [user, accessToken]);
 
   useEffect(() => {
