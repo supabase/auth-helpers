@@ -190,3 +190,26 @@ export const getServerSideProps = withAuthRequired({
   }
 });
 ```
+
+## Protecting API routes
+
+Wrap an API Route to check that the user has a valid session. If they're not logged in the handler will return a
+401 Unauthorized.
+
+```js
+// pages/api/protected-route.js
+import {
+  withAuthRequired,
+  supabaseServerClient
+} from '@supabase/supabase-auth-helpers/nextjs';
+
+export default withAuthRequired(async function ProtectedRoute(req, res) {
+  // Run queries with RLS on the server
+  const { data } = await supabaseServerClient({ req, res })
+    .from('test')
+    .select('*');
+  res.json(data);
+});
+```
+
+If you visit `/api/protected-route` without a valid session cookie, you will get a 401 response.
