@@ -4,7 +4,7 @@ import type { NextPage } from 'next';
 import Link from 'next/link';
 
 const LoginPage: NextPage = () => {
-  const { user, onUserLoadedData, error } = useUser();
+  const { isLoading, user, onUserLoadedData, error } = useUser();
 
   if (!user)
     return (
@@ -27,6 +27,7 @@ const LoginPage: NextPage = () => {
         <Link href="/protected-page">supabaseServerClient</Link>]
       </p>
       <button onClick={() => supabaseClient.auth.signOut()}>Sign out</button>
+      {isLoading ? <h1>Loading...</h1> : <h1>Loaded!</h1>}
       <p>user:</p>
       <pre>{JSON.stringify(user, null, 2)}</pre>
       <p>client-side data fetching with RLS</p>

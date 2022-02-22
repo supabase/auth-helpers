@@ -12,9 +12,11 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <UserProvider
       supabaseClient={supabaseClient}
-      onUserLoaded={async (supabaseClient) =>
-        (await supabaseClient.from('test').select('*').single()).data
-      }
+      onUserLoaded={async (supabaseClient) => {
+        // Since supabase is so fast, we need a 2s sleep here to test that it's working :D
+        await new Promise((r) => setTimeout(r, 2000));
+        return (await supabaseClient.from('test').select('*').single()).data;
+      }}
     >
       <Component {...pageProps} />
     </UserProvider>
