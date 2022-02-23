@@ -1,6 +1,10 @@
 import { CookieOptions } from '../types';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { setCookies } from '../../shared/utils/cookies';
+import {
+  NextRequestAdapter,
+  NextResponseAdapter
+} from '../../shared/adapters/NextAdapter';
 
 export default function handelCallback(
   req: NextApiRequest,
@@ -17,8 +21,8 @@ export default function handelCallback(
   if (event === 'SIGNED_IN') {
     if (!session) throw new Error('Auth session missing!');
     setCookies(
-      req,
-      res,
+      new NextRequestAdapter(req),
+      new NextResponseAdapter(res),
       [
         { key: 'access-token', value: session.access_token },
         { key: 'refresh-token', value: session.refresh_token }
@@ -34,8 +38,8 @@ export default function handelCallback(
   }
   if (event === 'SIGNED_OUT') {
     setCookies(
-      req,
-      res,
+      new NextRequestAdapter(req),
+      new NextResponseAdapter(res),
       ['access-token', 'refresh-token'].map((key) => ({
         name: `${cookieOptions.name}-${key}`,
         value: '',
