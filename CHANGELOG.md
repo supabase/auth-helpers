@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.1.3 - 2022-02-23
+
+- [#30](https://github.com/supabase-community/supabase-auth-helpers/pull/30): fix: Unknown encoding: base64url.
+
 ## 1.1.2 - 2022-02-22
 
 - Makes `withAuthRequired` work for API routes as well. See [the docs](./src/nextjs/README.md#protecting-api-routes) for more details.
