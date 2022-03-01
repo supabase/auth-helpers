@@ -2,6 +2,7 @@ import { CookieOptions } from '../types';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import handelCallback from './callback';
 import handleUser from './user';
+import handleLogout from './logout';
 import { COOKIE_OPTIONS } from '../utils/constants';
 
 export default function handleAuth(
@@ -19,6 +20,8 @@ export default function handleAuth(
         return handelCallback(req, res, cookieOptions);
       case 'user':
         return await handleUser(req, res, cookieOptions);
+      case 'logout':
+        return await handleLogout(req, res, cookieOptions);
       default:
         res.status(404).end();
     }

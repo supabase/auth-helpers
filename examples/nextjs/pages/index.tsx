@@ -37,7 +37,6 @@ const LoginPage: NextPage = () => {
         [<Link href="/profile">withAuthRequired</Link>] | [
         <Link href="/protected-page">supabaseServerClient</Link>]
       </p>
-      <button onClick={() => supabaseClient.auth.signOut()}>Sign out</button>
       {isLoading ? <h1>Loading...</h1> : <h1>Loaded!</h1>}
       <p>user:</p>
       <pre>{JSON.stringify(user, null, 2)}</pre>

@@ -48,6 +48,8 @@ Executing `handleAuth()` creates the following route handlers under the hood tha
 
 - `/api/auth/user`: You can fetch user profile information in JSON format.
 
+- `/api/auth/logout`: Your Next.js application logs out the user. (you can optionally pass a `returnTo` parameter to return to a custom relative URL after logout, eg `/api/auth/logout?returnTo=/login`).
+
 Wrap your `pages/_app.js` component with the `UserProvider` component:
 
 ```jsx
