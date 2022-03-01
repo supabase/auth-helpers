@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.2.0 - 2022-03-01
+
+- [#32](https://github.com/supabase-community/supabase-auth-helpers/pull/32): feat: add logout api route. See [the docs](./src/nextjs/README.md#basic-setup) for more details.
+
 ## 1.1.3 - 2022-02-23
 
 - [#30](https://github.com/supabase-community/supabase-auth-helpers/pull/30): fix: Unknown encoding: base64url.
