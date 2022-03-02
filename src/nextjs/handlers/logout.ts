@@ -6,13 +6,23 @@ import {
   NextResponseAdapter
 } from '../../shared/adapters/NextAdapter';
 import { supabaseClient } from '../utils/initSupabase';
+import { COOKIE_OPTIONS } from '../../shared/utils/constants';
+
+export interface HandleLogoutOptions {
+  cookieOptions?: CookieOptions;
+  returnTo?: string;
+}
 
 export default function handleLogout(
   req: NextApiRequest,
   res: NextApiResponse,
-  cookieOptions: CookieOptions
+  options: HandleLogoutOptions = {}
 ) {
-  const { returnTo = '/' } = req.query;
+  let { returnTo } = req.query;
+  if (!returnTo) returnTo = options?.returnTo ?? '/';
+  returnTo = Array.isArray(returnTo) ? returnTo[0] : returnTo;
+  returnTo = returnTo.charAt(0) === '/' ? returnTo : `/${returnTo}`;
+  const { cookieOptions = COOKIE_OPTIONS } = options;
 
   // Logout request to Gotrue
   const access_token = req.cookies[`${cookieOptions.name}-access-token`];

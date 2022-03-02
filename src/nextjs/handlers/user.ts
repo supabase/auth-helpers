@@ -2,16 +2,22 @@ import { ApiError, CookieOptions } from '../types';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { jwtDecoder } from '../../shared/utils/jwt';
 import getUser from '../utils/getUser';
+import { COOKIE_OPTIONS } from '../../shared/utils/constants';
+
+export interface HandleUserOptions {
+  cookieOptions?: CookieOptions;
+}
 
 export default async function handleUser(
   req: NextApiRequest,
   res: NextApiResponse,
-  cookieOptions: CookieOptions
+  options: HandleUserOptions = {}
 ) {
   try {
     if (!req.cookies) {
       throw new Error('Not able to parse cookies!');
     }
+    const { cookieOptions = COOKIE_OPTIONS } = options;
     const access_token = req.cookies[`${cookieOptions.name}-access-token`];
 
     if (!access_token) {

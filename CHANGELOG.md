@@ -2,7 +2,7 @@
 
 ## 1.2.0 - 2022-03-01
 
-- [#32](https://github.com/supabase-community/supabase-auth-helpers/pull/32): feat: add logout api route. See [the docs](./src/nextjs/README.md#basic-setup) for more details.
+- [BREAKING CHANGE][#32](https://github.com/supabase-community/supabase-auth-helpers/pull/32): feat: add logout api route. Note that this includes a breaking change to the options parameter for `handleAuth(options: HandleAuthOptions)` See [the docs](./src/nextjs/README.md#basic-setup) for more details.
 
 ## 1.1.3 - 2022-02-23
 

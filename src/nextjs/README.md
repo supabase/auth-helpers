@@ -39,7 +39,7 @@ The path to your dynamic API route file would be `/pages/api/auth/[...supabase].
 ```js
 import { handleAuth } from '@supabase/supabase-auth-helpers/nextjs';
 
-export default handleAuth();
+export default handleAuth({ logout: { returnTo: '/' } });
 ```
 
 Executing `handleAuth()` creates the following route handlers under the hood that perform different parts of the authentication flow:
@@ -48,7 +48,7 @@ Executing `handleAuth()` creates the following route handlers under the hood tha
 
 - `/api/auth/user`: You can fetch user profile information in JSON format.
 
-- `/api/auth/logout`: Your Next.js application logs out the user. (you can optionally pass a `returnTo` parameter to return to a custom relative URL after logout, eg `/api/auth/logout?returnTo=/login`).
+- `/api/auth/logout`: Your Next.js application logs out the user. You can optionally pass a `returnTo` parameter to return to a custom relative URL after logout, eg `/api/auth/logout?returnTo=/login`. This will overwrite the logout `returnTo` option specified `handleAuth()`
 
 Wrap your `pages/_app.js` component with the `UserProvider` component:
 

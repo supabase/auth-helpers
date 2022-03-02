@@ -7,7 +7,7 @@ import {
 } from 'next';
 import { jwtDecoder } from '../../shared/utils/jwt';
 import { CookieOptions } from '../types';
-import { COOKIE_OPTIONS } from './constants';
+import { COOKIE_OPTIONS } from '../../shared/utils/constants';
 import getAccessToken from './getAccessToken';
 import getUser from './getUser';
 
