@@ -5,16 +5,22 @@ import {
   NextRequestAdapter,
   NextResponseAdapter
 } from '../../shared/adapters/NextAdapter';
+import { COOKIE_OPTIONS } from '../../shared/utils/constants';
+
+export interface HandleCallbackOptions {
+  cookieOptions?: CookieOptions;
+}
 
 export default function handelCallback(
   req: NextApiRequest,
   res: NextApiResponse,
-  cookieOptions: CookieOptions
+  options: HandleCallbackOptions = {}
 ) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
     res.status(405).end('Method Not Allowed');
   }
+  const { cookieOptions = COOKIE_OPTIONS } = options;
   const { event, session } = req.body;
 
   if (!event) throw new Error('Auth event missing!');

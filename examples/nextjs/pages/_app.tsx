@@ -6,6 +6,7 @@ import { supabaseClient } from '@supabase/supabase-auth-helpers/nextjs';
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <UserProvider supabaseClient={supabaseClient}>
+      <a href="/api/auth/logout">Logout</a>
       <Component {...pageProps} />
     </UserProvider>
   );

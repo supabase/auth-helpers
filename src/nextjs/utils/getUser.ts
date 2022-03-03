@@ -6,7 +6,7 @@ import {
 import { User, createClient } from '@supabase/supabase-js';
 import { CookieOptions } from '../types';
 import { setCookies } from '../../shared/utils/cookies';
-import { COOKIE_OPTIONS } from './constants';
+import { COOKIE_OPTIONS } from '../../shared/utils/constants';
 import { jwtDecoder } from '../../shared/utils/jwt';
 import {
   NextRequestAdapter,
