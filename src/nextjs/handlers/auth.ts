@@ -12,7 +12,8 @@ export interface HandleAuthOptions {
 
 export default function handleAuth(options: HandleAuthOptions = {}) {
   return async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
-    const { cookieOptions = COOKIE_OPTIONS, logout } = options;
+    const { logout } = options;
+    const cookieOptions = { ...COOKIE_OPTIONS, ...options.cookieOptions };
     let {
       query: { supabase: route }
     } = req;

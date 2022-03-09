@@ -80,12 +80,16 @@ export type WithAuthRequiredArg =
 
 export default function withAuthRequired(
   arg?: WithAuthRequiredArg,
-  cookieOptions = COOKIE_OPTIONS
+  options: { cookieOptions?: CookieOptions } = {}
 ) {
   if (typeof arg === 'function') {
     return async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
       try {
-        const accessToken = await getAccessToken({ req, res }, cookieOptions);
+        const cookieOptions = { ...COOKIE_OPTIONS, ...options.cookieOptions };
+        const accessToken = await getAccessToken(
+          { req, res },
+          { cookieOptions }
+        );
         if (!accessToken) throw new Error('No access token!');
         await arg(req, res);
       } catch (error) {
@@ -98,16 +102,17 @@ export default function withAuthRequired(
       }
     };
   } else {
-    const {
+    let {
       getServerSideProps = undefined,
       redirectTo = '/',
-      cookieOptions = COOKIE_OPTIONS
+      cookieOptions = {}
     } = arg ? arg : {};
     return async (context: GetServerSidePropsContext) => {
       try {
         if (!context.req.cookies) {
           throw new Error('Not able to parse cookies!');
         }
+        cookieOptions = { ...COOKIE_OPTIONS, ...cookieOptions };
         const access_token =
           context.req.cookies[`${cookieOptions.name}-access-token`];
         if (!access_token) {
@@ -123,7 +128,7 @@ export default function withAuthRequired(
         const timeNow = Math.round(Date.now() / 1000);
         if (jwtUser.exp < timeNow) {
           // JWT is expired, let's refresh from Gotrue
-          const response = await getUser(context, cookieOptions);
+          const response = await getUser(context, { cookieOptions });
           user = response.user;
           accessToken = response.accessToken;
         } else {
