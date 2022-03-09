@@ -4,7 +4,7 @@ import {
   NextApiResponse
 } from 'next';
 import { User, createClient } from '@supabase/supabase-js';
-import { CookieOptions } from '../types';
+import { CookieOptions, ApiError } from '../types';
 import { setCookies } from '../../shared/utils/cookies';
 import { COOKIE_OPTIONS } from '../../shared/utils/constants';
 import { jwtDecoder } from '../../shared/utils/jwt';
@@ -22,7 +22,7 @@ export default async function getUser(
     | GetServerSidePropsContext
     | { req: NextApiRequest; res: NextApiResponse },
   options: GetUserOptions = {}
-): Promise<{ user: User | null; accessToken: string | null }> {
+): Promise<{ user: User | null; accessToken: string | null; error?: string }> {
   try {
     if (
       !process.env.NEXT_PUBLIC_SUPABASE_URL ||
@@ -90,7 +90,8 @@ export default async function getUser(
       return { user: user!, accessToken: access_token };
     }
   } catch (e) {
-    console.log('Error getting user:', e);
-    return { user: null, accessToken: null };
+    const error = e as ApiError;
+    console.log('Error getting user:', error);
+    return { user: null, accessToken: null, error: error.message };
   }
 }
