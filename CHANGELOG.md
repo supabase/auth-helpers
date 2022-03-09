@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.2.1 - 2022-03-09
+
+- [#33](https://github.com/supabase-community/supabase-auth-helpers/pull/33): fix: merge cookieOptions correctly.
+
 ## 1.2.0 - 2022-03-01
 
 - [BREAKING CHANGE][#32](https://github.com/supabase-community/supabase-auth-helpers/pull/32): feat: add logout api route. Note that this includes a breaking change to the options parameter for `handleAuth(options: HandleAuthOptions)` See [the docs](./src/nextjs/README.md#basic-setup) for more details.
