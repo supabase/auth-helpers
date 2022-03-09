@@ -20,7 +20,7 @@ export default function handelCallback(
     res.setHeader('Allow', 'POST');
     res.status(405).end('Method Not Allowed');
   }
-  const { cookieOptions = COOKIE_OPTIONS } = options;
+  const cookieOptions = { ...COOKIE_OPTIONS, ...options.cookieOptions };
   const { event, session } = req.body;
 
   if (!event) throw new Error('Auth event missing!');

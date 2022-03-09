@@ -13,11 +13,15 @@ import {
   NextResponseAdapter
 } from '../../shared/adapters/NextAdapter';
 
+export interface GetUserOptions {
+  cookieOptions?: CookieOptions;
+}
+
 export default async function getUser(
   context:
     | GetServerSidePropsContext
     | { req: NextApiRequest; res: NextApiResponse },
-  cookieOptions: CookieOptions = COOKIE_OPTIONS
+  options: GetUserOptions = {}
 ): Promise<{ user: User | null; accessToken: string | null }> {
   try {
     if (
@@ -35,6 +39,7 @@ export default async function getUser(
       process.env.NEXT_PUBLIC_SUPABASE_URL,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
     );
+    const cookieOptions = { ...COOKIE_OPTIONS, ...options.cookieOptions };
     const access_token =
       context.req.cookies[`${cookieOptions.name}-access-token`];
     const refresh_token =

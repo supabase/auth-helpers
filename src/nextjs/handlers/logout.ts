@@ -22,7 +22,7 @@ export default function handleLogout(
   if (!returnTo) returnTo = options?.returnTo ?? '/';
   returnTo = Array.isArray(returnTo) ? returnTo[0] : returnTo;
   returnTo = returnTo.charAt(0) === '/' ? returnTo : `/${returnTo}`;
-  const { cookieOptions = COOKIE_OPTIONS } = options;
+  const cookieOptions = { ...COOKIE_OPTIONS, ...options.cookieOptions };
 
   // Logout request to Gotrue
   const access_token = req.cookies[`${cookieOptions.name}-access-token`];

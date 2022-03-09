@@ -17,7 +17,7 @@ export default async function handleUser(
     if (!req.cookies) {
       throw new Error('Not able to parse cookies!');
     }
-    const { cookieOptions = COOKIE_OPTIONS } = options;
+    const cookieOptions = { ...COOKIE_OPTIONS, ...options.cookieOptions };
     const access_token = req.cookies[`${cookieOptions.name}-access-token`];
 
     if (!access_token) {
@@ -32,7 +32,7 @@ export default async function handleUser(
     const timeNow = Math.round(Date.now() / 1000);
     if (jwtUser.exp < timeNow) {
       // JWT is expired, let's refresh from Gotrue
-      const response = await getUser({ req, res }, cookieOptions);
+      const response = await getUser({ req, res }, { cookieOptions });
       res.status(200).json(response);
     } else {
       // Transform JWT and add note that it ise cached from JWT.
@@ -59,7 +59,7 @@ export default async function handleUser(
   } catch (e) {
     const error = e as ApiError;
     res
-      .status(400)
+      .status(200)
       .json({ user: null, accessToken: null, error: error.message });
   }
 }

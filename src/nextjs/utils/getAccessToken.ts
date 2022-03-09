@@ -6,18 +6,22 @@ import {
 import getUser from './getUser';
 import { jwtDecoder } from '../../shared/utils/jwt';
 import { CookieOptions } from '../types';
+import { COOKIE_OPTIONS } from '../../shared/utils/constants';
+
+export interface GetAccessTokenOptions {
+  cookieOptions?: CookieOptions;
+}
 
 export default async function getAccessToken(
   context:
     | GetServerSidePropsContext
     | { req: NextApiRequest; res: NextApiResponse },
-  cookieOptions: CookieOptions = {
-    name: 'sb'
-  }
+  options: GetAccessTokenOptions = {}
 ): Promise<string | null> {
   if (!context.req.cookies) {
     throw new Error('Not able to parse cookies!');
   }
+  const cookieOptions = { ...COOKIE_OPTIONS, ...options.cookieOptions };
   const access_token =
     context.req.cookies[`${cookieOptions.name}-access-token`];
 
@@ -33,7 +37,7 @@ export default async function getAccessToken(
   const timeNow = Math.round(Date.now() / 1000);
   if (jwtUser.exp < timeNow) {
     // JWT is expired, let's refresh from Gotrue
-    const { accessToken } = await getUser(context, cookieOptions);
+    const { accessToken } = await getUser(context, { cookieOptions });
     return accessToken;
   } else {
     return access_token;
