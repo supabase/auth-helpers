@@ -15,6 +15,10 @@ export class NextRequestAdapter implements RequestAdapter {
     this.req = request;
   }
 
+  setRequestCookie(name: string, value: string) {
+    this.req.cookies[name] = value;
+  }
+
   getHeader(name: string) {
     return this.req.headers[name];
   }
