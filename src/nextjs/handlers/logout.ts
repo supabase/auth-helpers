@@ -32,7 +32,7 @@ export default function handleLogout(
   setCookies(
     new NextRequestAdapter(req),
     new NextResponseAdapter(res),
-    ['access-token', 'refresh-token', 'provider-token'].map((key) => ({
+    ['access-token', 'refresh-token'].map((key) => ({
       name: `${cookieOptions.name}-${key}`,
       value: '',
       maxAge: -1
