@@ -178,6 +178,9 @@ export function setCookies(
   res: ResponseAdapter,
   cookies: Array<Cookie>
 ) {
+  for (let cookie of cookies) {
+    req.setRequestCookie(cookie.name, cookie.value);
+  }
   res.setHeader('Set-Cookie', getCookieString(req, res, cookies));
 }
 
