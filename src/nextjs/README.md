@@ -261,3 +261,14 @@ export default withAuthRequired(async function ProtectedRoute(req, res) {
 ```
 
 If you visit `/api/protected-route` without a valid session cookie, you will get a 401 response.
+
+## Protecting routes with [Nextjs Middleware](https://nextjs.org/docs/middleware)
+
+As an alternative to protecting individual routes using `getServerSideProps` with `withAuthRequired`, `authMiddleware` can be used from inside a `_middleware` file to protect an entire directory. In the following example, all requests to `/protected/*` will check whether a user is signed in, if successful the request will be forwarded to the destination route, otherwise the user will be redirected to `/login` (defaults to: `/`) with a 307 Temporary Redirect response status:
+
+```ts
+// pages/protected/_middleware.ts
+import { authMiddleware } from '@supabase/supabase-auth-helpers/nextjs';
+
+export const middleware = authMiddleware('/login');
+```
