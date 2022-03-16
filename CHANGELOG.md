@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.2.3 - 2022-03-16
+
+- [#42](https://github.com/supabase-community/supabase-auth-helpers/pull/42): fix: update cookie values on request object.
+
 ## 1.2.2 - 2022-03-09
 
 - [#34](https://github.com/supabase-community/supabase-auth-helpers/pull/34): fix: update cookie lifetime default from 8h to 7 days.
