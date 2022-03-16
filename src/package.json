@@ -36,6 +36,7 @@
     "semantic-release-plugin-update-version-in-files": "^1.1.0"
   },
   "dependencies": {
+    "@supabase/supabase-auth-helpers": "file:..",
     "@supabase/supabase-js": "^1.30.0",
     "@supabase/ui": "^0.36.3",
     "tslib": "^2.3.1"
