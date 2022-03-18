@@ -84,7 +84,7 @@ export const withMiddlewareAuthRequired: WithMiddlewareAuthRequired =
       }
       const redirectUrl = req.nextUrl.clone();
       redirectUrl.pathname = redirectTo;
-      redirectUrl.searchParams.set(`ret`, req.nextUrl.pathname);
+      redirectUrl.searchParams.set(`redirectedFrom`, req.nextUrl.pathname);
       // Authentication failed, redirect request
       return NextResponse.redirect(redirectUrl);
     }
