@@ -5,18 +5,20 @@ import { CookieOptions } from '../types';
 import { COOKIE_OPTIONS } from '../../shared/utils/constants';
 import { jwtDecoder } from '../../shared/utils/jwt';
 
-export const authMiddleware =
-  (
-    /**
-     * Path relative to the site root to redirect an
-     * unauthenticated visitor.
-     *
-     * The original request route will be appended via
-     * a `ret` query parameter, ex: `?ret=%2Fdashboard`
-     */
-    redirectTo = '/',
-    cookieOptions: CookieOptions = COOKIE_OPTIONS
-  ): NextMiddleware =>
+export type WithMiddlewareAuthRequired = (options?: {
+  /**
+   * Path relative to the site root to redirect an
+   * unauthenticated visitor.
+   *
+   * The original request route will be appended via
+   * a `ret` query parameter, ex: `?ret=%2Fdashboard`
+   */
+  redirectTo?: string;
+  cookieOptions?: CookieOptions;
+}) => NextMiddleware;
+
+export const withMiddlewareAuthRequired: WithMiddlewareAuthRequired =
+  ({ redirectTo = '/', cookieOptions = COOKIE_OPTIONS } = {}) =>
   async (req) => {
     try {
       if (
@@ -80,10 +82,10 @@ export const authMiddleware =
           err
         );
       }
-      const url = req.nextUrl.clone();
-      url.pathname = redirectTo;
-      url.searchParams.set(`ret`, req.nextUrl.pathname);
+      const redirectUrl = req.nextUrl.clone();
+      redirectUrl.pathname = redirectTo;
+      redirectUrl.searchParams.set(`ret`, req.nextUrl.pathname);
       // Authentication failed, redirect request
-      return NextResponse.redirect(url);
+      return NextResponse.redirect(redirectUrl);
     }
   };
