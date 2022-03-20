@@ -9,7 +9,7 @@ import { setCookies } from '../../shared/utils/cookies';
 import {
   NextRequestAdapter,
   NextResponseAdapter
-} from '../../shared/adapters/NextMiddleWareAdapter';
+} from '../../shared/adapters/NextMiddlewareAdapter';
 
 export type WithMiddlewareAuthRequired = (options?: {
   /**
