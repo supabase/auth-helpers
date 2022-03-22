@@ -193,6 +193,52 @@ export const getServerSideProps = withAuthRequired({
 });
 ```
 
+### Server-side data fetching to OAuth APIs using `provider_token`
+
+When using third-party auth providers, sessions are initiated with an additional `provider_token` field which is persisted as an HTTPOnly cookie upon logging in to enabled usage on the server side. The `provider_token` can be used to make API requests to the OAuth provider's API endpoints on behalf of the logged-in user. In the following example, we fetch the user's full profile from the third-party API during SSR using their id and auth token:
+
+```js
+import {
+  User,
+  withAuthRequired,
+  getUser
+} from '@supabase/supabase-auth-helpers/nextjs';
+
+interface Profile {
+  /* ... */
+}
+
+export default function ProtectedPage({
+  user,
+  data
+}: {
+  user: User,
+  profile: Profile
+}) {
+  return <div>Protected content</div>;
+}
+
+export const getServerSideProps = withAuthRequired({
+  redirectTo: '/',
+  async getServerSideProps(ctx) {
+    // Retrieve provider_token from cookies
+    const provider_token = ctx.req.cookies['sb-provider-token'];
+    // Get logged in user's third-party id from metadata
+    const { user } = await getUser(ctx);
+    const userId = user?.user_metadata.provider_id;
+    const profile: Profile = await (
+      await fetch(`https://api.example.com/users/${userId}`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${provider_token}`
+        }
+      })
+    ).json();
+    return { props: { profile } };
+  }
+});
+```
+
 ## Protecting API routes
 
 Wrap an API Route to check that the user has a valid session. If they're not logged in the handler will return a
@@ -215,3 +261,14 @@ export default withAuthRequired(async function ProtectedRoute(req, res) {
 ```
 
 If you visit `/api/protected-route` without a valid session cookie, you will get a 401 response.
+
+## Protecting routes with [Nextjs Middleware](https://nextjs.org/docs/middleware)
+
+As an alternative to protecting individual routes using `getServerSideProps` with `withAuthRequired`, `withMiddlewareAuthRequired` can be used from inside a `_middleware` file to protect an entire directory. In the following example, all requests to `/protected/*` will check whether a user is signed in, if successful the request will be forwarded to the destination route, otherwise the user will be redirected to `/login` (defaults to: `/`) with a 307 Temporary Redirect response status:
+
+```ts
+// pages/protected/_middleware.ts
+import { withMiddlewareAuthRequired } from '@supabase/supabase-auth-helpers/nextjs';
+
+export const middleware = withMiddlewareAuthRequired({ redirectTo: '/login' });
+```
