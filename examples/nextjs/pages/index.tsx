@@ -21,10 +21,21 @@ const LoginPage: NextPage = () => {
       <>
         {error && <p>{error.message}</p>}
         {isLoading ? <h1>Loading...</h1> : <h1>Loaded!</h1>}
+        <button
+          onClick={() => {
+            supabaseClient.auth.signIn(
+              { provider: 'github' },
+              { scopes: 'repo' }
+            );
+          }}
+        >
+          GitHub wit scopes
+        </button>
         <Auth
           // view="update_password"
           supabaseClient={supabaseClient}
           providers={['google', 'github']}
+          // scopes={{github: 'repo'}} // TODO: enable scopes in Auth component.
           socialLayout="horizontal"
           socialButtonSize="xlarge"
         />

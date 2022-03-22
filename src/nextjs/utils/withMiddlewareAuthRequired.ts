@@ -1,9 +1,15 @@
-import { NextResponse } from 'next/server';
+// import { NextResponse } from 'next/server'; TODO fix import
+import { NextResponse } from 'next/dist/server/web/spec-extension/response';
 import { NextMiddleware } from 'next/server';
 import { User, ApiError, createClient } from '@supabase/supabase-js';
 import { CookieOptions } from '../types';
 import { COOKIE_OPTIONS } from '../../shared/utils/constants';
 import { jwtDecoder } from '../../shared/utils/jwt';
+import { setCookies } from '../../shared/utils/cookies';
+import {
+  NextRequestAdapter,
+  NextResponseAdapter
+} from '../../shared/adapters/NextMiddlewareAdapter';
 
 export type WithMiddlewareAuthRequired = (options?: {
   /**
@@ -11,14 +17,14 @@ export type WithMiddlewareAuthRequired = (options?: {
    * unauthenticated visitor.
    *
    * The original request route will be appended via
-   * a `ret` query parameter, ex: `?ret=%2Fdashboard`
+   * a `redirectedFrom` query parameter, ex: `?redirectedFrom=%2Fdashboard`
    */
   redirectTo?: string;
   cookieOptions?: CookieOptions;
 }) => NextMiddleware;
 
 export const withMiddlewareAuthRequired: WithMiddlewareAuthRequired =
-  ({ redirectTo = '/', cookieOptions = COOKIE_OPTIONS } = {}) =>
+  (options: { redirectTo?: string; cookieOptions?: CookieOptions } = {}) =>
   async (req) => {
     try {
       if (
@@ -34,10 +40,14 @@ export const withMiddlewareAuthRequired: WithMiddlewareAuthRequired =
       }
       const supabase = createClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+        { fetch }
       );
+      const cookieOptions = { ...COOKIE_OPTIONS, ...options.cookieOptions };
       const access_token = req.cookies[`${cookieOptions.name!}-access-token`];
       const refresh_token = req.cookies[`${cookieOptions.name!}-refresh-token`];
+
+      const res = NextResponse.next();
 
       const getUser = async (): Promise<{
         user: User | null;
@@ -56,11 +66,27 @@ export const withMiddlewareAuthRequired: WithMiddlewareAuthRequired =
           if (!refresh_token) {
             throw new Error('No refresh_token cookie found!');
           }
-          const res = await supabase.auth.api.refreshAccessToken(refresh_token);
-          return { user: res.data?.user ?? null, error: res.error };
+          const { data, error } = await supabase.auth.api.refreshAccessToken(
+            refresh_token
+          );
+          setCookies(
+            new NextRequestAdapter(req),
+            new NextResponseAdapter(res),
+            [
+              { key: 'access-token', value: data!.access_token },
+              { key: 'refresh-token', value: data!.refresh_token! }
+            ].map((token) => ({
+              name: `${cookieOptions.name}-${token.key}`,
+              value: token.value,
+              domain: cookieOptions.domain,
+              maxAge: cookieOptions.lifetime ?? 0,
+              path: cookieOptions.path,
+              sameSite: cookieOptions.sameSite
+            }))
+          );
+          return { user: data?.user ?? null, error };
         }
-        const res = await supabase.auth.api.getUser(access_token);
-        return { user: res.user, error: res.error };
+        return { user: jwtUser, error: null };
       };
 
       const authResult = await getUser();
@@ -74,8 +100,9 @@ export const withMiddlewareAuthRequired: WithMiddlewareAuthRequired =
       }
 
       // Authentication successful, forward request to protected route
-      return NextResponse.next();
+      return res;
     } catch (err: unknown) {
+      const { redirectTo = '/' } = options;
       if (err instanceof Error) {
         console.log(
           `Could not authenticate request, redirecting to ${redirectTo}:`,

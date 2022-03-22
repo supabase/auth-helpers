@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.3.0 - 2022-03-19
+
+- [#44](https://github.com/supabase-community/supabase-auth-helpers/pull/43): feat: Add `withMiddlewareAuthRequired` Nextjs Middleware util to protect directories.
+- [#43](https://github.com/supabase-community/supabase-auth-helpers/pull/43): feat: store `provider_token` in cookie.
+
 ## 1.2.3 - 2022-03-16
 
 - [#42](https://github.com/supabase-community/supabase-auth-helpers/pull/42): fix: update cookie values on request object.
