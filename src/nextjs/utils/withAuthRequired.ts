@@ -91,15 +91,15 @@ export default function withAuthRequired(
           { cookieOptions }
         );
         if (!accessToken) throw new Error('No access token!');
-        await arg(req, res);
       } catch (error) {
         res.status(401).json({
           error: 'not_authenticated',
           description:
-            'The user does not have an active session or is not authenticated'
+          'The user does not have an active session or is not authenticated'
         });
         return;
       }
+      await arg(req, res);
     };
   } else {
     let {
@@ -159,15 +159,8 @@ export default function withAuthRequired(
           throw new Error('No user found!');
         }
 
-        let ret: any = { props: {} };
-        if (getServerSideProps) {
-          ret = await getServerSideProps(context);
-        }
-        return {
-          ...ret,
-          props: { ...ret.props, user: user, accessToken: accessToken }
-        };
       } catch (e) {
+        console.error('The user does not have an active session or is not authenticated', e);
         return {
           redirect: {
             destination: redirectTo,
@@ -175,6 +168,15 @@ export default function withAuthRequired(
           }
         };
       }
+
+      let ret: any = { props: {} };
+      if (getServerSideProps) {
+        ret = await getServerSideProps(context);
+      }
+      return {
+        ...ret,
+        props: { ...ret.props, user: user, accessToken: accessToken }
+      };
     };
   }
 }

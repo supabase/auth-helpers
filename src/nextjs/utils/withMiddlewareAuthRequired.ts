@@ -26,6 +26,10 @@ export type WithMiddlewareAuthRequired = (options?: {
 export const withMiddlewareAuthRequired: WithMiddlewareAuthRequired =
   (options: { redirectTo?: string; cookieOptions?: CookieOptions } = {}) =>
   async (req) => {
+    // invoke the main handler first without catching any errors that may result,
+    // then authorize the request before responding
+    const res = NextResponse.next();
+
     try {
       if (
         !process.env.NEXT_PUBLIC_SUPABASE_URL ||
@@ -46,8 +50,6 @@ export const withMiddlewareAuthRequired: WithMiddlewareAuthRequired =
       const cookieOptions = { ...COOKIE_OPTIONS, ...options.cookieOptions };
       const access_token = req.cookies[`${cookieOptions.name!}-access-token`];
       const refresh_token = req.cookies[`${cookieOptions.name!}-refresh-token`];
-
-      const res = NextResponse.next();
 
       const getUser = async (): Promise<{
         user: User | null;
