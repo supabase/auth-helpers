@@ -6,7 +6,14 @@ import React, {
   useCallback
 } from 'react';
 import { useRouter } from 'next/router';
-import { SupabaseClient, User } from '@supabase/supabase-js';
+import { 
+  SupabaseClient, 
+  AuthChangeEvent,
+  Session,
+  SupabaseClient,
+  User
+} from '@supabase/supabase-js';
+
 
 export type UserState = {
   user: User | null;
@@ -31,6 +38,7 @@ export interface Props {
   profileUrl?: string;
   user?: User;
   fetcher?: UserFetcher;
+  onAuthStateChangeFn?: (event: AuthChangeEvent, session: Session) => void;
   [propName: string]: any;
 }
 
@@ -40,7 +48,8 @@ export const UserProvider = (props: Props) => {
     callbackUrl = '/api/auth/callback',
     profileUrl = '/api/auth/user',
     user: initialUser = null,
-    fetcher = userFetcher
+    fetcher = userFetcher,
+    onAuthStateChangeFn
   } = props;
   const [user, setUser] = useState<User | null>(initialUser);
   const [accessToken, setAccessToken] = useState<string | null>(null);
@@ -93,6 +102,7 @@ export const UserProvider = (props: Props) => {
         // Fetch the user from the API route
         await checkSession();
         setIsLoading(false);
+        onAuthStateChangeFn && onAuthStateChangeFn(event, session);
       }
     );
 
