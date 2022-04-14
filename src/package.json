@@ -1,5 +1,5 @@
 {
-  "name": "@supabase/supabase-auth-helpers",
+  "name": "@supabase/auth-helpers",
   "version": "0.0.0",
   "description": "A collection of framework specific Auth utilities for working with Supabase.",
   "main": "index.js",
@@ -17,7 +17,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/supabase-community/supabase-auth-helpers.git"
+    "url": "git+https://github.com/supabase-community/auth-helpers.git"
   },
   "keywords": [
     "Supabase",
@@ -28,9 +28,9 @@
   "author": "Supabase Community",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/supabase-community/supabase-auth-helpers/issues"
+    "url": "https://github.com/supabase-community/auth-helpers/issues"
   },
-  "homepage": "https://github.com/supabase-community/supabase-auth-helpers#readme",
+  "homepage": "https://github.com/supabase-community/auth-helpers#readme",
   "devDependencies": {
     "semantic-release": "^19.0.2",
     "semantic-release-plugin-update-version-in-files": "^1.1.0"

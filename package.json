@@ -1,5 +1,5 @@
 {
-  "name": "@supabase/supabase-auth-helpers",
+  "name": "@supabase/auth-helpers",
   "version": "0.0.0",
   "description": "A collection of framework specific Auth utilities for working with Supabase.",
   "engines": {
@@ -21,7 +21,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/supabase-community/supabase-auth-helpers.git"
+    "url": "git+https://github.com/supabase-community/auth-helpers.git"
   },
   "keywords": [
     "Supabase",
@@ -32,9 +32,9 @@
   "author": "Supabase Community",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/supabase-community/supabase-auth-helpers/issues"
+    "url": "https://github.com/supabase-community/auth-helpers/issues"
   },
-  "homepage": "https://github.com/supabase-community/supabase-auth-helpers#readme",
+  "homepage": "https://github.com/supabase-community/auth-helpers#readme",
   "devDependencies": {
     "@types/node": "^14.14.20",
     "@types/react": "^17.0.20",
@@ -52,14 +52,12 @@
     "react-dom": "^17.0.2",
     "rimraf": "^3.0.2",
     "typedoc": "^0.22.11",
-    "typescript": "^4.1.3"
-  },
-  "dependencies": {
-    "@supabase/supabase-js": "^1.30.0",
-    "@supabase/ui": "^0.36.3",
+    "typescript": "^4.1.3",
     "tslib": "^2.3.1"
   },
   "peerDependencies": {
+    "@supabase/supabase-js": "^1.33.3",
+    "@supabase/ui": "^0.36.5",
     "next": ">=10"
   }
 }

@@ -18,7 +18,7 @@ import getUser from './getUser';
  *
  * ```js
  * // pages/profile.js
- * import { withAuthRequired } from '@supabase/supabase-auth-helpers/nextjs';
+ * import { withAuthRequired } from '@supabase/auth-helpers/nextjs';
  *
  * export default function Profile({ user }) {
  *   return <div>Hello {user.name}</div>;
@@ -34,7 +34,7 @@ import getUser from './getUser';
  *
  * ```js
  * // pages/protected-page.js
- * import { withAuthRequired, getUser } from '@supabase/supabase-auth-helpers/nextjs';
+ * import { withAuthRequired, getUser } from '@supabase/auth-helpers/nextjs';
  *
  * export default function ProtectedPage({ user, customProp }) {
  *   return <div>Protected content</div>;
@@ -56,7 +56,7 @@ import getUser from './getUser';
  *
  * ```js
  * // pages/api/protected-route.js
- * import { withAuthRequired, supabaseServerClient } from '@supabase/supabase-auth-helpers/nextjs';
+ * import { withAuthRequired, supabaseServerClient } from '@supabase/auth-helpers/nextjs';
  *
  * export default withAuthRequired(async function ProtectedRoute(req, res) {
  *   // Run queries with RLS on the server
@@ -147,7 +147,7 @@ export default function withAuthRequired(
             identities: [],
             created_at: null,
             updated_at: null,
-            'supabase-auth-helpers-note':
+            'auth-helpers-note':
               'This user payload is retrieved from the cached JWT and might be stale. If you need up to date user data, please call the `getUser` method in a server-side context!'
           };
           const mergedUser = { ...user, ...jwtUser };

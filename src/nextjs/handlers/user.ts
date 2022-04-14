@@ -50,7 +50,7 @@ export default async function handleUser(
         identities: [],
         created_at: null,
         updated_at: null,
-        'supabase-auth-helpers-note':
+        'auth-helpers-note':
           'This user payload is retrieved from the cached JWT and might be stale. If you need up to date user data, please call the `getUser` method in a server-side context!'
       };
       const mergedUser = { ...user, ...jwtUser };

@@ -1,5 +1,5 @@
 module.exports = {
-  name: '@supabase/supabase-auth-helpers',
+  name: '@supabase/auth-helpers',
   out: './docs/',
   entryPointStrategy: 'expand',
   exclude: ['./src/index.ts'],
