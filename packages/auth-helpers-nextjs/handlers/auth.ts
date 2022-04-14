@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import handelCallback from './callback';
 import handleUser from './user';
 import handleLogout from './logout';
-import { COOKIE_OPTIONS } from '../../shared/utils/constants';
+import { COOKIE_OPTIONS } from '../utils/constants';
 
 export interface HandleAuthOptions {
   cookieOptions?: CookieOptions;

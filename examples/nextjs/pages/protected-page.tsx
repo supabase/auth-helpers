@@ -3,7 +3,7 @@ import {
   User,
   withAuthRequired,
   supabaseServerClient
-} from '@supabase/auth-helpers/nextjs';
+} from '@supabase/auth-helpers-nextjs';
 import Link from 'next/link';
 
 export default function ProtectedPage({

@@ -1,0 +1,18 @@
+{
+  "name": "@supabase/auth-helpers-nextjs",
+  "description": "Next.js specific Supabase Auth Helpers.",
+  "version": "0.0.1",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/supabase-community/auth-helpers",
+    "directory": "packages/auth-helpers-nextjs"
+  },
+  "bugs": {
+    "url": "https://github.com/supabase-community/auth-helpers/issues"
+  },
+  "peerDependencies": {
+    "@supabase/supabase-js": ">=1.33.3",
+    "next": ">=10"
+  }
+}

@@ -4,9 +4,9 @@ import {
   NextApiResponse
 } from 'next';
 import getUser from './getUser';
-import { jwtDecoder } from '../../shared/utils/jwt';
+import { jwtDecoder } from '../utils/jwt';
 import { CookieOptions } from '../types';
-import { COOKIE_OPTIONS } from '../../shared/utils/constants';
+import { COOKIE_OPTIONS } from '../utils/constants';
 
 export interface GetAccessTokenOptions {
   cookieOptions?: CookieOptions;

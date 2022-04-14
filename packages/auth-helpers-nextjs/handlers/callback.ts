@@ -1,11 +1,11 @@
 import { CookieOptions } from '../types';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { setCookies } from '../../shared/utils/cookies';
+import { setCookies } from '../utils/cookies';
 import {
   NextRequestAdapter,
   NextResponseAdapter
-} from '../../shared/adapters/NextAdapter';
-import { COOKIE_OPTIONS } from '../../shared/utils/constants';
+} from '../adapters/NextAdapter';
+import { COOKIE_OPTIONS } from '../utils/constants';
 
 export interface HandleCallbackOptions {
   cookieOptions?: CookieOptions;

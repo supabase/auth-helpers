@@ -5,9 +5,9 @@ import {
   NextApiRequest,
   NextApiResponse
 } from 'next';
-import { jwtDecoder } from '../../shared/utils/jwt';
+import { jwtDecoder } from '../utils/jwt';
 import { CookieOptions } from '../types';
-import { COOKIE_OPTIONS } from '../../shared/utils/constants';
+import { COOKIE_OPTIONS } from '../utils/constants';
 import getAccessToken from './getAccessToken';
 import getUser from './getUser';
 
@@ -18,7 +18,7 @@ import getUser from './getUser';
  *
  * ```js
  * // pages/profile.js
- * import { withAuthRequired } from '@supabase/auth-helpers/nextjs';
+ * import { withAuthRequired } from '@supabase/auth-helpers-nextjs';
  *
  * export default function Profile({ user }) {
  *   return <div>Hello {user.name}</div>;
@@ -34,7 +34,7 @@ import getUser from './getUser';
  *
  * ```js
  * // pages/protected-page.js
- * import { withAuthRequired, getUser } from '@supabase/auth-helpers/nextjs';
+ * import { withAuthRequired, getUser } from '@supabase/auth-helpers-nextjs';
  *
  * export default function ProtectedPage({ user, customProp }) {
  *   return <div>Protected content</div>;
@@ -56,7 +56,7 @@ import getUser from './getUser';
  *
  * ```js
  * // pages/api/protected-route.js
- * import { withAuthRequired, supabaseServerClient } from '@supabase/auth-helpers/nextjs';
+ * import { withAuthRequired, supabaseServerClient } from '@supabase/auth-helpers-nextjs';
  *
  * export default withAuthRequired(async function ProtectedRoute(req, res) {
  *   // Run queries with RLS on the server

@@ -5,13 +5,13 @@ import {
 } from 'next';
 import { User, createClient } from '@supabase/supabase-js';
 import { CookieOptions, ApiError } from '../types';
-import { setCookies } from '../../shared/utils/cookies';
-import { COOKIE_OPTIONS } from '../../shared/utils/constants';
-import { jwtDecoder } from '../../shared/utils/jwt';
+import { setCookies } from '../utils/cookies';
+import { COOKIE_OPTIONS } from '../utils/constants';
+import { jwtDecoder } from '../utils/jwt';
 import {
   NextRequestAdapter,
   NextResponseAdapter
-} from '../../shared/adapters/NextAdapter';
+} from '../adapters/NextAdapter';
 
 export interface GetUserOptions {
   cookieOptions?: CookieOptions;

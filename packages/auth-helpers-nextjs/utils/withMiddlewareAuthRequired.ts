@@ -3,13 +3,13 @@ import { NextResponse } from 'next/dist/server/web/spec-extension/response';
 import { NextMiddleware } from 'next/server';
 import { User, ApiError, createClient } from '@supabase/supabase-js';
 import { CookieOptions } from '../types';
-import { COOKIE_OPTIONS } from '../../shared/utils/constants';
-import { jwtDecoder } from '../../shared/utils/jwt';
-import { setCookies } from '../../shared/utils/cookies';
+import { COOKIE_OPTIONS } from '../utils/constants';
+import { jwtDecoder } from '../utils/jwt';
+import { setCookies } from '../utils/cookies';
 import {
   NextRequestAdapter,
   NextResponseAdapter
-} from '../../shared/adapters/NextMiddlewareAdapter';
+} from '../adapters/NextMiddlewareAdapter';
 
 export type WithMiddlewareAuthRequired = (options?: {
   /**

@@ -64,6 +64,7 @@ typings/
 .env.local
 
 # Distribution directories
+build/
 dist/
 .next
 

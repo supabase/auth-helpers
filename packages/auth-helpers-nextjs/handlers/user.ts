@@ -1,8 +1,8 @@
 import { ApiError, CookieOptions } from '../types';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { jwtDecoder } from '../../shared/utils/jwt';
+import { jwtDecoder } from '../utils/jwt';
 import getUser from '../utils/getUser';
-import { COOKIE_OPTIONS } from '../../shared/utils/constants';
+import { COOKIE_OPTIONS } from '../utils/constants';
 
 export interface HandleUserOptions {
   cookieOptions?: CookieOptions;

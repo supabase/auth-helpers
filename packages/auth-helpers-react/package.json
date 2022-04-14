@@ -1,0 +1,19 @@
+{
+  "name": "@supabase/auth-helpers-react",
+  "description": "Pure React Supabase Auth Helpers that are shared across React based frameworks.",
+  "version": "0.0.1",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/supabase-community/auth-helpers",
+    "directory": "packages/auth-helpers-react"
+  },
+  "bugs": {
+    "url": "https://github.com/supabase-community/auth-helpers/issues"
+  },
+  "peerDependencies": {
+    "@supabase/supabase-js": ">=1.33.3",
+    "react": ">=16.8",
+    "react-dom": ">=16.8"
+  }
+}
