@@ -107,7 +107,10 @@ export default function withAuthRequired(
       redirectTo = '/',
       cookieOptions = {}
     } = arg ? arg : {};
+
     return async (context: GetServerSidePropsContext) => {
+      let user, accessToken;
+
       try {
         if (!context.req.cookies) {
           throw new Error('Not able to parse cookies!');
@@ -119,7 +122,6 @@ export default function withAuthRequired(
           throw new Error('No cookie found!');
         }
 
-        let user, accessToken;
         // Get payload from cached access token.
         const jwtUser = jwtDecoder(access_token);
         if (!jwtUser?.exp) {
@@ -158,15 +160,6 @@ export default function withAuthRequired(
         if (!user) {
           throw new Error('No user found!');
         }
-
-        let ret: any = { props: {} };
-        if (getServerSideProps) {
-          ret = await getServerSideProps(context);
-        }
-        return {
-          ...ret,
-          props: { ...ret.props, user: user, accessToken: accessToken }
-        };
       } catch (e) {
         return {
           redirect: {
@@ -175,6 +168,15 @@ export default function withAuthRequired(
           }
         };
       }
+
+      let ret: any = { props: {} };
+      if (getServerSideProps) {
+        ret = await getServerSideProps(context);
+      }
+      return {
+        ...ret,
+        props: { ...ret.props, user: user, accessToken: accessToken }
+      };
     };
   }
 }
