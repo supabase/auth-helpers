@@ -1,0 +1,8 @@
+{
+  "extends": "tsconfig/nextjs.json",
+  "compilerOptions": {
+    "incremental": false
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"]
+}
