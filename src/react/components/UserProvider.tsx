@@ -1,12 +1,13 @@
-import React, {
-  useEffect,
-  useState,
-  createContext,
-  useContext,
-  useCallback
-} from 'react';
-import { useRouter } from 'next/router';
 import { SupabaseClient, User } from '@supabase/supabase-js';
+import { useRouter } from 'next/router';
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState
+} from 'react';
 
 export type UserState = {
   user: User | null;
@@ -17,12 +18,20 @@ export type UserState = {
 
 const UserContext = createContext<UserState | undefined>(undefined);
 
-type UserFetcher = (
-  url: string
-) => Promise<{ user: User | null; accessToken: string | null }>;
+type UserFetcher = (url: string) => Promise<{
+  user: User | null;
+  accessToken: string | null;
+  refreshToken: string | null;
+  expiresAt: number | null;
+}>;
 const userFetcher: UserFetcher = async (url) => {
   const response = await fetch(url);
   return response.ok ? response.json() : { user: null, accessToken: null };
+};
+
+type RefreshToken = {
+  token: string;
+  expiresAt: number;
 };
 
 export interface Props {
@@ -46,14 +55,21 @@ export const UserProvider = (props: Props) => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(!initialUser);
   const [error, setError] = useState<Error>();
+  const [refreshToken, setRefreshToken] = useState<RefreshToken | null>(null);
+  const refreshTimer = useRef<NodeJS.Timeout | undefined>();
   const { pathname } = useRouter();
 
   const checkSession = useCallback(async (): Promise<void> => {
     try {
-      const { user, accessToken } = await fetcher(profileUrl);
+      const { user, accessToken, refreshToken, expiresAt } = await fetcher(
+        profileUrl
+      );
       if (accessToken) {
         supabaseClient.auth.setAuth(accessToken);
         setAccessToken(accessToken);
+      }
+      if (refreshToken && expiresAt) {
+        setRefreshToken({ token: refreshToken, expiresAt });
       }
       setUser(user);
       if (!user) setIsLoading(false);
@@ -61,7 +77,34 @@ export const UserProvider = (props: Props) => {
       const error = new Error(`The request to ${profileUrl} failed`);
       setError(error);
     }
-  }, [profileUrl]);
+  }, [fetcher, profileUrl, supabaseClient]);
+
+  useEffect(() => {
+    if (!refreshToken) return;
+
+    if (refreshTimer.current !== undefined) {
+      clearTimeout(refreshTimer.current);
+    }
+
+    const timeNow = Math.round(Date.now() / 1000);
+    const expiresIn = refreshToken.expiresAt - timeNow;
+    const refreshDurationBeforeExpires = expiresIn > 60 ? 60 : 0.5;
+    const ms = (expiresIn - refreshDurationBeforeExpires) * 1000;
+
+    const timer = setTimeout(async () => {
+      // setSession triggers a refresh of the token
+      await supabaseClient.auth.setSession(refreshToken.token);
+      refreshTimer.current = undefined;
+    }, ms);
+
+    refreshTimer.current = timer;
+
+    return () => {
+      if (refreshTimer.current !== undefined) {
+        clearTimeout(refreshTimer.current);
+      }
+    };
+  }, [refreshToken, supabaseClient]);
 
   // Get cached user on every page render.
   useEffect(() => {
@@ -71,7 +114,7 @@ export const UserProvider = (props: Props) => {
       setIsLoading(false);
     }
     runOnPathChange();
-  }, [pathname]);
+  }, [checkSession, pathname]);
 
   useEffect(() => {
     const { data: authListener } = supabaseClient.auth.onAuthStateChange(
