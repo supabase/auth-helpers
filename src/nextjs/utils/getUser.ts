@@ -22,7 +22,13 @@ export default async function getUser(
     | GetServerSidePropsContext
     | { req: NextApiRequest; res: NextApiResponse },
   options: GetUserOptions = {}
-): Promise<{ user: User | null; accessToken: string | null; error?: string }> {
+): Promise<{
+  user: User | null;
+  accessToken: string | null;
+  refreshToken: string | null;
+  expiresAt: number | null;
+  error?: string;
+}> {
   try {
     if (
       !process.env.NEXT_PUBLIC_SUPABASE_URL ||
@@ -78,7 +84,12 @@ export default async function getUser(
             sameSite: cookieOptions.sameSite
           }))
         );
-        return { user: data!.user!, accessToken: data!.access_token };
+        return {
+          user: data!.user!,
+          accessToken: data!.access_token,
+          refreshToken: refresh_token,
+          expiresAt: jwtUser.exp
+        };
       }
     } else {
       const { user, error: getUserError } = await supabase.auth.api.getUser(
@@ -87,11 +98,22 @@ export default async function getUser(
       if (getUserError) {
         throw getUserError;
       }
-      return { user: user!, accessToken: access_token };
+      return {
+        user: user!,
+        accessToken: access_token,
+        refreshToken: refresh_token,
+        expiresAt: jwtUser.exp
+      };
     }
   } catch (e) {
     const error = e as ApiError;
     console.log('Error getting user:', error);
-    return { user: null, accessToken: null, error: error.message };
+    return {
+      user: null,
+      accessToken: null,
+      refreshToken: null,
+      expiresAt: null,
+      error: error.message
+    };
   }
 }
