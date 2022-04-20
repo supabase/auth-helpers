@@ -30,7 +30,7 @@ export interface Props {
   profileUrl?: string;
   user?: User;
   fetcher?: UserFetcher;
-  pathname: any;
+  pathname: string;
   [propName: string]: any;
 }
 

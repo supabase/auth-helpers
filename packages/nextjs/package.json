@@ -13,7 +13,7 @@
     "access": "public"
   },
   "scripts": {
-    "build": "pnpm clean && tsup",
+    "build": "tsup",
     "clean": "rimraf dist",
     "clean:all": "rimraf dist node_modules",
     "publish": "semantic-release"

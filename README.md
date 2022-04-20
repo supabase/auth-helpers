@@ -1,4 +1,4 @@
-# @supabase/supabase-auth-helpers
+# @supabase/auth-helpers
 
 A collection of framework specific Auth utilities for working with Supabase.
 
@@ -12,14 +12,16 @@ A collection of framework specific Auth utilities for working with Supabase.
 - [Remix](https://github.com/supabase-community/supabase-auth-helpers/issues/57)
 - [SvelteKit](https://github.com/supabase-community/supabase-auth-helpers/issues/54)
 
-### Apps and Packages
+### Examples and Packages
 
-- `nextjs`: a [Next.js](https://nextjs.org) app
-- `@supabase/auth-helpers-nextjs`: the supabase auth helper nextjs library used by `nextjs` application
-- `@supabase/auth-helpers-react`: the supabase auth helper reactjs library used by `nextjs` application
-- `shared`: shared typescript types used by `@supabase/auth-helpers-nextjs` library
-- `config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `tsconfig`: `tsconfig.json`s used throughout the monorepo
+- Examples
+  - `nextjs`: a [Next.js](https://nextjs.org) app
+- Packages
+  - `@supabase/auth-helpers-nextjs`: the supabase auth helper nextjs library used by `nextjs` application
+  - `@supabase/auth-helpers-react`: the supabase auth helper reactjs library used by `nextjs` application
+  - `shared`: shared typescript types used by `@supabase/auth-helpers-nextjs` library
+  - `config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
+  - `tsconfig`: `tsconfig.json`s used throughout the monorepo
 
 Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 
@@ -33,13 +35,22 @@ This turborepo has some additional tools already setup for you:
 
 ## Setup
 
-This repository is used in the `npx create-turbo@latest` command, and selected when choosing which package manager you wish to use with your monorepo (PNPM).
+This repository is a monorepo using PNPM.
+
+Install [pnpm](https://pnpm.io/installation)
+
+Install all examples and packages dependencies with pnpm
+
+```sh
+cd auth-helpers
+pnpm install
+```
 
 ### Build
 
 To build all apps and packages, run the following command:
 
-```
+```sh
 cd auth-helpers
 pnpm build
 ```
@@ -48,7 +59,7 @@ pnpm build
 
 To develop all apps and packages, run the following command:
 
-```
+```sh
 cd auth-helpers
 pnpm dev
 ```

@@ -198,11 +198,7 @@ export const getServerSideProps = withAuthRequired({
 When using third-party auth providers, sessions are initiated with an additional `provider_token` field which is persisted as an HTTPOnly cookie upon logging in to enabled usage on the server side. The `provider_token` can be used to make API requests to the OAuth provider's API endpoints on behalf of the logged-in user. In the following example, we fetch the user's full profile from the third-party API during SSR using their id and auth token:
 
 ```js
-import {
-  User,
-  withAuthRequired,
-  getUser
-} from '@supabase/auth-helpers-nextjs';
+import { User, withAuthRequired, getUser } from '@supabase/auth-helpers-nextjs';
 
 interface Profile {
   /* ... */
