@@ -8,7 +8,9 @@
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "docs": "typedoc",
-    "clean:all": "turbo run clean:all"
+    "clean:all": "turbo run clean:all",
+    "ci:version": "changeset version",
+    "ci:release": "changeset publish"
   },
   "devDependencies": {
     "@changesets/cli": "^2.22.0",

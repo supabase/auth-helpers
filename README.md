@@ -15,7 +15,7 @@ A collection of framework specific Auth utilities for working with Supabase.
 ### Examples and Packages
 
 - Examples
-  - `nextjs`: a [Next.js](https://nextjs.org) app
+  - `@examples/nextjs`: a [Next.js](https://nextjs.org) app
 - Packages
   - `@supabase/auth-helpers-nextjs`: the supabase auth helper nextjs library used by `nextjs` application
   - `@supabase/auth-helpers-react`: the supabase auth helper reactjs library used by `nextjs` application
@@ -39,10 +39,11 @@ This repository is a monorepo using PNPM.
 
 Install [pnpm](https://pnpm.io/installation)
 
+> All commands below should be run at the root level of the cloned repository.
+
 Install all examples and packages dependencies with pnpm
 
 ```sh
-cd auth-helpers
 pnpm install
 ```
 
@@ -51,7 +52,6 @@ pnpm install
 To build all apps and packages, run the following command:
 
 ```sh
-cd auth-helpers
 pnpm build
 ```
 
@@ -60,6 +60,13 @@ pnpm build
 To develop all apps and packages, run the following command:
 
 ```sh
-cd auth-helpers
 pnpm dev
+```
+
+### Change logs
+
+To generate a changelog entry, run the following command:
+
+```sh
+pnpm changeset
 ```
