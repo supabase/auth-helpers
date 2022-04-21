@@ -3,7 +3,12 @@ module.exports = {
   out: './docs/',
   entryPoints: ['./packages'],
   entryPointStrategy: 'expand',
-  exclude: ['./node_modules/**'],
+  exclude: [
+    'packages/shared/utils/index.ts',
+    '**/node_modules/**',
+    '**/dist/**',
+    '**/packages/**/tsup.config.ts'
+  ],
   excludeExternals: true,
   excludePrivate: true,
   hideGenerator: true,
