@@ -2,7 +2,7 @@
 import {
   withAuthRequired,
   supabaseServerClient
-} from '@supabase/supabase-auth-helpers/nextjs';
+} from '@supabase/auth-helpers-nextjs';
 
 export default withAuthRequired(async function ProtectedRoute(req, res) {
   // Run queries with RLS on the server

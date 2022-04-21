@@ -1,8 +1,14 @@
 module.exports = {
-  name: '@supabase/supabase-auth-helpers',
+  name: '@supabase/auth-helpers',
   out: './docs/',
+  entryPoints: ['./packages'],
   entryPointStrategy: 'expand',
-  exclude: ['./src/index.ts'],
+  exclude: [
+    'packages/shared/utils/index.ts',
+    '**/node_modules/**',
+    '**/dist/**',
+    '**/packages/**/tsup.config.ts'
+  ],
   excludeExternals: true,
   excludePrivate: true,
   hideGenerator: true,

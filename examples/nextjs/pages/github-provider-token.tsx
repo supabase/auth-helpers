@@ -1,9 +1,5 @@
 // pages/protected-page.js
-import {
-  User,
-  withAuthRequired,
-  getUser
-} from '@supabase/supabase-auth-helpers/nextjs';
+import { User, withAuthRequired, getUser } from '@supabase/auth-helpers-nextjs';
 import Link from 'next/link';
 
 export default function ProtectedPage({

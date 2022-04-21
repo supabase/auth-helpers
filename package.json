@@ -1,65 +1,26 @@
 {
-  "name": "@supabase/supabase-auth-helpers",
+  "name": "@supabase/auth-helpers",
   "version": "0.0.0",
-  "description": "A collection of framework specific Auth utilities for working with Supabase.",
-  "engines": {
-    "node": "^10.13.0 || >=12.0.0"
-  },
+  "private": true,
   "scripts": {
-    "clean": "rimraf dist",
-    "pretty": "prettier --write \"src/**/*.{ts,tsx}\" \"src/*.ts\"",
-    "lint": "tsc --noEmit && eslint --fix --ext .ts ./src",
-    "docs": "typedoc --options typedoc.js src",
-    "prepack": "npm run build",
-    "postinstall": "npm i --prefix=src",
-    "install:nextjs": "npm i --prefix=examples/nextjs --no-package-lock",
-    "install:examples": "npm run install:nextjs",
-    "build": "npm run clean && tsc -p tsconfig.build.json",
-    "build:nextjs": "npm run build --prefix=examples/nextjs",
-    "build:examples": "npm run build:nextjs",
-    "dev:nextjs": "npm run dev --prefix=examples/nextjs"
+    "build": "turbo run build",
+    "dev": "turbo run dev --parallel",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "docs": "typedoc",
+    "clean:all": "turbo run clean:all",
+    "ci:version": "changeset version",
+    "ci:release": "changeset publish"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/supabase-community/supabase-auth-helpers.git"
-  },
-  "keywords": [
-    "Supabase",
-    "Auth",
-    "Nextjs",
-    "Remix"
-  ],
-  "author": "Supabase Community",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/supabase-community/supabase-auth-helpers/issues"
-  },
-  "homepage": "https://github.com/supabase-community/supabase-auth-helpers#readme",
   "devDependencies": {
-    "@types/node": "^14.14.20",
-    "@types/react": "^17.0.20",
-    "@types/react-dom": "^17.0.9",
-    "eslint-config-prettier": "^8.1.0",
-    "eslint-import-resolver-typescript": "^2.3.0",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-prettier": "^3.3.1",
-    "eslint-plugin-react": "^7.22.0",
-    "eslint-plugin-react-hooks": "^4.2.0",
-    "next": "^12.0.10",
-    "prettier": "^2.2.1",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "rimraf": "^3.0.2",
-    "typedoc": "^0.22.11",
-    "typescript": "^4.1.3"
+    "@changesets/cli": "^2.22.0",
+    "prettier": "^2.5.1",
+    "turbo": "latest",
+    "typedoc": "^0.22.15"
   },
-  "dependencies": {
-    "@supabase/supabase-js": "^1.30.0",
-    "@supabase/ui": "^0.36.3",
-    "tslib": "^2.3.1"
+  "engines": {
+    "npm": ">=7.0.0",
+    "node": ">=14.0.0"
   },
-  "peerDependencies": {
-    "next": ">=10"
-  }
+  "packageManager": "pnpm@6.32.3"
 }
