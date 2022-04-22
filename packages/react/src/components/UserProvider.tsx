@@ -45,15 +45,18 @@ export const UserProvider = (props: Props) => {
   } = props;
   const [user, setUser] = useState<User | null>(initialUser);
   const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [isForwarding, setIsForwarding] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(!initialUser);
   const [error, setError] = useState<Error>();
 
   const checkSession = useCallback(async (): Promise<void> => {
     try {
-      const { user, accessToken } = await fetcher(profileUrl);
-      if (accessToken) {
-        supabaseClient.auth.setAuth(accessToken);
-        setAccessToken(accessToken);
+      const { user, accessToken: fetchedAccessToken } = await fetcher(
+        profileUrl
+      );
+      if (fetchedAccessToken && fetchedAccessToken !== accessToken) {
+        supabaseClient.auth.setAuth(fetchedAccessToken);
+        setAccessToken(fetchedAccessToken);
       }
       setUser(user);
       if (!user) setIsLoading(false);
@@ -76,6 +79,12 @@ export const UserProvider = (props: Props) => {
   useEffect(() => {
     const { data: authListener } = supabaseClient.auth.onAuthStateChange(
       async (event, session) => {
+        if (event === 'TOKEN_REFRESHED' && isForwarding) {
+          // token was already refreshed
+          setIsForwarding(false);
+          return;
+        }
+        setIsForwarding(true);
         setIsLoading(true);
         // Forward session from client to server where it is set in a Cookie.
         // NOTE: this will eventually be removed when the Cookie can be set differently.
