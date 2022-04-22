@@ -1,6 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
-
-import { RequestAdapter, ResponseAdapter } from './types';
+import type { NextRequest, NextResponse } from 'next/server';
+import type { RequestAdapter, ResponseAdapter } from './types';
 
 export class NextRequestAdapter implements RequestAdapter {
   private req: NextRequest;

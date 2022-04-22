@@ -9,7 +9,8 @@
       "outputs": ["dist/**", ".next/**"]
     },
     "clean:all": {
-      "dependsOn": ["^clean:all"]
+      "dependsOn": ["^clean:all"],
+      "cache": false
     },
     "lint": {
       "outputs": []

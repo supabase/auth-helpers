@@ -1,7 +1,7 @@
-import { IncomingMessage, ServerResponse } from 'http';
+import type { IncomingMessage, ServerResponse } from 'http';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import type { NextApiRequestCookies } from 'next/dist/server/api-utils';
-import { RequestAdapter, ResponseAdapter } from './types';
+import type { RequestAdapter, ResponseAdapter } from './types';
 
 type NextRequest =
   | NextApiRequest

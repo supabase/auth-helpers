@@ -1,4 +1,4 @@
-import { RequestAdapter, ResponseAdapter } from '../adapters/types';
+import type { RequestAdapter, ResponseAdapter } from '../adapters/types';
 
 type Cookie = {
   name: string;

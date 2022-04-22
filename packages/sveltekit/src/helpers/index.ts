@@ -1,0 +1,1 @@
+export { redirect } from './redirect';
