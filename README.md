@@ -4,7 +4,7 @@ A collection of framework specific Auth utilities for working with Supabase.
 
 ## Supported Frameworks
 
-- [Next.js](./src/nextjs/README.md)
+- [Next.js](./packages/nextjs/README.md)
 - [Nuxt - via @nuxtjs/supabase](https://supabase.nuxtjs.org/)
 
 ### Coming soon
