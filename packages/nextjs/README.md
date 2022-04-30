@@ -9,13 +9,7 @@ Install the `@supabase/supabase-auth-helpers` package.
 Using [npm](https://npmjs.org):
 
 ```sh
-npm install @supabase/supabase-auth-helpers/nextjs
-```
-
-Import the Next.js utils in your application like this:
-
-```js
-import { withAuthRequired } from '@supabase/supabase-auth-helpers/nextjs';
+npm install @supabase/supabase-auth-helpers
 ```
 
 This library supports the following tooling versions:
