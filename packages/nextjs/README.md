@@ -1,13 +1,21 @@
-# @supabase/auth-helpers-nextjs
+# @supabase/supabase-auth-helpers/nextjs
 
 This submodule provides convenience helpers for implementing user authentication in Next.js applications.
 
 ## Installation
 
+Install the `@supabase/supabase-auth-helpers` package.
+
 Using [npm](https://npmjs.org):
 
 ```sh
-npm install @supabase/auth-helpers-nextjs
+npm install @supabase/supabase-auth-helpers/nextjs
+```
+
+Import the Next.js utils in your application like this:
+
+```js
+import { withAuthRequired } from '@supabase/supabase-auth-helpers/nextjs';
 ```
 
 This library supports the following tooling versions:
