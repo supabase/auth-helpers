@@ -45,7 +45,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 The path to your dynamic API route file would be `/pages/api/auth/[...supabase].js`. Populate that file as follows:
 
 ```js
-import { handleAuth } from '@supabase/auth-helpers-nextjs';
+import { handleAuth } from '@supabase/supabase-auth-helpers/nextjs';
 
 export default handleAuth({ logout: { returnTo: '/' } });
 ```
@@ -63,8 +63,8 @@ Wrap your `pages/_app.js` component with the `UserProvider` component:
 ```jsx
 // pages/_app.js
 import React from 'react';
-import { UserProvider } from '@supabase/auth-helpers-react';
-import { supabaseClient } from '@supabase/auth-helpers-nextjs';
+import { UserProvider } from '@supabase/supabase-auth-helpers/react';
+import { supabaseClient } from '@supabase/supabase-auth-helpers/nextjs';
 
 export default function App({ Component, pageProps }) {
   return (
@@ -82,8 +82,8 @@ You can now determine if a user is authenticated by checking that the `user` obj
 For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row-level-security) to work properly when fetching data client-side, you need to make sure to import the `{ supabaseClient }` from `# @supabase/auth-helpers-nextjs` and only run your query once the user is defined client-side in the `useUser()` hook:
 
 ```js
-import { useUser, Auth } from '@supabase/auth-helpers-react';
-import { supabaseClient } from '@supabase/auth-helpers-nextjs';
+import { useUser, Auth } from '@supabase/supabase-auth-helpers/react';
+import { supabaseClient } from '@supabase/supabase-auth-helpers/nextjs';
 import { useEffect, useState } from 'react';
 
 const LoginPage = () => {
@@ -132,7 +132,7 @@ If you wrap your `getServerSideProps` with `withAuthRequired` your props object 
 
 ```js
 // pages/profile.js
-import { withAuthRequired } from '@supabase/auth-helpers-nextjs';
+import { withAuthRequired } from '@supabase/supabase-auth-helpers/nextjs';
 
 export default function Profile({ user }) {
   return <div>Hello {user.name}</div>;
@@ -148,7 +148,7 @@ user props. You can also access the user session data by calling `getUser` insid
 
 ```js
 // pages/protected-page.js
-import { withAuthRequired, getUser } from '@supabase/auth-helpers-nextjs';
+import { withAuthRequired, getUser } from '@supabase/supabase-auth-helpers/nextjs';
 
 export default function ProtectedPage({ user, customProp }) {
   return <div>Protected content</div>;
@@ -173,7 +173,7 @@ import {
   User,
   withAuthRequired,
   supabaseServerClient
-} from '@supabase/auth-helpers-nextjs';
+} from '@supabase/supabase-auth-helpers/nextjs';
 
 export default function ProtectedPage({
   user,
@@ -206,7 +206,11 @@ export const getServerSideProps = withAuthRequired({
 When using third-party auth providers, sessions are initiated with an additional `provider_token` field which is persisted as an HTTPOnly cookie upon logging in to enabled usage on the server side. The `provider_token` can be used to make API requests to the OAuth provider's API endpoints on behalf of the logged-in user. In the following example, we fetch the user's full profile from the third-party API during SSR using their id and auth token:
 
 ```js
-import { User, withAuthRequired, getUser } from '@supabase/auth-helpers-nextjs';
+import {
+  User,
+  withAuthRequired,
+  getUser
+} from '@supabase/supabase-auth-helpers/nextjs';
 
 interface Profile {
   /* ... */
@@ -253,7 +257,7 @@ Wrap an API Route to check that the user has a valid session. If they're not log
 import {
   withAuthRequired,
   supabaseServerClient
-} from '@supabase/auth-helpers-nextjs';
+} from '@supabase/supabase-auth-helpers/nextjs';
 
 export default withAuthRequired(async function ProtectedRoute(req, res) {
   // Run queries with RLS on the server
@@ -272,7 +276,7 @@ As an alternative to protecting individual routes using `getServerSideProps` wit
 
 ```ts
 // pages/protected/_middleware.ts
-import { withMiddlewareAuthRequired } from '@supabase/auth-helpers-nextjs';
+import { withMiddlewareAuthRequired } from '@supabase/supabase-auth-helpers/nextjs';
 
 export const middleware = withMiddlewareAuthRequired({ redirectTo: '/login' });
 ```
