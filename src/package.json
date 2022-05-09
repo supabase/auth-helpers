@@ -37,7 +37,6 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^1.35.3",
-    "@supabase/ui": "^0.36.3",
     "tslib": "^2.3.1"
   }
 }

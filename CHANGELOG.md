@@ -2,6 +2,9 @@
 
 ## 1.4.0 - 2022-05-09
 
+- [BREAKING CHANGE][](): fix: remove `@supabase/ui` as dependency. If you are using the Auth component, please make sure to install `@supabase/ui` separately in your project and import `Auth` from there. Fixes #39; Fixes #64; Fixes #69; 
+
+
 - [](): fix: Refresh tokens client-side via updated gotrue-js dependency. Fixes #72; Fixes #77; Fixes #83; Fixes #84; Fixes #85; Closes #62
 
 

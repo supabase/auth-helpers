@@ -1,4 +1,5 @@
-import { useUser, Auth } from '@supabase/supabase-auth-helpers/react';
+import { Auth } from '@supabase/ui'
+import { useUser } from '@supabase/supabase-auth-helpers/react';
 import { supabaseClient } from '@supabase/supabase-auth-helpers/nextjs';
 import type { NextPage } from 'next';
 import Link from 'next/link';
@@ -29,7 +30,7 @@ const LoginPage: NextPage = () => {
             );
           }}
         >
-          GitHub wit scopes
+          GitHub with scopes
         </button>
         <Auth
           // view="update_password"
