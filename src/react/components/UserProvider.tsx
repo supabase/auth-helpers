@@ -76,6 +76,7 @@ export const UserProvider = (props: Props) => {
   useEffect(() => {
     const { data: authListener } = supabaseClient.auth.onAuthStateChange(
       async (event, session) => {
+        if (event === 'TOKEN_REFRESHED') return; // ignore this as we're refreshing tokens server-side.
         setIsLoading(true);
         // Forward session from client to server where it is set in a Cookie.
         // NOTE: this will eventually be removed when the Cookie can be set differently.
