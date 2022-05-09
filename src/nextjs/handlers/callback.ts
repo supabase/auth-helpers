@@ -26,7 +26,7 @@ export default function handelCallback(
   const { event, session } = req.body;
 
   if (!event) throw new Error('Auth event missing!');
-  if (event === 'SIGNED_IN') {
+  if (event === 'SIGNED_IN' || event === 'USER_UPDATED') {
     if (!session) throw new Error('Auth session missing!');
     setCookies(
       new NextRequestAdapter(req),
@@ -52,7 +52,7 @@ export default function handelCallback(
       }, [])
     );
   }
-  if (event === 'SIGNED_OUT') {
+  if (event === 'SIGNED_OUT' || event === 'USER_DELETED') {
     setCookies(
       new NextRequestAdapter(req),
       new NextResponseAdapter(res),

@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.4.0 - 2022-05-09
+
+- [](): fix: Refresh tokens client-side via updated gotrue-js dependency. Fixes #72; Fixes #77; Fixes #83; Fixes #84; Fixes #85; Closes #62
+
+
 ## 1.3.0 - 2022-03-19
 
 - [#44](https://github.com/supabase-community/supabase-auth-helpers/pull/43): feat: Add `withMiddlewareAuthRequired` Nextjs Middleware util to protect directories.
