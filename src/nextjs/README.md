@@ -118,19 +118,19 @@ const LoginPage = () => {
 export default LoginPage;
 ```
 
-### Server-side rendering (SSR) - withAuthRequired
+### Server-side rendering (SSR) - withPageAuth
 
-If you wrap your `getServerSideProps` with `withAuthRequired` your props object will be augmented with the user object.
+If you wrap your `getServerSideProps` with `withPageAuth` your props object will be augmented with the user object.
 
 ```js
 // pages/profile.js
-import { withAuthRequired } from '@supabase/supabase-auth-helpers/nextjs';
+import { withPageAuth } from '@supabase/supabase-auth-helpers/nextjs';
 
 export default function Profile({ user }) {
   return <div>Hello {user.name}</div>;
 }
 
-export const getServerSideProps = withAuthRequired({ redirectTo: '/login' });
+export const getServerSideProps = withPageAuth({ redirectTo: '/login' });
 ```
 
 If there is no authenticated user, they will be redirect to your home page, unless you specify the `redirectTo` option.
@@ -140,13 +140,13 @@ user props. You can also access the user session data by calling `getUser` insid
 
 ```js
 // pages/protected-page.js
-import { withAuthRequired, getUser } from '@supabase/supabase-auth-helpers/nextjs';
+import { withPageAuth, getUser } from '@supabase/supabase-auth-helpers/nextjs';
 
 export default function ProtectedPage({ user, customProp }) {
   return <div>Protected content</div>;
 }
 
-export const getServerSideProps = withAuthRequired({
+export const getServerSideProps = withPageAuth({
   redirectTo: '/foo',
   async getServerSideProps(ctx) {
     // Access the user object
@@ -163,7 +163,7 @@ For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row
 ```js
 import {
   User,
-  withAuthRequired,
+  withPageAuth,
   supabaseServerClient
 } from '@supabase/supabase-auth-helpers/nextjs';
 
@@ -183,7 +183,7 @@ export default function ProtectedPage({
   );
 }
 
-export const getServerSideProps = withAuthRequired({
+export const getServerSideProps = withPageAuth({
   redirectTo: '/',
   async getServerSideProps(ctx) {
     // Run queries with RLS on the server
@@ -200,7 +200,7 @@ When using third-party auth providers, sessions are initiated with an additional
 ```js
 import {
   User,
-  withAuthRequired,
+  withPageAuth,
   getUser
 } from '@supabase/supabase-auth-helpers/nextjs';
 
@@ -218,7 +218,7 @@ export default function ProtectedPage({
   return <div>Protected content</div>;
 }
 
-export const getServerSideProps = withAuthRequired({
+export const getServerSideProps = withPageAuth({
   redirectTo: '/',
   async getServerSideProps(ctx) {
     // Retrieve provider_token from cookies
@@ -247,11 +247,11 @@ Wrap an API Route to check that the user has a valid session. If they're not log
 ```js
 // pages/api/protected-route.js
 import {
-  withAuthRequired,
+  withApiAuth,
   supabaseServerClient
 } from '@supabase/supabase-auth-helpers/nextjs';
 
-export default withAuthRequired(async function ProtectedRoute(req, res) {
+export default withApiAuth(async function ProtectedRoute(req, res) {
   // Run queries with RLS on the server
   const { data } = await supabaseServerClient({ req, res })
     .from('test')
@@ -264,7 +264,7 @@ If you visit `/api/protected-route` without a valid session cookie, you will get
 
 ## Protecting routes with [Nextjs Middleware](https://nextjs.org/docs/middleware)
 
-As an alternative to protecting individual routes using `getServerSideProps` with `withAuthRequired`, `withMiddlewareAuthRequired` can be used from inside a `_middleware` file to protect an entire directory. In the following example, all requests to `/protected/*` will check whether a user is signed in, if successful the request will be forwarded to the destination route, otherwise the user will be redirected to `/login` (defaults to: `/`) with a 307 Temporary Redirect response status:
+As an alternative to protecting individual pages using `getServerSideProps` with `withPageAuth`, `withMiddlewareAuthRequired` can be used from inside a `_middleware` file to protect an entire directory. In the following example, all requests to `/protected/*` will check whether a user is signed in, if successful the request will be forwarded to the destination route, otherwise the user will be redirected to `/login` (defaults to: `/`) with a 307 Temporary Redirect response status:
 
 ```ts
 // pages/protected/_middleware.ts
