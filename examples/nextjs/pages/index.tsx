@@ -1,4 +1,4 @@
-import { Auth } from '@supabase/ui'
+import { Auth } from '@supabase/ui';
 import { useUser } from '@supabase/supabase-auth-helpers/react';
 import { supabaseClient } from '@supabase/supabase-auth-helpers/nextjs';
 import type { NextPage } from 'next';
@@ -46,7 +46,7 @@ const LoginPage: NextPage = () => {
   return (
     <>
       <p>
-        [<Link href="/profile">withAuthRequired</Link>] | [
+        [<Link href="/profile">withPageAuth</Link>] | [
         <Link href="/protected-page">supabaseServerClient</Link>]
       </p>
       {isLoading ? <h1>Loading...</h1> : <h1>Loaded!</h1>}

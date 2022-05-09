@@ -1,18 +1,26 @@
 // pages/profile.js
-import { withAuthRequired, User } from '@supabase/supabase-auth-helpers/nextjs';
+import { withPageAuth, User } from '@supabase/supabase-auth-helpers/nextjs';
 import Link from 'next/link';
 
-export default function Profile({ user }: { user: User }) {
-  return (
-    <>
-      <p>
-        [<Link href="/">Home</Link>] | [
-        <Link href="/protected-page">supabaseServerClient</Link>]
-      </p>
-      <div>Hello {user.email}</div>
-      <pre>{JSON.stringify(user, null, 2)}</pre>
-    </>
-  );
+export default function Profile({
+  user,
+  error
+}: {
+  user: User;
+  error: string;
+}) {
+  if (user)
+    return (
+      <>
+        <p>
+          [<Link href="/">Home</Link>] | [
+          <Link href="/protected-page">supabaseServerClient</Link>]
+        </p>
+        <div>Hello {user.email}</div>
+        <pre>{JSON.stringify(user, null, 2)}</pre>
+      </>
+    );
+  return <p>{error}</p>;
 }
 
-export const getServerSideProps = withAuthRequired();
+export const getServerSideProps = withPageAuth({ authRequired: false });
