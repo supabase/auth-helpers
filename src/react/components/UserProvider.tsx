@@ -124,7 +124,7 @@ export const UserProvider = (props: Props) => {
       window?.addEventListener('visibilitychange', handleVisibilityChange);
     const { data: authListener } = supabaseClient.auth.onAuthStateChange(
       async (event, session) => {
-        if (event === 'TOKEN_REFRESHED') return; // ignore this as it also emits a SIGNED_IN event.
+        if (event === 'TOKEN_REFRESHED') return; // ignore this as we're refreshing tokens server-side.
         setIsLoading(true);
         // Forward session from client to server where it is set in a Cookie.
         // NOTE: this will eventually be removed when the Cookie can be set differently.
