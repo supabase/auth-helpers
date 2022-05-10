@@ -1,5 +1,21 @@
 # CHANGELOG
 
+## 1.4.0 - 2022-05-10
+
+- **BREAKING CHANGE** [a48a238](https://github.com/supabase-community/supabase-auth-helpers/pull/92/commits/a48a238b1efe89456835e0b23954b21a55937224): fix: remove `@supabase/ui` as dependency. If you are using the Auth component, please make sure to install `@supabase/ui` separately in your project and import `Auth` from there. Fixes #39; Fixes #64; Fixes #69;
+
+- **BREAKING CHANGE** [ecdc5a2](https://github.com/supabase-community/supabase-auth-helpers/pull/92/commits/ecdc5a240bf0b3d72ab21a42e01cf4dee9eb5ec7): fix: rename `withMiddlewareAuthRequired` to `withMiddlewareAuth` and move it to `@supabase/supabase-auth-helpers/nextjs/middleware`. Closes #59; Fixes #90
+- [19f53c3](https://github.com/supabase-community/supabase-auth-helpers/pull/92/commits/19f53c34a7237d4f1370ed06f5bc6613954361a5): feat: adds `withPageAuth` [[docs](./src/nextjs/README.md#server-side-rendering-ssr---withpageauth)] and deprecates `withAuthRequired`.
+- [8888b41](https://github.com/supabase-community/supabase-auth-helpers/pull/92/commits/8888b41242291219eadff8631e25b85101b90255): feat: adds `withApiAuth` [[docs](./src/nextjs/README.md#protecting-api-routes)] and deprecates `withAuthRequired`.
+
+- [df984d0](https://github.com/supabase-community/supabase-auth-helpers/pull/92/commits/df984d0f12b364cd2e6e5238906dc14c9a452859): fix: automtically refresh tokens. Fixes #72; Fixes #77; Fixes #83; Fixes #84; Fixes #85;
+
+- [862acf8](https://github.com/supabase-community/supabase-auth-helpers/pull/92/commits/862acf8792a1a95cf6527f226148be111957436f): fix: refresh token automatically when user is updated. Fixes #62
+
+## 1.3.1 - 2022-05-09
+
+- [#91](https://github.com/supabase-community/supabase-auth-helpers/pull/91): fix: token refresh loop
+
 ## 1.3.0 - 2022-03-19
 
 - [#44](https://github.com/supabase-community/supabase-auth-helpers/pull/43): feat: Add `withMiddlewareAuthRequired` Nextjs Middleware util to protect directories.
@@ -19,7 +35,7 @@
 
 ## 1.2.0 - 2022-03-01
 
-- [BREAKING CHANGE][#32](https://github.com/supabase-community/supabase-auth-helpers/pull/32): feat: add logout api route. Note that this includes a breaking change to the options parameter for `handleAuth(options: HandleAuthOptions)` See [the docs](./src/nextjs/README.md#basic-setup) for more details.
+- **BREAKING CHANGE** [#32](https://github.com/supabase-community/supabase-auth-helpers/pull/32): feat: add logout api route. Note that this includes a breaking change to the options parameter for `handleAuth(options: HandleAuthOptions)` See [the docs](./src/nextjs/README.md#basic-setup) for more details.
 
 ## 1.1.3 - 2022-02-23
 

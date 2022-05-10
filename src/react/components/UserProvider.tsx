@@ -5,24 +5,43 @@ import React, {
   useContext,
   useCallback
 } from 'react';
-import { useRouter } from 'next/router';
 import { SupabaseClient, User } from '@supabase/supabase-js';
+import { UserFetcher, UserState } from '../types';
+import {
+  TOKEN_REFRESH_MARGIN,
+  RETRY_INTERVAL,
+  MAX_RETRIES
+} from '../../shared/utils/constants';
 
-export type UserState = {
-  user: User | null;
-  accessToken: string | null;
-  error?: Error;
-  isLoading: boolean;
-};
+let networkRetries = 0;
+let refreshTokenTimer: ReturnType<typeof setTimeout>;
 
 const UserContext = createContext<UserState | undefined>(undefined);
 
-type UserFetcher = (
-  url: string
-) => Promise<{ user: User | null; accessToken: string | null }>;
+const handleError = async (error: any) => {
+  console.log(error);
+  if (typeof error.json !== 'function') {
+    return String(error);
+  }
+  const err = await error.json();
+  return {
+    message:
+      err.msg ||
+      err.message ||
+      err.error_description ||
+      err.error ||
+      JSON.stringify(err),
+    status: error?.status || 500
+  };
+};
+
 const userFetcher: UserFetcher = async (url) => {
-  const response = await fetch(url);
-  return response.ok ? response.json() : { user: null, accessToken: null };
+  const response = await fetch(url).catch(() => undefined);
+  if (!response)
+    return { user: null, accessToken: null, error: 'Request failed' };
+  return response.ok
+    ? response.json()
+    : { user: null, accessToken: null, error: await handleError(response) };
 };
 
 export interface Props {
@@ -31,6 +50,7 @@ export interface Props {
   profileUrl?: string;
   user?: User;
   fetcher?: UserFetcher;
+  autoRefreshToken?: boolean;
   [propName: string]: any;
 }
 
@@ -40,22 +60,49 @@ export const UserProvider = (props: Props) => {
     callbackUrl = '/api/auth/callback',
     profileUrl = '/api/auth/user',
     user: initialUser = null,
-    fetcher = userFetcher
+    fetcher = userFetcher,
+    autoRefreshToken = true
   } = props;
   const [user, setUser] = useState<User | null>(initialUser);
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(!initialUser);
   const [error, setError] = useState<Error>();
-  const { pathname } = useRouter();
 
   const checkSession = useCallback(async (): Promise<void> => {
     try {
-      const { user, accessToken } = await fetcher(profileUrl);
+      networkRetries++;
+      const { user, accessToken, error } = await fetcher(profileUrl);
+      if (error) {
+        if (error === 'Request failed' && networkRetries < MAX_RETRIES) {
+          if (refreshTokenTimer) clearTimeout(refreshTokenTimer);
+          refreshTokenTimer = setTimeout(
+            checkSession,
+            RETRY_INTERVAL ** networkRetries * 100 // exponential backoff
+          );
+          return;
+        }
+        console.error(error);
+        setError(new Error(error));
+      }
+      networkRetries = 0;
       if (accessToken) {
         supabaseClient.auth.setAuth(accessToken);
         setAccessToken(accessToken);
       }
       setUser(user);
+      // Set up auto token refresh
+      if (autoRefreshToken) {
+        const expiresAt = (user as any).exp;
+        let timeout = 20 * 1000;
+        if (expiresAt) {
+          const timeNow = Math.round(Date.now() / 1000);
+          const expiresIn = expiresAt - timeNow;
+          const refreshDurationBeforeExpires =
+            expiresIn > TOKEN_REFRESH_MARGIN ? TOKEN_REFRESH_MARGIN : 0.5;
+          timeout = (expiresIn - refreshDurationBeforeExpires) * 1000;
+        }
+        setTimeout(checkSession, timeout);
+      }
       if (!user) setIsLoading(false);
     } catch (_e) {
       const error = new Error(`The request to ${profileUrl} failed`);
@@ -63,17 +110,18 @@ export const UserProvider = (props: Props) => {
     }
   }, [profileUrl]);
 
-  // Get cached user on every page render.
-  useEffect(() => {
-    async function runOnPathChange() {
+  const handleVisibilityChange = async () => {
+    if (document?.visibilityState === 'visible') {
       setIsLoading(true);
       await checkSession();
       setIsLoading(false);
     }
-    runOnPathChange();
-  }, [pathname]);
+  };
 
   useEffect(() => {
+    handleVisibilityChange();
+    if (autoRefreshToken)
+      window?.addEventListener('visibilitychange', handleVisibilityChange);
     const { data: authListener } = supabaseClient.auth.onAuthStateChange(
       async (event, session) => {
         if (event === 'TOKEN_REFRESHED') return; // ignore this as we're refreshing tokens server-side.
@@ -98,6 +146,7 @@ export const UserProvider = (props: Props) => {
     );
 
     return () => {
+      window?.removeEventListener('visibilitychange', handleVisibilityChange);
       authListener?.unsubscribe();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -107,7 +156,8 @@ export const UserProvider = (props: Props) => {
     isLoading,
     user,
     accessToken,
-    error
+    error,
+    checkSession
   };
   return <UserContext.Provider value={value} {...props} />;
 };

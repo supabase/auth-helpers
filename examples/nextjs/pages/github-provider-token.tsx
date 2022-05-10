@@ -1,7 +1,7 @@
 // pages/protected-page.js
 import {
   User,
-  withAuthRequired,
+  withPageAuth,
   getUser
 } from '@supabase/supabase-auth-helpers/nextjs';
 import Link from 'next/link';
@@ -17,7 +17,7 @@ export default function ProtectedPage({
     <>
       <p>
         [<Link href="/">Home</Link>] | [
-        <Link href="/profile">withAuthRequired</Link>]
+        <Link href="/profile">withPageAuth</Link>]
       </p>
       <div>Protected content for {user.email}</div>
       <p>Data fetched with provider token:</p>
@@ -28,7 +28,7 @@ export default function ProtectedPage({
   );
 }
 
-export const getServerSideProps = withAuthRequired({
+export const getServerSideProps = withPageAuth({
   redirectTo: '/',
   async getServerSideProps(ctx) {
     // Retrieve provider_token from cookies

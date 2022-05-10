@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@supabase/supabase-auth-helpers": "file:../../dist",
+    "@supabase/ui": "^0.36.5",
     "next": "file:../../node_modules/next",
     "react": "file:../../node_modules/react",
     "react-dom": "file:../../node_modules/react-dom"

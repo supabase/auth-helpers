@@ -3,17 +3,23 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import handelCallback from './callback';
 import handleUser from './user';
 import handleLogout from './logout';
-import { COOKIE_OPTIONS } from '../../shared/utils/constants';
+import {
+  COOKIE_OPTIONS,
+  TOKEN_REFRESH_MARGIN
+} from '../../shared/utils/constants';
 
 export interface HandleAuthOptions {
   cookieOptions?: CookieOptions;
   logout?: { returnTo?: string };
+  tokenRefreshMargin?: number;
 }
 
 export default function handleAuth(options: HandleAuthOptions = {}) {
   return async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
     const { logout } = options;
     const cookieOptions = { ...COOKIE_OPTIONS, ...options.cookieOptions };
+    const tokenRefreshMargin =
+      options.tokenRefreshMargin ?? TOKEN_REFRESH_MARGIN;
     let {
       query: { supabase: route }
     } = req;
@@ -24,7 +30,10 @@ export default function handleAuth(options: HandleAuthOptions = {}) {
       case 'callback':
         return handelCallback(req, res, { cookieOptions });
       case 'user':
-        return await handleUser(req, res, { cookieOptions });
+        return await handleUser(req, res, {
+          cookieOptions,
+          tokenRefreshMargin
+        });
       case 'logout':
         return handleLogout(req, res, {
           cookieOptions,

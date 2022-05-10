@@ -11,7 +11,16 @@ import { COOKIE_OPTIONS } from '../../shared/utils/constants';
 import getAccessToken from './getAccessToken';
 import getUser from './getUser';
 
+export type WithAuthRequiredArg =
+  | {
+      redirectTo?: string;
+      getServerSideProps?: GetServerSideProps;
+      cookieOptions?: CookieOptions;
+    }
+  | NextApiHandler;
+
 /**
+ * @deprecated use `withPageAuth` instead!
  * ## Protecting Pages with Server Side Rendering (SSR)
  * If you wrap your `getServerSideProps` with {@link withAuthRequired} your props object will be augmented with
  * the user object {@link User}
@@ -50,6 +59,7 @@ import getUser from './getUser';
  * });
  * ```
  *
+ * @deprecated use `withApiAuth` instead!
  * ## Protecting API routes
  * Wrap an API Route to check that the user has a valid session. If they're not logged in the handler will return a
  * 401 Unauthorized.
@@ -69,15 +79,6 @@ import getUser from './getUser';
  *
  * @category Server
  */
-
-export type WithAuthRequiredArg =
-  | {
-      redirectTo?: string;
-      getServerSideProps?: GetServerSideProps;
-      cookieOptions?: CookieOptions;
-    }
-  | NextApiHandler;
-
 export default function withAuthRequired(
   arg?: WithAuthRequiredArg,
   options: { cookieOptions?: CookieOptions } = {}
