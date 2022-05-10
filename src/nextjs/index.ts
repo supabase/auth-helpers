@@ -3,7 +3,6 @@ export { User } from '@supabase/supabase-js';
 
 // Methods
 export * from './handlers';
-export { withMiddlewareAuthRequired } from './utils/withMiddlewareAuthRequired';
 export { default as getUser } from './utils/getUser';
 export { default as withAuthRequired } from './utils/withAuthRequired';
 export { default as withPageAuth } from './utils/withPageAuth';

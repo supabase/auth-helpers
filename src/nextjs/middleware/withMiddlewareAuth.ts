@@ -14,7 +14,7 @@ import {
   NextResponseAdapter
 } from '../../shared/adapters/NextMiddlewareAdapter';
 
-export interface WithMiddlewareAuthRequiredOptions {
+export interface withMiddlewareAuthOptions {
   /**
    * Path relative to the site root to redirect an
    * unauthenticated visitor.
@@ -26,12 +26,12 @@ export interface WithMiddlewareAuthRequiredOptions {
   cookieOptions?: CookieOptions;
   tokenRefreshMargin?: number;
 }
-export type WithMiddlewareAuthRequired = (
-  options?: WithMiddlewareAuthRequiredOptions
+export type withMiddlewareAuth = (
+  options?: withMiddlewareAuthOptions
 ) => NextMiddleware;
 
-export const withMiddlewareAuthRequired: WithMiddlewareAuthRequired =
-  (options: WithMiddlewareAuthRequiredOptions = {}) =>
+export const withMiddlewareAuth: withMiddlewareAuth =
+  (options: withMiddlewareAuthOptions = {}) =>
   async (req) => {
     try {
       if (
