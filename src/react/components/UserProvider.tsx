@@ -7,10 +7,12 @@ import React, {
 } from 'react';
 import { SupabaseClient, User } from '@supabase/supabase-js';
 import { UserFetcher, UserState } from '../types';
-import { TOKEN_REFRESH_MARGIN } from '../../shared/utils/constants';
+import {
+  TOKEN_REFRESH_MARGIN,
+  RETRY_INTERVAL,
+  MAX_RETRIES
+} from '../../shared/utils/constants';
 
-const RETRY_INTERVAL = 2;
-const MAX_RETRIES = 10;
 let networkRetries = 0;
 let refreshTokenTimer: ReturnType<typeof setTimeout>;
 
