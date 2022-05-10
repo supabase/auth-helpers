@@ -1,13 +1,19 @@
 # CHANGELOG
 
-## 1.4.0 - 2022-05-09
+## 1.4.0 - 2022-05-10
 
 - [](): feat: adds `withPageAuth` [docs]() and deprecates `withAuthRequired`.
 - [](): feat: adds `withApiAuth` [docs]() and deprecates `withAuthRequired`.
 
 - [BREAKING CHANGE][](): fix: remove `@supabase/ui` as dependency. If you are using the Auth component, please make sure to install `@supabase/ui` separately in your project and import `Auth` from there. Fixes #39; Fixes #64; Fixes #69;
 
-- [](): fix: Refresh tokens client-side via updated gotrue-js dependency. Fixes #72; Fixes #77; Fixes #83; Fixes #84; Fixes #85; Closes #62
+- [](): fix: Refresh tokens client-side via updated gotrue-js dependency. Fixes #72; Fixes #77; Fixes #83; Fixes #84; Fixes #85;
+
+- [](): fix: refresh token automatically when user is updated. Fixes #62
+
+## 1.3.1 - 2022-05-09
+
+- [#91](https://github.com/supabase-community/supabase-auth-helpers/pull/91): fix: token refresh loop
 
 ## 1.3.0 - 2022-03-19
 

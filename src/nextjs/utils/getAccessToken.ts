@@ -6,10 +6,14 @@ import {
 import getUser from './getUser';
 import { jwtDecoder } from '../../shared/utils/jwt';
 import { CookieOptions } from '../types';
-import { COOKIE_OPTIONS } from '../../shared/utils/constants';
+import {
+  COOKIE_OPTIONS,
+  TOKEN_REFRESH_MARGIN
+} from '../../shared/utils/constants';
 
 export interface GetAccessTokenOptions {
   cookieOptions?: CookieOptions;
+  tokenRefreshMargin?: number;
 }
 
 export default async function getAccessToken(
@@ -22,6 +26,7 @@ export default async function getAccessToken(
     throw new Error('Not able to parse cookies!');
   }
   const cookieOptions = { ...COOKIE_OPTIONS, ...options.cookieOptions };
+  const tokenRefreshMargin = options.tokenRefreshMargin ?? TOKEN_REFRESH_MARGIN;
   const access_token =
     context.req.cookies[`${cookieOptions.name}-access-token`];
 
@@ -35,9 +40,12 @@ export default async function getAccessToken(
     throw new Error('Not able to parse JWT payload!');
   }
   const timeNow = Math.round(Date.now() / 1000);
-  if (jwtUser.exp < timeNow) {
+  if (jwtUser.exp < timeNow + tokenRefreshMargin) {
     // JWT is expired, let's refresh from Gotrue
-    const { accessToken } = await getUser(context, { cookieOptions });
+    const { accessToken } = await getUser(context, {
+      cookieOptions,
+      tokenRefreshMargin
+    });
     return accessToken;
   } else {
     return access_token;

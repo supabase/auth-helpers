@@ -1,6 +1,9 @@
 import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
 import { CookieOptions } from '../types';
-import { COOKIE_OPTIONS } from '../../shared/utils/constants';
+import {
+  COOKIE_OPTIONS,
+  TOKEN_REFRESH_MARGIN
+} from '../../shared/utils/constants';
 import getAccessToken from './getAccessToken';
 
 /**
@@ -25,12 +28,17 @@ import getAccessToken from './getAccessToken';
  */
 export default function withApiAuth(
   handler: NextApiHandler,
-  options: { cookieOptions?: CookieOptions } = {}
+  options: { cookieOptions?: CookieOptions; tokenRefreshMargin?: number } = {}
 ) {
   return async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
     try {
       const cookieOptions = { ...COOKIE_OPTIONS, ...options.cookieOptions };
-      const accessToken = await getAccessToken({ req, res }, { cookieOptions });
+      const tokenRefreshMargin =
+        options.tokenRefreshMargin ?? TOKEN_REFRESH_MARGIN;
+      const accessToken = await getAccessToken(
+        { req, res },
+        { cookieOptions, tokenRefreshMargin }
+      );
       if (!accessToken) throw new Error('No access token!');
       try {
         await handler(req, res);

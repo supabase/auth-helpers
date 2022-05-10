@@ -1,7 +1,10 @@
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { jwtDecoder } from '../../shared/utils/jwt';
 import { CookieOptions } from '../types';
-import { COOKIE_OPTIONS } from '../../shared/utils/constants';
+import {
+  COOKIE_OPTIONS,
+  TOKEN_REFRESH_MARGIN
+} from '../../shared/utils/constants';
 import getUser from './getUser';
 
 /**
@@ -49,12 +52,14 @@ export default function withPageAuth({
   authRequired = true,
   redirectTo = '/',
   getServerSideProps = undefined,
-  cookieOptions = {}
+  cookieOptions = {},
+  tokenRefreshMargin = TOKEN_REFRESH_MARGIN
 }: {
   authRequired?: boolean;
   redirectTo?: string;
   getServerSideProps?: GetServerSideProps;
   cookieOptions?: CookieOptions;
+  tokenRefreshMargin?: number;
 } = {}) {
   return async (context: GetServerSidePropsContext) => {
     try {
@@ -75,7 +80,7 @@ export default function withPageAuth({
         throw new Error('Not able to parse JWT payload!');
       }
       const timeNow = Math.round(Date.now() / 1000);
-      if (jwtUser.exp < timeNow) {
+      if (jwtUser.exp < timeNow + tokenRefreshMargin) {
         // JWT is expired, let's refresh from Gotrue
         const response = await getUser(context, { cookieOptions });
         user = response.user;

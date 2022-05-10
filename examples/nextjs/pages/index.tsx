@@ -47,7 +47,14 @@ const LoginPage: NextPage = () => {
     <>
       <p>
         [<Link href="/profile">withPageAuth</Link>] | [
-        <Link href="/protected-page">supabaseServerClient</Link>]
+        <Link href="/protected-page">supabaseServerClient</Link>] |{' '}
+        <button
+          onClick={() =>
+            supabaseClient.auth.update({ data: { test5: 'updated' } })
+          }
+        >
+          Update
+        </button>
       </p>
       {isLoading ? <h1>Loading...</h1> : <h1>Loaded!</h1>}
       <p>user:</p>

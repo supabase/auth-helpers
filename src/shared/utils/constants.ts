@@ -5,3 +5,5 @@ export const COOKIE_OPTIONS = {
   path: '/',
   sameSite: 'lax'
 };
+
+export const TOKEN_REFRESH_MARGIN = 10; // in seconds
