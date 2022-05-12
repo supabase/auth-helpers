@@ -1,5 +1,4 @@
 import type { User } from '@supabase/supabase-js';
-export type { User } from '@supabase/supabase-js';
 
 export type UserFetcher = (url: string) => Promise<{
   user: User | null;
