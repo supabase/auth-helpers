@@ -1,13 +1,10 @@
-// import { NextResponse } from 'next/server'; TODO fix import
-import { NextResponse } from 'next/dist/server/web/spec-extension/response';
+import { NextResponse } from 'next/server';
 import { NextMiddleware } from 'next/server';
-import { User, ApiError, createClient } from '@supabase/supabase-js';
 import { CookieOptions } from '../types';
 import {
   COOKIE_OPTIONS,
   TOKEN_REFRESH_MARGIN
 } from '../../shared/utils/constants';
-import { jwtDecoder } from '../../shared/utils/jwt';
 import { setCookies } from '../../shared/utils/cookies';
 import {
   NextRequestAdapter,
@@ -45,11 +42,6 @@ export const withMiddlewareAuth: withMiddlewareAuth =
       if (!req.cookies) {
         throw new Error('Not able to parse cookies!');
       }
-      const supabase = createClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-        { fetch }
-      );
       const cookieOptions = { ...COOKIE_OPTIONS, ...options.cookieOptions };
       const tokenRefreshMargin =
         options.tokenRefreshMargin ?? TOKEN_REFRESH_MARGIN;
@@ -59,14 +51,14 @@ export const withMiddlewareAuth: withMiddlewareAuth =
       const res = NextResponse.next();
 
       const getUser = async (): Promise<{
-        user: User | null;
-        error: ApiError | null;
+        user: any;
+        error: any;
       }> => {
         if (!access_token) {
           throw new Error('No cookie found!');
         }
         // Get payload from access token.
-        const jwtUser = jwtDecoder(access_token);
+        const jwtUser = JSON.parse(atob(access_token.split('.')[1]));
         if (!jwtUser?.exp) {
           throw new Error('Not able to parse JWT payload!');
         }
@@ -75,9 +67,29 @@ export const withMiddlewareAuth: withMiddlewareAuth =
           if (!refresh_token) {
             throw new Error('No refresh_token cookie found!');
           }
-          const { data, error } = await supabase.auth.api.refreshAccessToken(
-            refresh_token
+          const requestHeaders: HeadersInit = new Headers();
+          requestHeaders.set('accept', 'json');
+          requestHeaders.set(
+            'apiKey',
+            process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
           );
+          requestHeaders.set(
+            'authorization',
+            `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`
+          );
+
+          const data = await fetch(
+            `${process.env.NEXT_PUBLIC_SUPABASE_URL}/auth/v1/token?grant_type=refresh_token`,
+            {
+              method: 'POST',
+              headers: requestHeaders,
+              body: JSON.stringify({ refresh_token })
+            }
+          )
+            .then((res) => res.json())
+            .catch((e) => ({
+              error: String(e)
+            }));
           setCookies(
             new NextRequestAdapter(req),
             new NextResponseAdapter(res),
@@ -93,7 +105,7 @@ export const withMiddlewareAuth: withMiddlewareAuth =
               sameSite: cookieOptions.sameSite
             }))
           );
-          return { user: data?.user ?? null, error };
+          return { user: data?.user ?? null, error: data?.error };
         }
         return { user: jwtUser, error: null };
       };
