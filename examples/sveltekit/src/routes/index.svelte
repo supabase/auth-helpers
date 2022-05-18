@@ -35,8 +35,10 @@
 	<h1>{$isLoading ? `Loading...` : `Loaded!`}</h1>
 	<Auth {supabaseClient} providers={[]} />
 {:else}
-	<a href="/about">About</a>
-	<a href="/hello">Hello</a>
+	<p>
+		<a href="/profile">[withAuthRequired]</a>
+		<a href="/protected-page">[supabaseServerClient]</a>
+	</p>
 
 	<button on:click={signOut}>Sign out</button>
 	<h1>{$isLoading ? `Loading...` : `Loaded!`}</h1>

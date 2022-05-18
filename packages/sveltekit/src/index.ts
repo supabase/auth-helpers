@@ -8,6 +8,5 @@ export { default as getUser } from './utils/getUser';
 export { default as withApiAuthRequired } from './utils/withApiAuthRequired';
 export { default as withPageAuthRequired } from './utils/withPageAuthRequired';
 export { default as supabaseServerClient } from './utils/supabaseServerClient';
-// export { supabaseClient, SupabaseClient } from './utils/initSupabase';
 export { UserStore } from './UserStore';
 export { skHelper } from './instance';

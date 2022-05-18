@@ -1,3 +1,4 @@
+import { beforeNavigate } from '$app/navigation';
 import type { SupabaseClient, Subscription, User } from '@supabase/supabase-js';
 import { writable, type Writable } from 'svelte/store';
 import { redirect } from './helpers';
@@ -82,6 +83,10 @@ const createUserStore = (props: Props) => {
 
     return authListener;
   };
+
+  beforeNavigate(({ from, to }) => {
+    checkSession();
+  });
 
   return {
     isLoading,
