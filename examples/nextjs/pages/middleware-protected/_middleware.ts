@@ -1,3 +1,3 @@
-import { withMiddlewareAuthRequired } from '@supabase/auth-helpers-nextjs';
+import { withMiddlewareAuth } from '@supabase/auth-helpers-nextjs/dist/middleware';
 
-export const middleware = withMiddlewareAuthRequired();
+export const middleware = withMiddlewareAuth();
