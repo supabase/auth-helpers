@@ -6,7 +6,7 @@ import { CookieOptions } from 'shared/types';
  * This is a helper method to wrap your SupabaseClient to inject a user's access_token to make use of RLS on the server side.
  *
  * ```js
- * import { supabaseServerClient } from '@supabase/supabase-auth-helpers/nextjs';
+ * import { supabaseServerClient } from '@supabase/auth-helpers-nextjs';
  *
  * export async function getServerSideProps(context) {
  *   // Run queries with RLS on the server

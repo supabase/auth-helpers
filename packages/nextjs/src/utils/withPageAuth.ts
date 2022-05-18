@@ -27,7 +27,7 @@ import getUser from './getUser';
  *
  * ```js
  * // pages/protected-page.js
- * import { withPageAuth, getUser } from '@supabase/supabase-auth-helpers/nextjs';
+ * import { withPageAuth, getUser } from '@supabase/auth-helpers-nextjs';
  *
  * export default function ProtectedPage({ user, customProp }) {
  *   return <div>Protected content</div>;
