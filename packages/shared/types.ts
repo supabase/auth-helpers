@@ -1,3 +1,19 @@
+import type { User } from '@supabase/supabase-js';
+
+export type UserFetcher = (url: string) => Promise<{
+  user: User | null;
+  accessToken: string | null;
+  error?: string | null;
+}>;
+
+export type UserState = {
+  user: User | null;
+  accessToken: string | null;
+  error?: Error;
+  isLoading: boolean;
+  checkSession: () => Promise<void>;
+};
+
 export interface CookieOptions {
   // (Optional) The Cookie name prefix. Defaults to `sb` meaning the cookies will be `sb-access-token` and `sb-refresh-token`.
   name?: string;

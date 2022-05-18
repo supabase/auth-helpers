@@ -6,7 +6,7 @@ import {
 import { User, createClient } from '@supabase/supabase-js';
 import { CookieOptions, ApiError } from 'shared/types';
 import { setCookies } from 'shared/utils/cookies';
-import { COOKIE_OPTIONS } from 'shared/utils/constants';
+import { COOKIE_OPTIONS, TOKEN_REFRESH_MARGIN } from 'shared/utils/constants';
 import { jwtDecoder } from 'shared/utils/jwt';
 import {
   NextRequestAdapter,
@@ -15,13 +15,15 @@ import {
 
 export interface GetUserOptions {
   cookieOptions?: CookieOptions;
+  forceRefresh?: boolean;
+  tokenRefreshMargin?: number;
 }
 
 export default async function getUser(
   context:
     | GetServerSidePropsContext
     | { req: NextApiRequest; res: NextApiResponse },
-  options: GetUserOptions = {}
+  options: GetUserOptions = { forceRefresh: false }
 ): Promise<{ user: User | null; accessToken: string | null; error?: string }> {
   try {
     if (
@@ -40,6 +42,8 @@ export default async function getUser(
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
     );
     const cookieOptions = { ...COOKIE_OPTIONS, ...options.cookieOptions };
+    const tokenRefreshMargin =
+      options.tokenRefreshMargin ?? TOKEN_REFRESH_MARGIN;
     const access_token =
       context.req.cookies[`${cookieOptions.name}-access-token`];
     const refresh_token =
@@ -54,7 +58,7 @@ export default async function getUser(
       throw new Error('Not able to parse JWT payload!');
     }
     const timeNow = Math.round(Date.now() / 1000);
-    if (jwtUser.exp < timeNow) {
+    if (options.forceRefresh || jwtUser.exp < timeNow + tokenRefreshMargin) {
       // JWT is expired, let's refresh from Gotrue
       if (!refresh_token) throw new Error('No refresh_token cookie found!');
       const { data, error } = await supabase.auth.api.refreshAccessToken(
