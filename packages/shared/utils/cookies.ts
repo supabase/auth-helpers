@@ -9,31 +9,6 @@ type Cookie = {
   sameSite?: string;
 };
 
-interface Objs {
-  [key: string]: string | null;
-}
-
-export const parseCookie = (str: string | null) => {
-  if (!str) return {};
-
-  const decode = decodeURIComponent;
-
-  return str
-    .split(';')
-    .map((v) => v.split('='))
-    .reduce((acc: Objs, v) => {
-      const [key, val] = v;
-      acc[decode(key.trim())] = decode(val.trim());
-      return acc;
-    }, {});
-};
-
-/*!
- * cookie
- * Copyright(c) 2012-2014 Roman Shtylman
- * Copyright(c) 2015 Douglas Christopher Wilson
- * MIT Licensed
- */
 /**
  * Serialize data into a cookie header.
  */

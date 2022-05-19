@@ -2,10 +2,11 @@ import { ApiError, CookieOptions } from 'shared/types';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { jwtDecoder } from 'shared/utils/jwt';
 import getUser from '../utils/getUser';
-import { COOKIE_OPTIONS } from 'shared/utils/constants';
+import { COOKIE_OPTIONS, TOKEN_REFRESH_MARGIN } from 'shared/utils/constants';
 
 export interface HandleUserOptions {
   cookieOptions?: CookieOptions;
+  tokenRefreshMargin?: number;
 }
 
 export default async function handleUser(
@@ -18,6 +19,8 @@ export default async function handleUser(
       throw new Error('Not able to parse cookies!');
     }
     const cookieOptions = { ...COOKIE_OPTIONS, ...options.cookieOptions };
+    const tokenRefreshMargin =
+      options.tokenRefreshMargin ?? TOKEN_REFRESH_MARGIN;
     const access_token = req.cookies[`${cookieOptions.name}-access-token`];
 
     if (!access_token) {
@@ -30,9 +33,12 @@ export default async function handleUser(
       throw new Error('Not able to parse JWT payload!');
     }
     const timeNow = Math.round(Date.now() / 1000);
-    if (jwtUser.exp < timeNow) {
+    if (jwtUser.exp < timeNow + tokenRefreshMargin) {
       // JWT is expired, let's refresh from Gotrue
-      const response = await getUser({ req, res }, { cookieOptions });
+      const response = await getUser(
+        { req, res },
+        { cookieOptions, tokenRefreshMargin }
+      );
       res.status(200).json(response);
     } else {
       // Transform JWT and add note that it ise cached from JWT.

@@ -1,0 +1,1 @@
+export { withMiddlewareAuth } from './withMiddlewareAuth';

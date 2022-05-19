@@ -6,6 +6,7 @@ import {
   NextResponseAdapter
 } from 'shared/adapters/NextAdapter';
 import { COOKIE_OPTIONS } from 'shared/utils/constants';
+import getUser from '../utils/getUser';
 
 export interface HandleCallbackOptions {
   cookieOptions?: CookieOptions;
@@ -13,7 +14,7 @@ export interface HandleCallbackOptions {
 
 type AuthCookies = Parameters<typeof setCookies>[2];
 
-export default function handelCallback(
+export default async function handelCallback(
   req: NextApiRequest,
   res: NextApiResponse,
   options: HandleCallbackOptions = {}
@@ -26,14 +27,21 @@ export default function handelCallback(
   const { event, session } = req.body;
 
   if (!event) throw new Error('Auth event missing!');
+  if (event === 'USER_UPDATED') {
+    await getUser({ req, res }, { forceRefresh: true });
+  }
   if (event === 'SIGNED_IN') {
     if (!session) throw new Error('Auth session missing!');
     setCookies(
       new NextRequestAdapter(req),
       new NextResponseAdapter(res),
       [
-        { key: 'access-token', value: session.access_token },
-        { key: 'refresh-token', value: session.refresh_token },
+        session.access_token
+          ? { key: 'access-token', value: session.access_token }
+          : null,
+        session.refresh_token
+          ? { key: 'refresh-token', value: session.refresh_token }
+          : null,
         session.provider_token
           ? { key: 'provider-token', value: session.provider_token }
           : null
@@ -52,7 +60,7 @@ export default function handelCallback(
       }, [])
     );
   }
-  if (event === 'SIGNED_OUT') {
+  if (event === 'SIGNED_OUT' || event === 'USER_DELETED') {
     setCookies(
       new NextRequestAdapter(req),
       new NextResponseAdapter(res),

@@ -16,11 +16,15 @@
     "@changesets/cli": "^2.22.0",
     "prettier": "^2.5.1",
     "turbo": "latest",
-    "typedoc": "^0.22.15"
+    "typedoc": "^0.22.15",
+    "typescript": "4.0.x || 4.1.x || 4.2.x || 4.3.x || 4.4.x || 4.5.x || 4.6.x"
   },
   "engines": {
     "npm": ">=7.0.0",
     "node": ">=14.0.0"
   },
-  "packageManager": "pnpm@6.32.3"
+  "packageManager": "pnpm@6.32.3",
+  "peerDependencies": {
+    "typescript": "4.0.x || 4.1.x || 4.2.x || 4.3.x || 4.4.x || 4.5.x || 4.6.x"
+  }
 }
