@@ -3,6 +3,7 @@ import { NextMiddleware } from 'next/server';
 import { CookieOptions } from 'shared/types';
 import { COOKIE_OPTIONS, TOKEN_REFRESH_MARGIN } from 'shared/utils/constants';
 import { setCookies } from 'shared/utils/cookies';
+import { jwtDecoder } from 'shared/utils/jwt';
 import {
   NextRequestAdapter,
   NextResponseAdapter
@@ -55,7 +56,7 @@ export const withMiddlewareAuth: withMiddlewareAuth =
           throw new Error('No cookie found!');
         }
         // Get payload from access token.
-        const jwtUser = JSON.parse(atob(access_token.split('.')[1]));
+        const jwtUser = jwtDecoder(access_token);
         if (!jwtUser?.exp) {
           throw new Error('Not able to parse JWT payload!');
         }
