@@ -126,6 +126,7 @@ importers:
 
   packages/shared:
     specifiers:
+      '@supabase/supabase-js': ^1.35.3
       jose: ^4.8.1
       next: ^12.1.5
       react: '>=17.0.2 <18.0.0 || >=18.0.0-0 <19.0.0'
@@ -133,6 +134,7 @@ importers:
     dependencies:
       jose: 4.8.1
     devDependencies:
+      '@supabase/supabase-js': 1.35.3
       next: 12.1.5_zpnidt7m3osuk7shl3s4oenomq
       react: 18.0.0
       react-dom: 18.0.0_react@18.0.0
