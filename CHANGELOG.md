@@ -2,7 +2,7 @@
 
 ## 1.4.2 - 2022-05-20
 
-- [](): fix: use jose to decode JWT. Fixes #
+- [#102](https://github.com/supabase-community/supabase-auth-helpers/pull/102): fix: use jose to decode JWT. Fixes #97; Fixes#98; Fixes #99
 
 ## 1.4.1 - 2022-05-12
 
