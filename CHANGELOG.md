@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.4.2 - 2022-05-20
+
+- [](): fix: use jose to decode JWT. Fixes #
+
 ## 1.4.1 - 2022-05-12
 
 - [#95](https://github.com/supabase-community/supabase-auth-helpers/pull/95): fix: change middleware to use pure fetch. Fixes #90
