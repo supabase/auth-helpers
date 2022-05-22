@@ -11,6 +11,14 @@ import {
   NextResponseAdapter
 } from '../../shared/adapters/NextMiddlewareAdapter';
 import { jwtDecoder } from '../../shared/utils/jwt';
+import type { User } from '@supabase/supabase-js';
+
+class NoPermissionError extends Error {
+  constructor(message: string) {
+    super(message);
+    Object.setPrototypeOf(this, NoPermissionError.prototype);
+  }
+}
 
 export interface withMiddlewareAuthOptions {
   /**
@@ -23,6 +31,10 @@ export interface withMiddlewareAuthOptions {
   redirectTo?: string;
   cookieOptions?: CookieOptions;
   tokenRefreshMargin?: number;
+  permissionGuard?: {
+    isPermitted: (user: User) => Promise<boolean>;
+    redirectTo: string;
+  };
 }
 export type withMiddlewareAuth = (
   options?: withMiddlewareAuthOptions
@@ -119,12 +131,20 @@ export const withMiddlewareAuth: withMiddlewareAuth =
         );
       } else if (!authResult.user) {
         throw new Error('No auth user, redirecting');
+      } else if (
+        options.permissionGuard &&
+        !(await options.permissionGuard.isPermitted(authResult.user))
+      ) {
+        throw new NoPermissionError('User is not permitted, redirecting');
       }
 
       // Authentication successful, forward request to protected route
       return res;
     } catch (err: unknown) {
-      const { redirectTo = '/' } = options;
+      let { redirectTo = '/' } = options;
+      if (err instanceof NoPermissionError && !!options.permissionGuard) {
+        redirectTo = options.permissionGuard.redirectTo;
+      }
       if (err instanceof Error) {
         console.log(
           `Could not authenticate request, redirecting to ${redirectTo}:`,
