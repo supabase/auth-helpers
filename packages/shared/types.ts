@@ -1,4 +1,4 @@
-import type { User } from '@supabase/supabase-js';
+import type { ApiError, User } from '@supabase/supabase-js';
 
 export type UserFetcher = (url: string) => Promise<{
   user: User | null;
@@ -26,7 +26,4 @@ export interface CookieOptions {
   sameSite?: string;
 }
 
-export interface ApiError {
-  message: string;
-  status: number;
-}
+export type { ApiError, User }
