@@ -142,7 +142,7 @@ export const withMiddlewareAuth: withMiddlewareAuth =
       return res;
     } catch (err: unknown) {
       let { redirectTo = '/' } = options;
-      if (err instanceof NoPermissionError && !!options.permissionGuard) {
+      if (err instanceof NoPermissionError && !!options?.permissionGuard?.redirectTo) {
         redirectTo = options.permissionGuard.redirectTo;
       }
       if (err instanceof Error) {
