@@ -189,6 +189,7 @@ importers:
       '@supabase/supabase-js': ^1.30.0
       '@sveltejs/kit': ^1.0.0-next.312
       config: workspace:*
+      jose: ^4.8.1
       rimraf: ^3.0.2
       shared: workspace:*
       svelte: ^3.47.0
@@ -196,6 +197,8 @@ importers:
       tslib: ^2.3.1
       tsup: ^5.12.5
       typescript: ^4.6.3
+    dependencies:
+      jose: 4.8.1
     devDependencies:
       '@supabase/supabase-js': 1.35.3
       '@sveltejs/kit': 1.0.0-next.345_svelte@3.48.0

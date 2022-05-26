@@ -3,11 +3,11 @@ import {
   type ApiError,
   COOKIE_OPTIONS,
   type CookieOptions,
-  jwtDecoder,
   parseCookie
 } from '../types';
 import { skHelper } from '../instance';
 import getUser from '../utils/getUser';
+import { jwtDecoder } from '../utils/jwt';
 
 export const handleUser = (cookieOptions: CookieOptions = COOKIE_OPTIONS) => {
   const handle: Handle = async ({ event, resolve }) => {

@@ -2,7 +2,6 @@ import { createClient } from '@supabase/supabase-js';
 import type { User } from '@supabase/supabase-js';
 import { skHelper } from '../instance';
 import {
-  jwtDecoder,
   setCookies,
   parseCookie,
   COOKIE_OPTIONS,
@@ -10,6 +9,7 @@ import {
   SvelteKitRequestAdapter,
   SvelteKitResponseAdapter
 } from '../types';
+import { jwtDecoder } from '../utils/jwt';
 
 interface RequestResponse {
   req: Request;
