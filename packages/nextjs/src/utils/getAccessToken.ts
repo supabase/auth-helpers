@@ -4,7 +4,7 @@ import {
   NextApiResponse
 } from 'next';
 import getUser from './getUser';
-import { jwtDecoder } from 'shared/utils/jwt';
+import { jwtDecoder } from './jwt';
 import { CookieOptions } from 'shared/types';
 import { COOKIE_OPTIONS, TOKEN_REFRESH_MARGIN } from 'shared/utils/constants';
 

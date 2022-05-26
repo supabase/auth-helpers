@@ -1,6 +1,6 @@
 import { ApiError, CookieOptions } from 'shared/types';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { jwtDecoder } from 'shared/utils/jwt';
+import { jwtDecoder } from '../utils/jwt';
 import getUser from '../utils/getUser';
 import { COOKIE_OPTIONS, TOKEN_REFRESH_MARGIN } from 'shared/utils/constants';
 

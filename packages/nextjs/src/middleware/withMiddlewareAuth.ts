@@ -3,7 +3,7 @@ import { NextMiddleware } from 'next/server';
 import { CookieOptions } from 'shared/types';
 import { COOKIE_OPTIONS, TOKEN_REFRESH_MARGIN } from 'shared/utils/constants';
 import { setCookies } from 'shared/utils/cookies';
-import { jwtDecoder } from 'shared/utils/jwt';
+import { jwtDecoder } from '../utils/jwt';
 import {
   NextRequestAdapter,
   NextResponseAdapter

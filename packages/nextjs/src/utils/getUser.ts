@@ -7,7 +7,7 @@ import { User, createClient } from '@supabase/supabase-js';
 import { CookieOptions, ApiError } from 'shared/types';
 import { setCookies } from 'shared/utils/cookies';
 import { COOKIE_OPTIONS, TOKEN_REFRESH_MARGIN } from 'shared/utils/constants';
-import { jwtDecoder } from 'shared/utils/jwt';
+import { jwtDecoder } from './jwt';
 import {
   NextRequestAdapter,
   NextResponseAdapter
