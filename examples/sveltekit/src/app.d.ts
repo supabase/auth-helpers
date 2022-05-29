@@ -14,7 +14,7 @@ declare namespace App {
 
 	interface Session {
 		user: User;
-		accessToken: string;
+		accessToken?: string;
 	}
 
 	interface Stuff {}

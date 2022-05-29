@@ -34,6 +34,7 @@
   "type": "module",
   "dependencies": {
     "@supabase/auth-helpers-sveltekit": "workspace:*",
+    "@supabase/auth-helpers-svelte": "workspace:*",
     "@supabase/supabase-js": "^1.30.0"
   }
 }

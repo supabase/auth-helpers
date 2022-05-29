@@ -1,12 +1,11 @@
 <script>
 	import Auth from 'supabase-ui-svelte';
-	import { key } from '$lib/UserContext.svelte';
 	import { supabaseClient } from '$lib/db';
 	import { getContext } from 'svelte';
 	import { session } from '$app/stores';
 	import { goto } from '$app/navigation';
 
-	const { isLoading, error } = getContext(key);
+	const store = getContext('sb-auth-helpers-svelte-ctx');
 	let loadedData = [];
 	async function loadData() {
 		const { data } = await supabaseClient.from('test').select('*').single();
@@ -29,10 +28,10 @@
 <p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
 
 {#if !$session.user}
-	{#if $error}
-		<p>{$error.message}</p>
+	{#if $store.error}
+		<p>{$store.error.message}</p>
 	{/if}
-	<h1>{$isLoading ? `Loading...` : `Loaded!`}</h1>
+	<h1>{$store.isLoading ? `Loading...` : `Loaded!`}</h1>
 	<Auth {supabaseClient} providers={[]} />
 {:else}
 	<p>
@@ -41,7 +40,7 @@
 	</p>
 
 	<button on:click={signOut}>Sign out</button>
-	<h1>{$isLoading ? `Loading...` : `Loaded!`}</h1>
+	<h1>{$store.isLoading ? `Loading...` : `Loaded!`}</h1>
 	<p>user:</p>
 	<pre>{JSON.stringify($session.user, null, 2)}</pre>
 	<p>client-side data fetching with RLS</p>

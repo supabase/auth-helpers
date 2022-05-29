@@ -3,6 +3,8 @@
   "references": [
     { "path": "packages/react" },
     { "path": "packages/nextjs" },
+    { "path": "packages/svelte" },
+    { "path": "packages/sveltekit" },
     { "path": "packages/shared" },
   ]
 }

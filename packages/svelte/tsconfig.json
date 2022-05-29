@@ -1,0 +1,9 @@
+{
+    "extends": "tsconfig/svelte.json",
+    "include": ["src"],
+    "compilerOptions": {
+        "declaration": false,
+        "declarationMap": false,
+        "types": ["svelte"]
+    }
+}
