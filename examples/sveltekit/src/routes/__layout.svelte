@@ -4,12 +4,12 @@
 	import { supabaseClient } from '$lib/db';
 	import UserContext from '@supabase/auth-helpers-svelte';
 
-	const redirectTo = async (user) => {
+	const cbRedirect = async (user) => {
 		await goto('/');
 		session.set({ user });
 	};
 </script>
 
-<UserContext {supabaseClient} cbRedirect={redirectTo}>
+<UserContext {supabaseClient} {cbRedirect}>
 	<slot />
 </UserContext>

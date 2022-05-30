@@ -2,7 +2,7 @@ import type { User } from '@supabase/supabase-js';
 import type { LoadOutput } from '@sveltejs/kit';
 import { isFunction } from './guards';
 
-interface PageAuthRequiredOpts {
+interface PageAuthOpts {
   redirectTo?: string;
   status?: number;
   user: User;
@@ -17,8 +17,8 @@ interface PageAuthRequiredOpts {
  * @param fn
  * @returns
  */
-export default async function withPageAuthRequired(
-  { redirectTo = '/', user, status = 303 }: PageAuthRequiredOpts,
+export default async function withPageAuth(
+  { redirectTo = '/', user, status = 303 }: PageAuthOpts,
   fn?: () => LoadOutput | Promise<LoadOutput>
 ) {
   if (!user) {

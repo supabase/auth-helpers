@@ -1,8 +1,8 @@
-import { withApiAuthRequired } from '@supabase/auth-helpers-sveltekit';
+import { withApiAuth } from '@supabase/auth-helpers-sveltekit';
 import type { RequestHandler } from '@sveltejs/kit';
 
 export const get: RequestHandler = async ({ locals }) =>
-	withApiAuthRequired(
+	withApiAuth(
 		{
 			redirectTo: '/',
 			user: locals.user

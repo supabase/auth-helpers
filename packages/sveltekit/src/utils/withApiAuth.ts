@@ -1,14 +1,14 @@
 import type { User } from '@supabase/supabase-js';
 import { isFunction } from './guards';
 
-interface ApiAuthRequiredOpts {
+interface ApiAuthOpts {
   redirectTo?: string;
   status?: number;
   user: User;
 }
 
-export default async function withApiAuthRequired(
-  { redirectTo = '/', user, status = 303 }: ApiAuthRequiredOpts,
+export default async function withApiAuth(
+  { redirectTo = '/', user, status = 303 }: ApiAuthOpts,
   fn: () => {}
 ) {
   if (!user) {
