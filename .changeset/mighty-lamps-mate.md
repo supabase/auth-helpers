@@ -1,5 +1,4 @@
 ---
-'@example/nextjs': minor
 'config': minor
 '@supabase/auth-helpers-nextjs': minor
 '@supabase/auth-helpers-react': minor
