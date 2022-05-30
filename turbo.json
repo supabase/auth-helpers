@@ -6,7 +6,7 @@
     },
     "build:example": {
       "dependsOn": ["^build", "^build:example"],
-      "outputs": ["dist/**", ".next/**"]
+      "outputs": ["dist/**", ".next/**", ".svelte-kit/**"]
     },
     "clean:all": {
       "dependsOn": ["^clean:all"],

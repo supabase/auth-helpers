@@ -4,8 +4,9 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
-    "build:example:sveltekit": "turbo run build --filter=@example/sveltekit",
-    "build:example:nextjs": "turbo run build --filter=@example/nextjs",
+    "build:example": "turbo run build:example",
+    "build:example:sveltekit": "turbo run build:example --filter=@example/sveltekit",
+    "build:example:nextjs": "turbo run build:example --filter=@example/nextjs",
     "build:sveltekit": "turbo run build --filter=@supabase/auth-helpers-sveltekit",
     "build:svelte": "turbo run build --filter=@supabase/auth-helpers-svelte",
     "build:nextjs": "turbo run build --filter=@supabase/auth-helpers-nextjs",
