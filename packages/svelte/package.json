@@ -16,6 +16,7 @@
         "copy:types": "copyfiles -f src/types.d.ts dist"
     },
     "devDependencies": {
+        "@supabase/supabase-js": "^1.35.3",
         "concurrently": "^7.2.1",
         "config": "workspace:*",
         "copyfiles": "^2.4.1",
