@@ -4,19 +4,13 @@
   "description": "A collection of framework specific Auth utilities for working with Supabase.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "release": {
-    "branches": [
-      "main"
-    ]
-  },
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
     "build": "tsup",
     "clean": "rimraf dist",
-    "clean:all": "rimraf dist node_modules",
-    "publish": "semantic-release"
+    "clean:all": "rimraf dist node_modules"
   },
   "repository": {
     "type": "git",
