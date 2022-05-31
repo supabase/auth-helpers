@@ -1,32 +1,28 @@
 {
     "name": "@supabase/auth-helpers-svelte",
     "version": "0.0.0",
-    "svelte": "dist/UserContext.svelte",
-    "module": "dist/index.mjs",
-    "main": "dist/index.mjs",
-    "types": "dist/types.d.ts",
+    "types": "./package/index.d.ts",
     "exports": {
-        ".": "./dist/index.mjs",
-        "./helpers": "./dist/helpers.mjs",
-        "./store": "./dist/store.mjs"
+        "./package.json": "./package/package.json",
+        ".": "./package/index.js"
     },
+    "files": [
+        "package"
+    ],
     "scripts": {
-        "build": "tsup && concurrently \"pnpm copy\" \"pnpm copy:types\"",
-        "copy": "svelte-transpile-typescript -i src/UserContext.svelte -o dist/UserContext.svelte",
-        "copy:types": "copyfiles -f src/types.d.ts dist"
+        "build": "pnpm package",
+        "package": "svelte-kit package && rm package/package.json",
+        "prepare": "svelte-kit sync"
     },
     "devDependencies": {
         "@supabase/supabase-js": "^1.35.3",
-        "concurrently": "^7.2.1",
+        "@sveltejs/kit": "next",
         "config": "workspace:*",
-        "copyfiles": "^2.4.1",
-        "rimraf": "^3.0.2",
         "shared": "workspace:*",
         "svelte": "^3.48.0",
-        "svelte-transpile-typescript": "^0.1.2",
+        "svelte2tsx": "^0.5.10",
         "tsconfig": "workspace:*",
         "tslib": "^2.3.1",
-        "tsup": "^5.12.5",
         "typescript": "^4.7.2"
     }
 }

@@ -31,6 +31,10 @@ yarn-error.log*
 
 # Distribution directories
 dist/
+package/
 
 # turbo
 .turbo
+
+# svelte kit
+.svelte-kit
