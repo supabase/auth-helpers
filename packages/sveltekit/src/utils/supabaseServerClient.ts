@@ -1,5 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import { COOKIE_OPTIONS } from 'shared';
+import { COOKIE_OPTIONS } from '$lib/shared';
 import { skHelper } from '../instance';
 import type { CookieOptions } from '../types';
 

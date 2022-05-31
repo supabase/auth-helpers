@@ -4,6 +4,10 @@
     "compilerOptions": {
         "declaration": false,
         "declarationMap": false,
-        "types": ["svelte"]
+        "types": ["svelte"],
+        "paths": {            
+            "$lib":["src"],
+            "$lib/*":["src/*", "../*"]
+        }
     }
 }

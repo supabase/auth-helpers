@@ -1,4 +1,4 @@
-export * from './helpers.js';
-export * from './store.js';
+export * from './helpers';
+export * from './store';
 
 export { default as UserContext } from './UserContext.svelte';

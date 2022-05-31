@@ -2,10 +2,10 @@ import {
   MAX_RETRIES,
   RETRY_INTERVAL,
   TOKEN_REFRESH_MARGIN
-} from 'shared/utils/constants';
-import type { UserFetcher } from 'shared/types';
+} from '$lib/shared/utils/constants';
+import type { UserFetcher } from '$lib/shared/types';
 import type { SupabaseClient, User } from '@supabase/supabase-js';
-import { store, type UserExtra } from './store';
+import { store, type UserExtra } from '$lib/store';
 
 const { setUser, setAccessToken, setError } = store;
 

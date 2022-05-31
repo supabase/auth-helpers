@@ -2,25 +2,24 @@
   "name": "@supabase/auth-helpers-sveltekit",
   "version": "0.0.0",
   "description": "A collection of framework specific Auth utilities for working with Supabase.",
-  "files": [
-    "package"
-  ],
-  "types": "./package/index.d.ts",
+  "types": "./dist/index.d.ts",
   "exports": {
     "./package.json": "./package.json",
-    ".": "./package/index.js"
+    ".": "./dist/index.js"
   },
-  "publishConfig": {
-    "access": "public"
-  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "build": "pnpm package",
+    "build": "pnpm copy:shared && pnpm package && pnpm rm:shared",
     "prepare": "svelte-kit sync",
-    "package": "svelte-kit package && rm package/package.json"
+    "package": "svelte-kit package && rimraf dist/package.json",
+    "copy:shared": "copyfiles -s ../shared/** src/shared -e ../shared/*.md -e ../shared/*.json",
+    "rm:shared": "rimraf src/shared"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/supabase-community/auth-helpers.git"
+    "url": "git+https://github.com/supabase-community/supabase-auth-helpers.git"
   },
   "keywords": [
     "Supabase",
@@ -31,19 +30,20 @@
   "author": "Supabase Community",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/supabase-community/auth-helpers/issues"
+    "url": "https://github.com/supabase-community/supabase-auth-helpers/issues"
   },
-  "homepage": "https://github.com/supabase-community/auth-helpers#readme",
+  "homepage": "https://github.com/supabase-community/supabase-auth-helpers#readme",
   "devDependencies": {
-    "@supabase/supabase-js": "^1.35.3",
     "@sveltejs/kit": "next",
-    "config": "workspace:*",
-    "shared": "workspace:*",
+    "copyfiles": "^2.4.1",
+    "rimraf": "^3.0.2",
     "svelte": "^3.48.0",
     "svelte2tsx": "^0.5.10",
     "tslib": "^2.3.1",
-    "tsup": "^5.12.5",
-    "typescript": "^4.6.3",
+    "typescript": "^4.7.2"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^1.35.3",
     "jose": "^4.8.1"
   }
 }
