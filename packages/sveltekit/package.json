@@ -2,18 +2,21 @@
   "name": "@supabase/auth-helpers-sveltekit",
   "version": "0.0.0",
   "description": "A collection of framework specific Auth utilities for working with Supabase.",
-  "main": "dist/index.mjs",
-  "types": "dist/index.d.ts",
   "files": [
-    "dist"
+    "package"
   ],
+  "types": "./package/index.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": "./package/index.js"
+  },
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "build": "tsup",
-    "clean": "rimraf dist",
-    "clean:all": "rimraf dist node_modules"
+    "build": "pnpm package",
+    "prepare": "svelte-kit sync",
+    "package": "svelte-kit package && rm package/package.json"
   },
   "repository": {
     "type": "git",
@@ -33,17 +36,14 @@
   "homepage": "https://github.com/supabase-community/auth-helpers#readme",
   "devDependencies": {
     "@supabase/supabase-js": "^1.35.3",
-    "@sveltejs/kit": "^1.0.0-next.345",
+    "@sveltejs/kit": "next",
     "config": "workspace:*",
-    "rimraf": "^3.0.2",
     "shared": "workspace:*",
     "svelte": "^3.48.0",
-    "tsconfig": "workspace:*",
+    "svelte2tsx": "^0.5.10",
     "tslib": "^2.3.1",
     "tsup": "^5.12.5",
-    "typescript": "^4.6.3"
-  },
-  "dependencies": {
+    "typescript": "^4.6.3",
     "jose": "^4.8.1"
   }
 }
