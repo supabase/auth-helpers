@@ -3,7 +3,7 @@
     "version": "0.0.0",
     "types": "./package/index.d.ts",
     "exports": {
-        "./package.json": "./package/package.json",
+        "./package.json": "./package.json",
         ".": "./package/index.js"
     },
     "files": [
