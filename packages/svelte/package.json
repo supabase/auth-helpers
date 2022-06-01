@@ -14,11 +14,27 @@
     ],
     "scripts": {
         "build": "pnpm copy:shared && pnpm package && pnpm rm:shared",
-        "package": "svelte-kit package && rimraf dist/package.json",
         "prepare": "svelte-kit sync",
+        "package": "svelte-kit package && rimraf dist/package.json",
         "copy:shared": "copyfiles -s ../shared/** src/shared -e ../shared/*.md -e ../shared/*.json",
         "rm:shared": "rimraf src/shared"
     },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/supabase-community/supabase-auth-helpers.git"
+    },
+    "keywords": [
+        "Supabase",
+        "Auth",
+        "Svelte Kit",
+        "Svelte"
+    ],
+    "author": "Supabase Community",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/supabase-community/supabase-auth-helpers/issues"
+    },
+    "homepage": "https://github.com/supabase-community/supabase-auth-helpers#readme",
     "devDependencies": {
         "@sveltejs/kit": "next",
         "copyfiles": "^2.4.1",
