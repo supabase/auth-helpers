@@ -1,0 +1,32 @@
+{
+    "name": "@supabase/auth-helpers-svelte",
+    "version": "0.0.0",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        "./package.json": "./package.json",
+        ".": "./dist/index.js"
+    },
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+        "build": "pnpm copy:shared && pnpm package && pnpm rm:shared",
+        "package": "svelte-kit package && rimraf dist/package.json",
+        "prepare": "svelte-kit sync",
+        "copy:shared": "copyfiles -s ../shared/** src/shared -e ../shared/*.md -e ../shared/*.json",
+        "rm:shared": "rimraf src/shared"
+    },
+    "devDependencies": {
+        "@sveltejs/kit": "next",
+        "copyfiles": "^2.4.1",
+        "rimraf": "^3.0.2",
+        "svelte": "^3.48.0",
+        "svelte-preprocess": "^4.10.1",
+        "svelte2tsx": "^0.5.10",
+        "tslib": "^2.3.1",
+        "typescript": "^4.7.2"
+    },
+    "dependencies": {
+        "@supabase/supabase-js": "^1.35.3"
+    }
+}

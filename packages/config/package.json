@@ -7,6 +7,9 @@
   "files": [
     "eslint-preset.js"
   ],
+  "scripts": {
+    "clean:all": "rimraf node_modules"
+  },
   "dependencies": {
     "eslint-config-next": "^12.0.8",
     "eslint-config-prettier": "^8.3.0",
@@ -17,6 +20,7 @@
     "next": ">=10.2.0",
     "react": ">=17.0.2 <18.0.0 || >=18.0.0-0 <19.0.0",
     "react-dom": "^17.0.2 || ^18.0.0-0",
+    "rimraf": "^3.0.2",
     "typescript": ">=3.3.1"
   },
   "peerDependencies": {
