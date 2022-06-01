@@ -215,29 +215,23 @@ importers:
     specifiers:
       '@supabase/supabase-js': ^1.35.3
       '@sveltejs/kit': next
-      config: workspace:*
       copyfiles: ^2.4.1
       jose: ^4.8.1
       rimraf: ^3.0.2
-      shared: workspace:*
       svelte: ^3.48.0
       svelte2tsx: ^0.5.10
       tslib: ^2.3.1
-      tsup: ^5.12.5
-      typescript: ^4.6.3
+      typescript: ^4.7.2
     dependencies:
       '@supabase/supabase-js': 1.35.3
       jose: 4.8.1
     devDependencies:
       '@sveltejs/kit': 1.0.0-next.347_svelte@3.48.0
-      config: link:../config
       copyfiles: 2.4.1
       rimraf: 3.0.2
-      shared: link:../shared
       svelte: 3.48.0
       svelte2tsx: 0.5.10_rxzurg3hjloskwsrdpptpplucy
       tslib: 2.4.0
-      tsup: 5.12.9_typescript@4.7.2
       typescript: 4.7.2
 
   packages/tsconfig:
