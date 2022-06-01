@@ -1,5 +1,11 @@
 # @supabase/auth-helpers-sveltekit
 
+## 0.2.0
+
+### Minor Changes
+
+- 5d741ae: Remove svelte-preprocess from sveltekit package
+
 ## 0.1.0
 
 ### Minor Changes
