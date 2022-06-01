@@ -1,9 +1,9 @@
-import { CookieOptions } from 'shared/types';
+import { CookieOptions } from '@supabase/auth-helpers-shared';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import handelCallback from './callback';
 import handleUser from './user';
 import handleLogout from './logout';
-import { COOKIE_OPTIONS, TOKEN_REFRESH_MARGIN } from 'shared/utils/constants';
+import { COOKIE_OPTIONS, TOKEN_REFRESH_MARGIN } from '@supabase/auth-helpers-shared';
 
 export interface HandleAuthOptions {
   cookieOptions?: CookieOptions;

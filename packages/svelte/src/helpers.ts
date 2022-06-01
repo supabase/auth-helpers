@@ -2,10 +2,10 @@ import {
   MAX_RETRIES,
   RETRY_INTERVAL,
   TOKEN_REFRESH_MARGIN
-} from '$lib/shared/utils/constants';
-import type { UserFetcher } from '$lib/shared/types';
+} from '@supabase/auth-helpers-shared';
+import type { UserFetcher } from '@supabase/auth-helpers-shared';
 import type { SupabaseClient, User } from '@supabase/supabase-js';
-import { setUser, setAccessToken, setError, type UserExtra } from '$lib/store';
+import { setUser, setAccessToken, setError, type UserExtra } from './store';
 
 let networkRetries = 0;
 let refreshTokenTimer: number;

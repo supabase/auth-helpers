@@ -1,13 +1,13 @@
 import { NextResponse } from 'next/server';
 import { NextMiddleware } from 'next/server';
-import { CookieOptions } from 'shared/types';
-import { COOKIE_OPTIONS, TOKEN_REFRESH_MARGIN } from 'shared/utils/constants';
-import { setCookies } from 'shared/utils/cookies';
+import { CookieOptions } from '@supabase/auth-helpers-shared';
+import { COOKIE_OPTIONS, TOKEN_REFRESH_MARGIN } from '@supabase/auth-helpers-shared';
+import { setCookies } from '@supabase/auth-helpers-shared';
 import { jwtDecoder } from '../utils/jwt';
 import {
-  NextRequestAdapter,
-  NextResponseAdapter
-} from 'shared/adapters/NextMiddlewareAdapter';
+  NextRequestMiddlewareAdapter,
+  NextResponseMiddlewareAdapter
+} from '@supabase/auth-helpers-shared';
 
 export interface withMiddlewareAuthOptions {
   /**
@@ -89,8 +89,8 @@ export const withMiddlewareAuth: withMiddlewareAuth =
               error: String(e)
             }));
           setCookies(
-            new NextRequestAdapter(req),
-            new NextResponseAdapter(res),
+            new NextRequestMiddlewareAdapter(req),
+            new NextResponseMiddlewareAdapter(res),
             [
               { key: 'access-token', value: data!.access_token },
               { key: 'refresh-token', value: data!.refresh_token! }

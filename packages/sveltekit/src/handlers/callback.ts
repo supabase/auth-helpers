@@ -5,7 +5,7 @@ import {
   type CookieOptions,
   SvelteKitRequestAdapter,
   SvelteKitResponseAdapter
-} from '../types';
+} from '@supabase/auth-helpers-shared';
 
 export const handleCallback = (
   cookieOptions: CookieOptions = COOKIE_OPTIONS

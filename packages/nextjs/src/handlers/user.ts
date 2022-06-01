@@ -1,8 +1,8 @@
-import { ApiError, CookieOptions } from 'shared/types';
+import { ApiError, CookieOptions } from '@supabase/auth-helpers-shared';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { jwtDecoder } from '../utils/jwt';
 import getUser from '../utils/getUser';
-import { COOKIE_OPTIONS, TOKEN_REFRESH_MARGIN } from 'shared/utils/constants';
+import { COOKIE_OPTIONS, TOKEN_REFRESH_MARGIN } from '@supabase/auth-helpers-shared';
 
 export interface HandleUserOptions {
   cookieOptions?: CookieOptions;

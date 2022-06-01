@@ -1,12 +1,12 @@
-import { CookieOptions } from 'shared/types';
+import { CookieOptions } from '@supabase/auth-helpers-shared';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { setCookies } from 'shared/utils/cookies';
+import { setCookies } from '@supabase/auth-helpers-shared';
 import {
   NextRequestAdapter,
   NextResponseAdapter
-} from 'shared/adapters/NextAdapter';
+} from '@supabase/auth-helpers-shared';
 import { supabaseClient } from '../utils/initSupabase';
-import { COOKIE_OPTIONS } from 'shared/utils/constants';
+import { COOKIE_OPTIONS } from '@supabase/auth-helpers-shared';
 
 export interface HandleLogoutOptions {
   cookieOptions?: CookieOptions;

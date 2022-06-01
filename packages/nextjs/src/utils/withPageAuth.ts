@@ -1,7 +1,7 @@
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { jwtDecoder } from './jwt';
-import { CookieOptions } from 'shared/types';
-import { COOKIE_OPTIONS, TOKEN_REFRESH_MARGIN } from 'shared/utils/constants';
+import { CookieOptions } from '@supabase/auth-helpers-shared';
+import { COOKIE_OPTIONS, TOKEN_REFRESH_MARGIN } from '@supabase/auth-helpers-shared';
 import getUser from './getUser';
 
 /**

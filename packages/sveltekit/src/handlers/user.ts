@@ -4,7 +4,7 @@ import {
   COOKIE_OPTIONS,
   type CookieOptions,
   parseCookie
-} from '../types';
+} from '@supabase/auth-helpers-shared';
 import { skHelper } from '../instance';
 import getUser from '../utils/getUser';
 import { jwtDecoder } from '../utils/jwt';
