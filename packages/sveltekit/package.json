@@ -3,6 +3,9 @@
   "version": "0.0.0",
   "description": "A collection of framework specific Auth utilities for working with Supabase.",
   "types": "./dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
   "exports": {
     "./package.json": "./package.json",
     ".": "./dist/index.js"

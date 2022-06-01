@@ -2,6 +2,9 @@
     "name": "@supabase/auth-helpers-svelte",
     "version": "0.0.0",
     "types": "./dist/index.d.ts",
+    "publishConfig": {
+        "access": "public"
+    },
     "exports": {
         "./package.json": "./package.json",
         ".": "./dist/index.js"
