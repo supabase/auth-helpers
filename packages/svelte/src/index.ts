@@ -1,4 +1,4 @@
 export * from './helpers';
-export * from './store';
+export { user, accessToken, isLoading, error } from './store';
 
-export { default as UserContext } from './UserContext.svelte';
+export { default as AuthHelper } from './AuthHelper.svelte';

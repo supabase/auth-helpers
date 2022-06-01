@@ -10,48 +10,45 @@ interface Props {
     error: Error | null;
 }
 
-function createStore() {
-    const initialValues = {
-        user: null,
-        accessToken: null,
-        isLoading: false,
-        error: null
-    };
+const initialValues: Props = {
+    user: null,
+    accessToken: null,
+    isLoading: false,
+    error: null
+};
 
-    const { subscribe, set, update } = writable<Props>(initialValues);
+const userStore = writable<User | null>(initialValues.user);
+const setUser = (usr: User | null) => userStore.set(usr);
 
-    const setUser = (user: User | null) => update(prop => ({
-        ...prop,
-        user,
-        error: null
-    }));
+const accessTokenStore = writable<string>(initialValues.accessToken);
+const setAccessToken = (token: string) => accessTokenStore.set(token);
 
-    const setAccessToken = (accessToken: string) => update(prop => ({
-        ...prop,
-        accessToken,
-        error: null
-    }));
+const isLoadingStore = writable(initialValues.isLoading);
+const setIsLoading = (loading: boolean) => isLoadingStore.set(loading);
 
-    const setIsLoading = (isLoading: boolean) => update(prop => ({
-        ...prop,
-        isLoading,
-        error: null
-    }));
+const errorStore = writable<Error | null>(initialValues.error);
+const setError = (err: Error) => errorStore.set(err);
 
-    const setError = (error: Error) => update(prop => ({
-        ...prop,
-        error
-    }));
+const resetAll = () => {
+    setUser(initialValues.user);
+    setAccessToken(initialValues.accessToken);
+    setIsLoading(initialValues.isLoading);
+    setError(initialValues.error);
+};
 
-    return {
-        set,
-        subscribe,
-        setUser,
-        setAccessToken,
-        setIsLoading,
-        setError,
-        reset: () => set(initialValues)
-    }
+const user = { subscribe: userStore.subscribe };
+const accessToken = { subscribe: accessTokenStore.subscribe };
+const isLoading = { subscribe: isLoadingStore.subscribe };
+const error = { subscribe: errorStore.subscribe };
+
+export {
+    user,
+    setUser,
+    accessToken,
+    setAccessToken,
+    isLoading,
+    setIsLoading,
+    error,
+    setError,
+    resetAll
 }
-
-export const store = createStore();

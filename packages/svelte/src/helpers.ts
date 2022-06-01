@@ -5,9 +5,7 @@ import {
 } from '$lib/shared/utils/constants';
 import type { UserFetcher } from '$lib/shared/types';
 import type { SupabaseClient, User } from '@supabase/supabase-js';
-import { store, type UserExtra } from '$lib/store';
-
-const { setUser, setAccessToken, setError } = store;
+import { setUser, setAccessToken, setError, type UserExtra } from '$lib/store';
 
 let networkRetries = 0;
 let refreshTokenTimer: number;
@@ -40,9 +38,9 @@ export const userFetcher: UserFetcher = async (url) => {
     : { user: null, accessToken: null, error: await handleError(response) };
 };
 
-interface UserData {
-  user: User | null;
-  accessToken: string | null;
+export interface Session {
+  user: User;
+  accessToken?: string;
 }
 
 interface CheckSessionArgs {
@@ -55,7 +53,7 @@ let profileUrl: CheckSessionArgs["profileUrl"];
 let autoRefreshToken: CheckSessionArgs["autoRefreshToken"];
 let supabaseClient: CheckSessionArgs["supabaseClient"];
 
-export const checkSession = async (props: CheckSessionArgs): Promise<UserData> => {
+export const checkSession = async (props: CheckSessionArgs): Promise<void> => {
   if (!profileUrl || !autoRefreshToken || !supabaseClient) {
     profileUrl = props.profileUrl;
     autoRefreshToken = props.autoRefreshToken;
@@ -72,7 +70,7 @@ export const checkSession = async (props: CheckSessionArgs): Promise<UserData> =
           checkSession,
           RETRY_INTERVAL ** networkRetries * 100 // exponential backoff
         );
-        return { user: null, accessToken: null };
+        return;
       }
       setError(new Error(error));
     }
@@ -96,14 +94,8 @@ export const checkSession = async (props: CheckSessionArgs): Promise<UserData> =
       }
       setTimeout(checkSession, timeout);
     }
-
-    return {
-      user,
-      accessToken
-    };
   } catch (_e) {
     const err = new Error(`The request to ${profileUrl} failed`);
     setError(err);
-    return { user: null, accessToken: null };
   }
 };

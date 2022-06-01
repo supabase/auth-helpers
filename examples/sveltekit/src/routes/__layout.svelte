@@ -2,14 +2,13 @@
 	import { goto } from '$app/navigation';
 	import { session } from '$app/stores';
 	import { supabaseClient } from '$lib/db';
-	import { UserContext } from '@supabase/auth-helpers-svelte';
+	import { AuthHelper } from '@supabase/auth-helpers-svelte';
 
-	const cbRedirect = async (user) => {
-		await goto('/');
-		session.set({ user });
+	const onUserUpdate = async (user) => {
+		if (user) await goto('/profile');
 	};
 </script>
 
-<UserContext {supabaseClient} {cbRedirect}>
+<AuthHelper {supabaseClient} {onUserUpdate} {session}>
 	<slot />
-</UserContext>
+</AuthHelper>

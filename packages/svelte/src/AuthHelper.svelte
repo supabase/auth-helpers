@@ -1,18 +1,17 @@
 <script lang="ts">
   import type { SupabaseClient, User } from '@supabase/supabase-js';
-  import { onMount, setContext } from 'svelte';
-  import { checkSession } from './helpers';
-  import { store } from './store';
+  import { onMount } from 'svelte';
+  import type { Writable } from 'svelte/store';
+  import { checkSession, type Session } from './helpers';
+  import { setIsLoading, setError, user } from './store';
 
   // Props
   export let supabaseClient: SupabaseClient;
   export let callbackUrl = '/api/auth/callback';
   export let profileUrl = '/api/auth/user';
   export let autoRefreshToken = true;
-  export let cbRedirect = (user: User | null) => {};
-  export const key = 'sb-auth-helpers-svelte-ctx';
-
-  const { setIsLoading, setError } = store;
+  export let session: Writable<Session>;
+  export let onUserUpdate = (user: User | null) => {};
 
   const handleVisibilityChange = async () => {
     if (document?.visibilityState === 'visible') {
@@ -24,6 +23,12 @@
 
   onMount(() => {
     handleVisibilityChange();
+    // hacky fix to subscribe to session before setting a value to it
+    const sess = $session;
+    user.subscribe((value) => {
+      session.set({ user: value });
+      onUserUpdate(value);
+    });
     if (autoRefreshToken)
       window?.addEventListener('visibilitychange', handleVisibilityChange);
     const { data: authListener } = supabaseClient.auth.onAuthStateChange(
@@ -44,13 +49,12 @@
           }
         });
         // Fetch the user from the API route
-        const { user } = await checkSession({
+        await checkSession({
           profileUrl,
           autoRefreshToken,
           supabaseClient
         });
         setIsLoading(false);
-        cbRedirect(user);
       }
     );
     return () => {
@@ -58,8 +62,6 @@
       authListener?.unsubscribe();
     };
   });
-
-  setContext(key, store);
 </script>
 
 <slot />

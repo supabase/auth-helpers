@@ -81,7 +81,7 @@ export const getSession: GetSession = async (event) => {
 
 These will create the handlers under the hood that perform different parts of the authentication flow:
 
-- `/api/auth/callback`: The `UserContext` forwards the session details here every time `onAuthStateChange` fires on the client side. This is needed to set up the cookies for your application so that SSR works seamlessly.
+- `/api/auth/callback`: The `UserHelper` forwards the session details here every time `onAuthStateChange` fires on the client side. This is needed to set up the cookies for your application so that SSR works seamlessly.
 
 - `/api/auth/user`: You can fetch user profile information in JSON format.
 
@@ -99,7 +99,7 @@ const { supabaseClient } = skHelper(
 export { supabaseClient };
 ```
 
-Wrap your `src/routes/__layout.svelte` component with the `UserContext` component:
+Wrap your `src/routes/__layout.svelte` component with the `UserHelper` component:
 
 ```html
 // src/routes/__layout.svelte
@@ -107,17 +107,16 @@ Wrap your `src/routes/__layout.svelte` component with the `UserContext` componen
   import { goto } from '$app/navigation';
   import { session } from '$app/stores';
   import { supabaseClient } from '$lib/db';
-  import UserContext from '@supabase/auth-helpers-svelte';
+  import { UserHelper } from '@supabase/auth-helpers-svelte';
 
-  const cbRedirect = async (user) => {
-    await goto('/');
-    session.set({ user });
+  const onUserUpdate = async (user) => {
+    if (user) await goto('/');
   };
 </script>
 
-<UserContext {supabaseClient} {cbRedirect}>
+<UserHelper {supabaseClient} {session} {onUserUpdate}>
   <slot />
-</UserContext>
+</UserHelper>
 ```
 
 You can now determine if a user is authenticated by checking that the `user` object returned by the `$session` store is defined.
@@ -138,11 +137,12 @@ You can now determine if a user is authenticated by checking that the `user` obj
 
 ## Client-side data fetching with RLS
 
-For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row-level-security) to work properly when fetching data client-side, you need to make sure to import the `{ supabaseClient }` from `@supabase/auth-helpers-nextjs` and only run your query once the user is defined client-side in the `useUser()` hook:
+For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row-level-security) to work properly when fetching data client-side, you need to make sure to import the `{ supabaseClient }` from `@supabase/auth-helpers-nextjs` and only run your query once the user is defined client-side in the `$session`:
 
 ```html
 <script>
   import Auth from 'supabase-ui-svelte';
+  import { error, isLoading } from '@supabase/auth-helpers-svelte';
   import { supabaseClient } from '$lib/db';
   import { session } from '$app/stores';
 
@@ -160,10 +160,10 @@ For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row
 </script>
 
 {#if !$session.user}
-  {#if $store.error}
-		<p>{$store.error.message}</p>
+  {#if $error}
+		<p>{$error.message}</p>
 	{/if}
-  <h1>{$store.isLoading ? `Loading...` : `Loaded!`}</h1>
+  <h1>{$isLoading ? `Loading...` : `Loaded!`}</h1>
   <Auth
     supabaseClient={supabaseClient}
     providers={['google', 'github']}
