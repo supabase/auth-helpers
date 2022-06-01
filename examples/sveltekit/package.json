@@ -1,6 +1,7 @@
 {
   "name": "@example/sveltekit",
   "version": "0.0.0",
+  "private": true,
   "scripts": {
     "dev": "svelte-kit dev --port 3001",
     "build:example": "svelte-kit build",
