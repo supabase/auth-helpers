@@ -16,9 +16,9 @@
   "scripts": {
     "build": "pnpm copy:shared && pnpm package && pnpm rm:shared",
     "prepare": "svelte-kit sync",
-    "package": "svelte-kit package && rimraf dist/package.json",
-    "copy:shared": "copyfiles -s ../shared/** src/shared -e ../shared/*.md -e ../shared/*.json",
-    "rm:shared": "rimraf src/shared"
+    "package": "svelte-kit package && del-cli dist/package.json",
+    "copy:shared": "copyfiles ../shared/** src/shared -e ../shared/*.md -e ../shared/*.json",
+    "rm:shared": "del-cli src/shared"
   },
   "repository": {
     "type": "git",
@@ -39,7 +39,6 @@
   "devDependencies": {
     "@sveltejs/kit": "next",
     "copyfiles": "^2.4.1",
-    "rimraf": "^3.0.2",
     "svelte": "^3.48.0",
     "svelte2tsx": "^0.5.10",
     "tslib": "^2.3.1",
@@ -47,6 +46,7 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^1.35.3",
+    "del-cli": "^4.0.1",
     "jose": "^4.8.1"
   }
 }
