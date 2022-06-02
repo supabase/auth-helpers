@@ -1,6 +1,6 @@
 {
     "name": "@supabase/auth-helpers-svelte",
-    "version": "0.3.0",
+    "version": "0.4.0",
     "type": "module",
     "svelte": "./dist/index.js",
     "module": "./dist/index.js",
