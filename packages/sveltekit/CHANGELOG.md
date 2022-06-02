@@ -1,5 +1,11 @@
 # @supabase/auth-helpers-sveltekit
 
+## 0.6.0
+
+### Minor Changes
+
+- 1e56b35: Add file extension to es modules imports
+
 ## 0.5.0
 
 ### Minor Changes
