@@ -1,5 +1,11 @@
 # @supabase/auth-helpers-sveltekit
 
+## 0.4.0
+
+### Minor Changes
+
+- 865cc4a: Update packages to compile to esm
+
 ## 0.3.0
 
 ### Minor Changes
