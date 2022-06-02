@@ -1,5 +1,11 @@
 # @supabase/auth-helpers-sveltekit
 
+## 0.5.0
+
+### Minor Changes
+
+- f854c7f: Remove unused helper files
+
 ## 0.4.0
 
 ### Minor Changes
