@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient, type ApiError } from '@supabase/supabase-js';
 import type { User } from '@supabase/supabase-js';
 import { skHelper } from '../instance';
 import {
@@ -8,7 +8,8 @@ import {
   type CookieOptions,
   SvelteKitRequestAdapter,
   SvelteKitResponseAdapter,
-  jwtDecoder
+  jwtDecoder,
+  TOKEN_REFRESH_MARGIN
 } from '@supabase/auth-helpers-shared';
 
 interface RequestResponse {
@@ -16,10 +17,16 @@ interface RequestResponse {
   res: Response;
 }
 
+export interface GetUserOptions {
+  cookieOptions?: CookieOptions;
+  forceRefresh?: boolean;
+  tokenRefreshMargin?: number;
+}
+
 export default async function getUser(
   { req, res }: RequestResponse,
-  cookieOptions: CookieOptions = COOKIE_OPTIONS
-): Promise<{ user: User | null; accessToken: string | null }> {
+  options: GetUserOptions = { forceRefresh: false }
+): Promise<{ user: User | null; accessToken: string | null; error?: string }> {
   try {
     const {
       apiInfo: { supabaseUrl, supabaseAnonKey }
@@ -33,6 +40,10 @@ export default async function getUser(
     if (!req.headers.has('cookie')) {
       throw new Error('Cookie not found!');
     }
+
+    const cookieOptions = { ...COOKIE_OPTIONS, ...options.cookieOptions };
+    const tokenRefreshMargin =
+      options.tokenRefreshMargin ?? TOKEN_REFRESH_MARGIN;
 
     const cookies = parseCookie(req.headers.get('cookie'));
 
@@ -53,7 +64,7 @@ export default async function getUser(
       throw new Error('Not able to parse JWT payload!');
     }
     const timeNow = Math.round(Date.now() / 1000);
-    if (jwtUser.exp < timeNow) {
+    if (options.forceRefresh || jwtUser.exp < timeNow + tokenRefreshMargin) {
       // JWT is expired, let's refresh from Gotrue
       if (!refresh_token) {
         throw new Error('No refresh_token cookie found!');
@@ -93,6 +104,7 @@ export default async function getUser(
       return { user, accessToken: access_token };
     }
   } catch (e) {
-    return { user: null, accessToken: null };
+    const error = e as ApiError;
+    return { user: null, accessToken: null, error: error.message };
   }
 }
