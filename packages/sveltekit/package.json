@@ -19,7 +19,8 @@
   "scripts": {
     "build": "pnpm package",
     "prepare": "svelte-kit sync",
-    "package": "svelte-kit package && del-cli dist/package.json"
+    "package": "svelte-kit package && del-cli dist/package.json && pnpm fix:esm",
+    "fix:esm": "fix-esm-import-path dist/index.js"
   },
   "repository": {
     "type": "git",
@@ -40,6 +41,7 @@
   "devDependencies": {
     "@sveltejs/kit": "next",
     "del-cli": "^4.0.1",
+    "fix-esm-import-path": "^1.2.1",
     "svelte": "^3.48.0",
     "svelte2tsx": "^0.5.10",
     "tslib": "^2.3.1",

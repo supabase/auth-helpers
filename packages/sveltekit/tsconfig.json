@@ -4,7 +4,7 @@
   "compilerOptions": {
     "composite": false,
     "declaration": true,
-    "declarationMap": true,
+    "declarationMap": false,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "inlineSources": false,
@@ -14,7 +14,7 @@
     "skipLibCheck": true,
     "strict": true,
     "resolveJsonModule": true,
-    "sourceMap": true,
+    "sourceMap": false,
     "paths": {
         "$lib":["src"],
         "$lib/*":["src/*"]
