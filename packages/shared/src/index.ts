@@ -1,4 +1,4 @@
-export type { CookieOptions, ApiError, User } from './types';
+export type { CookieOptions, ApiError, User, UserFetcher, UserState } from './types';
 export {
   NextRequestAdapter,
   NextResponseAdapter

@@ -6,12 +6,12 @@ import React, {
   useCallback
 } from 'react';
 import { SupabaseClient, User } from '@supabase/supabase-js';
-import { UserFetcher, UserState } from 'shared/types';
+import { UserFetcher, UserState } from '@supabase/auth-helpers-shared';
 import {
   TOKEN_REFRESH_MARGIN,
   RETRY_INTERVAL,
   MAX_RETRIES
-} from 'shared/utils/constants';
+} from '@supabase/auth-helpers-shared';
 
 let networkRetries = 0;
 let refreshTokenTimer: ReturnType<typeof setTimeout>;

@@ -1,11 +1,11 @@
-import { CookieOptions } from 'shared/types';
+import { 
+  CookieOptions, 
+  setCookies, 
+  COOKIE_OPTIONS, 
+  NextRequestAdapter, 
+  NextResponseAdapter 
+} from '@supabase/auth-helpers-shared';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { setCookies } from 'shared/utils/cookies';
-import {
-  NextRequestAdapter,
-  NextResponseAdapter
-} from 'shared/adapters/NextAdapter';
-import { COOKIE_OPTIONS } from 'shared/utils/constants';
 import getUser from '../utils/getUser';
 
 export interface HandleCallbackOptions {

@@ -3,13 +3,19 @@ import {
   type ApiError,
   COOKIE_OPTIONS,
   type CookieOptions,
-  parseCookie
-} from '../types';
+  parseCookie,
+  jwtDecoder,
+  TOKEN_REFRESH_MARGIN
+} from '@supabase/auth-helpers-shared';
 import { skHelper } from '../instance';
 import getUser from '../utils/getUser';
-import { jwtDecoder } from '../utils/jwt';
 
-export const handleUser = (cookieOptions: CookieOptions = COOKIE_OPTIONS) => {
+export interface HandleUserOptions {
+  cookieOptions?: CookieOptions;
+  tokenRefreshMargin?: number;
+}
+
+export const handleUser = (options: HandleUserOptions = {}) => {
   const handle: Handle = async ({ event, resolve }) => {
     const req = event.request;
     const { supabaseClient } = skHelper();
@@ -19,8 +25,10 @@ export const handleUser = (cookieOptions: CookieOptions = COOKIE_OPTIONS) => {
         throw new Error('Not able to parse cookies');
       }
 
-      const cookies = parseCookie(req.headers.get('cookie'));
+      const cookieOptions = { ...COOKIE_OPTIONS, ...options.cookieOptions };
+      const tokenRefreshMargin = options.tokenRefreshMargin ?? TOKEN_REFRESH_MARGIN;
 
+      const cookies = parseCookie(req.headers.get('cookie'));
       const access_token = cookies[`${cookieOptions.name}-access-token`];
 
       if (!access_token) {
@@ -33,10 +41,10 @@ export const handleUser = (cookieOptions: CookieOptions = COOKIE_OPTIONS) => {
         throw new Error('Not able to parse JWT payload!');
       }
       const timeNow = Math.round(Date.now() / 1000);
-      if (jwtUser.exp < timeNow) {
+      if (jwtUser.exp < timeNow + tokenRefreshMargin) {
         const res = await resolve(event);
         // JWT is expired, let's refresh from Gotrue
-        const response = await getUser({ req, res }, cookieOptions);
+        const response = await getUser({ req, res }, { cookieOptions, tokenRefreshMargin });
         event.locals.user = response.user;
         event.locals.accessToken = response.accessToken;
         return await resolve(event);

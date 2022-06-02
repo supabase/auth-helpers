@@ -11,6 +11,7 @@
     "build:svelte": "turbo run build --filter=@supabase/auth-helpers-svelte",
     "build:nextjs": "turbo run build --filter=@supabase/auth-helpers-nextjs",
     "build:react": "turbo run build --filter=@supabase/auth-helpers-react",
+    "build:shared": "turbo run build --filter=@supabase/auth-helpers-shared",
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",

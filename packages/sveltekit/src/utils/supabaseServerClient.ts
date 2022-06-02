@@ -1,7 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import { COOKIE_OPTIONS } from '$lib/shared';
 import { skHelper } from '../instance';
-import type { CookieOptions } from '../types';
+import { type CookieOptions, COOKIE_OPTIONS } from '@supabase/auth-helpers-shared';
 
 /**
  * This is a helper method to wrap your SupabaseClient to inject a user's access_token to make use of RLS on the server side.

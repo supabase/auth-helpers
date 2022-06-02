@@ -4,14 +4,16 @@ import {
   NextApiResponse
 } from 'next';
 import { User, createClient } from '@supabase/supabase-js';
-import { CookieOptions, ApiError } from 'shared/types';
-import { setCookies } from 'shared/utils/cookies';
-import { COOKIE_OPTIONS, TOKEN_REFRESH_MARGIN } from 'shared/utils/constants';
-import { jwtDecoder } from './jwt';
-import {
-  NextRequestAdapter,
-  NextResponseAdapter
-} from 'shared/adapters/NextAdapter';
+import { 
+  ApiError,
+  CookieOptions, 
+  setCookies, 
+  COOKIE_OPTIONS, 
+  TOKEN_REFRESH_MARGIN,
+  NextRequestAdapter, 
+  NextResponseAdapter, 
+  jwtDecoder
+} from '@supabase/auth-helpers-shared';
 
 export interface GetUserOptions {
   cookieOptions?: CookieOptions;
