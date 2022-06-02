@@ -4,9 +4,7 @@ import {
   NextApiResponse
 } from 'next';
 import getUser from './getUser';
-import { jwtDecoder } from './jwt';
-import { CookieOptions } from '@supabase/auth-helpers-shared';
-import { COOKIE_OPTIONS, TOKEN_REFRESH_MARGIN } from '@supabase/auth-helpers-shared';
+import { CookieOptions, COOKIE_OPTIONS, jwtDecoder, TOKEN_REFRESH_MARGIN } from '@supabase/auth-helpers-shared';
 
 export interface GetAccessTokenOptions {
   cookieOptions?: CookieOptions;

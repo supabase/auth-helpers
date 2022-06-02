@@ -3,11 +3,11 @@ import {
   type ApiError,
   COOKIE_OPTIONS,
   type CookieOptions,
-  parseCookie
+  parseCookie,
+  jwtDecoder
 } from '@supabase/auth-helpers-shared';
 import { skHelper } from '../instance';
 import getUser from '../utils/getUser';
-import { jwtDecoder } from '../utils/jwt';
 
 export const handleUser = (cookieOptions: CookieOptions = COOKIE_OPTIONS) => {
   const handle: Handle = async ({ event, resolve }) => {

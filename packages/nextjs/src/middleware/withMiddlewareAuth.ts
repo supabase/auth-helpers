@@ -1,12 +1,13 @@
 import { NextResponse } from 'next/server';
 import { NextMiddleware } from 'next/server';
-import { CookieOptions } from '@supabase/auth-helpers-shared';
-import { COOKIE_OPTIONS, TOKEN_REFRESH_MARGIN } from '@supabase/auth-helpers-shared';
-import { setCookies } from '@supabase/auth-helpers-shared';
-import { jwtDecoder } from '../utils/jwt';
-import {
+import { 
+  CookieOptions, 
+  setCookies, 
+  COOKIE_OPTIONS,
+  TOKEN_REFRESH_MARGIN, 
   NextRequestMiddlewareAdapter,
-  NextResponseMiddlewareAdapter
+  NextResponseMiddlewareAdapter,
+  jwtDecoder
 } from '@supabase/auth-helpers-shared';
 
 export interface withMiddlewareAuthOptions {

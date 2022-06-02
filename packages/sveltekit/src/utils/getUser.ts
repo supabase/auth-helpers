@@ -7,9 +7,9 @@ import {
   COOKIE_OPTIONS,
   type CookieOptions,
   SvelteKitRequestAdapter,
-  SvelteKitResponseAdapter
+  SvelteKitResponseAdapter,
+  jwtDecoder
 } from '@supabase/auth-helpers-shared';
-import { jwtDecoder } from '../utils/jwt';
 
 interface RequestResponse {
   req: Request;

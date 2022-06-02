@@ -23,10 +23,8 @@
 
   onMount(() => {
     handleVisibilityChange();
-    // hacky fix to subscribe to session before setting a value to it
-    const sess = $session;
     user.subscribe((value) => {
-      session.set({ user: value });
+      $session = { user: value };
       onUserUpdate(value);
     });
     if (autoRefreshToken)
