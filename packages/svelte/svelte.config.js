@@ -1,7 +1,7 @@
-const sveltePreprocess = require('svelte-preprocess');
+import sveltePreprocess from 'svelte-preprocess';
 
 /** @type {import('@sveltejs/kit').Config} */
-module.exports = {
+export default {
   preprocess: sveltePreprocess(),
 
   kit: {

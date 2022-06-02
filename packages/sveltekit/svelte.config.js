@@ -1,5 +1,5 @@
 /** @type {import('@sveltejs/kit').Config} */
-module.exports = {
+export default {
   kit: {
     files: {
       lib: 'src'

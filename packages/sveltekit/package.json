@@ -2,6 +2,9 @@
   "name": "@supabase/auth-helpers-sveltekit",
   "version": "0.3.0",
   "description": "A collection of framework specific Auth utilities for working with Supabase.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "publishConfig": {
     "access": "public"
