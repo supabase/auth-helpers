@@ -4,21 +4,24 @@ A collection of framework specific Auth utilities for working with Supabase.
 
 ## Supported Frameworks
 
-- [Next.js](./src/nextjs/README.md)
+- [Next.js](./packages/nextjs/README.md)
 - [Nuxt - via @nuxtjs/supabase](https://supabase.nuxtjs.org/)
+- [SvelteKit](./packages/sveltekit/README.md)
 
 ### Coming soon
 
 - [Remix](https://github.com/supabase-community/supabase-auth-helpers/issues/57)
-- [SvelteKit](https://github.com/supabase-community/supabase-auth-helpers/issues/54)
 
 ### Examples and Packages
 
 - Examples
   - `@examples/nextjs`: a [Next.js](https://nextjs.org) app
+  - `@examples/sveltekit`: a [SvelteKit](https://kit.svelte.dev) app
 - Packages
   - `@supabase/auth-helpers-nextjs`: the supabase auth helper nextjs library used by `nextjs` application
   - `@supabase/auth-helpers-react`: the supabase auth helper reactjs library used by `nextjs` application
+  - `@supabase/auth-helpers-svelte`: the supabase auth helper svelte library used by `sveltekit` application
+  - `@supabase/auth-helpers-sveltekit`: the supabase auth helper sveltekit library used by `sveltekit` application
   - `shared`: shared typescript types used by `@supabase/auth-helpers-nextjs` library
   - `config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
   - `tsconfig`: `tsconfig.json`s used throughout the monorepo
