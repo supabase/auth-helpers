@@ -4,7 +4,7 @@ module.exports = {
   entryPoints: ['./packages'],
   entryPointStrategy: 'expand',
   exclude: [
-    'packages/shared/utils/index.ts',
+    'packages/shared/src/utils/index.ts',
     '**/node_modules/**',
     '**/dist/**',
     '**/packages/**/tsup.config.ts'

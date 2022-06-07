@@ -36,40 +36,8 @@ This turborepo has some additional tools already setup for you:
 - [ESLint](https://eslint.org/) for code linting
 - [Prettier](https://prettier.io) for code formatting
 
-## Setup
+## Development
 
-This repository is a monorepo using PNPM.
+Read the [development.md](./development.md) for more information.
 
-Install [pnpm](https://pnpm.io/installation)
-
-> All commands below should be run at the root level of the cloned repository.
-
-Install all examples and packages dependencies with pnpm
-
-```sh
-pnpm install
-```
-
-### Build
-
-To build all apps and packages, run the following command:
-
-```sh
-pnpm build
-```
-
-### Develop
-
-To develop all apps and packages, run the following command:
-
-```sh
-pnpm dev
-```
-
-### Change logs
-
-To generate a changelog entry, run the following command:
-
-```sh
-pnpm changeset
-```
+Using a `@supabase/auth-helpers-[framework-name]` naming convention for packages

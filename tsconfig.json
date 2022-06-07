@@ -1,0 +1,10 @@
+{
+  "files": [],
+  "references": [
+    { "path": "packages/react" },
+    { "path": "packages/nextjs" },
+    { "path": "packages/shared" },
+    { "path": "packages/svelte" },
+    { "path": "packages/sveltekit" }
+  ]
+}

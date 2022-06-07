@@ -13,6 +13,22 @@
   "scripts": {
     "build": "tsup"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/supabase-community/auth-helpers.git"
+  },
+  "keywords": [
+    "Supabase",
+    "Auth",
+    "Svelte Kit",
+    "Svelte"
+  ],
+  "author": "Supabase Community",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/supabase-community/auth-helpers/issues"
+  },
+  "homepage": "https://github.com/supabase-community/auth-helpers#readme",
   "devDependencies": {
     "@supabase/supabase-js": "^1.35.3",
     "next": "^12.1.5",
