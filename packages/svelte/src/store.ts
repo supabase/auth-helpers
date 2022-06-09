@@ -17,17 +17,17 @@ const initialValues: Props = {
     error: null
 };
 
-const userStore = writable<User | null>(initialValues.user);
-const setUser = (usr: User | null) => userStore.set(usr);
+const user = writable<User | null>(initialValues.user);
+const setUser = (usr: User | null) => user.set(usr);
 
-const accessTokenStore = writable<string>(initialValues.accessToken);
-const setAccessToken = (token: string) => accessTokenStore.set(token);
+const accessToken = writable<string>(initialValues.accessToken);
+const setAccessToken = (token: string) => accessToken.set(token);
 
-const isLoadingStore = writable(initialValues.isLoading);
-const setIsLoading = (loading: boolean) => isLoadingStore.set(loading);
+const isLoading = writable(initialValues.isLoading);
+const setIsLoading = (loading: boolean) => isLoading.set(loading);
 
-const errorStore = writable<Error | null>(initialValues.error);
-const setError = (err: Error) => errorStore.set(err);
+const error = writable<Error | null>(initialValues.error);
+const setError = (err: Error) => error.set(err);
 
 const resetAll = () => {
     setUser(initialValues.user);
@@ -35,11 +35,6 @@ const resetAll = () => {
     setIsLoading(initialValues.isLoading);
     setError(initialValues.error);
 };
-
-const user = { subscribe: userStore.subscribe };
-const accessToken = { subscribe: accessTokenStore.subscribe };
-const isLoading = { subscribe: isLoadingStore.subscribe };
-const error = { subscribe: errorStore.subscribe };
 
 export {
     user,

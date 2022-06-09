@@ -1,7 +1,7 @@
-import type { ApiError, User } from '@supabase/supabase-js';
+import type { User } from '@supabase/supabase-js';
 
 export interface Locals {
-  user: User;
+  user: User | null;
   accessToken: string | null;
-  error: ApiError;
+  error: string | null;
 }
