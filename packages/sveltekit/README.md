@@ -99,7 +99,7 @@ const { supabaseClient } = skHelper(
 export { supabaseClient };
 ```
 
-Wrap your `src/routes/__layout.svelte` component with the `SuperUserHelper` component:
+Wrap your `src/routes/__layout.svelte` component with the `SupaUserHelper` component:
 
 ```html
 // src/routes/__layout.svelte
@@ -107,16 +107,16 @@ Wrap your `src/routes/__layout.svelte` component with the `SuperUserHelper` comp
   import { goto } from '$app/navigation';
   import { session } from '$app/stores';
   import { supabaseClient } from '$lib/db';
-  import { SuperUserHelper } from '@supabase/auth-helpers-svelte';
+  import { SupaUserHelper } from '@supabase/auth-helpers-svelte';
 
   const onUserUpdate = async (user) => {
     if (user) await goto('/');
   };
 </script>
 
-<SuperUserHelper {supabaseClient} {session} {onUserUpdate}>
+<SupaUserHelper {supabaseClient} {session} {onUserUpdate}>
   <slot />
-</SuperUserHelper>
+</SupaUserHelper>
 ```
 
 You can now determine if a user is authenticated by checking that the `user` object returned by the `$session` store is defined.
