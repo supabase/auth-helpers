@@ -34,7 +34,7 @@ VITE_SUPABASE_ANON_KEY=your-anon-key
 
 - Create a `callback.ts` and `user.ts` file under the newly created `auth` directory.
 
-The path to your dynamic API route files would be `/src/routes/api/auth/callback.ts` and `/src/routes/api/auth/callback.ts`. Populate both files as follows:
+The path to your dynamic API route files would be `/src/routes/api/auth/user.ts` and `/src/routes/api/auth/callback.ts`. Populate both files as follows:
 
 ```ts
 // src/routes/api/auth/user.ts
