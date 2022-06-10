@@ -24,7 +24,12 @@
 
   onMount(() => {
     handleVisibilityChange();
+    let firstRun = true;
     user.subscribe((value) => {
+      if (firstRun) {
+        firstRun = false;
+        return;
+      }
       const currentUser = $session.user;
       const currentAccessToken = $session.accessToken;
       if (value === null) {
