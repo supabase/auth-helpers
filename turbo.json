@@ -8,6 +8,10 @@
       "dependsOn": ["^build", "^build:example"],
       "outputs": ["dist/**", ".next/**", ".svelte-kit/**"]
     },
+    "build:watch": {
+      "dependsOn": ["^build:watch"],
+      "outputs": ["dist/**", ".next/**", ".svelte-kit/**"]
+    },
     "clean:all": {
       "dependsOn": ["^clean:all"],
       "cache": false

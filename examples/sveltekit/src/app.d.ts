@@ -1,20 +1,18 @@
 /// <reference types="@sveltejs/kit" />
-/// <reference types="@supabase/supabase-js" />
 
 // See https://kit.svelte.dev/docs/typescript
 // for information about these interfaces
 declare namespace App {
+	type AuthSession = import('@supabase/auth-helpers-svelte').Session;
 	interface Locals {
-		user: User;
+		user: import('@supabase/supabase-js').User;
 		accessToken: string | null;
-		error: ApiError;
+		error: string | null;
 	}
 
 	interface Platform {}
 
-	interface Session {
-		user: User;
-		accessToken?: string;
+	interface Session extends AuthSession {
 	}
 
 	interface Stuff {}

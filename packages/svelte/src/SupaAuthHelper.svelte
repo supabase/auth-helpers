@@ -3,7 +3,8 @@
   import { onMount } from 'svelte';
   import type { Writable } from 'svelte/store';
   import { checkSession, type Session } from './helpers';
-  import { setIsLoading, setError, user } from './store';
+  import { setIsLoading, setError, user, accessToken } from './store';
+  import { dequal } from 'dequal';
 
   // Props
   export let supabaseClient: SupabaseClient;
@@ -24,7 +25,22 @@
   onMount(() => {
     handleVisibilityChange();
     user.subscribe((value) => {
-      $session = { user: value };
+      const currentUser = $session.user;
+      const currentAccessToken = $session.accessToken;
+      if (value === null) {
+        $session = { ...$session, user: null, accessToken: null };
+      }
+
+      if (
+        (value && !dequal(currentUser, value)) ||
+        ($accessToken && !dequal(currentAccessToken, $accessToken))
+      ) {
+        $session = {
+          ...$session,
+          user: value,
+          accessToken: $accessToken
+        };
+      }
       onUserUpdate(value);
     });
     if (autoRefreshToken)

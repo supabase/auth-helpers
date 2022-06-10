@@ -5,7 +5,7 @@
 	import { SupaAuthHelper } from '@supabase/auth-helpers-svelte';
 
 	const onUserUpdate = async (user) => {
-		if (user) await goto('/profile');
+		// if (user) await goto('/profile');
 	};
 </script>
 

@@ -5,10 +5,12 @@ import {
   type CookieOptions,
   parseCookie,
   jwtDecoder,
-  TOKEN_REFRESH_MARGIN
+  TOKEN_REFRESH_MARGIN,
+  type User
 } from '@supabase/auth-helpers-shared';
 import { skHelper } from '../instance';
 import getUser from '../utils/getUser';
+import type { Locals } from '../types';
 
 export interface HandleUserOptions {
   cookieOptions?: CookieOptions;
@@ -51,23 +53,17 @@ export const handleUser = (options: HandleUserOptions = {}) => {
       } else {
         // Transform JWT and add note that it is cached from JWT.
         const user = {
-          id: jwtUser.sub,
-          aud: null,
-          role: null,
-          email: null,
-          email_confirmed_at: null,
-          phone: null,
-          confirmed_at: null,
-          last_sign_in_at: null,
+          id: jwtUser.sub!,
           app_metadata: {},
           user_metadata: {},
-          identities: [],
-          created_at: null,
-          updated_at: null,
+          aud: '',
+          created_at: '',
           'supabase-auth-helpers-note':
             'This user payload is retrieved from the cached JWT and might be stale. If you need up to date user data, please call the `getUser` method in a server-side context!'
         };
-        const mergedUser = { ...user, ...jwtUser };
+        type JWTUser = typeof jwtUser;
+        const jwt_user: Omit<JWTUser, 'iss'> = jwtUser;
+        const mergedUser = { ...user, ...jwt_user };
         event.locals.user = mergedUser;
         event.locals.accessToken = access_token;
         // set supabase auth
@@ -77,7 +73,7 @@ export const handleUser = (options: HandleUserOptions = {}) => {
     } catch (e) {
       const error = e as ApiError;
       event.locals.user = null;
-      event.locals.error = error;
+      event.locals.error = error.message;
       event.locals.accessToken = null;
       return await resolve(event);
     }

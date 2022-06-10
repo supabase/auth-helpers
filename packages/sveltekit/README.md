@@ -39,12 +39,13 @@ The path to your dynamic API route files would be `/src/routes/api/auth/callback
 ```ts
 // src/routes/api/auth/user.ts
 export async function post({ locals }) {
-  const { user, accessToken } = locals;
+  const { user, accessToken, error } = locals;
   return {
     status: 200,
     body: {
       user,
-      accessToken
+      accessToken,
+      error
     }
   };
 }
@@ -71,10 +72,11 @@ import { sequence } from '@sveltejs/kit/hooks';
 export const handle: Handle = sequence(handleCallback(), handleUser());
 
 export const getSession: GetSession = async (event) => {
-  const { user, accessToken } = event.locals;
+  const { user, accessToken, error } = event.locals;
   return {
     user,
-    accessToken
+    accessToken,
+    error
   };
 };
 ```
