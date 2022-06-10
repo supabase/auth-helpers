@@ -8,6 +8,17 @@ Using [npm](https://npmjs.org):
 
 ```sh
 npm install @supabase/auth-helpers-nextjs
+
+# Main components and hooks for React based frameworks (optional)
+npm install @supabase/auth-helpers-react
+```
+
+Using [yarn](https://yarnpkg.com/):
+```sh
+yarn add @supabase/auth-helpers-nextjs
+
+# Main components and hooks for React based frameworks (optional)
+yarn add @supabase/auth-helpers-react
 ```
 
 This library supports the following tooling versions:
