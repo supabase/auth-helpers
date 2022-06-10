@@ -1,5 +1,11 @@
 # @supabase/auth-helpers-svelte
 
+## 0.4.2
+
+### Patch Changes
+
+- ffbfcc8: Fix null value on first run of user subscribe
+
 ## 0.4.1
 
 ### Patch Changes
