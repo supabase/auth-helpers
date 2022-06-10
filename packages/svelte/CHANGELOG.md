@@ -1,5 +1,11 @@
 # @supabase/auth-helpers-svelte
 
+## 0.4.1
+
+### Patch Changes
+
+- 2f2abf2: Fix session being overwritten in SupaAuthHelper
+
 ## 0.4.0
 
 ### Minor Changes
