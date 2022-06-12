@@ -1,6 +1,6 @@
 {
     "name": "@supabase/auth-helpers-svelte",
-    "version": "0.4.0",
+    "version": "0.4.2",
     "type": "module",
     "svelte": "./dist/index.js",
     "module": "./dist/index.js",
@@ -17,8 +17,10 @@
     ],
     "scripts": {
         "build": "pnpm package",
+        "build:watch": "pnpm package:watch",
         "prepare": "svelte-kit sync",
-        "package": "svelte-kit package && del-cli dist/package.json"
+        "package": "svelte-kit package && del-cli dist/package.json",
+        "package:watch": "svelte-kit package -w && del-cli dist/package.json"
     },
     "repository": {
         "type": "git",
@@ -47,6 +49,7 @@
     },
     "dependencies": {
         "@supabase/auth-helpers-shared": "workspace:*",
-        "@supabase/supabase-js": "^1.35.3"
+        "@supabase/supabase-js": "^1.35.3",
+        "dequal": "^2.0.2"
     }
 }

@@ -8,7 +8,7 @@ import type { SupabaseClient, User } from '@supabase/supabase-js';
 import { setUser, setAccessToken, setError, type UserExtra } from './store';
 
 let networkRetries = 0;
-let refreshTokenTimer: number;
+let refreshTokenTimer: ReturnType<typeof setTimeout>;
 
 const handleError = async (error: Response) => {
   if (typeof error.json !== 'function') {
@@ -26,7 +26,7 @@ const handleError = async (error: Response) => {
   };
 };
 
-export const userFetcher: UserFetcher = async (url) => {
+const userFetcher: UserFetcher = async (url) => {
   const response = await fetch(url, { method: 'POST' }).catch(
     () => undefined
   );
@@ -39,8 +39,9 @@ export const userFetcher: UserFetcher = async (url) => {
 };
 
 export interface Session {
-  user: User;
-  accessToken?: string;
+  user: User | null;
+  accessToken?: string | null;
+  error?: string | null;
 }
 
 interface CheckSessionArgs {
@@ -65,7 +66,9 @@ export const checkSession = async (props: CheckSessionArgs): Promise<void> => {
     const { user, accessToken, error } = await userFetcher(profileUrl);
     if (error) {
       if (error === 'Request failed' && networkRetries < MAX_RETRIES) {
-        if (refreshTokenTimer) clearTimeout(refreshTokenTimer);
+        if (refreshTokenTimer) {
+          clearTimeout(refreshTokenTimer);
+        }
         refreshTokenTimer = setTimeout(
           checkSession,
           RETRY_INTERVAL ** networkRetries * 100 // exponential backoff
@@ -83,6 +86,7 @@ export const checkSession = async (props: CheckSessionArgs): Promise<void> => {
 
     // Set up auto token refresh
     if (autoRefreshToken) {
+      // TODO: the user.exp is a bug that is currently working like a feature
       const expiresAt = (user as UserExtra).exp;
       let timeout = 20 * 1000;
       if (expiresAt) {

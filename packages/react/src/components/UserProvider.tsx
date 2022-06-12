@@ -92,6 +92,7 @@ export const UserProvider = (props: Props) => {
       setUser(user);
       // Set up auto token refresh
       if (autoRefreshToken) {
+        // TODO: the user.exp is a bug that is currently working like a feature
         const expiresAt = (user as any).exp;
         let timeout = 20 * 1000;
         if (expiresAt) {
