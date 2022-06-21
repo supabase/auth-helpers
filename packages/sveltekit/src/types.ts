@@ -5,3 +5,8 @@ export interface Locals {
   accessToken: string | null;
   error: string | null;
 }
+
+export interface RequestResponse {
+  req: Request;
+  res: Response;
+}

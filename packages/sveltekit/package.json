@@ -18,8 +18,10 @@
   ],
   "scripts": {
     "build": "pnpm package",
+    "build:watch": "pnpm package:watch",
     "prepare": "svelte-kit sync",
     "package": "svelte-kit package && del-cli dist/package.json && pnpm fix:esm",
+    "package:watch": "svelte-kit package -w && del-cli dist/package.json && pnpm fix:esm",
     "fix:esm": "fix-esm-import-path dist/index.js"
   },
   "repository": {

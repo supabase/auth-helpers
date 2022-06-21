@@ -6,11 +6,9 @@ import {
   parseCookie,
   jwtDecoder,
   TOKEN_REFRESH_MARGIN,
-  type User
 } from '@supabase/auth-helpers-shared';
 import { skHelper } from '../instance';
-import getUser from '../utils/getUser';
-import type { Locals } from '../types';
+import { getUser, saveTokens } from '../utils/getUser';
 
 export interface HandleUserOptions {
   cookieOptions?: CookieOptions;
@@ -44,12 +42,13 @@ export const handleUser = (options: HandleUserOptions = {}) => {
       }
       const timeNow = Math.round(Date.now() / 1000);
       if (jwtUser.exp < timeNow + tokenRefreshMargin) {
-        const res = await resolve(event);
         // JWT is expired, let's refresh from Gotrue
-        const response = await getUser({ req, res }, { cookieOptions, tokenRefreshMargin });
-        event.locals.user = response.user;
-        event.locals.accessToken = response.accessToken;
-        return await resolve(event);
+        const session = await getUser(req, { cookieOptions, tokenRefreshMargin });
+        event.locals.user = session.user;
+        event.locals.accessToken = session.accessToken;
+        const res = await resolve(event);
+        await saveTokens({req, res}, session, { cookieOptions, tokenRefreshMargin });
+        return res;
       } else {
         // Transform JWT and add note that it is cached from JWT.
         const user = {
