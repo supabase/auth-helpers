@@ -7,6 +7,7 @@ import {
   SvelteKitResponseAdapter
 } from '@supabase/auth-helpers-shared';
 import { getUser, saveTokens } from '../utils/getUser';
+import { deleteTokens } from '../utils/deleteTokens';
 
 export interface HandleCallbackOptions {
   cookieOptions?: CookieOptions;
@@ -71,15 +72,7 @@ export const handleCallback = (options: HandleCallbackOptions = {}) => {
     }
 
     if (bodyEvent === 'SIGNED_OUT' || bodyEvent === 'USER_DELETED') {
-      setCookies(
-        new SvelteKitRequestAdapter(req),
-        new SvelteKitResponseAdapter(res),
-        ['access-token', 'refresh-token', 'provider-token'].map((key) => ({
-          name: `${cookieOptions.name}-${key}`,
-          value: '',
-          maxAge: -1
-        }))
-      );
+      deleteTokens({ req, res }, cookieOptions.name);
     }
 
     return res;
