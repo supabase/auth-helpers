@@ -1,12 +1,9 @@
-import { handleUser, handleCallback } from '@supabase/auth-helpers-sveltekit';
+import { handleAuth } from '@supabase/auth-helpers-sveltekit';
 import type { GetSession, Handle } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 
 export const handle: Handle = sequence(
-	handleCallback({
-		cookieOptions: { lifetime: 1 * 365 * 24 * 60 * 60 }
-	}),
-	handleUser({
+	...handleAuth({
 		cookieOptions: { lifetime: 1 * 365 * 24 * 60 * 60 }
 	})
 );

@@ -61,15 +61,15 @@ export async function post() {
 }
 ```
 
-We need to add the `handleCallback()` and `handleUser()` hooks to your `hooks.ts` file.
+We need to add the `handleAuth()` hook to your `hooks.ts` file.
 
 ```ts
 // src/hooks.ts
-import { handleUser, handleCallback } from '@supabase/auth-helpers-sveltekit';
+import { handleAuth } from '@supabase/auth-helpers-sveltekit';
 import type { GetSession, Handle } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 
-export const handle: Handle = sequence(handleCallback(), handleUser());
+export const handle: Handle = sequence(...handleAuth(), handleUser());
 
 export const getSession: GetSession = async (event) => {
   const { user, accessToken, error } = event.locals;
