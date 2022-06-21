@@ -1,5 +1,13 @@
 # @supabase/auth-helpers-sveltekit
 
+## 0.6.2
+
+### Patch Changes
+
+- d23b268: [breaking change] Update the getUser function to only get the user and not save the token
+- 1c95004: Add new handleAuth function to export all hooks as an array to destructure
+- 588d329: Add handleLogout hook for logging out via endpoint /api/auth/logout
+
 ## 0.6.1
 
 ### Patch Changes
