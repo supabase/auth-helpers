@@ -3,8 +3,7 @@
 </script>
 
 <p>
-	<a href="/">[Home]</a> |
-	<a href="/protected-page">[supabaseServerClient]</a>
+	[<a href="/">Home</a>] | [<a href="/protected-page">supabaseServerClient</a>]
 </p>
 
 <div>Hello {user.email}</div>
