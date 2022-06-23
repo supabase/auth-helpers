@@ -30,9 +30,35 @@ VITE_SUPABASE_ANON_KEY=your-anon-key
 
 ### Basic Setup
 
+- Add App Types 
+
 - Create an `auth` directory under the `/src/routes/api/` directory.
 
 - Create a `callback.ts` and `user.ts` file under the newly created `auth` directory.
+
+We need to add App types so that our `session` and `locals` in Kit don't error. You can do that by changing/updating the contents of `src/app.d.ts`:
+
+```ts
+/// <reference types="@sveltejs/kit" />
+
+// See https://kit.svelte.dev/docs/types#app
+// for information about these interfaces
+declare namespace App {
+	interface UserSession {
+		user: import('@supabase/supabase-js').User
+		accessToken?: string
+	}
+	
+	interface Locals extends UserSession {
+		error: import('@supabase/supabase-js').ApiError
+	}
+	
+	interface Session extends UserSession {}
+
+	// interface Platform {}
+	// interface Stuff {}
+}
+```
 
 The path to your dynamic API route files would be `/src/routes/api/auth/user.ts` and `/src/routes/api/auth/callback.ts`. Populate both files as follows:
 
