@@ -139,7 +139,7 @@ You can now determine if a user is authenticated by checking that the `user` obj
 
 ## Client-side data fetching with RLS
 
-For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row-level-security) to work properly when fetching data client-side, you need to make sure to import the `{ supabaseClient }` from `@supabase/auth-helpers-nextjs` and only run your query once the user is defined client-side in the `$session`:
+For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row-level-security) to work properly when fetching data client-side, you need to make sure to import the `{ supabaseClient }` from `@supabase/auth-helpers-sveltekit` and only run your query once the user is defined client-side in the `$session`:
 
 ```html
 <script>
