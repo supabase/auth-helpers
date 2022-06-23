@@ -30,7 +30,7 @@ VITE_SUPABASE_ANON_KEY=your-anon-key
 
 ### Basic Setup
 
-- Add App Types 
+- Add `session` and `locals` app types to `src/app.d.ts`
 
 - Create an `auth` directory under the `/src/routes/api/` directory.
 
