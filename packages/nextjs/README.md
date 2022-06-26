@@ -280,3 +280,19 @@ import { withMiddlewareAuth } from '@supabase/auth-helpers-nextjs/middleware';
 
 export const middleware = withMiddlewareAuth({ redirectTo: '/login' });
 ```
+
+It is also possible to add finer granularity based on the user logged in. I.e. you can specify a promise to determine if a specific user has permission or not.
+
+
+```ts
+// pages/protected/_middleware.ts
+import { withMiddlewareAuth } from '@supabase/auth-helpers-nextjs/middleware';
+
+export const middleware = withMiddlewareAuth({ 
+  redirectTo: '/login',
+  authGuard: {
+    isPermitted: async (user) => user.email?.endsWith('@example.com') ?? false,
+    redirectTo: '/insufficient-permissions'
+  }
+});
+```
