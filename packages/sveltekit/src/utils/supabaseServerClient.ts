@@ -1,6 +1,10 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { skHelper } from '../instance';
-import { type CookieOptions, COOKIE_OPTIONS } from '@supabase/auth-helpers-shared';
+import {
+  type CookieOptions,
+  COOKIE_OPTIONS,
+  parseCookie
+} from '@supabase/auth-helpers-shared';
 
 /**
  * This is a helper method to wrap your SupabaseClient to inject a user's access_token to make use of RLS on the server side.
@@ -47,7 +51,9 @@ function supabaseServerClient(
   const { supabaseClient } = skHelper();
   const access_token =
     typeof requestOrAccessToken !== 'string'
-      ? requestOrAccessToken?.headers.get(`${cookieOptions.name}-access-token`)
+      ? parseCookie(requestOrAccessToken?.headers.get('cookie'))?.[
+          `${cookieOptions.name}-access-token`
+        ]
       : requestOrAccessToken;
   if (access_token !== null) {
     supabaseClient?.auth.setAuth(access_token);
