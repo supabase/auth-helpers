@@ -130,8 +130,8 @@ export const withMiddlewareAuth: withMiddlewareAuth =
       } else if (!authResult.user) {
         throw new Error('No auth user, redirecting');
       } else if (
-        options.authenticated &&
-        !(await options.authenticated(authResult.user))
+        options.authGuard &&
+        !(await options.authGuard.isPermitted(authResult.user))
       ) {
         throw new NoPermissionError('User is not permitted, redirecting');
       }
