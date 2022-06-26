@@ -14,8 +14,8 @@ import {
 class NoPermissionError extends Error {
   constructor(message: string) {
     super(message);
-    Object.setPrototypeOf(this, NoPermissionError.prototype);
   }
+  get name() { return this.constructor.name }
 }
 
 export interface withMiddlewareAuthOptions {
@@ -29,7 +29,7 @@ export interface withMiddlewareAuthOptions {
   redirectTo?: string;
   cookieOptions?: CookieOptions;
   tokenRefreshMargin?: number;
-  permissionGuard?: {
+  authGuard?: {
     isPermitted: (user: User) => Promise<boolean>;
     redirectTo: string;
   };
@@ -130,8 +130,8 @@ export const withMiddlewareAuth: withMiddlewareAuth =
       } else if (!authResult.user) {
         throw new Error('No auth user, redirecting');
       } else if (
-        options.permissionGuard &&
-        !(await options.permissionGuard.isPermitted(authResult.user))
+        options.authenticated &&
+        !(await options.authenticated(authResult.user))
       ) {
         throw new NoPermissionError('User is not permitted, redirecting');
       }
@@ -142,9 +142,9 @@ export const withMiddlewareAuth: withMiddlewareAuth =
       let { redirectTo = '/' } = options;
       if (
         err instanceof NoPermissionError &&
-        !!options?.permissionGuard?.redirectTo
+        !!options?.authGuard?.redirectTo
       ) {
-        redirectTo = options.permissionGuard.redirectTo;
+        redirectTo = options.authGuard.redirectTo;
       }
       if (err instanceof Error) {
         console.log(
