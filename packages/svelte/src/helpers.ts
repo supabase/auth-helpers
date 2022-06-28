@@ -8,7 +8,7 @@ import type { SupabaseClient, User } from '@supabase/supabase-js';
 import { setUser, setAccessToken, setError, type UserExtra } from './store';
 
 let networkRetries = 0;
-let refreshTokenTimer: ReturnType<typeof setTimeout>;
+let refreshTokenTimer: number;
 
 const handleError = async (error: Response) => {
   if (typeof error.json !== 'function') {
@@ -69,7 +69,7 @@ export const checkSession = async (props: CheckSessionArgs): Promise<void> => {
         if (refreshTokenTimer) {
           clearTimeout(refreshTokenTimer);
         }
-        refreshTokenTimer = setTimeout(
+        refreshTokenTimer = window.setTimeout(
           checkSession,
           RETRY_INTERVAL ** networkRetries * 100 // exponential backoff
         );

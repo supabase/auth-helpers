@@ -37,7 +37,7 @@
     "bugs": {
         "url": "https://github.com/supabase-community/auth-helpers/issues"
     },
-    "homepage": "https://github.com/supabase-community/auth-helpers#readme",
+    "homepage": "https://github.com/supabase-community/auth-helpers/tree/main/packages/svelte#readme",
     "devDependencies": {
         "@sveltejs/kit": "next",
         "del-cli": "^4.0.1",
