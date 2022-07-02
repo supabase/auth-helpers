@@ -10,5 +10,8 @@
 </script>
 
 <SupaAuthHelper {supabaseClient} {onUserUpdate} {session}>
+	{#if $session?.user?.id}
+		<a href="/api/auth/logout">Sign out</a>
+	{/if}
 	<slot />
 </SupaAuthHelper>

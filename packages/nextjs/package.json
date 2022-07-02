@@ -26,7 +26,7 @@
   "bugs": {
     "url": "https://github.com/supabase-community/auth-helpers/issues"
   },
-  "homepage": "https://github.com/supabase-community/auth-helpers#readme",
+  "homepage": "https://github.com/supabase-community/auth-helpers/tree/main/packages/nextjs#readme",
   "devDependencies": {
     "@supabase/supabase-js": "^1.35.3",
     "config": "workspace:*",
@@ -39,6 +39,7 @@
     "tsup": "^5.12.5"
   },
   "dependencies": {
-    "@supabase/auth-helpers-shared": "workspace:*"
+    "@supabase/auth-helpers-shared": "workspace:*",
+    "loglevel": "^1.8.0"
   }
 }

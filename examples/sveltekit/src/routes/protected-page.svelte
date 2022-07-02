@@ -17,17 +17,15 @@
 </script>
 
 <script>
-	import { supabaseClient } from '$lib/db';
-
 	export let data;
 	export let user;
 </script>
 
 <p>
-	<a href="/">[Home]</a>
-	<a href="/profile">[withAuthRequired]</a>
+	[<a href="/">Home</a>] | [<a href="/profile">withPageAuth</a>] | [<a href="/github-provider-token"
+		>GitHub Token</a
+	>]
 </p>
-<button on:click={async () => await supabaseClient.auth.signOut()}>Sign out</button>
 <div>Protected content for {user.email}</div>
 <p>server-side fetched data with RLS:</p>
 <pre>{JSON.stringify(data, null, 2)}</pre>

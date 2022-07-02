@@ -1,4 +1,5 @@
 import {
+  CallbackUrlFailed,
   MAX_RETRIES,
   RETRY_INTERVAL,
   TOKEN_REFRESH_MARGIN
@@ -8,7 +9,7 @@ import type { SupabaseClient, User } from '@supabase/supabase-js';
 import { setUser, setAccessToken, setError, type UserExtra } from './store';
 
 let networkRetries = 0;
-let refreshTokenTimer: ReturnType<typeof setTimeout>;
+let refreshTokenTimer: number;
 
 const handleError = async (error: Response) => {
   if (typeof error.json !== 'function') {
@@ -27,9 +28,7 @@ const handleError = async (error: Response) => {
 };
 
 const userFetcher: UserFetcher = async (url) => {
-  const response = await fetch(url, { method: 'POST' }).catch(
-    () => undefined
-  );
+  const response = await fetch(url, { method: 'POST' }).catch(() => undefined);
   if (!response) {
     return { user: null, accessToken: null, error: 'Request failed' };
   }
@@ -50,9 +49,9 @@ interface CheckSessionArgs {
   supabaseClient: SupabaseClient;
 }
 
-let profileUrl: CheckSessionArgs["profileUrl"];
-let autoRefreshToken: CheckSessionArgs["autoRefreshToken"];
-let supabaseClient: CheckSessionArgs["supabaseClient"];
+let profileUrl: CheckSessionArgs['profileUrl'];
+let autoRefreshToken: CheckSessionArgs['autoRefreshToken'];
+let supabaseClient: CheckSessionArgs['supabaseClient'];
 
 export const checkSession = async (props: CheckSessionArgs): Promise<void> => {
   if (!profileUrl || !autoRefreshToken || !supabaseClient) {
@@ -69,7 +68,7 @@ export const checkSession = async (props: CheckSessionArgs): Promise<void> => {
         if (refreshTokenTimer) {
           clearTimeout(refreshTokenTimer);
         }
-        refreshTokenTimer = setTimeout(
+        refreshTokenTimer = window.setTimeout(
           checkSession,
           RETRY_INTERVAL ** networkRetries * 100 // exponential backoff
         );
@@ -86,9 +85,8 @@ export const checkSession = async (props: CheckSessionArgs): Promise<void> => {
 
     // Set up auto token refresh
     if (autoRefreshToken) {
-      // TODO: the user.exp is a bug that is currently working like a feature
-      const expiresAt = (user as UserExtra).exp;
       let timeout = 20 * 1000;
+      const expiresAt = (user as UserExtra).exp;
       if (expiresAt) {
         const timeNow = Math.round(Date.now() / 1000);
         const expiresIn = expiresAt - timeNow;
@@ -99,7 +97,7 @@ export const checkSession = async (props: CheckSessionArgs): Promise<void> => {
       setTimeout(checkSession, timeout);
     }
   } catch (_e) {
-    const err = new Error(`The request to ${profileUrl} failed`);
-    setError(err);
+    const err = new CallbackUrlFailed(profileUrl);
+    setError(err.toObj());
   }
 };

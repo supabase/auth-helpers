@@ -4,16 +4,22 @@ import {
   NextApiResponse
 } from 'next';
 import { User, createClient } from '@supabase/supabase-js';
-import { 
+import {
   ApiError,
-  CookieOptions, 
-  setCookies, 
-  COOKIE_OPTIONS, 
+  CookieOptions,
+  setCookies,
+  COOKIE_OPTIONS,
   TOKEN_REFRESH_MARGIN,
-  NextRequestAdapter, 
-  NextResponseAdapter, 
-  jwtDecoder
+  NextRequestAdapter,
+  NextResponseAdapter,
+  jwtDecoder,
+  CookieNotParsed,
+  JWTPayloadFailed,
+  AccessTokenNotFound,
+  RefreshTokenNotFound,
+  AuthHelperError
 } from '@supabase/auth-helpers-shared';
+import log from 'loglevel';
 
 export interface GetUserOptions {
   cookieOptions?: CookieOptions;
@@ -37,7 +43,7 @@ export default async function getUser(
       );
     }
     if (!context.req.cookies) {
-      throw new Error('Not able to parse cookies!');
+      throw new CookieNotParsed();
     }
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -52,17 +58,17 @@ export default async function getUser(
       context.req.cookies[`${cookieOptions.name}-refresh-token`];
 
     if (!access_token) {
-      throw new Error('No cookie found!');
+      throw new AccessTokenNotFound();
     }
     // Get payload from access token.
     const jwtUser = jwtDecoder(access_token);
     if (!jwtUser?.exp) {
-      throw new Error('Not able to parse JWT payload!');
+      throw new JWTPayloadFailed();
     }
     const timeNow = Math.round(Date.now() / 1000);
     if (options.forceRefresh || jwtUser.exp < timeNow + tokenRefreshMargin) {
       // JWT is expired, let's refresh from Gotrue
-      if (!refresh_token) throw new Error('No refresh_token cookie found!');
+      if (!refresh_token) throw new RefreshTokenNotFound();
       const { data, error } = await supabase.auth.api.refreshAccessToken(
         refresh_token
       );
@@ -97,7 +103,9 @@ export default async function getUser(
     }
   } catch (e) {
     const error = e as ApiError;
-    console.log('Error getting user:', error);
+    if (e instanceof AuthHelperError) {
+      log.debug(e.toObj());
+    }
     return { user: null, accessToken: null, error: error.message };
   }
 }

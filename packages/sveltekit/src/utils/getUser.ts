@@ -1,4 +1,4 @@
-import { createClient, type ApiError, type Session } from '@supabase/supabase-js';
+import { createClient, type ApiError } from '@supabase/supabase-js';
 import type { User } from '@supabase/supabase-js';
 import { skHelper } from '../instance';
 import {
@@ -9,9 +9,16 @@ import {
   SvelteKitRequestAdapter,
   SvelteKitResponseAdapter,
   jwtDecoder,
-  TOKEN_REFRESH_MARGIN
+  TOKEN_REFRESH_MARGIN,
+  CookieNotParsed,
+  AccessTokenNotFound,
+  JWTPayloadFailed,
+  RefreshTokenNotFound,
+  AuthHelperError,
+  CookieNotSaved
 } from '@supabase/auth-helpers-shared';
 import type { RequestResponse } from '../types';
+import log from 'loglevel';
 
 export interface GetUserOptions {
   cookieOptions?: CookieOptions;
@@ -20,10 +27,10 @@ export interface GetUserOptions {
 }
 
 interface UserResponse {
-  user: User | null; 
+  user: User | null;
   accessToken: string | null;
   refreshToken?: string;
-  error?: string
+  error?: string;
 }
 
 /**
@@ -49,7 +56,7 @@ export async function getUser(
     }
 
     if (!req.headers.has('cookie')) {
-      throw new Error('Cookie not found!');
+      throw new CookieNotParsed();
     }
 
     const cookieOptions = { ...COOKIE_OPTIONS, ...options.cookieOptions };
@@ -63,7 +70,7 @@ export async function getUser(
     const refresh_token = cookies[`${cookieOptions.name}-refresh-token`];
 
     if (!access_token) {
-      throw new Error('No cookie found!');
+      throw new AccessTokenNotFound();
     }
 
     // if we have a token, set the client to use it so we can make authorized requests to Supabase
@@ -72,13 +79,13 @@ export async function getUser(
     // Get payload from access token.
     const jwtUser = jwtDecoder(access_token);
     if (!jwtUser?.exp) {
-      throw new Error('Not able to parse JWT payload!');
+      throw new JWTPayloadFailed();
     }
     const timeNow = Math.round(Date.now() / 1000);
     if (options.forceRefresh || jwtUser.exp < timeNow + tokenRefreshMargin) {
       // JWT is expired, let's refresh from Gotrue
       if (!refresh_token) {
-        throw new Error('No refresh_token cookie found!');
+        throw new RefreshTokenNotFound();
       }
 
       const { data, error } = await supabase.auth.api.refreshAccessToken(
@@ -88,7 +95,11 @@ export async function getUser(
       if (error) {
         throw error;
       }
-      return { user: data!.user!, accessToken: data!.access_token, refreshToken: data?.refresh_token };
+      return {
+        user: data!.user!,
+        accessToken: data!.access_token,
+        refreshToken: data?.refresh_token
+      };
     } else {
       const { user, error: getUserError } = await supabase.auth.api.getUser(
         access_token
@@ -100,6 +111,9 @@ export async function getUser(
     }
   } catch (e) {
     const error = e as ApiError;
+    if (e instanceof AuthHelperError) {
+      log.debug(e.toObj());
+    }
     return { user: null, accessToken: null, error: error.message };
   }
 }
@@ -111,7 +125,7 @@ export function saveTokens(
 ) {
   try {
     if (session.error) {
-      throw new Error('Cookies cannot be saved!')
+      throw new CookieNotSaved();
     }
     const cookieOptions = { ...COOKIE_OPTIONS, ...options.cookieOptions };
     const tokenRefreshMargin =
@@ -122,19 +136,19 @@ export function saveTokens(
     const refresh_token = cookies[`${cookieOptions.name}-refresh-token`];
 
     if (!access_token) {
-      throw new Error('No cookie found!');
+      throw new AccessTokenNotFound();
     }
 
     // Get payload from access token.
     const jwtUser = jwtDecoder(access_token);
     if (!jwtUser?.exp) {
-      throw new Error('Not able to parse JWT payload!');
+      throw new JWTPayloadFailed();
     }
     const timeNow = Math.round(Date.now() / 1000);
     if (options.forceRefresh || jwtUser.exp < timeNow + tokenRefreshMargin) {
       // JWT is expired, let's refresh from Gotrue
       if (!refresh_token) {
-        throw new Error('No refresh_token cookie found!');
+        throw new RefreshTokenNotFound();
       }
 
       setCookies(
@@ -156,6 +170,9 @@ export function saveTokens(
     }
   } catch (e) {
     const error = e as ApiError;
+    if (e instanceof AuthHelperError) {
+      log.debug(e.toObj());
+    }
     return { user: null, accessToken: null, error: error.message };
   }
 }
@@ -164,7 +181,7 @@ export default async function getUserAndSaveTokens(
   { req, res }: RequestResponse,
   options: GetUserOptions = { forceRefresh: false }
 ): Promise<UserResponse> {
-  const session = await getUser(req, options)
-  await saveTokens({req, res}, session, options);
+  const session = await getUser(req, options);
+  await saveTokens({ req, res }, session, options);
   return session;
 }

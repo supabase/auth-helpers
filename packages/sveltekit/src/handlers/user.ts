@@ -6,9 +6,14 @@ import {
   parseCookie,
   jwtDecoder,
   TOKEN_REFRESH_MARGIN,
+  CookieNotParsed,
+  JWTPayloadFailed,
+  AuthHelperError,
+  AccessTokenNotFound
 } from '@supabase/auth-helpers-shared';
 import { skHelper } from '../instance';
 import { getUser, saveTokens } from '../utils/getUser';
+import log from 'loglevel';
 
 export interface HandleUserOptions {
   cookieOptions?: CookieOptions;
@@ -22,32 +27,39 @@ export const handleUser = (options: HandleUserOptions = {}) => {
 
     try {
       if (!req.headers.has('cookie')) {
-        throw new Error('Not able to parse cookies');
+        throw new CookieNotParsed();
       }
 
       const cookieOptions = { ...COOKIE_OPTIONS, ...options.cookieOptions };
-      const tokenRefreshMargin = options.tokenRefreshMargin ?? TOKEN_REFRESH_MARGIN;
+      const tokenRefreshMargin =
+        options.tokenRefreshMargin ?? TOKEN_REFRESH_MARGIN;
 
       const cookies = parseCookie(req.headers.get('cookie'));
       const access_token = cookies[`${cookieOptions.name}-access-token`];
 
       if (!access_token) {
-        throw new Error('No cookie found!');
+        throw new AccessTokenNotFound();
       }
 
       // Get payload from cached access token.
       const jwtUser = jwtDecoder(access_token);
       if (!jwtUser?.exp) {
-        throw new Error('Not able to parse JWT payload!');
+        throw new JWTPayloadFailed();
       }
       const timeNow = Math.round(Date.now() / 1000);
       if (jwtUser.exp < timeNow + tokenRefreshMargin) {
         // JWT is expired, let's refresh from Gotrue
-        const session = await getUser(req, { cookieOptions, tokenRefreshMargin });
+        const session = await getUser(req, {
+          cookieOptions,
+          tokenRefreshMargin
+        });
         event.locals.user = session.user;
         event.locals.accessToken = session.accessToken;
         const res = await resolve(event);
-        await saveTokens({req, res}, session, { cookieOptions, tokenRefreshMargin });
+        await saveTokens({ req, res }, session, {
+          cookieOptions,
+          tokenRefreshMargin
+        });
         return res;
       } else {
         // Transform JWT and add note that it is cached from JWT.
@@ -70,9 +82,15 @@ export const handleUser = (options: HandleUserOptions = {}) => {
         return await resolve(event);
       }
     } catch (e) {
-      const error = e as ApiError;
+      if (e instanceof JWTPayloadFailed) {
+        event.locals.error = e.toObj();
+      } else if (e instanceof AuthHelperError) {
+        log.debug(e.toObj());
+      } else {
+        const error = e as ApiError;
+        log.debug(error.message);
+      }
       event.locals.user = null;
-      event.locals.error = error.message;
       event.locals.accessToken = null;
       return await resolve(event);
     }

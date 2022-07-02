@@ -4,7 +4,15 @@ import {
   NextApiResponse
 } from 'next';
 import getUser from './getUser';
-import { CookieOptions, COOKIE_OPTIONS, jwtDecoder, TOKEN_REFRESH_MARGIN } from '@supabase/auth-helpers-shared';
+import {
+  AccessTokenNotFound,
+  CookieNotParsed,
+  CookieOptions,
+  COOKIE_OPTIONS,
+  jwtDecoder,
+  JWTPayloadFailed,
+  TOKEN_REFRESH_MARGIN
+} from '@supabase/auth-helpers-shared';
 
 export interface GetAccessTokenOptions {
   cookieOptions?: CookieOptions;
@@ -18,7 +26,7 @@ export default async function getAccessToken(
   options: GetAccessTokenOptions = {}
 ): Promise<string | null> {
   if (!context.req.cookies) {
-    throw new Error('Not able to parse cookies!');
+    throw new CookieNotParsed();
   }
   const cookieOptions = { ...COOKIE_OPTIONS, ...options.cookieOptions };
   const tokenRefreshMargin = options.tokenRefreshMargin ?? TOKEN_REFRESH_MARGIN;
@@ -26,13 +34,13 @@ export default async function getAccessToken(
     context.req.cookies[`${cookieOptions.name}-access-token`];
 
   if (!access_token) {
-    throw new Error('No cookie found!');
+    throw new AccessTokenNotFound();
   }
 
   // Get payload from access token.
   const jwtUser = jwtDecoder(access_token);
   if (!jwtUser?.exp) {
-    throw new Error('Not able to parse JWT payload!');
+    throw new JWTPayloadFailed();
   }
   const timeNow = Math.round(Date.now() / 1000);
   if (jwtUser.exp < timeNow + tokenRefreshMargin) {

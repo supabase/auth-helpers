@@ -1,20 +1,21 @@
 import { writable } from 'svelte/store';
 import type { User } from '@supabase/supabase-js';
+import type { ErrorPayload } from '@supabase/auth-helpers-shared';
 
 export type UserExtra = User & { exp?: number };
 
 interface Props {
-    user: UserExtra | null;
-    accessToken: string | null;
-    isLoading: boolean;
-    error: Error | null;
+  user: UserExtra | null;
+  accessToken: string | null;
+  isLoading: boolean;
+  error: ErrorPayload | null;
 }
 
 const initialValues: Props = {
-    user: null,
-    accessToken: null,
-    isLoading: false,
-    error: null
+  user: null,
+  accessToken: null,
+  isLoading: false,
+  error: null
 };
 
 const user = writable<User | null>(initialValues.user);
@@ -26,24 +27,24 @@ const setAccessToken = (token: string) => accessToken.set(token);
 const isLoading = writable(initialValues.isLoading);
 const setIsLoading = (loading: boolean) => isLoading.set(loading);
 
-const error = writable<Error | null>(initialValues.error);
-const setError = (err: Error) => error.set(err);
+const error = writable<ErrorPayload | null>(initialValues.error);
+const setError = (err: ErrorPayload) => error.set(err);
 
 const resetAll = () => {
-    setUser(initialValues.user);
-    setAccessToken(initialValues.accessToken);
-    setIsLoading(initialValues.isLoading);
-    setError(initialValues.error);
+  setUser(initialValues.user);
+  setAccessToken(initialValues.accessToken);
+  setIsLoading(initialValues.isLoading);
+  setError(initialValues.error);
 };
 
 export {
-    user,
-    setUser,
-    accessToken,
-    setAccessToken,
-    isLoading,
-    setIsLoading,
-    error,
-    setError,
-    resetAll
-}
+  user,
+  setUser,
+  accessToken,
+  setAccessToken,
+  isLoading,
+  setIsLoading,
+  error,
+  setError,
+  resetAll
+};
