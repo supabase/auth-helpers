@@ -296,3 +296,13 @@ export const middleware = withMiddlewareAuth({
   }
 });
 ```
+
+## Migrating from @supabase/supabase-auth-helpers to @supabase/auth-helpers
+
+This is a step by step guide on migrating away from the `@supabase/supabase-auth-helpers` to the newly released `@supabase/auth-helpers`.
+
+1. Install `@supabase/supabase-js`, `@supabase/auth-helpers-nextjs` and `@supabase/auth-helpers-react` libraries from npm.
+2. Replace all imports of `@supabase/supabase-auth-helpers/nextjs` in your project with `@supabase/auth-helpers-nextjs`.
+3. Replace all imports of `@supabase/supabase-auth-helpers/react` in your project with `@supabase/auth-helpers-react`.
+4. Replace all instances of `withAuthRequired` in any of your NextJS pages with `withPageAuth`.
+5. Replace all instances of `withAuthRequired` in any of your NextJS API endpoints with `withApiAuth`.
