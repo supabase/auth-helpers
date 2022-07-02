@@ -6,7 +6,7 @@ import React, {
   useCallback
 } from 'react';
 import { SupabaseClient, User } from '@supabase/supabase-js';
-import { UserFetcher, UserState } from '@supabase/auth-helpers-shared';
+import { CallbackUrlFailed, ErrorPayload, UserFetcher, UserState } from '@supabase/auth-helpers-shared';
 import {
   TOKEN_REFRESH_MARGIN,
   RETRY_INTERVAL,
@@ -66,7 +66,7 @@ export const UserProvider = (props: Props) => {
   const [user, setUser] = useState<User | null>(initialUser);
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(!initialUser);
-  const [error, setError] = useState<Error>();
+  const [error, setError] = useState<Error|ErrorPayload>();
 
   const checkSession = useCallback(async (): Promise<void> => {
     try {
@@ -81,7 +81,6 @@ export const UserProvider = (props: Props) => {
           );
           return;
         }
-        console.error(error);
         setError(new Error(error));
       }
       networkRetries = 0;
@@ -92,9 +91,8 @@ export const UserProvider = (props: Props) => {
       setUser(user);
       // Set up auto token refresh
       if (autoRefreshToken) {
-        // TODO: the user.exp is a bug that is currently working like a feature
-        const expiresAt = (user as any).exp;
         let timeout = 20 * 1000;
+        const expiresAt = (user as any)?.exp;
         if (expiresAt) {
           const timeNow = Math.round(Date.now() / 1000);
           const expiresIn = expiresAt - timeNow;
@@ -106,8 +104,8 @@ export const UserProvider = (props: Props) => {
       }
       if (!user) setIsLoading(false);
     } catch (_e) {
-      const error = new Error(`The request to ${profileUrl} failed`);
-      setError(error);
+      const error = new CallbackUrlFailed(profileUrl);
+      setError(error.toObj());
     }
   }, [profileUrl]);
 
@@ -136,7 +134,7 @@ export const UserProvider = (props: Props) => {
           body: JSON.stringify({ event, session })
         }).then((res) => {
           if (!res.ok) {
-            const error = new Error(`The request to ${callbackUrl} failed`);
+            const error = new CallbackUrlFailed(callbackUrl);
             setError(error);
           }
         });

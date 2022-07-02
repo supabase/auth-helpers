@@ -128,6 +128,7 @@ importers:
       '@supabase/auth-helpers-shared': workspace:*
       '@supabase/supabase-js': ^1.35.3
       config: workspace:*
+      loglevel: ^1.8.0
       next: ^12.1.5
       react: ^18.0.0
       react-dom: ^18.0.0
@@ -137,6 +138,7 @@ importers:
       tsup: ^5.12.5
     dependencies:
       '@supabase/auth-helpers-shared': link:../shared
+      loglevel: 1.8.0
     devDependencies:
       '@supabase/supabase-js': 1.35.3
       config: link:../config
@@ -226,6 +228,7 @@ importers:
       '@sveltejs/kit': next
       del-cli: ^4.0.1
       fix-esm-import-path: ^1.2.1
+      loglevel: ^1.8.0
       svelte: ^3.48.0
       svelte2tsx: ^0.5.10
       tslib: ^2.3.1
@@ -233,8 +236,9 @@ importers:
     dependencies:
       '@supabase/auth-helpers-shared': link:../shared
       '@supabase/supabase-js': 1.35.3
+      loglevel: 1.8.0
     devDependencies:
-      '@sveltejs/kit': 1.0.0-next.348_svelte@3.48.0
+      '@sveltejs/kit': 1.0.0-next.355_svelte@3.48.0
       del-cli: 4.0.1
       fix-esm-import-path: 1.2.1
       svelte: 3.48.0
@@ -988,26 +992,6 @@ packages:
       - supports-color
     dev: true
 
-  /@sveltejs/kit/1.0.0-next.348_svelte@3.48.0:
-    resolution: {integrity: sha512-K9dfgzIbotWmbcdCsQ6ROGs9R+bsGWwmSdN6l6km1QV5esQehqg1UYHGD9q0VJsg4rJg/zmKVBYo0oBquSHPZw==}
-    engines: {node: '>=16.7'}
-    hasBin: true
-    peerDependencies:
-      svelte: ^3.44.0
-    dependencies:
-      '@sveltejs/vite-plugin-svelte': 1.0.0-next.47_svelte@3.48.0+vite@2.9.9
-      chokidar: 3.5.3
-      sade: 1.8.1
-      svelte: 3.48.0
-      vite: 2.9.9
-    transitivePeerDependencies:
-      - diff-match-patch
-      - less
-      - sass
-      - stylus
-      - supports-color
-    dev: true
-
   /@sveltejs/kit/1.0.0-next.350_svelte@3.48.0:
     resolution: {integrity: sha512-qkZNjp7yIj6t91+wMhmMtGJH0Lb89OaKdVXUDy92CS5/4OHRTKcQPdfOKs4no/upkS3RiFb+rEpOkYqTMcPUXg==}
     engines: {node: '>=16.7'}
@@ -1028,26 +1012,23 @@ packages:
       - supports-color
     dev: true
 
-  /@sveltejs/vite-plugin-svelte/1.0.0-next.47_svelte@3.48.0+vite@2.9.9:
-    resolution: {integrity: sha512-J6n8UN51aq/TEZGQ89/EtdXTtca3cRcTJGzi6fi+xK8LkgsHQLCZhRj+PJ+swktRSWTX9IOmQS55SqVg6bz5fA==}
-    engines: {node: ^14.13.1 || >= 16}
+  /@sveltejs/kit/1.0.0-next.355_svelte@3.48.0:
+    resolution: {integrity: sha512-4M+BZL/kKgw5tMRkAYcpg38hxMX80iz6H9+nv2v6VzvKhD4Pw6zatzMs2D6PCT2uBHnrKGrUCheBBcK8kZdWKg==}
+    engines: {node: '>=16.7'}
+    hasBin: true
     peerDependencies:
-      diff-match-patch: ^1.0.5
       svelte: ^3.44.0
-      vite: ^2.9.0
-    peerDependenciesMeta:
-      diff-match-patch:
-        optional: true
     dependencies:
-      '@rollup/pluginutils': 4.2.1
-      debug: 4.3.4
-      deepmerge: 4.2.2
-      kleur: 4.1.4
-      magic-string: 0.26.2
+      '@sveltejs/vite-plugin-svelte': 1.0.0-next.49_svelte@3.48.0+vite@2.9.12
+      chokidar: 3.5.3
+      sade: 1.8.1
       svelte: 3.48.0
-      svelte-hmr: 0.14.12_svelte@3.48.0
-      vite: 2.9.9
+      vite: 2.9.12
     transitivePeerDependencies:
+      - diff-match-patch
+      - less
+      - sass
+      - stylus
       - supports-color
     dev: true
 
@@ -3757,6 +3738,11 @@ packages:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
     dev: false
 
+  /loglevel/1.8.0:
+    resolution: {integrity: sha512-G6A/nJLRgWOuuwdNuA6koovfEV1YpqqAG4pRUlFaz3jj2QNZ8M4vBqnVA+HBTmU/AMNUtlOsMmSpF6NyOjztbA==}
+    engines: {node: '>= 0.6.0'}
+    dev: false
+
   /loose-envify/1.4.0:
     resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}
     hasBin: true
@@ -5844,30 +5830,6 @@ packages:
       postcss: 8.4.14
       resolve: 1.22.1
       rollup: 2.75.7
-    optionalDependencies:
-      fsevents: 2.3.2
-    dev: true
-
-  /vite/2.9.9:
-    resolution: {integrity: sha512-ffaam+NgHfbEmfw/Vuh6BHKKlI/XIAhxE5QSS7gFLIngxg171mg1P3a4LSRME0z2ZU1ScxoKzphkipcYwSD5Ew==}
-    engines: {node: '>=12.2.0'}
-    hasBin: true
-    peerDependencies:
-      less: '*'
-      sass: '*'
-      stylus: '*'
-    peerDependenciesMeta:
-      less:
-        optional: true
-      sass:
-        optional: true
-      stylus:
-        optional: true
-    dependencies:
-      esbuild: 0.14.42
-      postcss: 8.4.14
-      resolve: 1.22.0
-      rollup: 2.75.0
     optionalDependencies:
       fsevents: 2.3.2
     dev: true

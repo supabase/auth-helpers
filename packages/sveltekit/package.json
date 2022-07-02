@@ -51,6 +51,7 @@
   },
   "dependencies": {
     "@supabase/auth-helpers-shared": "workspace:*",
-    "@supabase/supabase-js": "^1.35.3"
+    "@supabase/supabase-js": "^1.35.3",
+    "loglevel": "^1.8.0"
   }
 }
