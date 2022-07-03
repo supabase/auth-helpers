@@ -6,7 +6,12 @@ import React, {
   useCallback
 } from 'react';
 import { SupabaseClient, User } from '@supabase/supabase-js';
-import { CallbackUrlFailed, ErrorPayload, UserFetcher, UserState } from '@supabase/auth-helpers-shared';
+import {
+  CallbackUrlFailed,
+  ErrorPayload,
+  UserFetcher,
+  UserState
+} from '@supabase/auth-helpers-shared';
 import {
   TOKEN_REFRESH_MARGIN,
   RETRY_INTERVAL,
@@ -19,7 +24,6 @@ let refreshTokenTimer: ReturnType<typeof setTimeout>;
 const UserContext = createContext<UserState | undefined>(undefined);
 
 const handleError = async (error: any) => {
-  console.log(error);
   if (typeof error.json !== 'function') {
     return String(error);
   }
@@ -66,7 +70,7 @@ export const UserProvider = (props: Props) => {
   const [user, setUser] = useState<User | null>(initialUser);
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(!initialUser);
-  const [error, setError] = useState<Error|ErrorPayload>();
+  const [error, setError] = useState<ErrorPayload | string>();
 
   const checkSession = useCallback(async (): Promise<void> => {
     try {
@@ -81,7 +85,7 @@ export const UserProvider = (props: Props) => {
           );
           return;
         }
-        setError(new Error(error));
+        setError(new Error(error).message);
       }
       networkRetries = 0;
       if (accessToken) {
@@ -135,7 +139,7 @@ export const UserProvider = (props: Props) => {
         }).then((res) => {
           if (!res.ok) {
             const error = new CallbackUrlFailed(callbackUrl);
-            setError(error);
+            setError(error.message);
           }
         });
         // Fetch the user from the API route

@@ -1,4 +1,5 @@
 import type { ApiError, User } from '@supabase/supabase-js';
+import { ErrorPayload } from './utils/errors';
 
 export type UserFetcher = (url: string) => Promise<{
   user: User | null;
@@ -9,7 +10,7 @@ export type UserFetcher = (url: string) => Promise<{
 export type UserState = {
   user: User | null;
   accessToken: string | null;
-  error?: Error;
+  error?: ErrorPayload | string;
   isLoading: boolean;
   checkSession: () => Promise<void>;
 };
@@ -26,4 +27,4 @@ export interface CookieOptions {
   sameSite?: string;
 }
 
-export type { ApiError, User }
+export type { ApiError, User };
