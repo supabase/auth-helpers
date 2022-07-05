@@ -1,5 +1,11 @@
 # shared
 
+## 0.1.2
+
+### Patch Changes
+
+- 38ccf1c: Add new to string method to the base error class
+
 ## 0.1.1
 
 ### Patch Changes
