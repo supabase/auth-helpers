@@ -15,10 +15,12 @@ import {
   JWTPayloadFailed,
   RefreshTokenNotFound,
   AuthHelperError,
-  CookieNotSaved
+  CookieNotSaved,
+  CookieNotFound,
+  type ErrorPayload
 } from '@supabase/auth-helpers-shared';
 import type { RequestResponse } from '../types';
-import log from 'loglevel';
+import logger from './log';
 
 export interface GetUserOptions {
   cookieOptions?: CookieOptions;
@@ -30,7 +32,7 @@ interface UserResponse {
   user: User | null;
   accessToken: string | null;
   refreshToken?: string;
-  error?: string;
+  error?: ErrorPayload | string;
 }
 
 /**
@@ -56,7 +58,7 @@ export async function getUser(
     }
 
     if (!req.headers.has('cookie')) {
-      throw new CookieNotParsed();
+      throw new CookieNotFound();
     }
 
     const cookieOptions = { ...COOKIE_OPTIONS, ...options.cookieOptions };
@@ -64,6 +66,9 @@ export async function getUser(
       options.tokenRefreshMargin ?? TOKEN_REFRESH_MARGIN;
 
     const cookies = parseCookie(req.headers.get('cookie'));
+    if (!cookies) {
+      throw new CookieNotParsed();
+    }
 
     const supabase = createClient(supabaseUrl, supabaseAnonKey);
     const access_token = cookies[`${cookieOptions.name}-access-token`];
@@ -88,6 +93,7 @@ export async function getUser(
         throw new RefreshTokenNotFound();
       }
 
+      logger.info('Refreshing access token...');
       const { data, error } = await supabase.auth.api.refreshAccessToken(
         refresh_token
       );
@@ -101,6 +107,7 @@ export async function getUser(
         refreshToken: data?.refresh_token
       };
     } else {
+      logger.info('Getting the user object from the database...');
       const { user, error: getUserError } = await supabase.auth.api.getUser(
         access_token
       );
@@ -110,11 +117,21 @@ export async function getUser(
       return { user, accessToken: access_token };
     }
   } catch (e) {
-    const error = e as ApiError;
-    if (e instanceof AuthHelperError) {
-      log.debug(e.toObj());
+    let response: UserResponse = { user: null, accessToken: null };
+    if (e instanceof JWTPayloadFailed) {
+      logger.info('JWTPayloadFailed error has happened!');
+      response.error = e.toObj();
+    } else if (e instanceof CookieNotFound) {
+      logger.warn(e.toString());
+    } else if (e instanceof AuthHelperError) {
+      logger.info('AuthHelperError error has happened!');
+      logger.error(e.toString());
+    } else {
+      const error = e as ApiError;
+      logger.error(error.message);
     }
-    return { user: null, accessToken: null, error: error.message };
+
+    return response;
   }
 }
 
@@ -151,6 +168,7 @@ export function saveTokens(
         throw new RefreshTokenNotFound();
       }
 
+      logger.info('Saving tokens to cookies...');
       setCookies(
         new SvelteKitRequestAdapter(req),
         new SvelteKitResponseAdapter(res),
@@ -169,11 +187,18 @@ export function saveTokens(
       return { user: session.user, accessToken: session.accessToken };
     }
   } catch (e) {
-    const error = e as ApiError;
-    if (e instanceof AuthHelperError) {
-      log.debug(e.toObj());
+    let response: UserResponse = { user: null, accessToken: null };
+    if (e instanceof JWTPayloadFailed) {
+      logger.info('JWTPayloadFailed error has happened!');
+      response.error = e.toObj();
+    } else if (e instanceof AuthHelperError) {
+      logger.info('AuthHelperError error has happened!');
+      logger.error(e.toString());
+    } else {
+      const error = e as ApiError;
+      logger.error(error.message);
     }
-    return { user: null, accessToken: null, error: error.message };
+    return response;
   }
 }
 

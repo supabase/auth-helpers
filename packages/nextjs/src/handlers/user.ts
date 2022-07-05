@@ -4,15 +4,15 @@ import {
   COOKIE_OPTIONS,
   jwtDecoder,
   TOKEN_REFRESH_MARGIN,
-  CookieNotParsed,
   JWTPayloadFailed,
   AuthHelperError,
   ErrorPayload,
-  AccessTokenNotFound
+  AccessTokenNotFound,
+  CookieNotFound
 } from '@supabase/auth-helpers-shared';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import getUser from '../utils/getUser';
-import log from 'loglevel';
+import logger from '../utils/log';
 
 interface ResponsePayload {
   user: null;
@@ -32,7 +32,7 @@ export default async function handleUser(
 ) {
   try {
     if (!req.cookies) {
-      throw new CookieNotParsed();
+      throw new CookieNotFound();
     }
     const cookieOptions = { ...COOKIE_OPTIONS, ...options.cookieOptions };
     const tokenRefreshMargin =
@@ -81,12 +81,16 @@ export default async function handleUser(
   } catch (e) {
     let response: ResponsePayload = { user: null, accessToken: null };
     if (e instanceof JWTPayloadFailed) {
+      logger.info('JWTPayloadFailed error has happened!');
       response.error = e.toObj();
+    } else if (e instanceof CookieNotFound) {
+      logger.warn(e.toString());
     } else if (e instanceof AuthHelperError) {
-      log.debug(e.toObj());
+      logger.info('AuthHelperError error has happened!');
+      logger.error(e.toString());
     } else {
       const error = e as ApiError;
-      log.debug(error.message);
+      logger.error(error.message);
     }
     res.status(200).json(response);
   }

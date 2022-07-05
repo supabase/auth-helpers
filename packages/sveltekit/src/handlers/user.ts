@@ -9,11 +9,12 @@ import {
   CookieNotParsed,
   JWTPayloadFailed,
   AuthHelperError,
-  AccessTokenNotFound
+  AccessTokenNotFound,
+  CookieNotFound
 } from '@supabase/auth-helpers-shared';
 import { skHelper } from '../instance';
 import { getUser, saveTokens } from '../utils/getUser';
-import log from 'loglevel';
+import logger from '../utils/log';
 
 export interface HandleUserOptions {
   cookieOptions?: CookieOptions;
@@ -27,7 +28,7 @@ export const handleUser = (options: HandleUserOptions = {}) => {
 
     try {
       if (!req.headers.has('cookie')) {
-        throw new CookieNotParsed();
+        throw new CookieNotFound();
       }
 
       const cookieOptions = { ...COOKIE_OPTIONS, ...options.cookieOptions };
@@ -35,6 +36,9 @@ export const handleUser = (options: HandleUserOptions = {}) => {
         options.tokenRefreshMargin ?? TOKEN_REFRESH_MARGIN;
 
       const cookies = parseCookie(req.headers.get('cookie'));
+      if (!cookies) {
+        throw new CookieNotParsed();
+      }
       const access_token = cookies[`${cookieOptions.name}-access-token`];
 
       if (!access_token) {
@@ -83,13 +87,18 @@ export const handleUser = (options: HandleUserOptions = {}) => {
       }
     } catch (e) {
       if (e instanceof JWTPayloadFailed) {
+        logger.info('JWTPayloadFailed error has happened!');
         event.locals.error = e.toObj();
+      } else if (e instanceof CookieNotFound) {
+        logger.warn(e.toString());
       } else if (e instanceof AuthHelperError) {
-        log.debug(e.toObj());
+        logger.info('AuthHelperError error has happened!');
+        logger.error(e.toString());
       } else {
         const error = e as ApiError;
-        log.debug(error.message);
+        logger.error(error.message);
       }
+
       event.locals.user = null;
       event.locals.accessToken = null;
       return await resolve(event);
