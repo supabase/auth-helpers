@@ -2,15 +2,15 @@
   "pipeline": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**", ".next/**", ".svelte-kit/**"]
+      "outputs": ["dist/**", ".next/**", ".svelte-kit/**", ".remix/**"]
     },
     "build:example": {
       "dependsOn": ["^build", "^build:example"],
-      "outputs": ["dist/**", ".next/**", ".svelte-kit/**"]
+      "outputs": ["dist/**", ".next/**", ".svelte-kit/**", ".remix/**"]
     },
     "build:watch": {
       "dependsOn": ["^build:watch"],
-      "outputs": ["dist/**", ".next/**", ".svelte-kit/**"]
+      "outputs": ["dist/**", ".next/**", ".svelte-kit/**", ".remix/**"]
     },
     "clean:all": {
       "dependsOn": ["^clean:all"],
@@ -23,8 +23,5 @@
       "cache": false
     }
   },
-  "globalDependencies": [
-    "tsconfig.json",
-    ".env.*"
-  ]
+  "globalDependencies": ["tsconfig.json", ".env.*"]
 }

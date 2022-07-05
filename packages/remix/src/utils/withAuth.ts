@@ -11,7 +11,7 @@ import {
   DataFunctionArgs,
   redirect,
   json
-} from '@remix-run/server-runtime';
+} from '@remix-run/node';
 import { getSession } from './cookies';
 import { DataFunctionArgsWithResponse } from '../handlers/auth';
 

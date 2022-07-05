@@ -1,6 +1,6 @@
 import { CookieOptions } from '@supabase/auth-helpers-shared';
 import { supabaseClient } from '../utils/initSupabase.server';
-import { redirect } from '@remix-run/server-runtime';
+import { redirect } from '@remix-run/node';
 import { getSession, destroySession } from '../utils/cookies';
 import { DataFunctionArgsWithResponse } from './auth';
 

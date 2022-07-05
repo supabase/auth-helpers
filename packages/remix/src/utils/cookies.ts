@@ -1,4 +1,4 @@
-import { createCookieSessionStorage } from '@remix-run/server-runtime';
+import { createCookieSessionStorage } from '@remix-run/node';
 
 const MAX_AGE = 60 * 60 * 8; // 8 hours
 

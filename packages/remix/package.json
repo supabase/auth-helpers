@@ -1,6 +1,6 @@
 {
   "name": "@supabase/auth-helpers-remix",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "description": "A collection of framework specific Auth utilities for working with Supabase.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -32,7 +32,9 @@
     "config": "workspace:*",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "remix": "^1.5.1",
+    "@remix-run/node": "^1.6.3",
+    "@remix-run/react": "^1.6.3",
+    "@remix-run/serve": "^1.6.3",
     "rimraf": "^3.0.2",
     "tsconfig": "workspace:*",
     "tslib": "^2.3.1",

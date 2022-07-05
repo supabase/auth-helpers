@@ -1,4 +1,4 @@
-import { json } from '@remix-run/server-runtime';
+import { json } from '@remix-run/node';
 
 export const replaceResponseData = (response: Response, data: any) =>
   json(data, {

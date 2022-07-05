@@ -6,7 +6,7 @@ import {
 import handleCallback from './callback';
 import handleUser from './user';
 import handleLogout from './logout';
-import { DataFunctionArgs } from '@remix-run/server-runtime';
+import { DataFunctionArgs } from '@remix-run/node';
 
 export type DataFunctionArgsWithResponse = DataFunctionArgs & {
   response: Response;

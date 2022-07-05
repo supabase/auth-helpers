@@ -4,6 +4,7 @@ module.exports = {
   entryPoints: [
     './packages/sveltekit/src/index.ts',
     './packages/nextjs/src/index.ts',
+    './packages/remix/src/index.ts',
     './packages/shared/src/index.ts'
     // './packages/react/src/index.ts',
     // './packages/svelte/src/index.ts'
