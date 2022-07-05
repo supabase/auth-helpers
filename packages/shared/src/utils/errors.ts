@@ -21,6 +21,10 @@ export class AuthHelperError extends Error {
       source: this.source
     };
   }
+
+  toString() {
+    return JSON.stringify(this.toObj());
+  }
 }
 
 export class CookieNotFound extends AuthHelperError {
