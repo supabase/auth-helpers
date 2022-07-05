@@ -74,7 +74,7 @@ export const checkSession = async (props: CheckSessionArgs): Promise<void> => {
         );
         return;
       }
-      setError(new Error(error));
+      setError(new Error(error).message);
     }
     networkRetries = 0;
     if (accessToken) {
@@ -85,16 +85,18 @@ export const checkSession = async (props: CheckSessionArgs): Promise<void> => {
 
     // Set up auto token refresh
     if (autoRefreshToken) {
-      let timeout = 20 * 1000;
-      const expiresAt = (user as UserExtra).exp;
-      if (expiresAt) {
-        const timeNow = Math.round(Date.now() / 1000);
-        const expiresIn = expiresAt - timeNow;
-        const refreshDurationBeforeExpires =
-          expiresIn > TOKEN_REFRESH_MARGIN ? TOKEN_REFRESH_MARGIN : 0.5;
-        timeout = (expiresIn - refreshDurationBeforeExpires) * 1000;
+      if (user) {
+        let timeout = 20 * 1000;
+        const expiresAt = (user as UserExtra).exp;
+        if (expiresAt) {
+          const timeNow = Math.round(Date.now() / 1000);
+          const expiresIn = expiresAt - timeNow;
+          const refreshDurationBeforeExpires =
+            expiresIn > TOKEN_REFRESH_MARGIN ? TOKEN_REFRESH_MARGIN : 0.5;
+          timeout = (expiresIn - refreshDurationBeforeExpires) * 1000;
+        }
+        setTimeout(checkSession, timeout);
       }
-      setTimeout(checkSession, timeout);
     }
   } catch (_e) {
     const err = new CallbackUrlFailed(profileUrl);
