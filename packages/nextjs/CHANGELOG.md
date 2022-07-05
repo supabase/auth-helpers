@@ -1,5 +1,13 @@
 # @supabase/auth-helpers-nextjs
 
+## 0.2.2
+
+### Patch Changes
+
+- 38ccf1c: Logger can be imported in your own project for setting log levels
+- Updated dependencies [38ccf1c]
+  - @supabase/auth-helpers-shared@0.1.2
+
 ## 0.2.1
 
 ### Patch Changes
