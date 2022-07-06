@@ -10,6 +10,9 @@ const logger = {
   info: (message?: any, ...optionalParams: any[]) => {
     logger.log(message, ...optionalParams);
   },
+  debug: (message?: any, ...optionalParams: any[]) => {
+    logger.log(message, ...optionalParams);
+  },
   warn: (message?: any, ...optionalParams: any[]) => {
     dev ? logger.error(message, ...optionalParams) : null;
   }
