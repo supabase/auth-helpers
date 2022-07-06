@@ -41,17 +41,17 @@
   },
   "homepage": "https://github.com/supabase-community/auth-helpers/tree/main/packages/sveltekit#readme",
   "devDependencies": {
-    "@sveltejs/kit": "next",
+    "@sveltejs/kit": "1.0.0-next.355",
     "del-cli": "^4.0.1",
     "fix-esm-import-path": "^1.2.1",
     "svelte": "^3.48.0",
     "svelte2tsx": "^0.5.10",
     "tslib": "^2.3.1",
-    "typescript": "^4.7.2"
+    "typescript": "^4.7.2",
+    "vite": "^2.9.13"
   },
   "dependencies": {
     "@supabase/auth-helpers-shared": "workspace:*",
-    "@supabase/supabase-js": "^1.35.3",
-    "loglevel": "^1.8.0"
+    "@supabase/supabase-js": "^1.35.3"
   }
 }
