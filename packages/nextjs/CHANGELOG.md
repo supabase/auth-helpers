@@ -1,5 +1,11 @@
 # @supabase/auth-helpers-nextjs
 
+## 0.2.3
+
+### Patch Changes
+
+- 69fefcb: Change logger to be a wrapper for console
+
 ## 0.2.2
 
 ### Patch Changes
