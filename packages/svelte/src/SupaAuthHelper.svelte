@@ -9,8 +9,9 @@
 
   // Props
   export let supabaseClient: SupabaseClient;
-  export let callbackUrl = '/api/auth/callback';
-  export let profileUrl = '/api/auth/user';
+  export let endpointPrefix = '/api/auth';
+  export let callbackUrl = `${endpointPrefix}/callback`;
+  export let profileUrl = `${endpointPrefix}/user`;
   export let autoRefreshToken = true;
   export let session: Writable<Session>;
   export let onUserUpdate = (user: User | null) => {};
