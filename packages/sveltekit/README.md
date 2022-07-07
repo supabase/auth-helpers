@@ -30,9 +30,35 @@ VITE_SUPABASE_ANON_KEY=your-anon-key
 
 ### Basic Setup
 
+- Add `session` and `locals` app types to `src/app.d.ts`
+
 - Create an `auth` directory under the `/src/routes/api/` directory.
 
 - Create a `callback.ts` and `user.ts` file under the newly created `auth` directory.
+
+We need to add App types so that our `session` and `locals` in Kit don't error. You can do that by changing/updating the contents of `src/app.d.ts`:
+
+```ts
+/// <reference types="@sveltejs/kit" />
+
+// See https://kit.svelte.dev/docs/types#app
+// for information about these interfaces
+declare namespace App {
+	interface UserSession {
+		user: import('@supabase/supabase-js').User
+		accessToken?: string
+	}
+	
+	interface Locals extends UserSession {
+		error: import('@supabase/supabase-js').ApiError
+	}
+	
+	interface Session extends UserSession {}
+
+	// interface Platform {}
+	// interface Stuff {}
+}
+```
 
 The path to your dynamic API route files would be `/src/routes/api/auth/user.ts` and `/src/routes/api/auth/callback.ts`. Populate both files as follows:
 
@@ -61,15 +87,15 @@ export async function post() {
 }
 ```
 
-We need to add the `handleCallback()` and `handleUser()` hooks to your `hooks.ts` file.
+We need to add the `handleAuth()` hook to your `hooks.ts` file.
 
 ```ts
 // src/hooks.ts
-import { handleUser, handleCallback } from '@supabase/auth-helpers-sveltekit';
+import { handleAuth } from '@supabase/auth-helpers-sveltekit';
 import type { GetSession, Handle } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 
-export const handle: Handle = sequence(handleCallback(), handleUser());
+export const handle: Handle = sequence(...handleAuth());
 
 export const getSession: GetSession = async (event) => {
   const { user, accessToken, error } = event.locals;
@@ -139,7 +165,7 @@ You can now determine if a user is authenticated by checking that the `user` obj
 
 ## Client-side data fetching with RLS
 
-For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row-level-security) to work properly when fetching data client-side, you need to make sure to import the `{ supabaseClient }` from `@supabase/auth-helpers-nextjs` and only run your query once the user is defined client-side in the `$session`:
+For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row-level-security) to work properly when fetching data client-side, you need to make sure to import the `{ supabaseClient }` from `@supabase/auth-helpers-sveltekit` and only run your query once the user is defined client-side in the `$session`:
 
 ```html
 <script>

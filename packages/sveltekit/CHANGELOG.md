@@ -1,5 +1,36 @@
 # @supabase/auth-helpers-sveltekit
 
+## 0.6.5
+
+### Patch Changes
+
+- 69fefcb: Change logger to be a wrapper for console
+
+## 0.6.4
+
+### Patch Changes
+
+- 38ccf1c: Logger can be imported in your own project for setting log levels
+- Updated dependencies [38ccf1c]
+  - @supabase/auth-helpers-shared@0.1.2
+
+## 0.6.3
+
+### Patch Changes
+
+- 9dda264: Add better error handling and error codes
+- 9dda264: Fix supabaseServerClient with request and withApiAuth return type
+- Updated dependencies [9dda264]
+  - @supabase/auth-helpers-shared@0.1.1
+
+## 0.6.2
+
+### Patch Changes
+
+- d23b268: [breaking change] Update the getUser function to only get the user and not save the token
+- 1c95004: Add new handleAuth function to export all hooks as an array to destructure
+- 588d329: Add handleLogout hook for logging out via endpoint /api/auth/logout
+
 ## 0.6.1
 
 ### Patch Changes

@@ -4,16 +4,29 @@ import {
   NextApiResponse
 } from 'next';
 import { User, createClient } from '@supabase/supabase-js';
-import { 
+import {
   ApiError,
-  CookieOptions, 
-  setCookies, 
-  COOKIE_OPTIONS, 
+  CookieOptions,
+  setCookies,
+  COOKIE_OPTIONS,
   TOKEN_REFRESH_MARGIN,
-  NextRequestAdapter, 
-  NextResponseAdapter, 
-  jwtDecoder
+  NextRequestAdapter,
+  NextResponseAdapter,
+  jwtDecoder,
+  JWTPayloadFailed,
+  AccessTokenNotFound,
+  RefreshTokenNotFound,
+  AuthHelperError,
+  CookieNotFound,
+  ErrorPayload
 } from '@supabase/auth-helpers-shared';
+import logger from '../utils/log';
+
+interface ResponsePayload {
+  user: User | null;
+  accessToken: string | null;
+  error?: ErrorPayload;
+}
 
 export interface GetUserOptions {
   cookieOptions?: CookieOptions;
@@ -26,7 +39,7 @@ export default async function getUser(
     | GetServerSidePropsContext
     | { req: NextApiRequest; res: NextApiResponse },
   options: GetUserOptions = { forceRefresh: false }
-): Promise<{ user: User | null; accessToken: string | null; error?: string }> {
+): Promise<ResponsePayload> {
   try {
     if (
       !process.env.NEXT_PUBLIC_SUPABASE_URL ||
@@ -37,7 +50,7 @@ export default async function getUser(
       );
     }
     if (!context.req.cookies) {
-      throw new Error('Not able to parse cookies!');
+      throw new CookieNotFound();
     }
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -52,23 +65,25 @@ export default async function getUser(
       context.req.cookies[`${cookieOptions.name}-refresh-token`];
 
     if (!access_token) {
-      throw new Error('No cookie found!');
+      throw new AccessTokenNotFound();
     }
     // Get payload from access token.
     const jwtUser = jwtDecoder(access_token);
     if (!jwtUser?.exp) {
-      throw new Error('Not able to parse JWT payload!');
+      throw new JWTPayloadFailed();
     }
     const timeNow = Math.round(Date.now() / 1000);
     if (options.forceRefresh || jwtUser.exp < timeNow + tokenRefreshMargin) {
       // JWT is expired, let's refresh from Gotrue
-      if (!refresh_token) throw new Error('No refresh_token cookie found!');
+      if (!refresh_token) throw new RefreshTokenNotFound();
+      logger.info('Refreshing access token...');
       const { data, error } = await supabase.auth.api.refreshAccessToken(
         refresh_token
       );
       if (error) {
         throw error;
       } else {
+        logger.info('Saving tokens to cookies...');
         setCookies(
           new NextRequestAdapter(context.req),
           new NextResponseAdapter(context.res),
@@ -87,6 +102,7 @@ export default async function getUser(
         return { user: data!.user!, accessToken: data!.access_token };
       }
     } else {
+      logger.info('Getting the user object from the database...');
       const { user, error: getUserError } = await supabase.auth.api.getUser(
         access_token
       );
@@ -96,8 +112,19 @@ export default async function getUser(
       return { user: user!, accessToken: access_token };
     }
   } catch (e) {
-    const error = e as ApiError;
-    console.log('Error getting user:', error);
-    return { user: null, accessToken: null, error: error.message };
+    let response: ResponsePayload = { user: null, accessToken: null };
+    if (e instanceof JWTPayloadFailed) {
+      logger.info('JWTPayloadFailed error has happened!');
+      response.error = e.toObj();
+    } else if (e instanceof CookieNotFound) {
+      logger.warn(e.toString());
+    } else if (e instanceof AuthHelperError) {
+      logger.info('AuthHelperError error has happened!');
+      logger.error(e.toString());
+    } else {
+      const error = e as ApiError;
+      logger.error(error.message);
+    }
+    return response;
   }
 }

@@ -6,7 +6,12 @@ import React, {
   useCallback
 } from 'react';
 import { SupabaseClient, User } from '@supabase/supabase-js';
-import { UserFetcher, UserState } from '@supabase/auth-helpers-shared';
+import {
+  CallbackUrlFailed,
+  ErrorPayload,
+  UserFetcher,
+  UserState
+} from '@supabase/auth-helpers-shared';
 import {
   TOKEN_REFRESH_MARGIN,
   RETRY_INTERVAL,
@@ -19,7 +24,6 @@ let refreshTokenTimer: ReturnType<typeof setTimeout>;
 const UserContext = createContext<UserState | undefined>(undefined);
 
 const handleError = async (error: any) => {
-  console.log(error);
   if (typeof error.json !== 'function') {
     return String(error);
   }
@@ -66,7 +70,7 @@ export const UserProvider = (props: Props) => {
   const [user, setUser] = useState<User | null>(initialUser);
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(!initialUser);
-  const [error, setError] = useState<Error>();
+  const [error, setError] = useState<ErrorPayload | string>();
 
   const checkSession = useCallback(async (): Promise<void> => {
     try {
@@ -81,8 +85,7 @@ export const UserProvider = (props: Props) => {
           );
           return;
         }
-        console.error(error);
-        setError(new Error(error));
+        setError(new Error(error).message);
       }
       networkRetries = 0;
       if (accessToken) {
@@ -92,22 +95,23 @@ export const UserProvider = (props: Props) => {
       setUser(user);
       // Set up auto token refresh
       if (autoRefreshToken) {
-        // TODO: the user.exp is a bug that is currently working like a feature
-        const expiresAt = (user as any).exp;
-        let timeout = 20 * 1000;
-        if (expiresAt) {
-          const timeNow = Math.round(Date.now() / 1000);
-          const expiresIn = expiresAt - timeNow;
-          const refreshDurationBeforeExpires =
-            expiresIn > TOKEN_REFRESH_MARGIN ? TOKEN_REFRESH_MARGIN : 0.5;
-          timeout = (expiresIn - refreshDurationBeforeExpires) * 1000;
+        if (user) {
+          let timeout = 20 * 1000;
+          const expiresAt = (user as any).exp;
+          if (expiresAt) {
+            const timeNow = Math.round(Date.now() / 1000);
+            const expiresIn = expiresAt - timeNow;
+            const refreshDurationBeforeExpires =
+              expiresIn > TOKEN_REFRESH_MARGIN ? TOKEN_REFRESH_MARGIN : 0.5;
+            timeout = (expiresIn - refreshDurationBeforeExpires) * 1000;
+          }
+          setTimeout(checkSession, timeout);
         }
-        setTimeout(checkSession, timeout);
       }
       if (!user) setIsLoading(false);
     } catch (_e) {
-      const error = new Error(`The request to ${profileUrl} failed`);
-      setError(error);
+      const error = new CallbackUrlFailed(profileUrl);
+      setError(error.toObj());
     }
   }, [profileUrl]);
 
@@ -136,8 +140,8 @@ export const UserProvider = (props: Props) => {
           body: JSON.stringify({ event, session })
         }).then((res) => {
           if (!res.ok) {
-            const error = new Error(`The request to ${callbackUrl} failed`);
-            setError(error);
+            const error = new CallbackUrlFailed(callbackUrl);
+            setError(error.message);
           }
         });
         // Fetch the user from the API route

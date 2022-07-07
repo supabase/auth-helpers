@@ -5,6 +5,7 @@
   import { checkSession, type Session } from './helpers';
   import { setIsLoading, setError, user, accessToken } from './store';
   import { dequal } from 'dequal';
+  import { CallbackUrlFailed } from '@supabase/auth-helpers-shared';
 
   // Props
   export let supabaseClient: SupabaseClient;
@@ -63,8 +64,8 @@
           body: JSON.stringify({ event, session })
         }).then((res) => {
           if (!res.ok) {
-            const err = new Error(`The request to ${callbackUrl} failed`);
-            setError(err);
+            const err = new CallbackUrlFailed(callbackUrl);
+            setError(err.message);
           }
         });
         // Fetch the user from the API route

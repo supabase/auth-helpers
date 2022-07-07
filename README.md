@@ -19,7 +19,7 @@ A collection of framework specific Auth utilities for working with Supabase.
   - `@examples/sveltekit`: a [SvelteKit](https://kit.svelte.dev) app
 - Packages
   - `@supabase/auth-helpers-nextjs`: the supabase auth helper nextjs library used by `nextjs` application
-  - `@supabase/auth-helpers-react`: the supabase auth helper reactjs library used by `nextjs` application
+  - `@supabase/auth-helpers-react`: the supabase auth helper reactjs library used by `react` application
   - `@supabase/auth-helpers-svelte`: the supabase auth helper svelte library used by `sveltekit` application
   - `@supabase/auth-helpers-sveltekit`: the supabase auth helper sveltekit library used by `sveltekit` application
   - `shared`: shared typescript types used by `@supabase/auth-helpers-nextjs` library

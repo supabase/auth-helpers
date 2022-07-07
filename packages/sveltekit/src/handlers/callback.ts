@@ -6,11 +6,14 @@ import {
   SvelteKitRequestAdapter,
   SvelteKitResponseAdapter
 } from '@supabase/auth-helpers-shared';
-import getUser from '../utils/getUser';
+import { getUser, saveTokens } from '../utils/getUser';
+import { deleteTokens } from '../utils/deleteTokens';
 
 export interface HandleCallbackOptions {
   cookieOptions?: CookieOptions;
 }
+
+type AuthCookies = Parameters<typeof setCookies>[2];
 
 export const handleCallback = (options: HandleCallbackOptions = {}) => {
   const handle: Handle = async ({ event, resolve }) => {
@@ -34,7 +37,8 @@ export const handleCallback = (options: HandleCallbackOptions = {}) => {
 
     if (!bodyEvent) throw new Error('Auth event missing!');
     if (bodyEvent === 'USER_UPDATED') {
-      await getUser({ req, res }, { forceRefresh: true });
+      const session = await getUser(req, { forceRefresh: true });
+      await saveTokens({ req, res }, session, { forceRefresh: true })
     }
     if (bodyEvent === 'SIGNED_IN') {
       if (!session) throw new Error('Auth session missing!');
@@ -51,7 +55,7 @@ export const handleCallback = (options: HandleCallbackOptions = {}) => {
           session.provider_token
             ? { key: 'provider-token', value: session.provider_token }
             : null
-        ].reduce((acc, token) => {
+        ].reduce<AuthCookies>((acc, token) => {
           if (token) {
             acc.push({
               name: `${cookieOptions.name}-${token.key}`,
@@ -68,15 +72,7 @@ export const handleCallback = (options: HandleCallbackOptions = {}) => {
     }
 
     if (bodyEvent === 'SIGNED_OUT' || bodyEvent === 'USER_DELETED') {
-      setCookies(
-        new SvelteKitRequestAdapter(req),
-        new SvelteKitResponseAdapter(res),
-        ['access-token', 'refresh-token', 'provider-token'].map((key) => ({
-          name: `${cookieOptions.name}-${key}`,
-          value: '',
-          maxAge: -1
-        }))
-      );
+      deleteTokens({ req, res }, cookieOptions.name);
     }
 
     return res;

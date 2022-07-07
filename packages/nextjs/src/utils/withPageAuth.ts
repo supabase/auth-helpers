@@ -1,6 +1,16 @@
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
-import { CookieOptions, COOKIE_OPTIONS, jwtDecoder, TOKEN_REFRESH_MARGIN } from '@supabase/auth-helpers-shared';
+import {
+  AccessTokenNotFound,
+  AuthHelperError,
+  CookieNotParsed,
+  CookieOptions,
+  COOKIE_OPTIONS,
+  jwtDecoder,
+  JWTPayloadFailed,
+  TOKEN_REFRESH_MARGIN
+} from '@supabase/auth-helpers-shared';
 import getUser from './getUser';
+import logger from './log';
 
 /**
  * ## Protecting Pages with Server Side Rendering (SSR)
@@ -59,20 +69,20 @@ export default function withPageAuth({
   return async (context: GetServerSidePropsContext) => {
     try {
       if (!context.req.cookies) {
-        throw new Error('Not able to parse cookies!');
+        throw new CookieNotParsed();
       }
       cookieOptions = { ...COOKIE_OPTIONS, ...cookieOptions };
       const access_token =
         context.req.cookies[`${cookieOptions.name}-access-token`];
       if (!access_token) {
-        throw new Error('No cookie found!');
+        throw new AccessTokenNotFound();
       }
 
       let user, accessToken;
       // Get payload from cached access token.
       const jwtUser = jwtDecoder(access_token);
       if (!jwtUser?.exp) {
-        throw new Error('Not able to parse JWT payload!');
+        throw new JWTPayloadFailed();
       }
       const timeNow = Math.round(Date.now() / 1000);
       if (jwtUser.exp < timeNow + tokenRefreshMargin) {
@@ -125,15 +135,25 @@ export default function withPageAuth({
         props: { ...ret.props, user: user, accessToken: accessToken }
       };
     } catch (e) {
-      if (authRequired)
+      if (authRequired) {
         return {
           redirect: {
             destination: redirectTo,
             permanent: false
           }
         };
+      }
+
+      let props = { user: null, accessToken: null, error: '' };
+      if (e instanceof AuthHelperError) {
+        logger.debug(e.toObj());
+      } else {
+        logger.debug(String(e));
+        props.error = String(e);
+      }
+
       return {
-        props: { user: null, accessToken: null, error: String(e) }
+        props
       };
     }
   };

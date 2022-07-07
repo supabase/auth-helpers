@@ -1,8 +1,14 @@
 <script>
-	import Auth from 'supabase-ui-svelte';
+	import { onMount } from 'svelte';
 	import { error, isLoading } from '@supabase/auth-helpers-svelte';
 	import { supabaseClient } from '$lib/db';
 	import { session } from '$app/stores';
+
+	let auth;
+	onMount(async () => {
+		const { default: Auth } = await import('supabase-ui-svelte');
+		auth = Auth;
+	});
 
 	let loadedData = [];
 	async function loadData() {
@@ -25,17 +31,30 @@
 		<p>{$error.message}</p>
 	{/if}
 	<h1>{$isLoading ? `Loading...` : `Loaded!`}</h1>
-	<Auth {supabaseClient} providers={[]} />
+	<button
+		on:click={() => {
+			supabaseClient.auth.signIn({ provider: 'github' }, { scopes: 'public_repo user:email' });
+		}}
+	>
+		GitHub with scopes
+	</button>
+	<svelte:component
+		this={auth}
+		{supabaseClient}
+		providers={['google', 'github']}
+		socialLayout="horizontal"
+		socialButtonSize="large"
+	/>
 {:else}
 	<p>
-		<a href="/profile">[withAuthRequired]</a>
-		<a href="/protected-page">[supabaseServerClient]</a>
+		[<a href="/profile">withPageAuth</a>] | [<a href="/protected-page">supabaseServerClient</a>] | [<a
+			href="/github-provider-token">GitHub Token</a
+		>] |
 		<button on:click={() => supabaseClient.auth.update({ data: { test5: 'updated' } })}>
 			Update
 		</button>
 	</p>
 
-	<button on:click={async () => await supabaseClient.auth.signOut()}>Sign out</button>
 	<h1>{$isLoading ? `Loading...` : `Loaded!`}</h1>
 	<p>user:</p>
 	<pre>{JSON.stringify($session.user, null, 2)}</pre>

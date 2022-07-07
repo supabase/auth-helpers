@@ -1,6 +1,24 @@
-import { ApiError, CookieOptions, COOKIE_OPTIONS, jwtDecoder, TOKEN_REFRESH_MARGIN } from '@supabase/auth-helpers-shared';
+import {
+  ApiError,
+  CookieOptions,
+  COOKIE_OPTIONS,
+  jwtDecoder,
+  TOKEN_REFRESH_MARGIN,
+  JWTPayloadFailed,
+  AuthHelperError,
+  ErrorPayload,
+  AccessTokenNotFound,
+  CookieNotFound
+} from '@supabase/auth-helpers-shared';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import getUser from '../utils/getUser';
+import logger from '../utils/log';
+
+interface ResponsePayload {
+  user: null;
+  accessToken: null;
+  error?: ErrorPayload;
+}
 
 export interface HandleUserOptions {
   cookieOptions?: CookieOptions;
@@ -14,7 +32,7 @@ export default async function handleUser(
 ) {
   try {
     if (!req.cookies) {
-      throw new Error('Not able to parse cookies!');
+      throw new CookieNotFound();
     }
     const cookieOptions = { ...COOKIE_OPTIONS, ...options.cookieOptions };
     const tokenRefreshMargin =
@@ -22,13 +40,13 @@ export default async function handleUser(
     const access_token = req.cookies[`${cookieOptions.name}-access-token`];
 
     if (!access_token) {
-      throw new Error('No cookie found!');
+      throw new AccessTokenNotFound();
     }
 
     // Get payload from cached access token.
     const jwtUser = jwtDecoder(access_token);
     if (!jwtUser?.exp) {
-      throw new Error('Not able to parse JWT payload!');
+      throw new JWTPayloadFailed();
     }
     const timeNow = Math.round(Date.now() / 1000);
     if (jwtUser.exp < timeNow + tokenRefreshMargin) {
@@ -61,9 +79,19 @@ export default async function handleUser(
       res.status(200).json({ user: mergedUser, accessToken: access_token });
     }
   } catch (e) {
-    const error = e as ApiError;
-    res
-      .status(200)
-      .json({ user: null, accessToken: null, error: error.message });
+    let response: ResponsePayload = { user: null, accessToken: null };
+    if (e instanceof JWTPayloadFailed) {
+      logger.info('JWTPayloadFailed error has happened!');
+      response.error = e.toObj();
+    } else if (e instanceof CookieNotFound) {
+      logger.warn(e.toString());
+    } else if (e instanceof AuthHelperError) {
+      logger.info('AuthHelperError error has happened!');
+      logger.error(e.toString());
+    } else {
+      const error = e as ApiError;
+      logger.error(error.message);
+    }
+    res.status(200).json(response);
   }
 }

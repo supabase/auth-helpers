@@ -1,6 +1,6 @@
 {
   "name": "@supabase/auth-helpers-sveltekit",
-  "version": "0.6.1",
+  "version": "0.6.5",
   "description": "A collection of framework specific Auth utilities for working with Supabase.",
   "type": "module",
   "main": "./dist/index.js",
@@ -18,8 +18,10 @@
   ],
   "scripts": {
     "build": "pnpm package",
+    "build:watch": "pnpm package:watch",
     "prepare": "svelte-kit sync",
     "package": "svelte-kit package && del-cli dist/package.json && pnpm fix:esm",
+    "package:watch": "svelte-kit package -w && del-cli dist/package.json && pnpm fix:esm",
     "fix:esm": "fix-esm-import-path dist/index.js"
   },
   "repository": {
@@ -37,15 +39,16 @@
   "bugs": {
     "url": "https://github.com/supabase-community/auth-helpers/issues"
   },
-  "homepage": "https://github.com/supabase-community/auth-helpers#readme",
+  "homepage": "https://github.com/supabase-community/auth-helpers/tree/main/packages/sveltekit#readme",
   "devDependencies": {
-    "@sveltejs/kit": "next",
+    "@sveltejs/kit": "1.0.0-next.355",
     "del-cli": "^4.0.1",
     "fix-esm-import-path": "^1.2.1",
     "svelte": "^3.48.0",
     "svelte2tsx": "^0.5.10",
     "tslib": "^2.3.1",
-    "typescript": "^4.7.2"
+    "typescript": "^4.7.2",
+    "vite": "^2.9.13"
   },
   "dependencies": {
     "@supabase/auth-helpers-shared": "workspace:*",

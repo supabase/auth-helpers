@@ -1,13 +1,13 @@
 {
   "name": "@supabase/auth-helpers-react",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "build": "pnpm clean && tsup",
+    "build": "tsup",
     "clean": "rimraf dist",
     "clean:all": "rimraf dist node_modules"
   },

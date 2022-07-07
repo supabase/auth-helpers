@@ -280,3 +280,29 @@ import { withMiddlewareAuth } from '@supabase/auth-helpers-nextjs/middleware';
 
 export const middleware = withMiddlewareAuth({ redirectTo: '/login' });
 ```
+
+It is also possible to add finer granularity based on the user logged in. I.e. you can specify a promise to determine if a specific user has permission or not.
+
+
+```ts
+// pages/protected/_middleware.ts
+import { withMiddlewareAuth } from '@supabase/auth-helpers-nextjs/middleware';
+
+export const middleware = withMiddlewareAuth({ 
+  redirectTo: '/login',
+  authGuard: {
+    isPermitted: async (user) => user.email?.endsWith('@example.com') ?? false,
+    redirectTo: '/insufficient-permissions'
+  }
+});
+```
+
+## Migrating from @supabase/supabase-auth-helpers to @supabase/auth-helpers
+
+This is a step by step guide on migrating away from the `@supabase/supabase-auth-helpers` to the newly released `@supabase/auth-helpers`.
+
+1. Install `@supabase/supabase-js`, `@supabase/auth-helpers-nextjs` and `@supabase/auth-helpers-react` libraries from npm.
+2. Replace all imports of `@supabase/supabase-auth-helpers/nextjs` in your project with `@supabase/auth-helpers-nextjs`.
+3. Replace all imports of `@supabase/supabase-auth-helpers/react` in your project with `@supabase/auth-helpers-react`.
+4. Replace all instances of `withAuthRequired` in any of your NextJS pages with `withPageAuth`.
+5. Replace all instances of `withAuthRequired` in any of your NextJS API endpoints with `withApiAuth`.

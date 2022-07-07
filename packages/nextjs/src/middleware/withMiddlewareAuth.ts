@@ -1,14 +1,22 @@
 import { NextResponse } from 'next/server';
 import { NextMiddleware } from 'next/server';
-import { 
-  CookieOptions, 
-  setCookies, 
+import {
+  CookieOptions,
+  setCookies,
   COOKIE_OPTIONS,
-  TOKEN_REFRESH_MARGIN, 
+  TOKEN_REFRESH_MARGIN,
   NextRequestMiddlewareAdapter,
   NextResponseMiddlewareAdapter,
-  jwtDecoder
+  jwtDecoder,
+  User
 } from '@supabase/auth-helpers-shared';
+
+class NoPermissionError extends Error {
+  constructor(message: string) {
+    super(message);
+  }
+  get name() { return this.constructor.name }
+}
 
 export interface withMiddlewareAuthOptions {
   /**
@@ -21,6 +29,10 @@ export interface withMiddlewareAuthOptions {
   redirectTo?: string;
   cookieOptions?: CookieOptions;
   tokenRefreshMargin?: number;
+  authGuard?: {
+    isPermitted: (user: User) => Promise<boolean>;
+    redirectTo: string;
+  };
 }
 export type withMiddlewareAuth = (
   options?: withMiddlewareAuthOptions
@@ -117,12 +129,23 @@ export const withMiddlewareAuth: withMiddlewareAuth =
         );
       } else if (!authResult.user) {
         throw new Error('No auth user, redirecting');
+      } else if (
+        options.authGuard &&
+        !(await options.authGuard.isPermitted(authResult.user))
+      ) {
+        throw new NoPermissionError('User is not permitted, redirecting');
       }
 
       // Authentication successful, forward request to protected route
       return res;
     } catch (err: unknown) {
-      const { redirectTo = '/' } = options;
+      let { redirectTo = '/' } = options;
+      if (
+        err instanceof NoPermissionError &&
+        !!options?.authGuard?.redirectTo
+      ) {
+        redirectTo = options.authGuard.redirectTo;
+      }
       if (err instanceof Error) {
         console.log(
           `Could not authenticate request, redirecting to ${redirectTo}:`,
