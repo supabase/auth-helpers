@@ -32,10 +32,6 @@ VITE_SUPABASE_ANON_KEY=your-anon-key
 
 - Add `session` and `locals` app types to `src/app.d.ts`
 
-- Create an `auth` directory under the `/src/routes/api/` directory.
-
-- Create a `callback.ts` and `user.ts` file under the newly created `auth` directory.
-
 We need to add App types so that our `session` and `locals` in Kit don't error. You can do that by changing/updating the contents of `src/app.d.ts`:
 
 ```ts
@@ -44,46 +40,19 @@ We need to add App types so that our `session` and `locals` in Kit don't error. 
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
 declare namespace App {
-	interface UserSession {
-		user: import('@supabase/supabase-js').User
-		accessToken?: string
-	}
-	
-	interface Locals extends UserSession {
-		error: import('@supabase/supabase-js').ApiError
-	}
-	
-	interface Session extends UserSession {}
+  interface UserSession {
+    user: import('@supabase/supabase-js').User;
+    accessToken?: string;
+  }
 
-	// interface Platform {}
-	// interface Stuff {}
-}
-```
+  interface Locals extends UserSession {
+    error: import('@supabase/supabase-js').ApiError;
+  }
 
-The path to your dynamic API route files would be `/src/routes/api/auth/user.ts` and `/src/routes/api/auth/callback.ts`. Populate both files as follows:
+  interface Session extends UserSession {}
 
-```ts
-// src/routes/api/auth/user.ts
-export async function post({ locals }) {
-  const { user, accessToken, error } = locals;
-  return {
-    status: 200,
-    body: {
-      user,
-      accessToken,
-      error
-    }
-  };
-}
-```
-
-```ts
-// src/routes/api/auth/callback.ts
-export async function post() {
-  return {
-    status: 200,
-    body: {}
-  };
+  // interface Platform {}
+  // interface Stuff {}
 }
 ```
 
@@ -112,6 +81,8 @@ These will create the handlers under the hood that perform different parts of th
 - `/api/auth/callback`: The `UserHelper` forwards the session details here every time `onAuthStateChange` fires on the client side. This is needed to set up the cookies for your application so that SSR works seamlessly.
 
 - `/api/auth/user`: You can fetch user profile information in JSON format.
+
+- `/api/auth/logout`: You can logout the user.
 
 Create a file in your `src/lib` directory to get the `supabaseClient` from `@supabase/auth-helpers-sveltekit`
 
