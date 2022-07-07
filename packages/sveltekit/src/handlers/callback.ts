@@ -2,29 +2,42 @@ import type { Handle } from '@sveltejs/kit';
 import {
   setCookies,
   COOKIE_OPTIONS,
+  ENDPOINT_PREFIX,
   type CookieOptions,
   SvelteKitRequestAdapter,
   SvelteKitResponseAdapter
 } from '@supabase/auth-helpers-shared';
 import { getUser, saveTokens } from '../utils/getUser';
 import { deleteTokens } from '../utils/deleteTokens';
+import logger from '../utils/log';
 
 export interface HandleCallbackOptions {
   cookieOptions?: CookieOptions;
+  endpointPrefix?: string;
 }
 
 type AuthCookies = Parameters<typeof setCookies>[2];
 
 export const handleCallback = (options: HandleCallbackOptions = {}) => {
+  const endpointPath = `${options.endpointPrefix ?? ENDPOINT_PREFIX}/callback`;
+
   const handle: Handle = async ({ event, resolve }) => {
     const req = event.request;
-    let res = await resolve(event);
+    const res = await resolve(event);
 
     // if not a callback route return
-    if (event.url.pathname !== '/api/auth/callback') {
+    if (event.url.pathname !== endpointPath) {
       return res;
     }
 
+    // user implemented the route, warn
+    if (res.status !== 405) {
+      logger.warn(
+        `@supabase/auth-helpers-sveltekit handles the route '${endpointPath}'`
+      );
+    }
+
+    // check request method
     if (req.method !== 'POST') {
       const headers = new Headers({
         Allow: 'POST'
@@ -38,7 +51,7 @@ export const handleCallback = (options: HandleCallbackOptions = {}) => {
     if (!bodyEvent) throw new Error('Auth event missing!');
     if (bodyEvent === 'USER_UPDATED') {
       const session = await getUser(req, { forceRefresh: true });
-      await saveTokens({ req, res }, session, { forceRefresh: true })
+      await saveTokens({ req, res }, session, { forceRefresh: true });
     }
     if (bodyEvent === 'SIGNED_IN') {
       if (!session) throw new Error('Auth session missing!');
@@ -64,7 +77,7 @@ export const handleCallback = (options: HandleCallbackOptions = {}) => {
               maxAge: cookieOptions.lifetime ?? 0,
               path: cookieOptions.path,
               sameSite: cookieOptions.sameSite
-            })
+            });
           }
           return acc;
         }, [])
