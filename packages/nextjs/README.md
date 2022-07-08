@@ -163,7 +163,7 @@ export const getServerSideProps = withPageAuth({
   async getServerSideProps(ctx) {
     // Access the user object
     const { user, accessToken } = await getUser(ctx);
-    return { props: { email: user!.email } };
+    return { props: { email: user?.email } };
   }
 });
 ```
