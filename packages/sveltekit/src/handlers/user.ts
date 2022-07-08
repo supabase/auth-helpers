@@ -19,7 +19,7 @@ export const handleUser = (options: HandleUserOptions = {}) => {
     }
 
     // user implemented the route, warn
-    if (res.status !== 405) {
+    if (!(res.status === 405 || res.status === 404)) {
       logger.warn(
         `@supabase/auth-helpers-sveltekit handles the route '${endpointPath}'`
       );
