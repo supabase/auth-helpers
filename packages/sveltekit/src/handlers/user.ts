@@ -26,9 +26,9 @@ export const handleUser = (options: HandleUserOptions = {}) => {
     }
 
     // check request method
-    if (req.method !== 'GET') {
+    if (req.method !== 'POST') {
       const headers = new Headers({
-        Allow: 'GET'
+        Allow: 'POST'
       });
       return new Response('Method Not Allowed', { headers, status: 405 });
     }
