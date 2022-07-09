@@ -23,7 +23,7 @@ export const handleCallback = (options: HandleCallbackOptions = {}) => {
 
   const handle: Handle = async ({ event, resolve }) => {
     const req = event.request;
-    const res = await resolve(event);
+    let res = await resolve(event);
 
     // if not a callback route return
     if (event.url.pathname !== endpointPath) {
@@ -45,6 +45,10 @@ export const handleCallback = (options: HandleCallbackOptions = {}) => {
       return new Response('Method Not Allowed', { headers, status: 405 });
     }
 
+    res = new Response('{}', {
+      headers: { 'Content-Type': 'application/json' },
+      status: 200
+    });
     const cookieOptions = { ...COOKIE_OPTIONS, ...options.cookieOptions };
     const { event: bodyEvent, session } = await req.json();
 
@@ -88,13 +92,7 @@ export const handleCallback = (options: HandleCallbackOptions = {}) => {
       deleteTokens({ req, res }, cookieOptions.name);
     }
 
-    const headers = new Headers(res.headers);
-    headers.set('Content-Type', 'application/json');
-
-    return new Response('{}', {
-      headers: headers,
-      status: 200
-    });
+    return res;
   };
 
   return handle;
