@@ -88,8 +88,11 @@ export const handleCallback = (options: HandleCallbackOptions = {}) => {
       deleteTokens({ req, res }, cookieOptions.name);
     }
 
+    const headers = new Headers(res.headers);
+    headers.set('Content-Type', 'application/json');
+
     return new Response('{}', {
-      headers: res.headers,
+      headers: headers,
       status: 200
     });
   };
