@@ -88,7 +88,10 @@ export const handleCallback = (options: HandleCallbackOptions = {}) => {
       deleteTokens({ req, res }, cookieOptions.name);
     }
 
-    return res;
+    return new Response(res.body, {
+      headers: res.headers,
+      status: 200
+    });
   };
 
   return handle;
