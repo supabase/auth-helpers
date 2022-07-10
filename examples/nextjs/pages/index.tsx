@@ -20,7 +20,7 @@ const LoginPage: NextPage = () => {
   if (!user)
     return (
       <>
-        {error && <p>{error.message}</p>}
+        {error && <p>{typeof error === 'string' ? error : error.message}</p>}
         {isLoading ? <h1>Loading...</h1> : <h1>Loaded!</h1>}
         <button
           onClick={() => {

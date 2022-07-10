@@ -285,16 +285,17 @@ It is also possible to add finer granularity based on the user logged in. I.e. y
 
 
 ```ts
-// pages/protected/_middleware.ts
+// /middleware.ts
 import { withMiddlewareAuth } from '@supabase/auth-helpers-nextjs/middleware';
 
-export const middleware = withMiddlewareAuth({ 
+export const middleware = withMiddlewareAuth([{
+  matcher: ['path/to/protect'],
   redirectTo: '/login',
   authGuard: {
     isPermitted: async (user) => user.email?.endsWith('@example.com') ?? false,
     redirectTo: '/insufficient-permissions'
   }
-});
+}]);
 ```
 
 ## Migrating from @supabase/supabase-auth-helpers to @supabase/auth-helpers

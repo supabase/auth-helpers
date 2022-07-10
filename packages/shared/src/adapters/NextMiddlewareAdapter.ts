@@ -8,7 +8,7 @@ export class NextRequestAdapter implements RequestAdapter {
   }
 
   setRequestCookie(name: string, value: string) {
-    this.req.cookies[name] = value;
+    this.req.cookies.set(name, value);
   }
 
   getHeader(name: string) {

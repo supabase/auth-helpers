@@ -10,6 +10,7 @@ import {
   jwtDecoder,
   User
 } from '@supabase/auth-helpers-shared';
+import { getMiddlewareRegex } from 'next/dist/shared/lib/router/utils/route-regex';
 
 class NoPermissionError extends Error {
   constructor(message: string) {
@@ -27,6 +28,7 @@ export interface withMiddlewareAuthOptions {
    * a `redirectedFrom` query parameter, ex: `?redirectedFrom=%2Fdashboard`
    */
   redirectTo?: string;
+  matcher: string[];
   cookieOptions?: CookieOptions;
   tokenRefreshMargin?: number;
   authGuard?: {
@@ -35,12 +37,24 @@ export interface withMiddlewareAuthOptions {
   };
 }
 export type withMiddlewareAuth = (
-  options?: withMiddlewareAuthOptions
+  options?: withMiddlewareAuthOptions[]
 ) => NextMiddleware;
 
 export const withMiddlewareAuth: withMiddlewareAuth =
-  (options: withMiddlewareAuthOptions = {}) =>
+  (options: withMiddlewareAuthOptions[] = []) =>
   async (req) => {
+    const res = NextResponse.next();
+
+    const routeSpecificOptions = options.find(config => {
+      for (const matcher of config.matcher) {
+        // TODO: replace this with a regex-ish matcher similar/identical to the nextjs matcher implementaton
+        // Ref.: https://nextjs.org/docs/advanced-features/middleware#matcher
+        if (req.nextUrl.pathname.startsWith(matcher)) return true;
+      }
+    });
+    // there is no option matching the current path, proceed.
+    if (!routeSpecificOptions) return res;
+
     try {
       if (
         !process.env.NEXT_PUBLIC_SUPABASE_URL ||
@@ -53,13 +67,11 @@ export const withMiddlewareAuth: withMiddlewareAuth =
       if (!req.cookies) {
         throw new Error('Not able to parse cookies!');
       }
-      const cookieOptions = { ...COOKIE_OPTIONS, ...options.cookieOptions };
+      const cookieOptions = { ...COOKIE_OPTIONS, ...routeSpecificOptions.cookieOptions };
       const tokenRefreshMargin =
-        options.tokenRefreshMargin ?? TOKEN_REFRESH_MARGIN;
-      const access_token = req.cookies[`${cookieOptions.name!}-access-token`];
-      const refresh_token = req.cookies[`${cookieOptions.name!}-refresh-token`];
-
-      const res = NextResponse.next();
+        routeSpecificOptions.tokenRefreshMargin ?? TOKEN_REFRESH_MARGIN;
+      const access_token = req.cookies.get(`${cookieOptions.name!}-access-token`);
+      const refresh_token = req.cookies.get(`${cookieOptions.name!}-refresh-token`);
 
       const getUser = async (): Promise<{
         user: any;
@@ -130,8 +142,8 @@ export const withMiddlewareAuth: withMiddlewareAuth =
       } else if (!authResult.user) {
         throw new Error('No auth user, redirecting');
       } else if (
-        options.authGuard &&
-        !(await options.authGuard.isPermitted(authResult.user))
+        routeSpecificOptions.authGuard &&
+        !(await routeSpecificOptions.authGuard.isPermitted(authResult.user))
       ) {
         throw new NoPermissionError('User is not permitted, redirecting');
       }
@@ -139,12 +151,12 @@ export const withMiddlewareAuth: withMiddlewareAuth =
       // Authentication successful, forward request to protected route
       return res;
     } catch (err: unknown) {
-      let { redirectTo = '/' } = options;
+      let { redirectTo = '/' } = routeSpecificOptions;
       if (
         err instanceof NoPermissionError &&
-        !!options?.authGuard?.redirectTo
+        !!routeSpecificOptions?.authGuard?.redirectTo
       ) {
-        redirectTo = options.authGuard.redirectTo;
+        redirectTo = routeSpecificOptions.authGuard.redirectTo;
       }
       if (err instanceof Error) {
         console.log(
