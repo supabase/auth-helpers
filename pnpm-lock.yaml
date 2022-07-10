@@ -8,13 +8,13 @@ importers:
       prettier: ^2.5.1
       turbo: latest
       typedoc: ^0.22.17
-      typescript: 4.0.x || 4.1.x || 4.2.x || 4.3.x || 4.4.x || 4.5.x || 4.6.x
+      typescript: 4.0.x || 4.1.x || 4.2.x || 4.3.x || 4.4.x || 4.5.x || 4.6.x || 4.7.x
     devDependencies:
       '@changesets/cli': 2.22.0
       prettier: 2.6.2
       turbo: 1.3.1
-      typedoc: 0.22.17_typescript@4.6.4
-      typescript: 4.6.4
+      typedoc: 0.22.17_typescript@4.7.2
+      typescript: 4.7.2
 
   examples/nextjs:
     specifiers:
@@ -6005,7 +6005,7 @@ packages:
     dependencies:
       is-typedarray: 1.0.0
 
-  /typedoc/0.22.17_typescript@4.6.4:
+  /typedoc/0.22.17_typescript@4.7.2:
     resolution: {integrity: sha512-h6+uXHVVCPDaANzjwzdsj9aePBjZiBTpiMpBBeyh1zcN2odVsDCNajz8zyKnixF93HJeGpl34j/70yoEE5BfNg==}
     engines: {node: '>= 12.10.0'}
     hasBin: true
@@ -6017,17 +6017,11 @@ packages:
       marked: 4.0.16
       minimatch: 5.1.0
       shiki: 0.10.1
-      typescript: 4.6.4
+      typescript: 4.7.2
     dev: true
 
   /typescript/4.5.5:
     resolution: {integrity: sha512-TCTIul70LyWe6IJWT8QSYeA54WQe8EjQFU4wY52Fasj5UKx88LNYKCgBEHcOMOrFF1rKGbD8v/xcNWVUq9SymA==}
-    engines: {node: '>=4.2.0'}
-    hasBin: true
-    dev: true
-
-  /typescript/4.6.4:
-    resolution: {integrity: sha512-9ia/jWHIEbo49HfjrLGfKbZSuWo9iTMwXO+Ca3pRsSpbsMbc7/IU8NKdCZVRRBafVPGnoJeFL76ZOAA84I9fEg==}
     engines: {node: '>=4.2.0'}
     hasBin: true
     dev: true

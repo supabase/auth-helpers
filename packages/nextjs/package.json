@@ -27,6 +27,26 @@
     "url": "https://github.com/supabase-community/auth-helpers/issues"
   },
   "homepage": "https://github.com/supabase-community/auth-helpers/tree/main/packages/nextjs#readme",
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/index.d.ts"
+      ],
+      "middleware": [
+        "./dist/middleware/index.d.ts"
+      ]
+    }
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./middleware": {
+      "types": "./dist/middleware/index.d.ts",
+      "import": "./dist/middleware/index.js"
+    }
+  },
   "devDependencies": {
     "@supabase/supabase-js": "^1.35.3",
     "config": "workspace:*",

@@ -1,4 +1,4 @@
-import { withMiddlewareAuth } from '@supabase/auth-helpers-nextjs/dist/middleware';
+import { withMiddlewareAuth } from '@supabase/auth-helpers-nextjs/middleware';
 
 export const middleware = withMiddlewareAuth([{
   redirectTo: '/',
