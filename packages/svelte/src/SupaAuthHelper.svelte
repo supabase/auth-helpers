@@ -5,12 +5,16 @@
   import { checkSession, type Session } from './helpers';
   import { setIsLoading, setError, user, accessToken } from './store';
   import { dequal } from 'dequal';
-  import { CallbackUrlFailed } from '@supabase/auth-helpers-shared';
+  import {
+    CallbackUrlFailed,
+    ENDPOINT_PREFIX
+  } from '@supabase/auth-helpers-shared';
 
   // Props
   export let supabaseClient: SupabaseClient;
-  export let callbackUrl = '/api/auth/callback';
-  export let profileUrl = '/api/auth/user';
+  export let endpointPrefix = ENDPOINT_PREFIX;
+  export let callbackUrl = `${endpointPrefix}/callback`;
+  export let profileUrl = `${endpointPrefix}/user`;
   export let autoRefreshToken = true;
   export let session: Writable<Session>;
   export let onUserUpdate = (user: User | null) => {};

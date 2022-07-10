@@ -3,6 +3,7 @@ export type { User, SupabaseClient } from '@supabase/supabase-js';
 
 // Methods
 export {
+  handleSession,
   handleCallback,
   handleUser,
   handleLogout,
