@@ -10,7 +10,7 @@ import {
   jwtDecoder,
   User
 } from '@supabase/auth-helpers-shared';
-import UrlPattern from 'url-pattern';
+import { getPathMatch } from 'next/dist/shared/lib/router/utils/path-match'
 
 class NoPermissionError extends Error {
   constructor(message: string) {
@@ -44,10 +44,11 @@ export const withMiddlewareAuth: withMiddlewareAuth =
   (options: withMiddlewareAuthOptions[] = []) =>
   async (req) => {
     const routeSpecificOptions = options.find(config => {
-      for (const matcher of config.matcher) {
-        var pattern = new UrlPattern(matcher);
-        if (pattern.match(req.nextUrl.pathname)) return true;
-      }
+      return config.matcher.some(matcherString => {
+        const matcher = getPathMatch(matcherString);
+        const match = matcher(req.nextUrl.pathname);
+        return match !== false;
+      });
     });
     // there is no option matching the current path, proceed.
     if (!routeSpecificOptions) return NextResponse.next();
