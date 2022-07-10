@@ -1,5 +1,5 @@
 import type { NextPage } from 'next';
 
-const Page: NextPage = () => <p>Authenticated</p>;
+const Page: NextPage = () => <p>Directory Protected</p>;
 
 export default Page;
