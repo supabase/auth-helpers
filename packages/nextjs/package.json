@@ -39,6 +39,7 @@
     "tsup": "^5.12.5"
   },
   "dependencies": {
-    "@supabase/auth-helpers-shared": "workspace:*"
+    "@supabase/auth-helpers-shared": "workspace:*",
+    "url-pattern": "^1.0.3"
   }
 }

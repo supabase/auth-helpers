@@ -10,7 +10,7 @@ import {
   jwtDecoder,
   User
 } from '@supabase/auth-helpers-shared';
-import { getMiddlewareRegex } from 'next/dist/shared/lib/router/utils/route-regex';
+import UrlPattern from 'url-pattern';
 
 class NoPermissionError extends Error {
   constructor(message: string) {
@@ -43,17 +43,14 @@ export type withMiddlewareAuth = (
 export const withMiddlewareAuth: withMiddlewareAuth =
   (options: withMiddlewareAuthOptions[] = []) =>
   async (req) => {
-    const res = NextResponse.next();
-
     const routeSpecificOptions = options.find(config => {
       for (const matcher of config.matcher) {
-        // TODO: replace this with a regex-ish matcher similar/identical to the nextjs matcher implementaton
-        // Ref.: https://nextjs.org/docs/advanced-features/middleware#matcher
-        if (req.nextUrl.pathname.startsWith(matcher)) return true;
+        var pattern = new UrlPattern(matcher);
+        if (pattern.match(req.nextUrl.pathname)) return true;
       }
     });
     // there is no option matching the current path, proceed.
-    if (!routeSpecificOptions) return res;
+    if (!routeSpecificOptions) return NextResponse.next();
 
     try {
       if (
@@ -115,7 +112,7 @@ export const withMiddlewareAuth: withMiddlewareAuth =
             }));
           setCookies(
             new NextRequestMiddlewareAdapter(req),
-            new NextResponseMiddlewareAdapter(res),
+            new NextResponseMiddlewareAdapter(NextResponse.next()),
             [
               { key: 'access-token', value: data!.access_token },
               { key: 'refresh-token', value: data!.refresh_token! }
@@ -149,7 +146,7 @@ export const withMiddlewareAuth: withMiddlewareAuth =
       }
 
       // Authentication successful, forward request to protected route
-      return res;
+      return NextResponse.next();
     } catch (err: unknown) {
       let { redirectTo = '/' } = routeSpecificOptions;
       if (
