@@ -1,5 +1,14 @@
 # @supabase/auth-helpers-sveltekit
 
+## 0.6.6
+
+### Patch Changes
+
+- 56228e3: Remove the need for user to create /api/auth/user and /api/auth/callback endpoints
+- 56228e3: Add getProviderToken helper method
+- Updated dependencies [56228e3]
+  - @supabase/auth-helpers-shared@0.1.3
+
 ## 0.6.5
 
 ### Patch Changes
