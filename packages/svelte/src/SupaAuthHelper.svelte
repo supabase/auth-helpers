@@ -69,7 +69,7 @@
         }).then((res) => {
           if (!res.ok) {
             const err = new CallbackUrlFailed(callbackUrl);
-            setError(err.message);
+            setError(err);
           }
         });
         // Fetch the user from the API route

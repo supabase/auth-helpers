@@ -27,8 +27,8 @@ const setAccessToken = (token: string) => accessToken.set(token);
 const isLoading = writable(initialValues.isLoading);
 const setIsLoading = (loading: boolean) => isLoading.set(loading);
 
-const error = writable<ErrorPayload | string>(initialValues.error);
-const setError = (err: ErrorPayload | string) => error.set(err);
+const error = writable<ErrorPayload>(initialValues.error);
+const setError = (err: ErrorPayload) => error.set(err);
 
 const resetAll = () => {
   setUser(initialValues.user);
