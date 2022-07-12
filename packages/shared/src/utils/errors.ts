@@ -1,7 +1,7 @@
 export interface ErrorPayload {
-  type: string;
+  type?: string;
   message: string;
-  source: string;
+  source?: string;
 }
 
 export class AuthHelperError extends Error {
@@ -48,6 +48,12 @@ export class AccessTokenNotFound extends AuthHelperError {
 export class RefreshTokenNotFound extends AuthHelperError {
   constructor() {
     super('No refresh token was found!', 'cookie_not_found');
+  }
+}
+
+export class ProviderTokenNotFound extends AuthHelperError {
+  constructor() {
+    super('No provider token was found!', 'cookie_not_found');
   }
 }
 

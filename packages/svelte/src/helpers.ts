@@ -74,7 +74,7 @@ export const checkSession = async (props: CheckSessionArgs): Promise<void> => {
         );
         return;
       }
-      setError(new Error(error).message);
+      setError(new Error(error));
     }
     networkRetries = 0;
     if (accessToken) {

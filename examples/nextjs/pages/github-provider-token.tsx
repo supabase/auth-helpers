@@ -1,5 +1,10 @@
 // pages/protected-page.js
-import { User, withPageAuth, getUser } from '@supabase/auth-helpers-nextjs';
+import {
+  User,
+  withPageAuth,
+  getUser,
+  getProviderToken
+} from '@supabase/auth-helpers-nextjs';
 import Link from 'next/link';
 
 export default function ProtectedPage({
@@ -28,7 +33,7 @@ export const getServerSideProps = withPageAuth({
   redirectTo: '/',
   async getServerSideProps(ctx) {
     // Retrieve provider_token from cookies
-    const provider_token = ctx.req.cookies['sb-provider-token'];
+    const provider_token = getProviderToken(ctx);
     // Get logged in user's third-party id from metadata
     const { user } = await getUser(ctx);
     const userId = user?.user_metadata.user_name;

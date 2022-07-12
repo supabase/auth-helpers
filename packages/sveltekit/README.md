@@ -8,13 +8,22 @@ Using [npm](https://npmjs.org):
 
 ```sh
 npm install @supabase/auth-helpers-sveltekit
+
+# Main component for Svelte based frameworks (optional but recommended)
+npm install @supabase/auth-helpers-svelte
+```
+
+Using [yarn](https://yarnpkg.com/):
+```sh
+yarn add @supabase/auth-helpers-sveltekit
+
+# Main component for Svelte based frameworks (optional but recommended)
+yarn add @supabase/auth-helpers-svelte
 ```
 
 This library supports the following tooling versions:
 
 - Node.js: `^16.15.0`
-
-You should also install `@supabase/auth-helpers-svelte` to use with this library.
 
 ## Getting Started
 
@@ -28,35 +37,40 @@ VITE_SUPABASE_URL=https://your-project.supabase.co
 VITE_SUPABASE_ANON_KEY=your-anon-key
 ```
 
-### Basic Setup
+### SupabaseClient and SupaAuthHelper component setup
 
-- Add `session` and `locals` app types to `src/app.d.ts`
-
-We need to add App types so that our `session` and `locals` in Kit don't error. You can do that by changing/updating the contents of `src/app.d.ts`:
+We will start off by creating a `db.ts` file inside of our `src/lib` directory. Now lets instantiate our `supabaseClient` by using our `skHelper` function from the `@supabase/auth-helpers-sveltekit` library.
 
 ```ts
-/// <reference types="@sveltejs/kit" />
+// src/lib/db.ts
+import { skHelper } from '@supabase/auth-helpers-sveltekit';
 
-// See https://kit.svelte.dev/docs/types#app
-// for information about these interfaces
-declare namespace App {
-  interface UserSession {
-    user: import('@supabase/supabase-js').User;
-    accessToken?: string;
-  }
+const { supabaseClient } = skHelper(
+ import.meta.env.VITE_SUPABASE_URL as string,
+ import.meta.env.VITE_SUPABASE_ANON_KEY as string
+);
 
-  interface Locals extends UserSession {
-    error: import('@supabase/supabase-js').ApiError;
-  }
-
-  interface Session extends UserSession {}
-
-  // interface Platform {}
-  // interface Stuff {}
-}
+export { supabaseClient };
 ```
 
-We need to add the `handleAuth()` hook to your `hooks.ts` file.
+Edit your `__layout.svelte` file and add import the `SupaAuthHelper` component, the `supabaseClient` we just instantiated and the `session` store.
+
+```html
+// src/routes/__layout.svelte
+<script>
+	import { session } from '$app/stores';
+	import { supabaseClient } from '$lib/db';
+	import { SupaAuthHelper } from '@supabase/auth-helpers-svelte';	
+</script>
+
+<SupaAuthHelper {supabaseClient} {session}>
+	<slot />
+</SupaAuthHelper>
+````
+
+### Hooks setup
+
+Our `hooks.ts` file is where the heavy lifting of this library happens, we need to import our function to handle the sign in, signing out and cookie creation phase. we can import all the hooks using `handleAuth` function and destructure its returned data.
 
 ```ts
 // src/hooks.ts
@@ -67,58 +81,71 @@ import { sequence } from '@sveltejs/kit/hooks';
 export const handle: Handle = sequence(...handleAuth());
 
 export const getSession: GetSession = async (event) => {
-  const { user, accessToken, error } = event.locals;
-  return {
-    user,
-    accessToken,
-    error
-  };
-};
+	const { user, accessToken, error } = event.locals;
+	return { 
+		user, 
+		accessToken, 
+		error
+	}
+}
 ```
 
 These will create the handlers under the hood that perform different parts of the authentication flow:
 
 - `/api/auth/callback`: The `UserHelper` forwards the session details here every time `onAuthStateChange` fires on the client side. This is needed to set up the cookies for your application so that SSR works seamlessly.
-
 - `/api/auth/user`: You can fetch user profile information in JSON format.
-
 - `/api/auth/logout`: You can logout the user.
 
-Create a file in your `src/lib` directory to get the `supabaseClient` from `@supabase/auth-helpers-sveltekit`
+### Typings
+In order to get the most out of TypeScript and its intellisense, you should import our types into the `app.d.ts` type definition file that comes with your SvelteKit project.
 
 ```ts
-// src/lib/db.ts
-import { skHelper } from '@supabase/auth-helpers-sveltekit';
+// src/app.d.ts
+/// <reference types="@sveltejs/kit" />
+// See https://kit.svelte.dev/docs/types#app
+// for information about these interfaces
+declare namespace App {
+  interface UserSession {
+    user: import('@supabase/supabase-js').User;
+    accessToken?: string;
+  }
+  
+  interface Locals extends UserSession {
+    error: import('@supabase/supabase-js').ApiError;
+  }
 
-const { supabaseClient } = skHelper(
-  import.meta.env.VITE_SUPABASE_URL as string,
-  import.meta.env.VITE_SUPABASE_ANON_KEY as string
-);
-
-export { supabaseClient };
+  interface Session extends UserSession {}
+  
+  // interface Platform {}
+  // interface Stuff {}
+}
 ```
 
-Wrap your `src/routes/__layout.svelte` component with the `SupaAuthHelper` component:
+### Signing out
+
+This library has provided a dedicated endpoint for you to use to sign a user out. This endpoint will sign the user out of the Gotrue server, clear the cookies that were set when the user logged in and redirect the user to a configurable path.
+
+The logout handler endpoint is `/api/auth/logout`, this will take a `GET` request which means it can be used as the href for a normal `a` tag in your html.
 
 ```html
-// src/routes/__layout.svelte
-<script>
-  import { goto } from '$app/navigation';
-  import { session } from '$app/stores';
-  import { supabaseClient } from '$lib/db';
-  import { SupaAuthHelper } from '@supabase/auth-helpers-svelte';
-
-  const onUserUpdate = async (user) => {
-    if (user) await goto('/');
-  };
-</script>
-
-<SupaAuthHelper {supabaseClient} {session} {onUserUpdate}>
-  <slot />
-</SupaAuthHelper>
+<a href="/api/auth/logout">Sign out</a>
 ```
 
-You can now determine if a user is authenticated by checking that the `user` object returned by the `$session` store is defined.
+### Logout handler configuration
+
+In your `src/hooks.ts` file the logout handler is already setup and you can configure the redirect path from here.
+
+> By default the redirect path after logging out will be `/`.
+
+```ts
+export const handle = sequence(...handleAuth({ 
+	logout: { returnTo: '/auth/signin' }
+}));
+```
+
+### Basic Setup
+
+You can now determine if a user is authenticated on the client-side by checking that the `user` object returned by the `$session` store is defined.
 
 ```html
 // example
@@ -168,7 +195,7 @@ For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row
     providers={['google', 'github']}
   />
 {:else}
-  <button on:click={() => supabaseClient.auth.signOut()}>Sign out</button>
+  <a href=="/api/auth/logout">Sign out</a>
   <p>user:</p>
   <pre>{JSON.stringify($session.user, null, 2)}</pre>
   <p>client-side data fetching with RLS</p>
@@ -181,27 +208,7 @@ For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row
 For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row-level-security) to work in a server environment, you need to inject the request context into the supabase client:
 
 ```html
-<script context="module">
-  import {
-    supabaseServerClient,
-    withPageAuth
-  } from '@supabase/auth-helpers-sveltekit';
-
-  export const load = async ({ session }) =>
-    withPageAuth(
-      {
-        redirectTo: '/',
-        user: session.user
-      },
-      async () => {
-        const { data } = await supabaseServerClient(session.accessToken)
-          .from('test')
-          .select('*');
-        return { props: { data, user: session.user } };
-      }
-    );
-</script>
-
+<!-- src/routes/profile.svelte -->
 <script>
   export let user;
   export let data;
@@ -210,6 +217,42 @@ For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row
 <div>Protected content for {user.email}</div>
 <pre>{JSON.stringify(data, null, 2)}</pre>
 <pre>{JSON.stringify(user, null, 2)}</pre>
+```
+
+```ts
+// src/routes/profile.ts
+import { supabaseServerClient, withApiAuth } from '@supabase/auth-helpers-sveltekit';
+import type { RequestHandler } from './__types/profile';
+
+interface TestTable {
+	id: string;
+	created_at: string;
+}
+
+interface GetOutput {
+	user: User;
+  data: TestTable[];
+}
+
+export const get: RequestHandler<GetOutput> = async ({ locals }) =>
+	withApiAuth(
+		{
+			redirectTo: '/',
+			user: locals.user
+		},
+		async () => {
+      const { data } = await supabaseServerClient(session.accessToken)
+        .from<TestTable>('test')
+        .select('*');
+
+			return {
+				body: {
+					user: locals.user,
+          data
+				}
+			};
+		}
+	);
 ```
 
 ## Protecting API routes
@@ -223,9 +266,18 @@ import {
   supabaseServerClient,
   withApiAuth
 } from '@supabase/auth-helpers-sveltekit';
-import type { RequestHandler } from '@sveltejs/kit';
+import type { RequestHandler } from './__types/protected-route';
 
-export const get: RequestHandler = ({ locals, request }) =>
+interface TestTable {
+	id: string;
+	created_at: string;
+}
+
+interface GetOutput {
+	data: TestTable[];
+}
+
+export const get: RequestHandler<GetOutput> = async ({ locals, request }) =>
   withApiAuth({ user: locals.user }, async () => {
     // Run queries with RLS on the server
     const { data } = await supabaseServerClient(request)
@@ -234,7 +286,7 @@ export const get: RequestHandler = ({ locals, request }) =>
 
     return {
       status: 200,
-      body: data
+      body: { data }
     };
   });
 ```

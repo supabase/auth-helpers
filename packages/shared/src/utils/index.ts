@@ -16,5 +16,6 @@ export {
   CookieNotParsed,
   JWTPayloadFailed,
   RefreshTokenNotFound,
+  ProviderTokenNotFound,
   type ErrorPayload
 } from './errors';

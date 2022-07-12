@@ -10,7 +10,7 @@ export type UserFetcher = (url: string) => Promise<{
 export type UserState = {
   user: User | null;
   accessToken: string | null;
-  error?: ErrorPayload | string;
+  error?: ErrorPayload;
   isLoading: boolean;
   checkSession: () => Promise<void>;
 };
