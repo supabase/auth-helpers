@@ -1,26 +1,36 @@
-import { parseCookie } from '$lib/parseCookie';
-import { withApiAuth } from '@supabase/auth-helpers-sveltekit';
-import type { RequestHandler } from '@sveltejs/kit';
+import { getProviderToken } from '@supabase/auth-helpers-sveltekit';
+import { withApiAuth, type User } from '@supabase/auth-helpers-sveltekit';
+import type { RequestHandler } from './__types/github-provider-token';
 
-export const get: RequestHandler = async ({ locals, request }) =>
+interface GitHubOutput {
+	total_count: number;
+	incomplete_results: boolean;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	items: any[];
+}
+
+interface GetOutput {
+	user: User;
+	allRepos: GitHubOutput;
+}
+
+export const get: RequestHandler<GetOutput> = async ({ locals, request }) =>
 	withApiAuth(
 		{
 			redirectTo: '/',
 			user: locals.user
 		},
 		async () => {
-			const cookies = parseCookie(request.headers.get('cookie'));
-			const providerToken = cookies['sb-provider-token'];
+			const providerToken = getProviderToken(request);
 			const userId = locals.user?.user_metadata.user_name;
-			const allRepos = await (await fetch(
-				`https://api.github.com/search/repositories?q=user:${userId}`,
-				{
-				  method: 'GET',
-				  headers: {
-					Authorization: `token ${providerToken}`
-				  }
-				}
-			)).json()
+			const allRepos = await (
+				await fetch(`https://api.github.com/search/repositories?q=user:${userId}`, {
+					method: 'GET',
+					headers: {
+						Authorization: `token ${providerToken}`
+					}
+				})
+			).json();
 
 			return {
 				body: {
