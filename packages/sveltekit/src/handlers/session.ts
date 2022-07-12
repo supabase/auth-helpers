@@ -12,7 +12,7 @@ import {
   AccessTokenNotFound,
   CookieNotFound
 } from '@supabase/auth-helpers-shared';
-import { skHelper } from '../instance';
+import { createSupabaseClient } from '../instance';
 import { getUser, saveTokens } from '../utils/getUser';
 import logger from '../utils/log';
 
@@ -24,7 +24,7 @@ export interface HandleUserOptions {
 export const handleSession = (options: HandleUserOptions = {}) => {
   const session: Handle = async ({ event, resolve }) => {
     const req = event.request;
-    const { supabaseClient } = skHelper();
+    const { supabaseClient } = createSupabaseClient();
 
     try {
       if (!req.headers.has('cookie')) {

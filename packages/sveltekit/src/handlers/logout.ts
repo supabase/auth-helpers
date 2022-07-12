@@ -5,7 +5,7 @@ import {
   type CookieOptions,
   parseCookie
 } from '@supabase/auth-helpers-shared';
-import { skHelper } from '../instance';
+import { createSupabaseClient } from '../instance';
 import { deleteTokens } from '../utils/deleteTokens';
 import logger from '../utils/log';
 
@@ -42,7 +42,7 @@ export const handleLogout = (options: HandleOptions = {}) => {
       return new Response('Method Not Allowed', { headers, status: 405 });
     }
 
-    const { supabaseClient } = skHelper();
+    const { supabaseClient } = createSupabaseClient();
     let returnTo = options?.returnTo ?? '/';
     returnTo = returnTo.startsWith('/') ? returnTo : `/${returnTo}`;
     const cookieOptions = { ...COOKIE_OPTIONS, ...options.cookieOptions };

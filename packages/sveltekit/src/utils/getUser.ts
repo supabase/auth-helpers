@@ -1,6 +1,6 @@
 import { createClient, type ApiError } from '@supabase/supabase-js';
 import type { User } from '@supabase/supabase-js';
-import { skHelper } from '../instance';
+import { createSupabaseClient } from '../instance';
 import {
   setCookies,
   parseCookie,
@@ -50,7 +50,7 @@ export async function getUser(
   try {
     const {
       apiInfo: { supabaseUrl, supabaseAnonKey }
-    } = skHelper();
+    } = createSupabaseClient();
     if (!supabaseUrl || !supabaseAnonKey) {
       throw new Error(
         'supabaseUrl and supabaseAnonKey env variables are required!'

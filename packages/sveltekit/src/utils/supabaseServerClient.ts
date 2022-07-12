@@ -1,5 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import { skHelper } from '../instance';
+import { createSupabaseClient } from '../instance';
 import {
   type CookieOptions,
   COOKIE_OPTIONS,
@@ -48,7 +48,7 @@ function supabaseServerClient(
   requestOrAccessToken: Request | string,
   cookieOptions: CookieOptions = COOKIE_OPTIONS
 ): SupabaseClient {
-  const { supabaseClient } = skHelper();
+  const { supabaseClient } = createSupabaseClient();
   const access_token =
     typeof requestOrAccessToken !== 'string'
       ? parseCookie(requestOrAccessToken?.headers.get('cookie'))?.[

@@ -39,13 +39,13 @@ VITE_SUPABASE_ANON_KEY=your-anon-key
 
 ### SupabaseClient and SupaAuthHelper component setup
 
-We will start off by creating a `db.ts` file inside of our `src/lib` directory. Now lets instantiate our `supabaseClient` by using our `skHelper` function from the `@supabase/auth-helpers-sveltekit` library.
+We will start off by creating a `db.ts` file inside of our `src/lib` directory. Now lets instantiate our `supabaseClient` by using our `createSupabaseClient` function from the `@supabase/auth-helpers-sveltekit` library.
 
 ```ts
 // src/lib/db.ts
-import { skHelper } from '@supabase/auth-helpers-sveltekit';
+import { createSupabaseClient } from '@supabase/auth-helpers-sveltekit';
 
-const { supabaseClient } = skHelper(
+const { supabaseClient } = createSupabaseClient(
  import.meta.env.VITE_SUPABASE_URL as string,
  import.meta.env.VITE_SUPABASE_ANON_KEY as string
 );
