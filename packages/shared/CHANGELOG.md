@@ -1,5 +1,11 @@
 # shared
 
+## 0.1.3
+
+### Patch Changes
+
+- 56228e3: Add new error class for provider token not found
+
 ## 0.1.2
 
 ### Patch Changes

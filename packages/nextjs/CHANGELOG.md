@@ -1,5 +1,13 @@
 # @supabase/auth-helpers-nextjs
 
+## 0.2.4
+
+### Patch Changes
+
+- 56228e3: Add getProviderToken helper method
+- Updated dependencies [56228e3]
+  - @supabase/auth-helpers-shared@0.1.3
+
 ## 0.2.3
 
 ### Patch Changes
