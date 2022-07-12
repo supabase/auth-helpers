@@ -1,5 +1,11 @@
 # @supabase/auth-helpers-sveltekit
 
+## 0.6.7
+
+### Patch Changes
+
+- 0298db1: Rename skHelper method to createSupabaseClient
+
 ## 0.6.6
 
 ### Patch Changes
