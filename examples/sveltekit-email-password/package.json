@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "svelte-kit dev --port 3003",
+    "dev": "svelte-kit dev --port 3002",
     "build:example": "svelte-kit build",
     "package": "svelte-kit package",
     "preview": "svelte-kit preview",
