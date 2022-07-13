@@ -1,9 +1,9 @@
-<script>
+<script lang="ts">
 	import Layout from './_layout.svelte';
 
-	export let errors;
-	export let values;
-	export let message;
+	export let errors: Record<string, string> = null;
+	export let values: Record<string, string> = null;
+	export let message: string = null;
 </script>
 
 <Layout>

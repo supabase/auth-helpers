@@ -1,6 +1,6 @@
-<script>
-	export let errors;
-	export let values;
+<script lang="ts">
+	export let errors: Record<string, string> = null;
+	export let values: Record<string, string> = null;
 </script>
 
 <section class="columns mt-6 pt-6">

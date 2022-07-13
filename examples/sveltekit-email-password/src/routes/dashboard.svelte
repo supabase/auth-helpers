@@ -1,6 +1,9 @@
-<script>
-	export let data;
-	export let user;
+<script lang="ts">
+	import type { TestTable } from '$lib/types';
+	import type { User } from '@supabase/supabase-js';
+
+	export let data: TestTable[];
+	export let user: User;
 </script>
 
 <div class="block">

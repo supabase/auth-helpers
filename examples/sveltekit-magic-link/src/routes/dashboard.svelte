@@ -1,8 +1,10 @@
-<script>
+<script lang="ts">
+	import type { TestTable } from '$lib/types';
+	import type { User } from '@supabase/supabase-js';
 	import Layout from './_layout.svelte';
 
-	export let data;
-	export let user;
+	export let data: TestTable[];
+	export let user: User;
 </script>
 
 <Layout>

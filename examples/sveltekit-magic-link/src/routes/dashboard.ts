@@ -1,6 +1,13 @@
-import { supabaseServerClient, withApiAuth } from '@supabase/auth-helpers-sveltekit';
+import type { RequestHandler } from './__types/dashboard';
+import { supabaseServerClient, withApiAuth, type User } from '@supabase/auth-helpers-sveltekit';
+import type { TestTable } from '$lib/types';
 
-export const get = async ({ locals, request }) =>
+interface GetOutput {
+	user: User;
+	data: TestTable[];
+}
+
+export const get: RequestHandler<GetOutput> = async ({ locals, request }) =>
 	withApiAuth(
 		{
 			redirectTo: '/',

@@ -1,10 +1,6 @@
 import type { RequestHandler } from './__types/dashboard';
 import { supabaseServerClient, withApiAuth, type User } from '@supabase/auth-helpers-sveltekit';
-
-interface TestTable {
-	id: string;
-	created_at: string;
-}
+import type { TestTable } from '$lib/types';
 
 interface GetOutput {
 	user: User;
