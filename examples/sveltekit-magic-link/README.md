@@ -15,7 +15,7 @@ pnpm install
 3. Copy the `.env.example` file in this project and create a new `.env` file from it
 4. Replace `VITE_SUPABASE_URL` with the `URL` from step 2 and `VITE_SUPABASE_ANON_KEY` with `anon` key from step 2
 5. Copy the `SQL` below and paste it inside of the [SQL Editor](https://app.supabase.com/project/_/sql) section
-6. Run the following command from the repository root `pnpm dev --filter=@examples/sveltekit-email-password -- --open`
+6. Run the following command from the repository root `pnpm dev --filter=@example/sveltekit-magic-link -- --open`
 
 
 ### SQL
