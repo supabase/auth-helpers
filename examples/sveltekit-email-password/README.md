@@ -15,10 +15,6 @@ pnpm install
 3. Copy the `.env.example` file in this project and create a new `.env` file from it
 4. Replace `VITE_SUPABASE_URL` with the `URL` from step 2 and `VITE_SUPABASE_ANON_KEY` with `anon` key from step 2
 5. Copy the `SQL` below and paste it inside of the [SQL Editor](https://app.supabase.com/project/_/sql) section
-6. Run the following command from the repository root `pnpm dev --filter=@example/sveltekit-email-password -- --open`
-
-
-### SQL
 ```sql
 DROP TABLE IF EXISTS "public"."test";
 
@@ -28,4 +24,12 @@ CREATE TABLE "public"."test" (
     "created_at" timestamptz DEFAULT now(),
     PRIMARY KEY ("id")
 );
+```
+6. Build all the packages that this example relies on using the following command 
+```bash
+pnpm build:svelteandkit
+```
+7. Run the following command from the repository root 
+```bash
+pnpm dev --filter=@example/sveltekit-email-password -- --open
 ```
