@@ -222,7 +222,7 @@ For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row
 ```ts
 // src/routes/profile.ts
 import { supabaseServerClient, withApiAuth } from '@supabase/auth-helpers-sveltekit';
-import type { RequestHandler } from './__types/profile';
+import type { RequestHandler } from './__types/protected-route';
 
 interface TestTable {
 	id: string;
@@ -230,29 +230,18 @@ interface TestTable {
 }
 
 interface GetOutput {
-	user: User;
-  data: TestTable[];
+	data: TestTable[];
 }
 
-export const get: RequestHandler<GetOutput> = async ({ locals }) =>
-	withApiAuth(
-		{
-			redirectTo: '/',
-			user: locals.user
-		},
-		async () => {
-      const { data } = await supabaseServerClient(session.accessToken)
-        .from<TestTable>('test')
-        .select('*');
+export const get: RequestHandler<GetOutput> = async ({ locals, request }) =>
+	withApiAuth({ user: locals.user }, async () => {
+		const { data } = await supabaseServerClient(request).from<TestTable>('test').select('*');
 
-			return {
-				body: {
-					user: locals.user,
-          data
-				}
-			};
-		}
-	);
+		return {
+			status: 200,
+			body: { data }
+		};
+	});
 ```
 
 ## Protecting API routes
