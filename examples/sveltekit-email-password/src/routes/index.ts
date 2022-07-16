@@ -39,7 +39,7 @@ export async function post({ request }: { request: Request }) {
 	}
 
 	if (session) {
-		const response = await fetch('http://localhost:3003/api/auth/callback', {
+		const response = await fetch('http://localhost:3002/api/auth/callback', {
 			method: 'POST',
 			headers: new Headers({ 'Content-Type': 'application/json' }),
 			credentials: 'same-origin',

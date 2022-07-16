@@ -24,7 +24,7 @@ export async function post({ request }: { request: Request }) {
 
 	const { error } = await supabaseClient.auth.signIn(
 		{ email },
-		{ redirectTo: 'http://localhost:3004/logging-in' }
+		{ redirectTo: 'http://localhost:3003/logging-in' }
 	);
 
 	if (error) {
