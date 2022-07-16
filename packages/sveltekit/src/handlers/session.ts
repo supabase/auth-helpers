@@ -89,11 +89,8 @@ export const handleSession = (options: HandleUserOptions = {}) => {
       if (e instanceof JWTPayloadFailed) {
         logger.info('JWTPayloadFailed error has happened!');
         event.locals.error = e.toObj();
-      } else if (e instanceof CookieNotFound) {
-        logger.warn(e.toString());
       } else if (e instanceof AuthHelperError) {
-        logger.info('AuthHelperError error has happened!');
-        logger.error(e.toString());
+        // do nothing, these are all just to disrupt the control flow
       } else {
         const error = e as ApiError;
         logger.error(error.message);
