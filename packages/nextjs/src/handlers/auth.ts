@@ -1,6 +1,6 @@
 import { CookieOptions, COOKIE_OPTIONS, TOKEN_REFRESH_MARGIN } from '@supabase/auth-helpers-shared';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import handelCallback from './callback';
+import handleCallback from './callback';
 import handleUser from './user';
 import handleLogout from './logout';
 
@@ -24,7 +24,7 @@ export default function handleAuth(options: HandleAuthOptions = {}) {
 
     switch (route) {
       case 'callback':
-        return handelCallback(req, res, { cookieOptions });
+        return handleCallback(req, res, { cookieOptions });
       case 'user':
         return await handleUser(req, res, {
           cookieOptions,
