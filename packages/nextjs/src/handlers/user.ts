@@ -83,11 +83,8 @@ export default async function handleUser(
     if (e instanceof JWTPayloadFailed) {
       logger.info('JWTPayloadFailed error has happened!');
       response.error = e.toObj();
-    } else if (e instanceof CookieNotFound) {
-      logger.warn(e.toString());
     } else if (e instanceof AuthHelperError) {
-      logger.info('AuthHelperError error has happened!');
-      logger.error(e.toString());
+      // do nothing because since this just means the user isn't logged in
     } else {
       const error = e as ApiError;
       logger.error(error.message);
