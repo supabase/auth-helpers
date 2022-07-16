@@ -1,6 +1,6 @@
 import { supabaseClient } from '$lib/db';
 
-export async function get({ locals }: { locals: App.Locals }) {
+export async function GET({ locals }: { locals: App.Locals }) {
 	if (locals.user) {
 		return {
 			status: 303,
@@ -14,7 +14,7 @@ export async function get({ locals }: { locals: App.Locals }) {
 	};
 }
 
-export async function post({ request }: { request: Request }) {
+export async function POST({ request }: { request: Request }) {
 	const data = await request.formData();
 
 	const email = data.get('email') as string;

@@ -7,7 +7,7 @@ interface GetOutput {
 	data: TestTable[];
 }
 
-export const get: RequestHandler<GetOutput> = async ({ locals, request }) =>
+export const GET: RequestHandler<GetOutput> = async ({ locals, request }) =>
 	withApiAuth(
 		{
 			redirectTo: '/',

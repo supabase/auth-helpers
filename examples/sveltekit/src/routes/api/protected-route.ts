@@ -10,7 +10,7 @@ interface GetOutput {
 	data: TestTable[];
 }
 
-export const get: RequestHandler<GetOutput> = async ({ locals, request }) =>
+export const GET: RequestHandler<GetOutput> = async ({ locals, request }) =>
 	withApiAuth({ user: locals.user }, async () => {
 		const { data } = await supabaseServerClient(request).from<TestTable>('test').select('*');
 

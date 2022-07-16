@@ -5,7 +5,7 @@ interface GetOutput {
 	user: User;
 }
 
-export const get: RequestHandler<GetOutput> = async ({ locals }) =>
+export const GET: RequestHandler<GetOutput> = async ({ locals }) =>
 	withApiAuth(
 		{
 			redirectTo: '/',

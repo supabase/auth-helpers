@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "svelte-kit dev --port 3001",
-    "build:example": "svelte-kit build",
+    "dev": "vite dev --port 3001",
+    "build:example": "vite build",
     "package": "svelte-kit package",
-    "preview": "svelte-kit preview",
+    "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
     "lint": "prettier --ignore-path .gitignore --check --plugin-search-dir=. . && eslint --ignore-path .gitignore .",
@@ -15,7 +15,7 @@
   },
   "devDependencies": {
     "@sveltejs/adapter-auto": "next",
-    "@sveltejs/kit": "1.0.0-next.350",
+    "@sveltejs/kit": "1.0.0-next.377",
     "@typescript-eslint/eslint-plugin": "^5.10.1",
     "@typescript-eslint/parser": "^5.10.1",
     "eslint": "^7.32.0",
@@ -30,7 +30,8 @@
     "svelte-preprocess": "^4.10.1",
     "tsconfig": "workspace:*",
     "tslib": "^2.3.1",
-    "typescript": "~4.5.4"
+    "typescript": "~4.5.4",
+    "vite": "^3.0.0"
   },
   "type": "module",
   "dependencies": {
