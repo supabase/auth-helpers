@@ -1,5 +1,11 @@
 # @supabase/auth-helpers-sveltekit
 
+## 0.6.8
+
+### Patch Changes
+
+- 8e0b747: Change error handling to not show flow disruption errors
+
 ## 0.6.7
 
 ### Patch Changes
