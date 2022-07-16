@@ -234,7 +234,7 @@ interface GetOutput {
   data: TestTable[];
 }
 
-export const get: RequestHandler<GetOutput> = async ({ locals }) =>
+export const GET: RequestHandler<GetOutput> = async ({ locals }) =>
   withApiAuth(
     {
       redirectTo: "/",
@@ -274,7 +274,7 @@ interface GetOutput {
   data: TestTable[];
 }
 
-export const get: RequestHandler<GetOutput> = async ({ locals, request }) =>
+export const GET: RequestHandler<GetOutput> = async ({ locals, request }) =>
   withApiAuth({ user: locals.user }, async () => {
     // Run queries with RLS on the server
     const { data } = await supabaseServerClient(request).from("test").select("*");
