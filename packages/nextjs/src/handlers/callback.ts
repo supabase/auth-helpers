@@ -14,7 +14,7 @@ export interface HandleCallbackOptions {
 
 type AuthCookies = Parameters<typeof setCookies>[2];
 
-export default async function handelCallback(
+export default async function handleCallback(
   req: NextApiRequest,
   res: NextApiResponse,
   options: HandleCallbackOptions = {}
