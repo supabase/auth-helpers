@@ -15,7 +15,7 @@ export const GET: RequestHandler = async ({ locals }) => {
 	};
 };
 
-export const POST: RequestHandler = async ({ request }) => {
+export const POST: RequestHandler = async ({ request, url }) => {
 	const data = await request.formData();
 
 	const email = data.get('email') as string;
@@ -39,7 +39,7 @@ export const POST: RequestHandler = async ({ request }) => {
 	}
 
 	if (session) {
-		const response = await fetch('http://localhost:3002/api/auth/callback', {
+		const response = await fetch(`${url.origin}/api/auth/callback`, {
 			method: 'POST',
 			headers: new Headers({ 'Content-Type': 'application/json' }),
 			credentials: 'same-origin',
