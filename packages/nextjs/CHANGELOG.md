@@ -1,5 +1,25 @@
 # @supabase/auth-helpers-nextjs
 
+## 0.2.5
+
+### Patch Changes
+
+- 8e0b747: Change error handling to not show flow disruption errors
+
+## 0.2.4
+
+### Patch Changes
+
+- 56228e3: Add getProviderToken helper method
+- Updated dependencies [56228e3]
+  - @supabase/auth-helpers-shared@0.1.3
+
+## 0.2.3
+
+### Patch Changes
+
+- 69fefcb: Change logger to be a wrapper for console
+
 ## 0.2.2
 
 ### Patch Changes

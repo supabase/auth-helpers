@@ -1,7 +1,11 @@
-import { withApiAuth } from '@supabase/auth-helpers-sveltekit';
-import type { RequestHandler } from '@sveltejs/kit';
+import { withApiAuth, type User } from '@supabase/auth-helpers-sveltekit';
+import type { RequestHandler } from './__types/profile';
 
-export const get: RequestHandler = async ({ locals }) =>
+interface GetOutput {
+	user: User;
+}
+
+export const GET: RequestHandler<GetOutput> = async ({ locals }) =>
 	withApiAuth(
 		{
 			redirectTo: '/',

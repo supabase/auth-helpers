@@ -10,7 +10,7 @@ import {
   TOKEN_REFRESH_MARGIN
 } from '@supabase/auth-helpers-shared';
 import getUser from './getUser';
-import log from 'loglevel';
+import logger from './log';
 
 /**
  * ## Protecting Pages with Server Side Rendering (SSR)
@@ -146,9 +146,9 @@ export default function withPageAuth({
 
       let props = { user: null, accessToken: null, error: '' };
       if (e instanceof AuthHelperError) {
-        log.debug(e.toObj());
+        logger.debug(e.toObj());
       } else {
-        log.debug(String(e));
+        logger.debug(String(e));
         props.error = String(e);
       }
 

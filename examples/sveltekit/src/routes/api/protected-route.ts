@@ -1,12 +1,21 @@
 import { supabaseServerClient, withApiAuth } from '@supabase/auth-helpers-sveltekit';
-import type { RequestHandler } from '@sveltejs/kit';
+import type { RequestHandler } from './__types/protected-route';
 
-export const get: RequestHandler = ({ locals, request }) =>
+interface TestTable {
+	id: string;
+	created_at: string;
+}
+
+interface GetOutput {
+	data: TestTable[];
+}
+
+export const GET: RequestHandler<GetOutput> = async ({ locals, request }) =>
 	withApiAuth({ user: locals.user }, async () => {
-		const { data } = await supabaseServerClient(request).from('test').select('*');
+		const { data } = await supabaseServerClient(request).from<TestTable>('test').select('*');
 
 		return {
 			status: 200,
-			body: data
+			body: { data }
 		};
 	});

@@ -1,5 +1,32 @@
 # @supabase/auth-helpers-sveltekit
 
+## 0.6.8
+
+### Patch Changes
+
+- 8e0b747: Change error handling to not show flow disruption errors
+
+## 0.6.7
+
+### Patch Changes
+
+- 0298db1: Rename skHelper method to createSupabaseClient
+
+## 0.6.6
+
+### Patch Changes
+
+- 56228e3: Remove the need for user to create /api/auth/user and /api/auth/callback endpoints
+- 56228e3: Add getProviderToken helper method
+- Updated dependencies [56228e3]
+  - @supabase/auth-helpers-shared@0.1.3
+
+## 0.6.5
+
+### Patch Changes
+
+- 69fefcb: Change logger to be a wrapper for console
+
 ## 0.6.4
 
 ### Patch Changes

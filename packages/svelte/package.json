@@ -1,6 +1,6 @@
 {
     "name": "@supabase/auth-helpers-svelte",
-    "version": "0.4.4",
+    "version": "0.4.5",
     "type": "module",
     "svelte": "./dist/index.js",
     "module": "./dist/index.js",
@@ -39,7 +39,7 @@
     },
     "homepage": "https://github.com/supabase-community/auth-helpers/tree/main/packages/svelte#readme",
     "devDependencies": {
-        "@sveltejs/kit": "next",
+        "@sveltejs/kit": "1.0.0-next.355",
         "del-cli": "^4.0.1",
         "svelte": "^3.48.0",
         "svelte-preprocess": "^4.10.1",

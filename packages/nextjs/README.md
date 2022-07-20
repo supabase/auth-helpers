@@ -306,3 +306,4 @@ This is a step by step guide on migrating away from the `@supabase/supabase-auth
 3. Replace all imports of `@supabase/supabase-auth-helpers/react` in your project with `@supabase/auth-helpers-react`.
 4. Replace all instances of `withAuthRequired` in any of your NextJS pages with `withPageAuth`.
 5. Replace all instances of `withAuthRequired` in any of your NextJS API endpoints with `withApiAuth`.
+6. Uninstall `@supabase/supabase-auth-helpers`.

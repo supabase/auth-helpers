@@ -70,7 +70,7 @@ export const UserProvider = (props: Props) => {
   const [user, setUser] = useState<User | null>(initialUser);
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(!initialUser);
-  const [error, setError] = useState<ErrorPayload | string>();
+  const [error, setError] = useState<ErrorPayload>();
 
   const checkSession = useCallback(async (): Promise<void> => {
     try {
@@ -85,7 +85,7 @@ export const UserProvider = (props: Props) => {
           );
           return;
         }
-        setError(new Error(error).message);
+        setError(new Error(error));
       }
       networkRetries = 0;
       if (accessToken) {
@@ -141,7 +141,7 @@ export const UserProvider = (props: Props) => {
         }).then((res) => {
           if (!res.ok) {
             const error = new CallbackUrlFailed(callbackUrl);
-            setError(error.message);
+            setError(error);
           }
         });
         // Fetch the user from the API route

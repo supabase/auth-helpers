@@ -1,9 +1,8 @@
-<script context="module">
+<script lang="ts" context="module">
 	import { supabaseServerClient, withPageAuth } from '@supabase/auth-helpers-sveltekit';
-	/**
-	 * @type {import('@sveltejs/kit').Load}
-	 */
-	export const load = async ({ session }) =>
+	import type { Load } from './__types/protected-page';
+
+	export const load: Load = async ({ session }) =>
 		withPageAuth(
 			{
 				redirectTo: '/',
