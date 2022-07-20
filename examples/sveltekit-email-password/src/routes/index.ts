@@ -1,7 +1,7 @@
 import type { RequestHandler } from './__types/index';
 import { supabaseClient } from '$lib/db';
 
-export async function GET({ locals }: { locals: App.Locals }) {
+export const GET: RequestHandler = async ({ locals }) => {
 	if (locals.user) {
 		return {
 			status: 303,
@@ -13,9 +13,9 @@ export async function GET({ locals }: { locals: App.Locals }) {
 	return {
 		status: 200
 	};
-}
+};
 
-export async function POST({ request }: { request: Request }) {
+export const POST: RequestHandler = async ({ request }) => {
 	const data = await request.formData();
 
 	const email = data.get('email') as string;
@@ -62,4 +62,4 @@ export async function POST({ request }: { request: Request }) {
 		status: 303,
 		headers
 	};
-}
+};
