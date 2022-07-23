@@ -1,7 +1,7 @@
 import type { RequestHandler } from './__types/index';
 import { supabaseClient } from '$lib/db';
 
-export async function GET({ locals }: { locals: App.Locals }) {
+export const GET: RequestHandler = async ({ locals }) => {
 	if (locals.user) {
 		return {
 			status: 303,
@@ -13,9 +13,9 @@ export async function GET({ locals }: { locals: App.Locals }) {
 	return {
 		status: 200
 	};
-}
+};
 
-export async function POST({ request }: { request: Request }) {
+export const POST: RequestHandler = async ({ request, url }) => {
 	const data = await request.formData();
 
 	const email = data.get('email') as string;
@@ -39,7 +39,7 @@ export async function POST({ request }: { request: Request }) {
 	}
 
 	if (session) {
-		const response = await fetch('http://localhost:3002/api/auth/callback', {
+		const response = await fetch(`${url.origin}/api/auth/callback`, {
 			method: 'POST',
 			headers: new Headers({ 'Content-Type': 'application/json' }),
 			credentials: 'same-origin',
@@ -62,4 +62,4 @@ export async function POST({ request }: { request: Request }) {
 		status: 303,
 		headers
 	};
-}
+};
