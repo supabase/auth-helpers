@@ -1,7 +1,6 @@
 import { GetServerSidePropsContext, NextApiRequest } from 'next';
 import { supabaseClient, SupabaseClient } from './initSupabase';
 import { CookieOptions } from '@supabase/auth-helpers-shared';
-import { NextRequest } from 'next/server';
 
 /**
  * This is a helper method to wrap your SupabaseClient to inject a user's access_token to make use of RLS on the server side.
