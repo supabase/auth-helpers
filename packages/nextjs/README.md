@@ -286,7 +286,7 @@ It is also possible to add finer granularity based on the user logged in. I.e. y
 
 ```ts
 // pages/protected/_middleware.ts
-import { withMiddlewareAuth } from '@supabase/auth-helpers-nextjs/middleware';
+import { withMiddlewareAuth } from '@supabase/auth-helpers-nextjs/dist/middleware';
 
 export const middleware = withMiddlewareAuth({ 
   redirectTo: '/login',
