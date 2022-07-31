@@ -241,7 +241,7 @@ export const GET: RequestHandler<GetOutput> = async ({ locals }) =>
       user: locals.user
     },
     async () => {
-      const { data } = await supabaseServerClient(session.accessToken)
+      const { data } = await supabaseServerClient(locals.user.accessToken)
       	.from<TestTable>("test")
 	.select("*");
 
