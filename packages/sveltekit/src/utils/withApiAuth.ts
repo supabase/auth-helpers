@@ -5,7 +5,7 @@ import { isFunction } from './guards';
 interface ApiAuthOpts {
   redirectTo?: string;
   status?: number;
-  user: User;
+  user: User | null;
 }
 
 export default async function withApiAuth<T>(
