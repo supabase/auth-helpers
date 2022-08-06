@@ -5,7 +5,7 @@ import { isFunction } from './guards';
 interface PageAuthOpts {
   redirectTo?: string;
   status?: number;
-  user: User;
+  user: User | null;
 }
 
 /**
