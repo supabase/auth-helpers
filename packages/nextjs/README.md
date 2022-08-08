@@ -31,7 +31,7 @@ This library supports the following tooling versions:
 
 ### Configuration
 
-Set up the fillowing env vars. For local development you can set them in a `.env.local` file. See an example [here](../../examples/nextjs/.env.local.example)).
+Set up the following env vars. For local development you can set them in a `.env.local` file. See an example [here](../../examples/nextjs/.env.local.example)).
 
 ```bash
 # Find these in your Supabase project settings > API
