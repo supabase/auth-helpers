@@ -10,7 +10,7 @@ A collection of framework specific Auth utilities for working with Supabase.
 
 ### Coming soon
 
-- [Remix](https://github.com/supabase-community/supabase-auth-helpers/issues/57)
+- [Remix](https://github.com/supabase/auth-helpers/issues/57)
 
 ### Examples and Packages
 

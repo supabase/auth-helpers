@@ -26,7 +26,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/supabase-community/auth-helpers.git"
+    "url": "git+https://github.com/supabase/auth-helpers.git"
   },
   "keywords": [
     "Supabase",
@@ -34,12 +34,12 @@
     "Svelte Kit",
     "Svelte"
   ],
-  "author": "Supabase Community",
+  "author": "Supabase",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/supabase-community/auth-helpers/issues"
+    "url": "https://github.com/supabase/auth-helpers/issues"
   },
-  "homepage": "https://github.com/supabase-community/auth-helpers/tree/main/packages/sveltekit#readme",
+  "homepage": "https://github.com/supabase/auth-helpers/tree/main/packages/sveltekit#readme",
   "devDependencies": {
     "@sveltejs/kit": "1.0.0-next.355",
     "del-cli": "^4.0.1",

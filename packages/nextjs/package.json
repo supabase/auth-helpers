@@ -14,19 +14,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/supabase-community/auth-helpers.git"
+    "url": "git+https://github.com/supabase/auth-helpers.git"
   },
   "keywords": [
     "Supabase",
     "Auth",
     "Nextjs"
   ],
-  "author": "Supabase Community",
+  "author": "Supabase",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/supabase-community/auth-helpers/issues"
+    "url": "https://github.com/supabase/auth-helpers/issues"
   },
-  "homepage": "https://github.com/supabase-community/auth-helpers/tree/main/packages/nextjs#readme",
+  "homepage": "https://github.com/supabase/auth-helpers/tree/main/packages/nextjs#readme",
   "devDependencies": {
     "@supabase/supabase-js": "^1.35.3",
     "config": "workspace:*",
