@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { session } from '$app/stores';
 	import { supabaseClient } from '$lib/db';
 	import { SupaAuthHelper } from '@supabase/auth-helpers-svelte';

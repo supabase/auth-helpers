@@ -1,7 +1,7 @@
 <script lang="ts">
-	export let errors: Record<string, string> = null;
-	export let values: Record<string, string> = null;
-	export let message: string = null;
+	export let errors: Record<string, string> = {};
+	export let values: Record<string, string> = {};
+	export let message: string = '';
 </script>
 
 <section class="columns mt-6 pt-6">
