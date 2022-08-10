@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import { PKG_NAME, PKG_VERSION } from '../constants';
 
 const getClientWithEnvCheck = (
   supabaseUrl: string | undefined,
@@ -11,7 +12,10 @@ const getClientWithEnvCheck = (
   }
   return createClient(supabaseUrl, supabaseAnonKey, {
     autoRefreshToken: false,
-    persistSession: false
+    persistSession: false,
+    headers: {
+      'X-Client-Info': `${PKG_NAME}@${PKG_VERSION}`
+    }
   });
 };
 

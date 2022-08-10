@@ -8,9 +8,10 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsup",
+    "build": "pnpm run make:constants && tsup",
     "clean": "rimraf dist",
-    "clean:all": "rimraf dist node_modules"
+    "clean:all": "rimraf dist node_modules",
+    "make:constants": "node ./scripts/make_constants.cjs > src/constants.ts"
   },
   "repository": {
     "type": "git",
