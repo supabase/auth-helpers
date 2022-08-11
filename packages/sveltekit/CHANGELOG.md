@@ -1,5 +1,11 @@
 # @supabase/auth-helpers-sveltekit
 
+## 0.6.10
+
+### Patch Changes
+
+- 0ab05cf: Update format of x-client-info header
+
 ## 0.6.9
 
 ### Patch Changes

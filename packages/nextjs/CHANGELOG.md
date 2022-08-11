@@ -1,5 +1,11 @@
 # @supabase/auth-helpers-nextjs
 
+## 0.2.7
+
+### Patch Changes
+
+- 0ab05cf: Update format of x-client-info header
+
 ## 0.2.6
 
 ### Patch Changes
