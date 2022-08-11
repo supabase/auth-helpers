@@ -18,7 +18,10 @@ const getClientWithEnvCheck = () => {
       autoRefreshToken: false,
       persistSession: false,
       headers: {
-        'X-Client-Info': `${PKG_NAME}@${PKG_VERSION}`
+        'X-Client-Info': `${PKG_NAME.replace('@', '').replace(
+          '/',
+          '-'
+        )}/${PKG_VERSION}`
       }
     }
   );
