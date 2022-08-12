@@ -1,4 +1,4 @@
-# @supabase/auth-helpers
+# @supabase/auth-helpers (BETA)
 
 A collection of framework specific Auth utilities for working with Supabase.
 
