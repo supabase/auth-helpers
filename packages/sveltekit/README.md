@@ -1,4 +1,4 @@
-# @supabase/auth-helpers-sveltekit
+# @supabase/auth-helpers-sveltekit (BETA)
 
 This submodule provides convenience helpers for implementing user authentication in [SvelteKit](https://kit.svelte.dev/) applications.
 
