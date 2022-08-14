@@ -3,6 +3,7 @@ export type { User } from '@supabase/supabase-js';
 
 // Methods
 export * from './handlers';
+export * from './middleware';
 export { default as getUser } from './utils/getUser';
 export { getProviderToken } from './utils/getProviderToken';
 export { default as withPageAuth } from './utils/withPageAuth';
