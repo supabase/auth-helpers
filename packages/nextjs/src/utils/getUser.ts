@@ -21,6 +21,7 @@ import {
   ErrorPayload
 } from '@supabase/auth-helpers-shared';
 import logger from '../utils/log';
+import { PKG_NAME, PKG_VERSION } from '../constants';
 
 interface ResponsePayload {
   user: User | null;
@@ -54,7 +55,12 @@ export default async function getUser(
     }
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+      {
+        headers: {
+          'X-Client-Info': `${PKG_NAME}@${PKG_VERSION}`
+        }
+      }
     );
     const cookieOptions = { ...COOKIE_OPTIONS, ...options.cookieOptions };
     const tokenRefreshMargin =

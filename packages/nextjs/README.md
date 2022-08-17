@@ -1,4 +1,4 @@
-# @supabase/auth-helpers-nextjs
+# @supabase/auth-helpers-nextjs (BETA)
 
 This submodule provides convenience helpers for implementing user authentication in Next.js applications.
 
@@ -31,7 +31,7 @@ This library supports the following tooling versions:
 
 ### Configuration
 
-Set up the fillowing env vars. For local development you can set them in a `.env.local` file. See an example [here](../../examples/nextjs/.env.local.example)).
+Set up the following env vars. For local development you can set them in a `.env.local` file. See an example [here](../../examples/nextjs/.env.local.example)).
 
 ```bash
 # Find these in your Supabase project settings > API
@@ -286,7 +286,7 @@ It is also possible to add finer granularity based on the user logged in. I.e. y
 
 ```ts
 // pages/protected/_middleware.ts
-import { withMiddlewareAuth } from '@supabase/auth-helpers-nextjs/middleware';
+import { withMiddlewareAuth } from '@supabase/auth-helpers-nextjs/dist/middleware';
 
 export const middleware = withMiddlewareAuth({ 
   redirectTo: '/login',

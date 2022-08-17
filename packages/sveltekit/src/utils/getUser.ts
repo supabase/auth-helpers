@@ -21,6 +21,7 @@ import {
 } from '@supabase/auth-helpers-shared';
 import type { RequestResponse } from '../types';
 import logger from './log';
+import { PKG_NAME, PKG_VERSION } from '../constants';
 
 export interface GetUserOptions {
   cookieOptions?: CookieOptions;
@@ -70,7 +71,11 @@ export async function getUser(
       throw new CookieNotParsed();
     }
 
-    const supabase = createClient(supabaseUrl, supabaseAnonKey);
+    const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+      headers: {
+        'X-Client-Info': `${PKG_NAME}@${PKG_VERSION}`
+      }
+    });
     const access_token = cookies[`${cookieOptions.name}-access-token`];
     const refresh_token = cookies[`${cookieOptions.name}-refresh-token`];
 

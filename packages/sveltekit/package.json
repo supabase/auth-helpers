@@ -1,6 +1,6 @@
 {
   "name": "@supabase/auth-helpers-sveltekit",
-  "version": "0.6.8",
+  "version": "0.6.10",
   "description": "A collection of framework specific Auth utilities for working with Supabase.",
   "type": "module",
   "main": "./dist/index.js",
@@ -20,13 +20,14 @@
     "build": "pnpm package",
     "build:watch": "pnpm package:watch",
     "prepare": "svelte-kit sync",
-    "package": "svelte-kit package && del-cli dist/package.json && pnpm fix:esm",
+    "package": "pnpm run make:constants && svelte-kit package && del-cli dist/package.json && pnpm fix:esm",
     "package:watch": "svelte-kit package -w && del-cli dist/package.json && pnpm fix:esm",
-    "fix:esm": "fix-esm-import-path dist/index.js"
+    "fix:esm": "fix-esm-import-path dist/index.js",
+    "make:constants": "node ./scripts/make_constants.cjs > src/constants.ts"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/supabase-community/auth-helpers.git"
+    "url": "git+https://github.com/supabase/auth-helpers.git"
   },
   "keywords": [
     "Supabase",
@@ -34,12 +35,12 @@
     "Svelte Kit",
     "Svelte"
   ],
-  "author": "Supabase Community",
+  "author": "Supabase",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/supabase-community/auth-helpers/issues"
+    "url": "https://github.com/supabase/auth-helpers/issues"
   },
-  "homepage": "https://github.com/supabase-community/auth-helpers/tree/main/packages/sveltekit#readme",
+  "homepage": "https://github.com/supabase/auth-helpers/tree/main/packages/sveltekit#readme",
   "devDependencies": {
     "@sveltejs/kit": "1.0.0-next.355",
     "del-cli": "^4.0.1",

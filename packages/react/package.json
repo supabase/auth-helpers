@@ -13,14 +13,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/supabase-community/auth-helpers.git"
+    "url": "git+https://github.com/supabase/auth-helpers.git"
   },
   "keywords": [
     "Supabase",
     "Auth",
     "React"
   ],
-  "author": "Supabase Community",
+  "author": "Supabase",
   "license": "MIT",
   "devDependencies": {
     "@supabase/supabase-js": "^1.35.3",
