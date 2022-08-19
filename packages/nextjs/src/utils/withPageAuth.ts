@@ -138,7 +138,7 @@ export default function withPageAuth({
       if (authRequired) {
         return {
           redirect: {
-            destination: redirectTo,
+            destination: redirectTo + '?nextUrl=' + context.req.url,
             permanent: false
           }
         };
