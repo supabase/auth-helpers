@@ -1,17 +1,27 @@
-import '../styles/globals.css';
+import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs';
+import { SessionContextProvider } from '@supabase/auth-helpers-react';
 import type { AppProps } from 'next/app';
-import { UserProvider } from '@supabase/auth-helpers-react';
-import { supabaseClient } from '@supabase/auth-helpers-nextjs';
-import Link from 'next/link';
+import { useState } from 'react';
+import '../styles/globals.css';
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const [supabaseClient] = useState(() => createBrowserSupabaseClient());
+
   return (
-    <UserProvider supabaseClient={supabaseClient}>
-      <Link href="/api/auth/logout">
-        <a>Logout</a>
-      </Link>
+    <SessionContextProvider
+      supabaseClient={supabaseClient}
+      initialSession={pageProps.initialSession}
+    >
+      <button
+        onClick={() => {
+          supabaseClient.auth.signOut();
+        }}
+      >
+        Logout
+      </button>
+
       <Component {...pageProps} />
-    </UserProvider>
+    </SessionContextProvider>
   );
 }
 

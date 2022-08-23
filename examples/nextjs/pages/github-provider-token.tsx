@@ -1,10 +1,5 @@
 // pages/protected-page.js
-import {
-  User,
-  withPageAuth,
-  getUser,
-  getProviderToken
-} from '@supabase/auth-helpers-nextjs';
+import { User, withPageAuth } from '@supabase/auth-helpers-nextjs';
 import Link from 'next/link';
 
 export default function ProtectedPage({
@@ -31,12 +26,22 @@ export default function ProtectedPage({
 
 export const getServerSideProps = withPageAuth({
   redirectTo: '/',
-  async getServerSideProps(ctx) {
-    // Retrieve provider_token from cookies
-    const provider_token = getProviderToken(ctx);
-    // Get logged in user's third-party id from metadata
-    const { user } = await getUser(ctx);
-    const userId = user?.user_metadata.user_name;
+  async getServerSideProps(ctx, supabase) {
+    const {
+      data: { session },
+      error
+    } = await supabase.auth.getSession();
+    if (error) {
+      throw error;
+    }
+    if (!session) {
+      return { props: {} };
+    }
+
+    // Retrieve provider_token & logged in user's third-party id from metadata
+    const { provider_token, user } = session;
+    const userId = user.user_metadata.user_name;
+
     const allRepos = await (
       await fetch(
         `https://api.github.com/search/repositories?q=user:${userId}`,
@@ -48,6 +53,7 @@ export const getServerSideProps = withPageAuth({
         }
       )
     ).json();
+
     return { props: { allRepos, user } };
   }
 });
