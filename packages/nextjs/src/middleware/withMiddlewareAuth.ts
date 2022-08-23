@@ -47,8 +47,6 @@ export const withMiddlewareAuth: withMiddlewareAuth =
         );
       }
 
-      console.log('here');
-
       const res = NextResponse.next();
 
       const supabase = createServerSupabaseClient({
@@ -70,8 +68,6 @@ export const withMiddlewareAuth: withMiddlewareAuth =
         data: { session },
         error
       } = await supabase.auth.getSession();
-
-      console.log('middleware session:', session);
 
       if (error) {
         throw new Error(

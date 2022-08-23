@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 
 const LoginPage: NextPage = () => {
   const { isLoading, session, error, supabaseClient } = useSessionContext();
-  console.log('session:', session);
+
   const [data, setData] = useState(null);
 
   useEffect(() => {

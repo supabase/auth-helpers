@@ -127,7 +127,13 @@ export default function withPageAuth({
         }
       }
 
-      return ret;
+      return {
+        ...ret,
+        props: {
+          initialSession: session,
+          ...ret.props
+        }
+      };
     } catch (e) {
       if (authRequired) {
         return {
