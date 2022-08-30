@@ -1,5 +1,5 @@
 import { useSessionContext } from '@supabase/auth-helpers-react';
-import { Auth } from '@supabase/ui';
+import { Auth, ThemeSupa } from '@supabase/auth-ui-react';
 import type { NextPage } from 'next';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -34,12 +34,13 @@ const LoginPage: NextPage = () => {
           GitHub with scopes
         </button>
         <Auth
+          redirectTo="http://localhost:3000/"
+          appearance={{ theme: ThemeSupa }}
           // view="update_password"
           supabaseClient={supabaseClient}
           providers={['google', 'github']}
           // scopes={{github: 'repo'}} // TODO: enable scopes in Auth component.
           socialLayout="horizontal"
-          socialButtonSize="xlarge"
         />
       </>
     );

@@ -29,6 +29,6 @@ export const getServerSideProps = withPageAuth({
     // Run queries with RLS on the server
     const { data } = await supabase.from('test').select('*');
 
-    return { props: { data } };
+    return { props: { data: data ?? [] } };
   }
 });

@@ -1,9 +1,4 @@
-import {
-  AuthError,
-  createClient,
-  Session,
-  SupabaseClient
-} from '@supabase/supabase-js';
+import { AuthError, Session, SupabaseClient } from '@supabase/supabase-js';
 import React, {
   createContext,
   PropsWithChildren,

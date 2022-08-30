@@ -21,7 +21,7 @@ importers:
       '@babel/core': '>=7.0.0 <8.0.0'
       '@supabase/auth-helpers-nextjs': workspace:*
       '@supabase/auth-helpers-react': workspace:*
-      '@supabase/ui': ^0.36.5
+      '@supabase/auth-ui-react': ^0.1.8
       '@types/node': ^17.0.12
       '@types/react': 17.0.37
       config: workspace:*
@@ -37,7 +37,7 @@ importers:
     dependencies:
       '@supabase/auth-helpers-nextjs': link:../../packages/nextjs
       '@supabase/auth-helpers-react': link:../../packages/react
-      '@supabase/ui': 0.36.5_sfoxds7t5ydpegc3knd667wn6m
+      '@supabase/auth-ui-react': 0.1.8_sfoxds7t5ydpegc3knd667wn6m
       next: 12.2.5_noz7egsnsfdcs6s6px6pthieke
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
@@ -83,7 +83,7 @@ importers:
       '@supabase/supabase-js': 1.36.0-next.17
       jose: 4.8.1
     devDependencies:
-      '@sveltejs/adapter-auto': 1.0.0-next.65
+      '@sveltejs/adapter-auto': 1.0.0-next.68
       '@sveltejs/kit': 1.0.0-next.377_svelte@3.48.0+vite@3.0.0
       '@typescript-eslint/eslint-plugin': 5.27.0_j3kisizn2zzjdskoos2zt4z3pi
       '@typescript-eslint/parser': 5.27.0_sgaiclxgc5mltnpgmg7py4v6ca
@@ -131,7 +131,7 @@ importers:
       '@supabase/supabase-js': 1.36.0-next.17
       jose: 4.8.1
     devDependencies:
-      '@sveltejs/adapter-auto': 1.0.0-next.65
+      '@sveltejs/adapter-auto': 1.0.0-next.68
       '@sveltejs/kit': 1.0.0-next.377_svelte@3.48.0+vite@3.0.0
       '@typescript-eslint/eslint-plugin': 5.27.0_j3kisizn2zzjdskoos2zt4z3pi
       '@typescript-eslint/parser': 5.27.0_sgaiclxgc5mltnpgmg7py4v6ca
@@ -178,7 +178,7 @@ importers:
       '@supabase/supabase-js': 1.36.0-next.17
       jose: 4.8.1
     devDependencies:
-      '@sveltejs/adapter-auto': 1.0.0-next.65
+      '@sveltejs/adapter-auto': 1.0.0-next.68
       '@sveltejs/kit': 1.0.0-next.377_svelte@3.48.0+vite@3.0.0
       '@typescript-eslint/eslint-plugin': 5.27.0_j3kisizn2zzjdskoos2zt4z3pi
       '@typescript-eslint/parser': 5.27.0_sgaiclxgc5mltnpgmg7py4v6ca
@@ -222,7 +222,7 @@ importers:
   packages/nextjs:
     specifiers:
       '@supabase/auth-helpers-shared': workspace:*
-      '@supabase/supabase-js': 2.0.0-rc.6
+      '@supabase/supabase-js': 2.0.0-rc.7
       config: workspace:*
       next: ^12.2.5
       react: ^18.0.0
@@ -234,7 +234,7 @@ importers:
     dependencies:
       '@supabase/auth-helpers-shared': link:../shared
     devDependencies:
-      '@supabase/supabase-js': 2.0.0-rc.6
+      '@supabase/supabase-js': 2.0.0-rc.7
       config: link:../config
       next: 12.2.5_ef5jwxihqo6n7gxfmzogljlgcm
       react: 18.1.0
@@ -247,7 +247,7 @@ importers:
   packages/react:
     specifiers:
       '@supabase/auth-helpers-shared': workspace:*
-      '@supabase/supabase-js': 2.0.0-rc.6
+      '@supabase/supabase-js': 2.0.0-rc.7
       '@types/react': ^17.0.20
       '@types/react-dom': ^17.0.9
       config: workspace:*
@@ -260,7 +260,7 @@ importers:
     dependencies:
       '@supabase/auth-helpers-shared': link:../shared
     devDependencies:
-      '@supabase/supabase-js': 2.0.0-rc.6
+      '@supabase/supabase-js': 2.0.0-rc.7
       '@types/react': 17.0.45
       '@types/react-dom': 17.0.17
       config: link:../config
@@ -273,7 +273,7 @@ importers:
 
   packages/shared:
     specifiers:
-      '@supabase/supabase-js': 2.0.0-rc.6
+      '@supabase/supabase-js': 2.0.0-rc.7
       '@types/cookie': ^0.5.1
       cookie: ^0.5.0
       next: ^12.1.5
@@ -284,7 +284,7 @@ importers:
     dependencies:
       cookie: 0.5.0
     devDependencies:
-      '@supabase/supabase-js': 2.0.0-rc.6
+      '@supabase/supabase-js': 2.0.0-rc.7
       '@types/cookie': 0.5.1
       next: 12.1.6_ef5jwxihqo6n7gxfmzogljlgcm
       react: 18.1.0
@@ -1100,6 +1100,34 @@ packages:
     resolution: {integrity: sha512-WiBSI6JBIhC6LRIsB2Kwh8DsGTlbBU+mLRxJmAe3LjHTdkDpwIbEOZgoXBbZilk/vlfjK8i6nKRAvIRn1XaIMw==}
     dev: false
 
+  /@stitches/core/1.2.8:
+    resolution: {integrity: sha512-Gfkvwk9o9kE9r9XNBmJRfV8zONvXThnm1tcuojL04Uy5uRyqg93DC83lDebl0rocZCfKSjUv+fWYtMQmEDJldg==}
+    dev: false
+
+  /@stitches/react/1.2.8_react@17.0.2:
+    resolution: {integrity: sha512-9g9dWI4gsSVe8bNLlb+lMkBYsnIKCZTmvqvDG+Avnn69XfmHZKiaMrx7cgTaddq7aTPPmXiTsbFcUy0xgI4+wA==}
+    peerDependencies:
+      react: '>= 16.3.0'
+    dependencies:
+      react: 17.0.2
+    dev: false
+
+  /@supabase/auth-ui-react/0.1.8_sfoxds7t5ydpegc3knd667wn6m:
+    resolution: {integrity: sha512-G4/E7s5xC4NuDK+qR2NSgjvCbBnJtDssabpKJ5RWYf1ciR0xW2s7pMdqH9Dc9rLP44LDEj6HGwI4fSarhzAXSg==}
+    peerDependencies:
+      react: ^16.13.1 || ^17.0.1
+      react-dom: ^16.13.1 || ^17.0.1
+    dependencies:
+      '@stitches/core': 1.2.8
+      '@stitches/react': 1.2.8_react@17.0.2
+      lodash: 4.17.21
+      prop-types: 15.8.1
+      react: 17.0.2
+      react-dom: 17.0.2_react@17.0.2
+    optionalDependencies:
+      fsevents: 2.3.2
+    dev: false
+
   /@supabase/functions-js/1.3.3:
     resolution: {integrity: sha512-35vO9niHRtzGe1QSvXKdOfvGPiX2KC44dGpWU6y0/gZCfTIgog/soU9HqABzQC/maVowO3hGLWfez5aN0MKfow==}
     dependencies:
@@ -1196,8 +1224,8 @@ packages:
       - supports-color
     dev: false
 
-  /@supabase/supabase-js/2.0.0-rc.6:
-    resolution: {integrity: sha512-PGDfqToLXONn2S9msJCGRq+B5ZNL+X1PHyzYA5gOHU6q8PClZLVzlE+jJBoMnraw+S0wm9/vQxUJm6qhrayCkA==}
+  /@supabase/supabase-js/2.0.0-rc.7:
+    resolution: {integrity: sha512-u6F1AE1ziEhAkpNddY3CAQrsvwd/uDyPj3gNxW2kf6JgbHxlroblU1SvipH75Lbyrx/PFdu7bRIKoDayJmyb7w==}
     dependencies:
       '@supabase/functions-js': 2.0.0-rc.1
       '@supabase/gotrue-js': 2.0.0-rc.3
@@ -1210,41 +1238,27 @@ packages:
       - supports-color
     dev: true
 
-  /@supabase/ui/0.36.5_sfoxds7t5ydpegc3knd667wn6m:
-    resolution: {integrity: sha512-SdjUf20sCVw0Ap+x4YfGmjMunUz9ZEipc0bwGxj2f5pEWf12qrDQyhhMcoWCWgjWneITfrjFcejV0jA9zTuiEw==}
-    peerDependencies:
-      react: ^16.13.1 || ^17.0.1
-      react-dom: ^16.13.1 || ^17.0.1
+  /@sveltejs/adapter-auto/1.0.0-next.68:
+    resolution: {integrity: sha512-UCapdMg/DfDBPvBHDjuqK1bNIAzOD0HM+tf90Q1zGNA2HeUSGyIc2Z4vaGXZ3Z+CBgQWaUhsglytr69KPM8hIA==}
     dependencies:
-      lodash: 4.17.21
-      prop-types: 15.8.1
-      react: 17.0.2
-      react-dom: 17.0.2_react@17.0.2
-    optionalDependencies:
-      fsevents: 2.3.2
-    dev: false
-
-  /@sveltejs/adapter-auto/1.0.0-next.65:
-    resolution: {integrity: sha512-wYEcOeuCrswcmeOdmbaq+WxTp7vWN1fG1yPvmdzqe2LoUchOw6FQb6X/fR8miX6L8MXQXJteA0ntqE3FKqaBsw==}
-    dependencies:
-      '@sveltejs/adapter-cloudflare': 1.0.0-next.31
-      '@sveltejs/adapter-netlify': 1.0.0-next.71
-      '@sveltejs/adapter-vercel': 1.0.0-next.67
+      '@sveltejs/adapter-cloudflare': 1.0.0-next.32
+      '@sveltejs/adapter-netlify': 1.0.0-next.74
+      '@sveltejs/adapter-vercel': 1.0.0-next.70
     transitivePeerDependencies:
       - encoding
       - supports-color
     dev: true
 
-  /@sveltejs/adapter-cloudflare/1.0.0-next.31:
-    resolution: {integrity: sha512-HhEFZP72GJ8AZGgFECKIiayDcLaAWi65pI0AnBfiNhCifYSlH/mPNWNVD4AWRDnXnH6XU+FLwhGDnIDwytTyYg==}
+  /@sveltejs/adapter-cloudflare/1.0.0-next.32:
+    resolution: {integrity: sha512-tzkUsdQlBk9xUjcGUOBYos4HKaeaXvz9v4TQ1QS2yIHEtL5xvMEDPZ94/DB2gPL4LZCnYbdY2lsy5HCsoN0hkQ==}
     dependencies:
       '@cloudflare/workers-types': 3.14.1
       esbuild: 0.14.49
       worktop: 0.8.0-next.14
     dev: true
 
-  /@sveltejs/adapter-netlify/1.0.0-next.71:
-    resolution: {integrity: sha512-la1CGtWO1xul1L3zEoFAoc4EX2uxZjrZcOMS3tkKB8drxhbQsNbnTE6fmSSMFiZXhxaikczrBgQwqIaDkLTmZg==}
+  /@sveltejs/adapter-netlify/1.0.0-next.74:
+    resolution: {integrity: sha512-pT8JmmFFS378HXYogxMpUTfA/nl/DI1+hNzmSybU2i8wJxqyt2Qi59YZmdu5ewRnUWrJRoZ+CmMplp7SbLOiLQ==}
     dependencies:
       '@iarna/toml': 2.2.5
       esbuild: 0.14.49
@@ -1252,10 +1266,10 @@ packages:
       tiny-glob: 0.2.9
     dev: true
 
-  /@sveltejs/adapter-vercel/1.0.0-next.67:
-    resolution: {integrity: sha512-xg85d/vlivbTaZu70zmaPNkrY1YZhDrcxljuwVWO0LCzA4DACIA7CnXI9klUiXM5SPpsB8BhY6dS8sW5cDYWzw==}
+  /@sveltejs/adapter-vercel/1.0.0-next.70:
+    resolution: {integrity: sha512-0kwOpzrgpmHXnx+47fYzD5wrINjZvibL/ewq2dDYJiGxeAT/kNmszrIyoCDxm0oq7n1/+mLsyzX0V+lMs+leKg==}
     dependencies:
-      '@vercel/nft': 0.21.0
+      '@vercel/nft': 0.22.0
       esbuild: 0.14.49
     transitivePeerDependencies:
       - encoding
@@ -1596,8 +1610,8 @@ packages:
       '@typescript-eslint/types': 5.27.0
       eslint-visitor-keys: 3.3.0
 
-  /@vercel/nft/0.21.0:
-    resolution: {integrity: sha512-hFCAETfI5cG8l5iAiLhMC2bReC5K7SIybzrxGorv+eGspIbIFsVw7Vg85GovXm/LxA08pIDrAlrhR6GN36XB/Q==}
+  /@vercel/nft/0.22.0:
+    resolution: {integrity: sha512-hB80/093PPiCefN2gVbqv6J93MH+63Zr7uDCwkiS/U4W07DXkLoftbnkBmZoS0Q84LiTSl9DRVSHU4XYCX+sJA==}
     hasBin: true
     dependencies:
       '@mapbox/node-pre-gyp': 1.0.9
