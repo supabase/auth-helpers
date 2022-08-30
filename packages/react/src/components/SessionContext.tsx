@@ -85,6 +85,24 @@ export const SessionContextProvider = ({
     getSession();
   }, []);
 
+  useEffect(() => {
+    const {
+      data: { subscription }
+    } = supabaseClient.auth.onAuthStateChange((event, session) => {
+      if (session && (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED')) {
+        setSession(session);
+      }
+
+      if (event === 'SIGNED_OUT') {
+        setSession(null);
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
+
   const value: SessionContext = useMemo(() => {
     if (isLoading) {
       return {
