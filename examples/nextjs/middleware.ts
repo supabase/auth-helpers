@@ -1,10 +1,10 @@
 import { withMiddlewareAuth } from '@supabase/auth-helpers-nextjs/dist/middleware';
 
 export const middleware = withMiddlewareAuth({
-  redirectTo: '/login',
+  redirectTo: '/',
   authGuard: {
     isPermitted: async (user) => {
-      return user.email.endsWith('@example.com') ?? false;
+      return user.email.endsWith('@gmail.com') ?? false;
     },
     redirectTo: '/insufficient-permissions'
   }
