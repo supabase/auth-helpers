@@ -1,5 +1,16 @@
 # @supabase/auth-helpers-nextjs
 
+## 0.4.0-next.0
+
+### Minor Changes
+
+- 1b33e44: Update to work with supabase-js v2 RC
+
+### Patch Changes
+
+- Updated dependencies [1b33e44]
+  - @supabase/auth-helpers-shared@0.2.0-next.0
+
 ## 0.2.7
 
 ### Patch Changes
