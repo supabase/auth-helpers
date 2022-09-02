@@ -14,6 +14,7 @@ npm install @supabase/auth-helpers-react
 ```
 
 Using [yarn](https://yarnpkg.com/):
+
 ```sh
 yarn add @supabase/auth-helpers-nextjs
 
@@ -85,7 +86,7 @@ You can now determine if a user is authenticated by checking that the `user` obj
 For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row-level-security) to work properly when fetching data client-side, you need to make sure to import the `{ supabaseClient }` from `# @supabase/auth-helpers-nextjs` and only run your query once the user is defined client-side in the `useUser()` hook:
 
 ```js
-import { Auth } from '@supabase/ui';
+import { Auth } from '@supabase/auth-ui-react';
 import { useUser } from '@supabase/auth-helpers-react';
 import { supabaseClient } from '@supabase/auth-helpers-nextjs';
 import { useEffect, useState } from 'react';
@@ -283,12 +284,11 @@ export const middleware = withMiddlewareAuth({ redirectTo: '/login' });
 
 It is also possible to add finer granularity based on the user logged in. I.e. you can specify a promise to determine if a specific user has permission or not.
 
-
 ```ts
 // pages/protected/_middleware.ts
 import { withMiddlewareAuth } from '@supabase/auth-helpers-nextjs/dist/middleware';
 
-export const middleware = withMiddlewareAuth({ 
+export const middleware = withMiddlewareAuth({
   redirectTo: '/login',
   authGuard: {
     isPermitted: async (user) => user.email?.endsWith('@example.com') ?? false,

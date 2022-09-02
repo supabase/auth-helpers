@@ -1,12 +1,33 @@
+import {
+  CookieOptions,
+  createBrowserSupabaseClient as _createBrowserSupabaseClient
+} from '@supabase/auth-helpers-shared';
+
 // Types
 export type { User } from '@supabase/supabase-js';
 
 // Methods
-export * from './handlers';
-export { default as getUser } from './utils/getUser';
-export { getProviderToken } from './utils/getProviderToken';
 export { default as withPageAuth } from './utils/withPageAuth';
 export { default as withApiAuth } from './utils/withApiAuth';
-export { default as supabaseServerClient } from './utils/supabaseServerClient';
-export { supabaseClient, SupabaseClient } from './utils/initSupabase';
 export { default as logger } from './utils/log';
+
+export function createBrowserSupabaseClient({
+  cookieOptions
+}: {
+  cookieOptions?: CookieOptions;
+} = {}) {
+  if (
+    !process.env.NEXT_PUBLIC_SUPABASE_URL ||
+    !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  ) {
+    throw new Error(
+      'NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY env variables are required!'
+    );
+  }
+
+  return _createBrowserSupabaseClient({
+    supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
+    supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    cookieOptions
+  });
+}
