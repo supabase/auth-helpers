@@ -1,5 +1,11 @@
 # shared
 
+## 0.2.0-next.0
+
+### Minor Changes
+
+- 1b33e44: Update to work with supabase-js v2 RC
+
 ## 0.1.3
 
 ### Patch Changes
