@@ -1,13 +1,11 @@
 import type { PageLoad } from './$types';
-import { loadWithSession, supabaseServerClient } from '@supabase/auth-helpers-sveltekit';
+import { withSession } from '@supabase/auth-helpers-sveltekit';
 import type { TestTable } from '$lib/types';
 
-export const load: PageLoad = loadWithSession(
+export const load: PageLoad = withSession(
 	{ status: 303, location: '/' },
-	async ({ session }) => {
-		const { data: testTable } = await supabaseServerClient(session.accessToken)
-			.from<TestTable>('test')
-			.select('*');
+	async ({ session, getSupabaseClient }) => {
+		const { data: testTable } = await getSupabaseClient().from<TestTable>('test').select('*');
 		return {
 			testTable,
 			user: session.user

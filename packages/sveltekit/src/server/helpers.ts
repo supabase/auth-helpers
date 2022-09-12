@@ -1,11 +1,5 @@
 import type { Session } from '@supabase/supabase-js';
-import {
-  error,
-  redirect,
-  type Cookies,
-  type RequestEvent,
-  type ServerLoadEvent
-} from '@sveltejs/kit';
+import type { Cookies } from '@sveltejs/kit';
 import { getServerConfig } from './config';
 
 export function saveSession(cookies: Cookies, session: Session) {
@@ -48,48 +42,4 @@ export function deleteSession(cookies: Cookies) {
 export function getProviderToken(cookies: Cookies) {
   const { cookieName } = getServerConfig();
   return cookies.get(`${cookieName}-provider-token`);
-}
-
-export function serverLoadWithSession<T>(
-  { status, location }: { status: number; location: string },
-  cb?: (
-    event: ServerLoadEvent & { session: Required<App.SupabaseSession> }
-  ) => T
-) {
-  return (event: ServerLoadEvent) => {
-    if (!event.locals.user) {
-      throw redirect(status, location);
-    }
-    if (!cb) {
-      return;
-    }
-    const session = {
-      user: event.locals.user,
-      accessToken: event.locals.accessToken
-    };
-    return cb({ ...event, session });
-  };
-}
-
-export function serverWithSession<T>(
-  {
-    status,
-    location,
-    error: errorBody
-  }: { status: number; location?: string; error?: App.PageError },
-  cb: (event: RequestEvent & { session: Required<App.SupabaseSession> }) => T
-) {
-  return (event: RequestEvent) => {
-    if (!event.locals.user) {
-      if (location) {
-        throw redirect(status, location);
-      }
-      throw error(status, errorBody);
-    }
-    const session = {
-      user: event.locals.user,
-      accessToken: event.locals.accessToken
-    };
-    return cb({ ...event, session });
-  };
 }

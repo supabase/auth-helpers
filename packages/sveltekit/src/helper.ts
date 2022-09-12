@@ -1,7 +1,12 @@
 import { applyAction, enhance } from '$app/forms';
 import { invalidateAll } from '$app/navigation';
 import type { SupabaseClient } from '@supabase/supabase-js';
-import { redirect, type LoadEvent } from '@sveltejs/kit';
+import {
+  error,
+  redirect,
+  type LoadEvent,
+  type RequestEvent
+} from '@sveltejs/kit';
 import { getClientConfig } from './config';
 
 export function enhanceAndInvalidate(form: HTMLFormElement) {
@@ -24,18 +29,75 @@ export function supabaseServerClient(
   return supabaseClient;
 }
 
-export function loadWithSession<T>(
-  { status, location }: { status: number; location: string },
-  cb?: (event: LoadEvent & { session: Required<App.SupabaseSession> }) => T
-) {
-  return (event: LoadEvent) =>
-    event.parent().then((data) => {
-      if (!data.session.user) {
-        throw redirect(status, location);
+type ExtendedEvent = {
+  getSupabaseClient(): SupabaseClient;
+  session: Required<App.SupabaseSession>;
+};
+
+type NotAuthenticated =
+  | { status: number; location: string; error?: never }
+  | { status: number; location?: never; error: App.PageError };
+
+function handleNotAuthenticated({
+  status,
+  location,
+  error: errorBody
+}: NotAuthenticated) {
+  if (location) {
+    throw redirect(status, location);
+  }
+  if (errorBody) {
+    throw error(status, errorBody);
+  }
+  throw new Error('You must provide one of [location, error]');
+}
+
+export function withSession<T extends (event: any) => any>(
+  options: NotAuthenticated,
+  cb: (event: Parameters<T>[0] & ExtendedEvent) => ReturnType<T>
+): T {
+  async function handle(event: Parameters<T>[0]) {
+    let session!: Required<App.SupabaseSession>;
+    {
+      // ServerLoad, Action, RequestHander
+      const ev = event as RequestEvent;
+      if (typeof ev.locals === 'object') {
+        if (!ev.locals.user) {
+          handleNotAuthenticated(options);
+        }
+        session = {
+          user: ev.locals.user,
+          accessToken: ev.locals.accessToken
+        };
       }
-      if (!cb) {
-        return;
+    }
+    {
+      // Load
+      const ev = event as LoadEvent;
+      if (typeof ev.parent === 'function') {
+        const parentData = await ev.parent();
+        if (!parentData.session.user) {
+          handleNotAuthenticated(options);
+        }
+        session = {
+          user: parentData.session.user,
+          accessToken: parentData.session.accessToken
+        };
       }
-      return cb({ ...event, session: data.session });
+    }
+
+    if (!session) {
+      throw new Error('Can not get the session');
+    }
+
+    return cb({
+      ...event,
+      session,
+      getSupabaseClient() {
+        return supabaseServerClient(session.accessToken);
+      }
     });
+  }
+
+  return handle as unknown as T;
 }

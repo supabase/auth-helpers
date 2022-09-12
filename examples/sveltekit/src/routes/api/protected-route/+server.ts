@@ -1,5 +1,4 @@
-import { supabaseServerClient } from '@supabase/auth-helpers-sveltekit';
-import { serverWithSession } from '@supabase/auth-helpers-sveltekit/server';
+import { withSession } from '@supabase/auth-helpers-sveltekit';
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
@@ -8,12 +7,10 @@ interface TestTable {
 	created_at: string;
 }
 
-export const GET: RequestHandler = serverWithSession(
-	{ status: 403, error: { message: 'Unauthorized' } },
-	async ({ session }) => {
-		const { data } = await supabaseServerClient(session.accessToken)
-			.from<TestTable>('test')
-			.select('*');
+export const GET: RequestHandler = withSession(
+	{ status: 401, error: { message: 'Unauthorized' } },
+	async ({ getSupabaseClient }) => {
+		const { data } = await getSupabaseClient().from<TestTable>('test').select('*');
 
 		return json({ data });
 	}

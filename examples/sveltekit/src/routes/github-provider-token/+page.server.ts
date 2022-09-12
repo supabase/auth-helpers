@@ -1,4 +1,5 @@
-import { serverLoadWithSession, getProviderToken } from '@supabase/auth-helpers-sveltekit/server';
+import { withSession } from '@supabase/auth-helpers-sveltekit';
+import { getProviderToken } from '@supabase/auth-helpers-sveltekit/server';
 import type { PageServerLoad } from './$types';
 
 interface GitHubOutput {
@@ -8,7 +9,7 @@ interface GitHubOutput {
 	items: any[];
 }
 
-export const load: PageServerLoad = serverLoadWithSession(
+export const load: PageServerLoad = withSession(
 	{ status: 303, location: '/' },
 	async ({ session, cookies }) => {
 		const providerToken = getProviderToken(cookies);
