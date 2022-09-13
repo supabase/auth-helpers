@@ -37,8 +37,15 @@ export function startSupabaseSessionSync() {
     let expiresAt: number | undefined;
 
     const pageUnsub = page.subscribe(({ data }) => {
-      const exp = (data.session?.user as User & { exp: number })?.exp;
+      const accessToken = data.session.accessToken;
+      if (accessToken) {
+        supabaseClient.auth.setAuth(accessToken);
+      } else {
+        // @ts-expect-error this is a private method but we have to clear the session
+        supabaseClient.auth._removeSession();
+      }
 
+      const exp = (data.session?.user as User & { exp: number })?.exp;
       if (!exp) {
         timeout && clearTimeout(timeout);
         timeout = null;
