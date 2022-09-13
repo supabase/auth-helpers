@@ -56,7 +56,7 @@ export const supabaseClient = createClient(
 Edit your `+layout.svelte` file and set up the client side.
 
 ```html
-<!-- src/routes/__layout.svelte -->
+<!-- src/routes/+layout.svelte -->
 <script lang="ts" context="module">
   // set global the client instance
   // this must happen in module context
@@ -81,7 +81,7 @@ Edit your `+layout.svelte` file and set up the client side.
 Our `hooks.ts` file is where the heavy lifting of this library happens, we need to import our function to handle the session syncronization.
 
 ```ts
-// src/hooks.ts
+// src/hooks.server.ts
 import { auth } from '@supabase/auth-helpers-sveltekit/server';
 import { dev } from '$app/environment';
 import { supabaseClient } from '$lib/db';
@@ -117,6 +117,8 @@ These will create the handlers under the hood that perform different parts of th
 In order to get the most out of TypeScript and its intellisense, you should import our types into the `app.d.ts` type definition file that comes with your SvelteKit project.
 
 ```ts
+// src/app.d.ts
+
 /// <reference types="@sveltejs/kit" />
 
 // See https://kit.svelte.dev/docs/types#app
