@@ -1,6 +1,6 @@
-import { withSession } from '@supabase/auth-helpers-sveltekit';
+import { withAuth } from '@supabase/auth-helpers-sveltekit';
 import type { PageLoad } from './$types';
 
-export const load: PageLoad = withSession({ status: 303, location: '/' }, ({ session }) => {
+export const load: PageLoad = withAuth({ status: 303, location: '/' }, ({ session }) => {
 	return { user: session.user };
 });

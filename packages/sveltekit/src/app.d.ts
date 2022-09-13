@@ -2,18 +2,12 @@
 // for information about these interfaces
 // and what to do when importing types
 declare namespace App {
-  interface SupabaseSession {
-    user: import('@supabase/supabase-js').User | null;
-    accessToken: string | null;
+  interface Locals {
+    session: import('./').SupabaseSession;
   }
 
-  interface Locals {
-    user: import('@supabase/supabase-js').User | null;
-    accessToken: string | null;
-    error: string | null;
-  }
   interface PageData {
-    session: SupabaseSession;
+    session: import('./').SupabaseSession;
   }
   // interface PageError {}
   // interface Platform {}

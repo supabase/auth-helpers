@@ -4,18 +4,11 @@
 // for information about these interfaces
 // and what to do when importing types
 declare namespace App {
-	interface SupabaseSession {
-		user?: import('@supabase/supabase-js').User;
-		accessToken?: string;
-	}
-
 	interface Locals {
-		user?: import('@supabase/supabase-js').User;
-		accessToken?: string;
-		error?: string;
+		session: import('@supabase/auth-helpers-sveltekit').SupabaseSession;
 	}
 	interface PageData {
-		session: SupabaseSession;
+		session: import('@supabase/auth-helpers-sveltekit').SupabaseSession;
 	}
 	// interface PageError {}
 	// interface Platform {}

@@ -8,6 +8,7 @@ import {
   type RequestEvent
 } from '@sveltejs/kit';
 import { getClientConfig } from './config';
+import type { AuthenticatedSupabaseSession, ExtendedEvent } from './types';
 
 export function enhanceAndInvalidate(form: HTMLFormElement) {
   return enhance(form, () => async ({ result }) => {
@@ -29,11 +30,6 @@ export function supabaseServerClient(
   return supabaseClient;
 }
 
-type ExtendedEvent = {
-  getSupabaseClient(): SupabaseClient;
-  session: Required<App.SupabaseSession>;
-};
-
 type NotAuthenticated =
   | { status: number; location: string; error?: never }
   | { status: number; location?: never; error: App.PageError };
@@ -52,22 +48,22 @@ function handleNotAuthenticated({
   throw new Error('You must provide one of [location, error]');
 }
 
-export function withSession<T extends (event: any) => any>(
+export function withAuth<T extends (event: any) => any>(
   options: NotAuthenticated,
   cb: (event: Parameters<T>[0] & ExtendedEvent) => ReturnType<T>
 ): T {
   async function handle(event: Parameters<T>[0]) {
-    let session!: Required<App.SupabaseSession>;
+    let session!: AuthenticatedSupabaseSession;
     {
       // ServerLoad, Action, RequestHander
       const ev = event as RequestEvent;
       if (typeof ev.locals === 'object') {
-        if (!ev.locals.user) {
-          handleNotAuthenticated(options);
+        if (!ev.locals.session.user) {
+          return handleNotAuthenticated(options);
         }
         session = {
-          user: ev.locals.user,
-          accessToken: ev.locals.accessToken
+          user: ev.locals.session.user,
+          accessToken: ev.locals.session.accessToken
         };
       }
     }
@@ -75,9 +71,9 @@ export function withSession<T extends (event: any) => any>(
       // Load
       const ev = event as LoadEvent;
       if (typeof ev.parent === 'function') {
-        const parentData = await ev.parent();
+        const parentData = (await ev.parent()) as App.PageData;
         if (!parentData.session.user) {
-          handleNotAuthenticated(options);
+          return handleNotAuthenticated(options);
         }
         session = {
           user: parentData.session.user,
