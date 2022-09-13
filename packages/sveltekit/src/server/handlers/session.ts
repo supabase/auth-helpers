@@ -1,8 +1,8 @@
 import type { Handle, RequestEvent } from '@sveltejs/kit';
 import { decodeJwt } from 'jose';
-import type { User } from '@supabase/supabase-js';
+import type { ApiError, User } from '@supabase/supabase-js';
 import { getServerConfig } from '../config';
-import { saveSession } from '../helpers';
+import { deleteSession, saveSession } from '../helpers';
 
 export async function attachSession(event: RequestEvent) {
   const { supabaseClient, cookieName, tokenRefreshMargin } = getServerConfig();
@@ -35,16 +35,25 @@ export async function attachSession(event: RequestEvent) {
       saveSession(cookies, data);
       locals.session = {
         user: { ...data.user, exp: data.expires_at } as User,
-        accessToken: accessToken
+        accessToken: data.access_token
       };
     } else {
-      const { data } = await supabaseClient.auth.api.getUser(accessToken);
+      const { data, error } = await supabaseClient.auth.api.getUser(
+        accessToken
+      );
+      if (error || !data) {
+        throw error;
+      }
       locals.session = {
         user: { ...data, exp: jwt.exp } as User,
         accessToken: accessToken
       };
     }
   } catch (err) {
+    if ((err as ApiError).message === 'Invalid Refresh Token') {
+      deleteSession(cookies);
+    }
+
     locals.session = {
       user: null,
       accessToken: null
