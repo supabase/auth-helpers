@@ -1,5 +1,11 @@
 # shared
 
+## 0.1.4
+
+### Patch Changes
+
+- 63b1da0: chore: Upgrades nextjs to 12.2.X
+
 ## 0.1.3
 
 ### Patch Changes
