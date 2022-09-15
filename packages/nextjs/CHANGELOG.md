@@ -1,5 +1,11 @@
 # @supabase/auth-helpers-nextjs
 
+## 0.4.0-next.1
+
+### Patch Changes
+
+- af28db1: chore: export middleware at root.
+
 ## 0.4.0-next.0
 
 ### Minor Changes
