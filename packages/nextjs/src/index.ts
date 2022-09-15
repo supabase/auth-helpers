@@ -7,6 +7,7 @@ import {
 export type { User } from '@supabase/supabase-js';
 
 // Methods
+export * from './middleware';
 export { default as withPageAuth } from './utils/withPageAuth';
 export { default as withApiAuth } from './utils/withApiAuth';
 export { default as logger } from './utils/log';
