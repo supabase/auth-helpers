@@ -42,39 +42,35 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 
 ### Basic Setup
 
-- Create an `auth` directory under the `/pages/api/` directory.
-
-- Create a `[...supabase].js` file under the newly created `auth` directory.
-
-The path to your dynamic API route file would be `/pages/api/auth/[...supabase].js`. Populate that file as follows:
-
-```js
-import { handleAuth } from '@supabase/auth-helpers-nextjs';
-
-export default handleAuth({ logout: { returnTo: '/' } });
-```
-
-Executing `handleAuth()` creates the following route handlers under the hood that perform different parts of the authentication flow:
-
-- `/api/auth/callback`: The `UserProvider` forwards the session details here every time `onAuthStateChange` fires on the client side. This is needed to set up the cookies for your application so that SSR works seamlessly.
-
-- `/api/auth/user`: You can fetch user profile information in JSON format.
-
-- `/api/auth/logout`: Your Next.js application logs out the user. You can optionally pass a `returnTo` parameter to return to a custom relative URL after logout, eg `/api/auth/logout?returnTo=/login`. This will overwrite the logout `returnTo` option specified `handleAuth()`
-
 Wrap your `pages/_app.js` component with the `UserProvider` component:
 
 ```jsx
 // pages/_app.js
 import React from 'react';
-import { UserProvider } from '@supabase/auth-helpers-react';
-import { supabaseClient } from '@supabase/auth-helpers-nextjs';
+import { useRouter } from 'next/router';
+import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs';
+import { SessionContextProvider } from '@supabase/auth-helpers-react';
 
-export default function App({ Component, pageProps }) {
+function MyApp({ Component, pageProps }: AppProps) {
+  const router = useRouter();
+  const [supabaseClient] = useState(() => createBrowserSupabaseClient());
+
   return (
-    <UserProvider supabaseClient={supabaseClient}>
+    <SessionContextProvider
+      supabaseClient={supabaseClient}
+      initialSession={pageProps.initialSession}
+    >
+      <button
+        onClick={async () => {
+          await supabaseClient.auth.signOut();
+          router.push('/');
+        }}
+      >
+        Logout
+      </button>
+
       <Component {...pageProps} />
-    </UserProvider>
+    </SessionContextProvider>
   );
 }
 ```
@@ -83,15 +79,16 @@ You can now determine if a user is authenticated by checking that the `user` obj
 
 ## Client-side data fetching with RLS
 
-For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row-level-security) to work properly when fetching data client-side, you need to make sure to import the `{ supabaseClient }` from `# @supabase/auth-helpers-nextjs` and only run your query once the user is defined client-side in the `useUser()` hook:
+For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row-level-security) to work properly when fetching data client-side, you need to make sure to use the `supabaseClient` from the `useSessionContext` hook and only run your query once the user is defined client-side in the `useUser()` hook:
 
 ```js
-import { Auth } from '@supabase/auth-ui-react';
-import { useUser } from '@supabase/auth-helpers-react';
+import { Auth, ThemeSupa } from '@supabase/auth-ui-react';
+import { useUser, useSessionContext } from '@supabase/auth-helpers-react';
 import { supabaseClient } from '@supabase/auth-helpers-nextjs';
 import { useEffect, useState } from 'react';
 
 const LoginPage = () => {
+  const { isLoading, session, error, supabaseClient } = useSessionContext();
   const { user, error } = useUser();
   const [data, setData] = useState();
 
@@ -109,10 +106,11 @@ const LoginPage = () => {
       <>
         {error && <p>{error.message}</p>}
         <Auth
+          redirectTo="http://localhost:3000/"
+          appearance={{ theme: ThemeSupa }}
           supabaseClient={supabaseClient}
           providers={['google', 'github']}
           socialLayout="horizontal"
-          socialButtonSize="xlarge"
         />
       </>
     );
@@ -273,20 +271,24 @@ If you visit `/api/protected-route` without a valid session cookie, you will get
 
 ## Protecting routes with [Nextjs Middleware](https://nextjs.org/docs/middleware)
 
-As an alternative to protecting individual pages using `getServerSideProps` with `withPageAuth`, `withMiddlewareAuth` can be used from inside a `_middleware` file to protect an entire directory. In the following example, all requests to `/protected/*` will check whether a user is signed in, if successful the request will be forwarded to the destination route, otherwise the user will be redirected to `/login` (defaults to: `/`) with a 307 Temporary Redirect response status:
+As an alternative to protecting individual pages using `getServerSideProps` with `withPageAuth`, `withMiddlewareAuth` can be used from inside a `middleware` file to protect the entire directory or those that match the config object. In the following example, all requests to `/middleware-protected/*` will check whether a user is signed in, if successful the request will be forwarded to the destination route, otherwise the user will be redirected to `/login` (defaults to: `/`) with a 307 Temporary Redirect response status:
 
 ```ts
-// pages/protected/_middleware.ts
-import { withMiddlewareAuth } from '@supabase/auth-helpers-nextjs/middleware';
+// middleware.ts
+import { withMiddlewareAuth } from '@supabase/auth-helpers-nextjs';
 
 export const middleware = withMiddlewareAuth({ redirectTo: '/login' });
+
+export const config = {
+  matcher: ['/middleware-protected/:path*']
+};
 ```
 
 It is also possible to add finer granularity based on the user logged in. I.e. you can specify a promise to determine if a specific user has permission or not.
 
 ```ts
-// pages/protected/_middleware.ts
-import { withMiddlewareAuth } from '@supabase/auth-helpers-nextjs/dist/middleware';
+// middleware.ts
+import { withMiddlewareAuth } from '@supabase/auth-helpers-nextjs';
 
 export const middleware = withMiddlewareAuth({
   redirectTo: '/login',
@@ -295,7 +297,15 @@ export const middleware = withMiddlewareAuth({
     redirectTo: '/insufficient-permissions'
   }
 });
+
+export const config = {
+  matcher: ['/middleware-protected/:path*']
+};
 ```
+
+## Migrating from `0.2.X` to `0.3.X`/`0.4.X`
+
+// TODO
 
 ## Migrating from @supabase/supabase-auth-helpers to @supabase/auth-helpers
 
