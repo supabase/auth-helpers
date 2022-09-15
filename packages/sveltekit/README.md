@@ -138,7 +138,7 @@ declare namespace App {
 
 ### Basic Setup
 
-You can now determine if a user is authenticated on the client-side by checking that the `user` object returned by the `$session` store is defined.
+You can now determine if a user is authenticated on the client-side by checking that the `user` object returned by `$page.data.session` is defined.
 
 ```html
 <!-- example -->
@@ -162,7 +162,7 @@ For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row
 <script>
   import Auth from 'supabase-ui-svelte';
   import { supabaseClient } from '$lib/db';
-  import { session } from '$app/stores';
+  import { page } from '$app/stores';
   import { enhanceAndInvalidate } from '@supabase/auth-helpers-sveltekit';
 
   let loadedData = [];
