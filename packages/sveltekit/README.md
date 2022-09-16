@@ -53,6 +53,8 @@ export const supabaseClient = createClient(
 );
 ```
 
+### Initialize the client
+
 Edit your `+layout.svelte` file and set up the client side.
 
 ```html
@@ -104,6 +106,10 @@ export const handle = sequence(
   yourHandler
 );
 ```
+
+### Send session to client
+
+
 
 ### Session sync
 
@@ -203,7 +209,7 @@ For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row
 {/if}
 ```
 
-### Server-side data fetching with RLS
+## Server-side data fetching with RLS
 
 ```html
 <!-- src/routes/profile/+page.svelte -->
@@ -264,7 +270,7 @@ await getSupabaseClient().from('table2').select();
 
 ## Protecting API routes
 
-Wrap an API Route to check that the user has a valid session. If they're not logged in the handler will redirect using the status and location.
+Wrap an API Route to check that the user has a valid session. If they're not logged in the session is `null`.
 
 ```ts
 // src/routes/api/protected-route/+server.ts
@@ -290,3 +296,41 @@ export const GET: RequestHandler = withAuth(async ({ getSupabaseClient }) => {
 ```
 
 If you visit `/api/protected-route` without a valid session cookie, you will get a 303 response.
+
+## Protecting Actions
+
+Wrap an Action to check that the user has a valid session. If they're not logged in the session is `null`.
+
+```ts
+// src/routes/posts/+page.server.ts
+import type { Actions } from './$types';
+import { withAuth } from '@supabase/auth-helpers-sveltekit';
+import { error, invalid } from '@sveltejs/kit';
+
+export const actions: Actions = {
+	createPost: withAuth(async ({ session, getSupabaseClient, request }) => {
+		if (!session) {
+			// the user is not signed in
+			throw error(403, { message: 'Unauthorized' });
+		}
+		// we are save, let the user create the post
+		const formData = await request.formData();
+		const content = formData.get('content');
+
+		const { error: createPostError, data: newPost } = await getSupabaseClient()
+			.from('posts')
+			.insert({ content });
+
+		if (createPostError) {
+			return invalid(500, {
+				supabaseErrorMessage: createPostError.message
+			});
+		}
+		return {
+			newPost
+		};
+	})
+};
+```
+
+If you try to submit a form with the action `?/createPost` without a valid session cookie, you will get a 403 error response.
