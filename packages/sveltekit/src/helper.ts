@@ -38,12 +38,7 @@ export function withAuth<E extends any, T extends any>(
       // ServerLoad, Action, RequestHander
       const ev = event as unknown as RequestEvent;
       if (typeof ev.locals === 'object') {
-        if (ev.locals.session) {
-          session = {
-            user: ev.locals.session.user,
-            accessToken: ev.locals.session.accessToken
-          };
-        }
+        session = getServerConfig().getSessionFromLocals(ev.locals);
       }
     }
     {
@@ -51,12 +46,7 @@ export function withAuth<E extends any, T extends any>(
       const ev = event as unknown as LoadEvent;
       if (typeof ev.parent === 'function') {
         const parentData = (await ev.parent()) as App.PageData;
-        if (parentData.session) {
-          session = {
-            user: parentData.session.user,
-            accessToken: parentData.session.accessToken
-          };
-        }
+        session = getClientConfig().getSessionFromPageData(parentData);
       }
     }
 

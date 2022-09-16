@@ -12,9 +12,15 @@ const HANDLE_EVENTS: AuthChangeEvent[] = ['SIGNED_IN', 'SIGNED_OUT'];
 export function setupSupabaseClient({
   supabaseClient,
   tokenRefreshMargin = TOKEN_REFRESH_MARGIN,
-  endpointPrefix = ENDPOINT_PREFIX
+  endpointPrefix = ENDPOINT_PREFIX,
+  getSessionFromPageData = (data) => data.session
 }: SetupClientOptions) {
-  setClientConfig({ supabaseClient, tokenRefreshMargin, endpointPrefix });
+  setClientConfig({
+    supabaseClient,
+    tokenRefreshMargin,
+    endpointPrefix,
+    getSessionFromPageData
+  });
 }
 
 export function startSupabaseSessionSync() {

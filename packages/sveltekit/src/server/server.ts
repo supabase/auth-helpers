@@ -11,13 +11,17 @@ export function setupSupabaseServer({
   cookieName = 'sb',
   cookieOptions = {},
   tokenRefreshMargin = TOKEN_REFRESH_MARGIN,
-  endpointPrefix = ENDPOINT_PREFIX
+  endpointPrefix = ENDPOINT_PREFIX,
+  getSessionFromLocals = (locals) => locals.session,
+  setSessionToLocals = (locals, session) => (locals.session = session)
 }: SetupServerOptions) {
   setServerConfig({
     supabaseClient,
     cookieName,
     cookieOptions: { ...COOKIE_OPTIONS, ...cookieOptions },
     tokenRefreshMargin,
-    endpointPrefix
+    endpointPrefix,
+    getSessionFromLocals,
+    setSessionToLocals
   });
 }
