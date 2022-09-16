@@ -167,7 +167,7 @@ You can now determine if a user is authenticated on the client-side by checking 
 
 ## Client-side data fetching with RLS
 
-For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row-level-security) to work properly when fetching data client-side, you need to make sure to import the `{ supabaseClient }` from `$lib/db` and only run your query once the session is defined client-side `$page.data`:
+For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row-level-security) to work properly when fetching data client-side, you need to make sure to import the `{ supabaseClient }` from `$lib/db` and only run your query once the session is defined client-side in `$page.data`:
 
 ```html
 <script>
@@ -206,8 +206,6 @@ For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row
 
 ### Server-side data fetching with RLS
 
-For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row-level-security) to work in a server environment, you need to use the `withAuth` helper to check if the user is authenticated. The helper extends the event with `session` and `getSupabaseClient()`:
-
 ```html
 <!-- src/routes/profile/+page.svelte -->
 <script>
@@ -220,6 +218,8 @@ For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row
 <pre>{JSON.stringify(tableData, null, 2)}</pre>
 <pre>{JSON.stringify(user, null, 2)}</pre>
 ```
+
+For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row-level-security) to work in a server environment, you need to use the `withAuth` helper to check if the user is authenticated. The helper extends the event with `session` and `getSupabaseClient()`:
 
 ```ts
 // src/routes/profile/+page.ts
