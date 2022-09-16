@@ -39,6 +39,7 @@ We will start off by creating a `db.ts` file inside of our `src/lib` directory. 
 ```ts
 // src/lib/db.ts
 import { createClient } from '@supabase/supabase-js';
+import { setupSupabaseClient } from '@supabase/auth-helpers-sveltekit';
 import { env } from '$env/dynamic/public';
 // or use the static env
 // import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public';
@@ -51,6 +52,10 @@ export const supabaseClient = createClient(
     autoRefreshToken: false
   }
 );
+
+setupSupabaseClient({
+  supabaseClient
+});
 ```
 
 ### Initialize the client
@@ -59,19 +64,12 @@ Edit your `+layout.svelte` file and set up the client side.
 
 ```html
 <!-- src/routes/+layout.svelte -->
-<script lang="ts" context="module">
-  // set global the client instance
-  // this must happen in module context
-  import { supabaseClient } from '$lib/db';
-  import { setupSupabaseClient } from '@supabase/auth-helpers-sveltekit';
-
-  setupSupabaseClient({ supabaseClient });
-</script>
-
 <script lang="ts">
+  // make sure the supabase instance is initialized on the client
+  import '$lib/db';
   import { startSupabaseSessionSync } from '@supabase/auth-helpers-sveltekit';
 
-  // start automatic token refreshing
+  // this sets up automatic token refreshing
   startSupabaseSessionSync();
 </script>
 
@@ -80,20 +78,19 @@ Edit your `+layout.svelte` file and set up the client side.
 
 ### Hooks setup
 
-Our `hooks.ts` file is where the heavy lifting of this library happens, we need to import our function to handle the session syncronization.
+Our `hooks.ts` file is where the heavy lifting of this library happens, we need to import our function to parse the session from the cookie and populate it in locals.
 
 ```ts
 // src/hooks.server.ts
 import { dev } from '$app/environment';
 import { supabaseClient } from '$lib/db';
-import { setupSupabaseServer } from '@supabase/auth-helpers-sveltekit/server';
-import { auth } from '@supabase/auth-helpers-sveltekit/server';
+import { setupSupabaseServer, auth } from '@supabase/auth-helpers-sveltekit/server';
 
 setupSupabaseServer({
-	supabaseClient,
-	cookieOptions: {
-		secure: !dev
-	}
+  supabaseClient,
+  cookieOptions: {
+    secure: !dev
+  }
 });
 
 export const handle = auth;
@@ -109,7 +106,16 @@ export const handle = sequence(
 
 ### Send session to client
 
+```ts
+// src/routes/+layout.server.ts
+import type { LayoutServerLoad } from './$types';
 
+export const load: LayoutServerLoad = async ({ locals }) => {
+  return {
+    session: locals.session
+  };
+};
+```
 
 ### Session sync
 
@@ -308,29 +314,122 @@ import { withAuth } from '@supabase/auth-helpers-sveltekit';
 import { error, invalid } from '@sveltejs/kit';
 
 export const actions: Actions = {
-	createPost: withAuth(async ({ session, getSupabaseClient, request }) => {
-		if (!session) {
-			// the user is not signed in
-			throw error(403, { message: 'Unauthorized' });
-		}
-		// we are save, let the user create the post
-		const formData = await request.formData();
-		const content = formData.get('content');
+  createPost: withAuth(async ({ session, getSupabaseClient, request }) => {
+    if (!session) {
+      // the user is not signed in
+      throw error(403, { message: 'Unauthorized' });
+    }
+    // we are save, let the user create the post
+    const formData = await request.formData();
+    const content = formData.get('content');
 
-		const { error: createPostError, data: newPost } = await getSupabaseClient()
-			.from('posts')
-			.insert({ content });
+    const { error: createPostError, data: newPost } = await getSupabaseClient()
+      .from('posts')
+      .insert({ content });
 
-		if (createPostError) {
-			return invalid(500, {
-				supabaseErrorMessage: createPostError.message
-			});
-		}
-		return {
-			newPost
-		};
-	})
+    if (createPostError) {
+      return invalid(500, {
+        supabaseErrorMessage: createPostError.message
+      });
+    }
+    return {
+      newPost
+    };
+  })
 };
 ```
 
 If you try to submit a form with the action `?/createPost` without a valid session cookie, you will get a 403 error response.
+
+## Saving and deleting the session
+
+Use `saveSession` to save the session cookies:
+
+```ts
+import type { Actions } from './$types';
+import { supabaseClient } from '$lib/db';
+import { invalid, redirect } from '@sveltejs/kit';
+import { saveSession } from '@supabase/auth-helpers-sveltekit/server';
+
+export const actions: Actions = {
+  async signin({ request, cookies, url }) {
+    const formData = await request.formData();
+
+    const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
+
+    const { data, error } = await supabaseClient.auth.api.signInWithEmail(email, password, {
+      redirectTo: `${url.origin}/logging-in`
+    });
+
+    if (error || !data) {
+      if (error?.status === 400) {
+        return invalid(400, {
+          error: 'Invalid credentials',
+          values: {
+            email
+          }
+        });
+      }
+      return invalid(500, {
+        error: 'Server error. Try again later.',
+        values: {
+          email
+        }
+      });
+    }
+
+    saveSession(cookies, data);
+    throw redirect(303, '/dashboard');
+  }
+};
+```
+
+Use `deleteSession` to delete the session cookies:
+
+```ts
+import type { Actions } from './$types';
+import { deleteSession } from '@supabase/auth-helpers-sveltekit/server';
+import { redirect } from '@sveltejs/kit';
+
+export const actions: Actions = {
+  async logout({ cookies }) {
+    deleteSession(cookies);
+    throw redirect(303, '/');
+  }
+};
+```
+
+## Custom session namespace
+
+If you wan´t to use something else than `locals.session` and `$page.data.session` you can do so by updating the types and creating three helper functions:
+
+```ts
+// src/app.d.ts
+declare namespace App {
+  interface Locals {
+    mySupabaseSession: import('@supabase/auth-helpers-sveltekit').SupabaseSession;
+  }
+  interface PageData {
+    mySupabaseSession: import('@supabase/auth-helpers-sveltekit').SupabaseSession;
+  }
+}
+
+// src/hooks.server.ts
+setupSupabaseServer({
+  supabaseClient,
+  cookieOptions: {
+    secure: !dev
+  },
+  // --- change location within locals ---
+  getSessionFromLocals: locals => locals.mySupabaseSession,
+  setSessionToLocals: (locals, session) => locals.mySupabaseSession = session
+});
+
+// src/lib/db.ts
+setupSupabaseClient({
+  supabaseClient,
+  // --- change location within pageData ---
+  getSessionFromPageData: data => data.mySupabaseSession
+});
+```
