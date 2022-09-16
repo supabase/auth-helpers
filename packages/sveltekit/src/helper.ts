@@ -60,9 +60,16 @@ export function withAuth<E extends any, T extends any>(
       }
     }
 
-    const ev = event as E & ExtendedEvent;
-    ev.getSupabaseClient = () => supabaseServerClient(session?.accessToken);
-    ev.session = session;
+    const ev = new Proxy(event as E & ExtendedEvent, {
+      get(target, p, receiver) {
+        if (p === 'getSupabaseClient')
+          return () => supabaseServerClient(session?.accessToken);
+        if (p === 'session') {
+          return session;
+        }
+        return Reflect.get(target, p, receiver);
+      }
+    });
 
     return cb(ev);
   }
