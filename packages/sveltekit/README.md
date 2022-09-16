@@ -138,7 +138,7 @@ declare namespace App {
 
 ### Basic Setup
 
-You can now determine if a user is authenticated on the client-side by checking that the `user` object returned by `$page.data.session` is defined.
+You can now determine if a user is authenticated on the client-side by checking that the `session` object returned by `$page.data` is defined.
 
 ```html
 <!-- example -->
@@ -146,7 +146,7 @@ You can now determine if a user is authenticated on the client-side by checking 
   import { page } from '$app/stores';
 </script>
 
-{#if !$page.data.session.user}
+{#if !$page.data.session}
   <h1>I am not logged in</h1>
 {:else}
   <h1>Welcome {$page.data.session.user.email}</h1>
