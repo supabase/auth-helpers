@@ -58,7 +58,7 @@ importers:
       '@supabase/auth-helpers-sveltekit': workspace:*
       '@supabase/supabase-js': ^1.35.3
       '@sveltejs/adapter-auto': next
-      '@sveltejs/kit': 1.0.0-next.480
+      '@sveltejs/kit': 1.0.0-next.483
       '@typescript-eslint/eslint-plugin': ^5.10.1
       '@typescript-eslint/parser': ^5.10.1
       eslint: ^7.32.0
@@ -79,8 +79,8 @@ importers:
       '@supabase/auth-helpers-sveltekit': link:../../packages/sveltekit/dist
       '@supabase/supabase-js': 1.35.3
     devDependencies:
-      '@sveltejs/adapter-auto': 1.0.0-next.73
-      '@sveltejs/kit': 1.0.0-next.480_svelte@3.48.0+vite@3.1.0
+      '@sveltejs/adapter-auto': 1.0.0-next.75
+      '@sveltejs/kit': 1.0.0-next.483_svelte@3.48.0+vite@3.1.0
       '@typescript-eslint/eslint-plugin': 5.27.0_hatonczsu7ve3fyw6burvz5sxq
       '@typescript-eslint/parser': 5.27.0_dyxdave6dwjbccc5dgiifcmuza
       eslint: 7.32.0
@@ -103,7 +103,7 @@ importers:
       '@supabase/auth-helpers-sveltekit': workspace:*
       '@supabase/supabase-js': ^1.35.3
       '@sveltejs/adapter-auto': next
-      '@sveltejs/kit': 1.0.0-next.480
+      '@sveltejs/kit': 1.0.0-next.483
       '@typescript-eslint/eslint-plugin': ^5.10.1
       '@typescript-eslint/parser': ^5.10.1
       eslint: ^7.32.0
@@ -123,8 +123,8 @@ importers:
       '@supabase/auth-helpers-sveltekit': link:../../packages/sveltekit/dist
       '@supabase/supabase-js': 1.35.3
     devDependencies:
-      '@sveltejs/adapter-auto': 1.0.0-next.73
-      '@sveltejs/kit': 1.0.0-next.480_svelte@3.48.0+vite@3.1.0
+      '@sveltejs/adapter-auto': 1.0.0-next.75
+      '@sveltejs/kit': 1.0.0-next.483_svelte@3.48.0+vite@3.1.0
       '@typescript-eslint/eslint-plugin': 5.27.0_hatonczsu7ve3fyw6burvz5sxq
       '@typescript-eslint/parser': 5.27.0_dyxdave6dwjbccc5dgiifcmuza
       eslint: 7.32.0
@@ -146,7 +146,7 @@ importers:
       '@supabase/auth-helpers-sveltekit': workspace:*
       '@supabase/supabase-js': ^1.35.3
       '@sveltejs/adapter-auto': next
-      '@sveltejs/kit': 1.0.0-next.480
+      '@sveltejs/kit': 1.0.0-next.483
       '@typescript-eslint/eslint-plugin': ^5.10.1
       '@typescript-eslint/parser': ^5.10.1
       eslint: ^7.32.0
@@ -166,51 +166,8 @@ importers:
       '@supabase/auth-helpers-sveltekit': link:../../packages/sveltekit/dist
       '@supabase/supabase-js': 1.35.3
     devDependencies:
-      '@sveltejs/adapter-auto': 1.0.0-next.73
-      '@sveltejs/kit': 1.0.0-next.480_svelte@3.48.0+vite@3.1.0
-      '@typescript-eslint/eslint-plugin': 5.27.0_hatonczsu7ve3fyw6burvz5sxq
-      '@typescript-eslint/parser': 5.27.0_dyxdave6dwjbccc5dgiifcmuza
-      eslint: 7.32.0
-      eslint-config-prettier: 8.5.0_eslint@7.32.0
-      eslint-plugin-svelte3: 3.4.1_6wevxxng4y4ff26nzlndg2wnpa
-      prettier: 2.6.2
-      prettier-plugin-svelte: 2.7.0_kkjbqzpydplecjtkxrgomroeru
-      rimraf: 3.0.2
-      svelte: 3.48.0
-      svelte-check: 2.7.1_svelte@3.48.0
-      svelte-preprocess: 4.10.6_sef34mbipkdngofoeuutt4axsu
-      tsconfig: link:../../packages/tsconfig
-      tslib: 2.4.0
-      typescript: 4.8.3
-      vite: 3.1.0
-
-  examples/sveltekit-supabase-v2:
-    specifiers:
-      '@supabase/auth-helpers-sveltekit': workspace:*
-      '@supabase/supabase-js': 2.0.0-rc.10
-      '@sveltejs/adapter-auto': next
-      '@sveltejs/kit': 1.0.0-next.480
-      '@typescript-eslint/eslint-plugin': ^5.10.1
-      '@typescript-eslint/parser': ^5.10.1
-      eslint: ^7.32.0
-      eslint-config-prettier: ^8.3.0
-      eslint-plugin-svelte3: ^3.2.1
-      prettier: ^2.5.1
-      prettier-plugin-svelte: ^2.5.0
-      rimraf: ^3.0.2
-      svelte: ^3.44.0
-      svelte-check: ^2.2.6
-      svelte-preprocess: ^4.10.1
-      tsconfig: workspace:*
-      tslib: ^2.3.1
-      typescript: ^4.7.4
-      vite: ^3.1.0
-    dependencies:
-      '@supabase/auth-helpers-sveltekit': link:../../packages/sveltekit/dist
-      '@supabase/supabase-js': 2.0.0-rc.10
-    devDependencies:
-      '@sveltejs/adapter-auto': 1.0.0-next.73
-      '@sveltejs/kit': 1.0.0-next.480_svelte@3.48.0+vite@3.1.0
+      '@sveltejs/adapter-auto': 1.0.0-next.75
+      '@sveltejs/kit': 1.0.0-next.483_svelte@3.48.0+vite@3.1.0
       '@typescript-eslint/eslint-plugin': 5.27.0_hatonczsu7ve3fyw6burvz5sxq
       '@typescript-eslint/parser': 5.27.0_dyxdave6dwjbccc5dgiifcmuza
       eslint: 7.32.0
@@ -324,7 +281,7 @@ importers:
   packages/sveltekit:
     specifiers:
       '@supabase/supabase-js': ^1.35.3
-      '@sveltejs/kit': 1.0.0-next.480
+      '@sveltejs/kit': 1.0.0-next.483
       '@sveltejs/package': 1.0.0-next.3
       fix-esm-import-path: ^1.3.1
       jose: ^4.9.2
@@ -337,7 +294,7 @@ importers:
       jose: 4.9.2
     devDependencies:
       '@supabase/supabase-js': 1.35.3
-      '@sveltejs/kit': 1.0.0-next.480_svelte@3.48.0+vite@3.1.0
+      '@sveltejs/kit': 1.0.0-next.483_svelte@3.48.0+vite@3.1.0
       '@sveltejs/package': 1.0.0-next.3_sef34mbipkdngofoeuutt4axsu
       fix-esm-import-path: 1.3.1
       svelte: 3.48.0
@@ -1018,14 +975,6 @@ packages:
     transitivePeerDependencies:
       - encoding
 
-  /@supabase/functions-js/2.0.0-rc.1:
-    resolution: {integrity: sha512-cYFaSA28NoTREM4ZrHWaxXjElfY0S8umrjoffTbmI4Rgkg8+4raBnQIi52usfr5MuFpy566vhbLNOcP9kNHjOw==}
-    dependencies:
-      cross-fetch: 3.1.5
-    transitivePeerDependencies:
-      - encoding
-    dev: false
-
   /@supabase/gotrue-js/1.22.15:
     resolution: {integrity: sha512-7/mwnd1hR/bpkCmbDvjnwPfWyRcE2B1ZnfxthqgVaZ5oJHS/CQibyuLBL8DA75fxmgY9nIfednDZSydSm6zK0w==}
     dependencies:
@@ -1033,28 +982,12 @@ packages:
     transitivePeerDependencies:
       - encoding
 
-  /@supabase/gotrue-js/2.0.0-rc.4:
-    resolution: {integrity: sha512-jHWyF1/Rl/1MXybFnHnHVjXYrOuvLzSUACow2Ii2KFD7zURPjPzy5KvOzq6tk+wL92LDgCl88nU1QVvO7dvRog==}
-    dependencies:
-      cross-fetch: 3.1.5
-    transitivePeerDependencies:
-      - encoding
-    dev: false
-
   /@supabase/postgrest-js/0.37.2:
     resolution: {integrity: sha512-3Dgx5k3RvtKqc8DvR2BEyh2fVyjZe5P4e0zD1r8dyuVmpaYDaASZ2YeNVgyWXMCWH7xzrj4vepTYlKwfj78QLg==}
     dependencies:
       cross-fetch: 3.1.5
     transitivePeerDependencies:
       - encoding
-
-  /@supabase/postgrest-js/1.0.0-rc.5:
-    resolution: {integrity: sha512-rBOyhK+qLd2fdX6WbCW3e9gY9qbwC5Zeso6QWM+00RlRz3k156lxnreVpe4KKGXNT3JMqJwAHXjQ2lbxmtBJqg==}
-    dependencies:
-      cross-fetch: 3.1.5
-    transitivePeerDependencies:
-      - encoding
-    dev: false
 
   /@supabase/realtime-js/1.7.2:
     resolution: {integrity: sha512-DMUaFIKj7KszGtWTTQbhMmUzZf7UnwYqySsmY+G8HgYxvY3ZaVa+DZD0I6ofgr4OLNr0po/ODM2a4lf5m5GNBg==}
@@ -1064,29 +997,12 @@ packages:
     transitivePeerDependencies:
       - supports-color
 
-  /@supabase/realtime-js/2.0.0-rc.5:
-    resolution: {integrity: sha512-0JiSJjoTmwleufGzBQwEVamI047jnAiemBk8qOkgwyoLOlfGTQk8XSA7aT023BsGVgRNKZqp/jJJAVBht/Rd2w==}
-    dependencies:
-      '@types/phoenix': 1.5.4
-      websocket: 1.0.34
-    transitivePeerDependencies:
-      - supports-color
-    dev: false
-
   /@supabase/storage-js/1.7.0:
     resolution: {integrity: sha512-f5EBw0wM96hKmnrXhgiqq2Reh9O0NgjKE+jkaKY4jQmfutefqaCAWn+cBzlmHs9h135H2ldaGmhWRFHUSkLt2g==}
     dependencies:
       cross-fetch: 3.1.5
     transitivePeerDependencies:
       - encoding
-
-  /@supabase/storage-js/2.0.0-rc.1:
-    resolution: {integrity: sha512-OjPtPuKzhzQW6nO/UdwVJVFrzfFnIWt1u+gTQ4+8t1+IBdn7xDHssDteBPkMCd+fYcbMZrqpggbagoFH3FylXw==}
-    dependencies:
-      cross-fetch: 3.1.5
-    transitivePeerDependencies:
-      - encoding
-    dev: false
 
   /@supabase/supabase-js/1.35.3:
     resolution: {integrity: sha512-uwO8OVdMFsGZNZ1xQhFz22+PSW0EWYZ5xVq+jQeGz8nhabEu+Q9Uyep/bcNzOpyPJRzbGfxSPRzgAdAxfJgFhw==}
@@ -1099,20 +1015,6 @@ packages:
     transitivePeerDependencies:
       - encoding
       - supports-color
-
-  /@supabase/supabase-js/2.0.0-rc.10:
-    resolution: {integrity: sha512-0yjcWm7YnyPcuHl4OOhUkWzyyvFpGeuKdK0x5HKVROApadVcUZEz5/Zng8J32TbmD0nSMhU/IDBYhVfjZrLSYw==}
-    dependencies:
-      '@supabase/functions-js': 2.0.0-rc.1
-      '@supabase/gotrue-js': 2.0.0-rc.4
-      '@supabase/postgrest-js': 1.0.0-rc.5
-      '@supabase/realtime-js': 2.0.0-rc.5
-      '@supabase/storage-js': 2.0.0-rc.1
-      cross-fetch: 3.1.5
-    transitivePeerDependencies:
-      - encoding
-      - supports-color
-    dev: false
 
   /@supabase/ui/0.36.5_sfoxds7t5ydpegc3knd667wn6m:
     resolution: {integrity: sha512-SdjUf20sCVw0Ap+x4YfGmjMunUz9ZEipc0bwGxj2f5pEWf12qrDQyhhMcoWCWgjWneITfrjFcejV0jA9zTuiEw==}
@@ -1128,35 +1030,35 @@ packages:
       fsevents: 2.3.2
     dev: false
 
-  /@sveltejs/adapter-auto/1.0.0-next.73:
-    resolution: {integrity: sha512-KvCnZtpyfJ6mhCX5jSTn/C4KfBe22VNcTLaHKBhdp/DUDDHJHX4so9nfSAXIC6TuLpxsKnA6dDKLVojlMe9H6g==}
+  /@sveltejs/adapter-auto/1.0.0-next.75:
+    resolution: {integrity: sha512-UEE6XkeXVrNhpEceqcCbtfV5EYzulIt1D/L+RsjIVsPVtUIZMMpPWzuHHzVvPemFRAuYho+4C1hJjIJ9iCgPeQ==}
     dependencies:
-      '@sveltejs/adapter-cloudflare': 1.0.0-next.33
-      '@sveltejs/adapter-netlify': 1.0.0-next.77
-      '@sveltejs/adapter-vercel': 1.0.0-next.74
+      '@sveltejs/adapter-cloudflare': 1.0.0-next.34
+      '@sveltejs/adapter-netlify': 1.0.0-next.78
+      '@sveltejs/adapter-vercel': 1.0.0-next.76
     transitivePeerDependencies:
       - encoding
       - supports-color
     dev: true
 
-  /@sveltejs/adapter-cloudflare/1.0.0-next.33:
-    resolution: {integrity: sha512-RNHHv3qcIZG7JbvucZEUEM5Vxqt6VApfIpXcOuAfq5IhJ+AOR33L+aAtkbIxhCcXr8d237YHibNWFSnxCHoVOg==}
+  /@sveltejs/adapter-cloudflare/1.0.0-next.34:
+    resolution: {integrity: sha512-9/YJsx5O+iy2+XGuH0vVzZ9OSeHGjkInh8JG8CLmIc0cKkv2t7sEu7qQ/qXA5CcvmS1AqNSUgIMxGoeEDVlO3g==}
     dependencies:
       '@cloudflare/workers-types': 3.14.1
       esbuild: 0.15.7
       worktop: 0.8.0-next.14
     dev: true
 
-  /@sveltejs/adapter-netlify/1.0.0-next.77:
-    resolution: {integrity: sha512-g4+i8xQROxw4Olt5T0bJAj3qCDuluQ/JnvzqajEz620COuIddpa2B1xK5DmbAhxQox823jLNTxg7LOEpBqD3bw==}
+  /@sveltejs/adapter-netlify/1.0.0-next.78:
+    resolution: {integrity: sha512-Yyn/j/0QcLK3Db442ducLUZmyvkO74j7Gdcwu9xN0fQN3kBlCJP9Itx5o4SySrPFGc4Q8cLJ5ELNg+mWduLBAA==}
     dependencies:
       '@iarna/toml': 2.2.5
       esbuild: 0.15.7
       set-cookie-parser: 2.5.0
     dev: true
 
-  /@sveltejs/adapter-vercel/1.0.0-next.74:
-    resolution: {integrity: sha512-BMAeib/aH0JdCyMncnugZteVMc47DfKtqE49BpH8JtiIBna34mkYevUWFLyIEVjoNUu2hHr9GMZXBI0q7JL8tQ==}
+  /@sveltejs/adapter-vercel/1.0.0-next.76:
+    resolution: {integrity: sha512-Od9DBfeMwWC/sZNeCJw4TYVE3LMR8lGJivSdkXWgpvksgG+QizLyzTfvBacapId3wcu+7X4PPTLoH00o5iQGEQ==}
     dependencies:
       '@vercel/nft': 0.22.1
       esbuild: 0.15.7
@@ -1165,8 +1067,8 @@ packages:
       - supports-color
     dev: true
 
-  /@sveltejs/kit/1.0.0-next.480_svelte@3.48.0+vite@3.1.0:
-    resolution: {integrity: sha512-RnltVDZFksAkeIZ0wgMQDr4POz3WZxSDy6D/ycIjrz3VXMDYWxKRqmTEI7Yl7TxPgUabeYHGRm/qI+nSXOb/Yw==}
+  /@sveltejs/kit/1.0.0-next.483_svelte@3.48.0+vite@3.1.0:
+    resolution: {integrity: sha512-0aiVdVJSy1kiK7xp4bw81qjDkErVaA6oIPlpbjsIYe2UYfeg3aRtST41b6XzLbyg61qLlHVGoM5WTLTIdLnbAQ==}
     engines: {node: '>=16.14'}
     hasBin: true
     requiresBuild: true
