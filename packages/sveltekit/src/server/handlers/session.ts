@@ -3,10 +3,13 @@ import { decodeJwt } from 'jose';
 import type { ApiError, User } from '@supabase/supabase-js';
 import { getServerConfig } from '../config';
 import { deleteSession, saveSession } from '../helpers';
+import type { SupabaseSession } from '../../types';
 
-export async function attachSession(event: RequestEvent) {
+export async function getSupabaseSession(event: RequestEvent) {
   const { supabaseClient, cookieName, tokenRefreshMargin } = getServerConfig();
-  const { cookies, locals } = event;
+  const { cookies } = event;
+
+  let session: SupabaseSession = null;
 
   try {
     const accessToken = cookies.get(`${cookieName}-access-token`);
@@ -33,7 +36,7 @@ export async function attachSession(event: RequestEvent) {
         throw error;
       }
       saveSession(cookies, data);
-      locals.session = {
+      session = {
         user: { ...data.user, exp: data.expires_at } as User,
         accessToken: data.access_token
       };
@@ -44,7 +47,7 @@ export async function attachSession(event: RequestEvent) {
       if (error || !data) {
         throw error;
       }
-      locals.session = {
+      session = {
         user: { ...data, exp: jwt.exp } as User,
         accessToken: accessToken
       };
@@ -53,14 +56,14 @@ export async function attachSession(event: RequestEvent) {
     if ((err as ApiError).message === 'Invalid Refresh Token') {
       deleteSession(cookies);
     }
-
-    locals.session = null;
   }
+  return session;
 }
 
 export default function session(): Handle {
   return async ({ resolve, event }) => {
-    await attachSession(event);
+    const session = await getSupabaseSession(event);
+    event.locals.session = session;
     return resolve(event);
   };
 }
