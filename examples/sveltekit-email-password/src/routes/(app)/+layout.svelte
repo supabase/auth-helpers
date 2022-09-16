@@ -13,7 +13,7 @@
 			<a class="my-2" href="/">Supabase Auth Helpers Demo</a>
 		</div>
 		<div class="navbar-end">
-			{#if $page.data.session.user?.id}
+			{#if $page.data.session}
 				<form action="/logout" method="post" use:enhanceAndInvalidate>
 					<button type="submit">Sign out</button>
 				</form>

@@ -19,7 +19,7 @@
 	}
 </script>
 
-{#if $page.data.session.user?.id}
+{#if $page.data.session}
 	<button on:click={signout}>Sign out</button>
 {/if}
 

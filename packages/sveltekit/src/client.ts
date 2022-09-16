@@ -36,19 +36,24 @@ export function startSupabaseSessionSync() {
     let timeout: ReturnType<typeof setTimeout> | null;
     let expiresAt: number | undefined;
 
+    const resetTimout = () => {
+      timeout && clearTimeout(timeout);
+      timeout = null;
+    };
+
     const pageUnsub = page.subscribe(({ data }) => {
-      const accessToken = data.session?.accessToken;
-      if (accessToken) {
-        supabaseClient.auth.setAuth(accessToken);
-      } else {
+      if (!data.session) {
+        resetTimout();
         // @ts-expect-error this is a private method but we have to clear the session
         supabaseClient.auth._removeSession();
+        return;
       }
 
-      const exp = (data.session?.user as User & { exp: number })?.exp;
+      supabaseClient.auth.setAuth(data.session.accessToken);
+
+      const exp = (data.session.user as User & { exp: number })?.exp;
       if (!exp) {
-        timeout && clearTimeout(timeout);
-        timeout = null;
+        resetTimout();
         return;
       }
 
@@ -60,7 +65,7 @@ export function startSupabaseSessionSync() {
         const refreshDurationBeforeExpires =
           expiresIn > tokenRefreshMargin ? tokenRefreshMargin : 0.5;
 
-        timeout && clearTimeout(timeout);
+        resetTimout();
 
         timeout = setTimeout(() => {
           // refresh token

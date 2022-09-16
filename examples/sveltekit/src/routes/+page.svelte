@@ -15,7 +15,7 @@
 		loadedData = data;
 	}
 
-	$: if ($page.data.session.user?.id) {
+	$: if ($page.data.session) {
 		loadData();
 	}
 </script>
@@ -23,7 +23,7 @@
 <h1>Welcome to SvelteKit</h1>
 <p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
 
-{#if !$page.data.session.user}
+{#if !$page.data.session}
 	<button
 		on:click={() => {
 			supabaseClient.auth.signIn({ provider: 'github' }, { scopes: 'public_repo user:email' });

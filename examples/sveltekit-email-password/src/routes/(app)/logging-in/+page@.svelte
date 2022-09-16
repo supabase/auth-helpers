@@ -12,7 +12,7 @@
 			redirectPath = redirectTo;
 		}
 		// check if user has been set in session store then redirect
-		if (browser && $page.data.session.user?.id) {
+		if (browser && $page.data.session) {
 			goto(redirectPath);
 		}
 	}
