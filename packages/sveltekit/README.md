@@ -61,9 +61,9 @@ Edit your `+layout.svelte` file and set up the client side.
   // set global the client instance
   // this must happen in module context
   import { supabaseClient } from '$lib/db';
-  import { setupSupabase } from '@supabase/auth-helpers-sveltekit';
+  import { setupSupabaseClient } from '@supabase/auth-helpers-sveltekit';
 
-  setupSupabase({ supabaseClient });
+  setupSupabaseClient({ supabaseClient });
 </script>
 
 <script lang="ts">
@@ -82,29 +82,40 @@ Our `hooks.ts` file is where the heavy lifting of this library happens, we need 
 
 ```ts
 // src/hooks.server.ts
-import { auth } from '@supabase/auth-helpers-sveltekit/server';
 import { dev } from '$app/environment';
 import { supabaseClient } from '$lib/db';
+import { setupSupabaseServer } from '@supabase/auth-helpers-sveltekit/server';
+import { auth } from '@supabase/auth-helpers-sveltekit/server';
 
-export const handle = auth({
-  supabaseClient,
-  cookieOptions: {
-    secure: !dev
-  }
+setupSupabaseServer({
+	supabaseClient,
+	cookieOptions: {
+		secure: !dev
+	}
 });
+
+export const handle = auth;
 
 // use the sequence helper if you have additional Handle methods
 import { sequence } from '@sveltejs/kit/hooks';
 
 export const handle = sequence(
-  auth({
-    supabaseClient,
-    cookieOptions: {
-      secure: !dev
-    }
-  }),
+  auth,
   yourHandler
 );
+```
+
+### Session sync
+
+Set up the `handleCallbackSession` helper to save the session on the server when the auth state changes on the client.
+
+```ts
+// src/routes/api/auth/callback/+server.ts
+import type { RequestHandler } from './$types';
+import { handleCallbackSession } from '@supabase/auth-helpers-sveltekit/server';
+
+// TODO: remove this when the cookie bug if fixed
+export const POST: RequestHandler = handleCallbackSession;
 ```
 
 <!-- TODO: Add this when the cookie issue is resolved
