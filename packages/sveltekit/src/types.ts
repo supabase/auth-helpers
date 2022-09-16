@@ -33,3 +33,17 @@ export type ExtendedEvent = {
   getSupabaseClient(): SupabaseClient;
   session: SupabaseSession;
 };
+
+export interface SetupClientOptions {
+  supabaseClient: SupabaseClient;
+  tokenRefreshMargin?: number;
+  endpointPrefix?: string;
+}
+
+export interface SetupServerOptions {
+  supabaseClient: SupabaseClient;
+  tokenRefreshMargin?: number;
+  cookieName?: string;
+  cookieOptions?: CookieOptions;
+  endpointPrefix?: string;
+}

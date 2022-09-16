@@ -1,8 +1,10 @@
+import { browser } from '$app/environment';
 import { applyAction, enhance } from '$app/forms';
 import { invalidateAll } from '$app/navigation';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { LoadEvent, RequestEvent } from '@sveltejs/kit';
 import { getClientConfig } from './config';
+import { getServerConfig } from './server/config';
 import type { ExtendedEvent, SupabaseSession } from './types';
 
 export function enhanceAndInvalidate(form: HTMLFormElement) {
@@ -17,11 +19,13 @@ export function enhanceAndInvalidate(form: HTMLFormElement) {
 export function supabaseServerClient(
   access_token: string | null | undefined
 ): SupabaseClient {
-  const { supabaseClient } = getClientConfig();
-  // no need to set the token on the browser
-  if (access_token) {
-    supabaseClient?.auth.setAuth(access_token);
+  const { supabaseClient } = browser ? getClientConfig() : getServerConfig();
+  if (!access_token) {
+    throw new Error(
+      'No access token provided, make sure to check if the user is authenticated.'
+    );
   }
+  supabaseClient.auth.setAuth(access_token);
   return supabaseClient;
 }
 

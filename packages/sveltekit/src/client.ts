@@ -1,28 +1,19 @@
 import { browser } from '$app/environment';
 import { invalidateAll } from '$app/navigation';
 import { page } from '$app/stores';
-import type {
-  AuthChangeEvent,
-  SupabaseClient,
-  User
-} from '@supabase/supabase-js';
+import type { AuthChangeEvent, User } from '@supabase/supabase-js';
 import { onMount } from 'svelte';
 import { setClientConfig, getClientConfig } from './config';
 import { ENDPOINT_PREFIX, TOKEN_REFRESH_MARGIN } from './constants';
-
-interface Options {
-  supabaseClient: SupabaseClient;
-  tokenRefreshMargin?: number;
-  endpointPrefix?: string;
-}
+import type { SetupClientOptions } from './types';
 
 const HANDLE_EVENTS: AuthChangeEvent[] = ['SIGNED_IN', 'SIGNED_OUT'];
 
-export function setupSupabase({
+export function setupSupabaseClient({
   supabaseClient,
   tokenRefreshMargin = TOKEN_REFRESH_MARGIN,
   endpointPrefix = ENDPOINT_PREFIX
-}: Options) {
+}: SetupClientOptions) {
   setClientConfig({ supabaseClient, tokenRefreshMargin, endpointPrefix });
 }
 
@@ -42,16 +33,17 @@ export function startSupabaseSessionSync() {
     };
 
     const pageUnsub = page.subscribe(({ data }) => {
-      if (!data.session) {
+      const session = data.session;
+      if (!session) {
         resetTimout();
         // @ts-expect-error this is a private method but we have to clear the session
         supabaseClient.auth._removeSession();
         return;
       }
 
-      supabaseClient.auth.setAuth(data.session.accessToken);
+      supabaseClient.auth.setAuth(session.accessToken);
 
-      const exp = (data.session.user as User & { exp: number })?.exp;
+      const exp = (session.user as User & { exp: number })?.exp;
       if (!exp) {
         resetTimout();
         return;

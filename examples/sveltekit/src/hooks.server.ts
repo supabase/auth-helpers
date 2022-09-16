@@ -1,10 +1,13 @@
 import { dev } from '$app/environment';
 import { supabaseClient } from '$lib/db';
+import { setupSupabaseServer } from '@supabase/auth-helpers-sveltekit/server';
 import { auth } from '@supabase/auth-helpers-sveltekit/server';
 
-export const handle = auth({
+setupSupabaseServer({
 	supabaseClient,
 	cookieOptions: {
 		secure: !dev
 	}
 });
+
+export const handle = auth;
