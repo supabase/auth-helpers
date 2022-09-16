@@ -32,7 +32,7 @@ PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 ```
 
-### SupabaseClient and SupaAuthHelper component setup
+### SupabaseClient setup
 
 We will start off by creating a `db.ts` file inside of our `src/lib` directory. Now lets instantiate our `supabaseClient`.
 
@@ -163,34 +163,39 @@ For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row
   import Auth from 'supabase-ui-svelte';
   import { supabaseClient } from '$lib/db';
   import { page } from '$app/stores';
-  import { enhanceAndInvalidate } from '@supabase/auth-helpers-sveltekit';
 
   let loadedData = [];
   async function loadData() {
-    const { data } = await supabaseClient.from('test').select('*').single();
+    const { data } = await supabaseClient.from('test').select('*').limit(20);
     loadedData = data;
   }
 
   $: if ($page.data.session.user?.id) {
     loadData();
   }
+
+  function signout() {
+    supabaseClient.auth.signOut();
+  }
 </script>
 
-{#if !$page.data.session.user} <Auth supabaseClient={supabaseClient}
-providers={['google', 'github']} /> {:else}
-<form action="/logout" method="post" use:enhanceAndInvalidate>
-  <button type="submit">Sign out</button>
-</form>
-<p>user:</p>
-<pre>{JSON.stringify($page.data.session.user, null, 2)}</pre>
-<p>client-side data fetching with RLS</p>
-<pre>{JSON.stringify(loadedData, null, 2)}</pre>
+{#if !$page.data.session.user}
+  <Auth
+    supabaseClient={supabaseClient}
+    providers={['google', 'github']}
+  />
+{:else}
+  <button on:click={signout}>Sign out</button>
+  <p>user:</p>
+  <pre>{JSON.stringify($page.data.session.user, null, 2)}</pre>
+  <p>client-side data fetching with RLS</p>
+  <pre>{JSON.stringify(loadedData, null, 2)}</pre>
 {/if}
 ```
 
 ### Server-side data fetching with RLS
 
-For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row-level-security) to work in a server environment, you need to inject the request context into the supabase client:
+For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row-level-security) to work in a server environment, you need to use the `withAuth` helper to check if the user is authenticated. The helper extends the event with `session` and `getSupabaseClient()`:
 
 ```html
 <!-- src/routes/profile/+page.svelte -->
@@ -207,10 +212,7 @@ For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row
 
 ```ts
 // src/routes/profile/+page.ts
-import {
-  supabaseServerClient,
-  withApiAuth
-} from '@supabase/auth-helpers-sveltekit';
+import { withAuth } from '@supabase/auth-helpers-sveltekit';
 import type { PageLoad } from './$types';
 
 interface TestTable {
@@ -220,7 +222,6 @@ interface TestTable {
 
 export const load: PageLoad = withAuth(
   { status: 303, location: '/' },
-
   async ({ getSupabaseClient, session }) => {
     const { data: tableData } = await getSupabaseClient()
       .from<TestTable>('test')
@@ -234,16 +235,29 @@ export const load: PageLoad = withAuth(
 );
 ```
 
+**Caution:**
+
+Always use the instance returned by `getSupabaseClient()` directly!
+
+```ts
+// Bad
+const supabaseClient = getSupabaseClient();
+
+await supabaseClient.from('table1').select();
+await supabaseClient.from('table2').select();
+
+// Good
+await getSupabaseClient().from('table1').select();
+await getSupabaseClient().from('table2').select();
+```
+
 ## Protecting API routes
 
 Wrap an API Route to check that the user has a valid session. If they're not logged in the handler will redirect using the status and location.
 
 ```ts
 // src/routes/api/protected-route/+server.ts
-import {
-  supabaseServerClient,
-  withApiAuth
-} from '@supabase/auth-helpers-sveltekit';
+import { withAuth } from '@supabase/auth-helpers-sveltekit';
 import type { RequestHandler } from './$types';
 import { json } from '@sveltejs/kit';
 
