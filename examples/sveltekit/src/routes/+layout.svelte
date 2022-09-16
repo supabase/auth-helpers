@@ -9,16 +9,18 @@
 
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { startSupabaseSessionSync, enhanceAndInvalidate } from '@supabase/auth-helpers-sveltekit';
+	import { startSupabaseSessionSync } from '@supabase/auth-helpers-sveltekit';
 
 	// this sets up automatic token refreshing
 	startSupabaseSessionSync();
+
+	function signout() {
+		supabaseClient.auth.signOut();
+	}
 </script>
 
 {#if $page.data.session.user?.id}
-	<form action="/logout" method="post" use:enhanceAndInvalidate>
-		<button type="submit">Sign out</button>
-	</form>
+	<button on:click={signout}>Sign out</button>
 {/if}
 
 <slot />
