@@ -1,7 +1,6 @@
 import { dev } from '$app/environment';
 import { supabaseClient } from '$lib/db';
-import { setupSupabaseServer } from '@supabase/auth-helpers-sveltekit/server';
-import { auth } from '@supabase/auth-helpers-sveltekit/server';
+import { setupSupabaseServer, auth } from '@supabase/auth-helpers-sveltekit/server';
 
 setupSupabaseServer({
 	supabaseClient,
