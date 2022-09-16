@@ -147,16 +147,16 @@ You can now determine if a user is authenticated on the client-side by checking 
 </script>
 
 {#if !$page.data.session.user}
-<h1>I am not logged in</h1>
+  <h1>I am not logged in</h1>
 {:else}
-<h1>Welcome {$page.data.session.user.email}</h1>
-<p>I am logged in!</p>
+  <h1>Welcome {$page.data.session.user.email}</h1>
+  <p>I am logged in!</p>
 {/if}
 ```
 
 ## Client-side data fetching with RLS
 
-For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row-level-security) to work properly when fetching data client-side, you need to make sure to import the `{ supabaseClient }` from `$lib/db` and only run your query once the user is defined client-side in the `$page.data.session`:
+For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row-level-security) to work properly when fetching data client-side, you need to make sure to import the `{ supabaseClient }` from `$lib/db` and only run your query once the session is defined client-side `$page.data`:
 
 ```html
 <script>
@@ -170,7 +170,7 @@ For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row
     loadedData = data;
   }
 
-  $: if ($page.data.session.user?.id) {
+  $: if ($page.data.session) {
     loadData();
   }
 
@@ -179,7 +179,7 @@ For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row
   }
 </script>
 
-{#if !$page.data.session.user}
+{#if !$page.data.session}
   <Auth
     supabaseClient={supabaseClient}
     providers={['google', 'github']}
@@ -212,26 +212,27 @@ For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row
 
 ```ts
 // src/routes/profile/+page.ts
-import { withAuth } from '@supabase/auth-helpers-sveltekit';
 import type { PageLoad } from './$types';
+import { withAuth } from '@supabase/auth-helpers-sveltekit';
+import { redirect } from '@sveltejs/kit';
 
 interface TestTable {
   id: string;
   created_at: string;
 }
 
-export const load: PageLoad = withAuth(
-  { status: 303, location: '/' },
-  async ({ getSupabaseClient, session }) => {
-    const { data: tableData } = await getSupabaseClient()
-      .from<TestTable>('test')
-      .select('*');
-
-    return {
-      user: session.user,
-      tableData
-    };
+export const load: PageLoad = withAuth(async ({ getSupabaseClient, session }) => {
+  if (!session) {
+    throw redirect(303, '/');
   }
+  const { data: tableData } = await getSupabaseClient()
+    .from<TestTable>('test')
+    .select('*');
+
+  return {
+    user: session.user,
+    tableData
+  };
 );
 ```
 
@@ -257,24 +258,24 @@ Wrap an API Route to check that the user has a valid session. If they're not log
 
 ```ts
 // src/routes/api/protected-route/+server.ts
-import { withAuth } from '@supabase/auth-helpers-sveltekit';
 import type { RequestHandler } from './$types';
-import { json } from '@sveltejs/kit';
+import { withAuth } from '@supabase/auth-helpers-sveltekit';
+import { json, redirect } from '@sveltejs/kit';
 
 interface TestTable {
   id: string;
   created_at: string;
 }
 
-export const GET: RequestHandler = withAuth(
-  { status: 303, location: '/' },
-  async ({ getSupabaseClient }) => {
-    const { data } = await getSupabaseClient()
-      .from<TestTable>('test')
-      .select('*');
-
-    return json({ data });
+export const GET: RequestHandler = withAuth(async ({ getSupabaseClient }) => {
+  if (!session) {
+    throw redirect(303, '/');
   }
+  const { data } = await getSupabaseClient()
+    .from<TestTable>('test')
+    .select('*');
+
+  return json({ data });
 );
 ```
 

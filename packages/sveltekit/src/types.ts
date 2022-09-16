@@ -22,17 +22,14 @@ export interface CookieOptions {
   secure?: boolean;
 }
 
-export interface SupabaseSession {
-  user: User | null;
-  accessToken: string | null;
-}
-
 export interface AuthenticatedSupabaseSession {
   user: User;
-  accessToken: string | null;
+  accessToken: string;
 }
+
+export type SupabaseSession = null | AuthenticatedSupabaseSession;
 
 export type ExtendedEvent = {
   getSupabaseClient(): SupabaseClient;
-  session: AuthenticatedSupabaseSession;
+  session: SupabaseSession;
 };

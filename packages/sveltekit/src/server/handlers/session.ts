@@ -54,10 +54,7 @@ export async function attachSession(event: RequestEvent) {
       deleteSession(cookies);
     }
 
-    locals.session = {
-      user: null,
-      accessToken: null
-    };
+    locals.session = null;
   }
 }
 

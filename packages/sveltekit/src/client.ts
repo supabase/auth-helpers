@@ -37,7 +37,7 @@ export function startSupabaseSessionSync() {
     let expiresAt: number | undefined;
 
     const pageUnsub = page.subscribe(({ data }) => {
-      const accessToken = data.session.accessToken;
+      const accessToken = data.session?.accessToken;
       if (accessToken) {
         supabaseClient.auth.setAuth(accessToken);
       } else {

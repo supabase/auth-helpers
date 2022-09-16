@@ -1,5 +1,6 @@
 import { withAuth } from '@supabase/auth-helpers-sveltekit';
 import { getProviderToken } from '@supabase/auth-helpers-sveltekit/server';
+import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 interface GitHubOutput {
@@ -9,23 +10,23 @@ interface GitHubOutput {
 	items: any[];
 }
 
-export const load: PageServerLoad = withAuth(
-	{ status: 303, location: '/' },
-	async ({ session, cookies }) => {
-		const providerToken = getProviderToken(cookies);
-		const userId = session.user.user_metadata.user_name;
-		const allRepos: GitHubOutput = await (
-			await fetch(`https://api.github.com/search/repositories?q=user:${userId}`, {
-				method: 'GET',
-				headers: {
-					Authorization: `token ${providerToken}`
-				}
-			})
-		).json();
-
-		return {
-			user: session.user,
-			allRepos
-		};
+export const load: PageServerLoad = withAuth(async ({ session, cookies }) => {
+	if (!session) {
+		throw redirect(303, '/');
 	}
-);
+	const providerToken = getProviderToken(cookies);
+	const userId = session.user.user_metadata.user_name;
+	const allRepos: GitHubOutput = await (
+		await fetch(`https://api.github.com/search/repositories?q=user:${userId}`, {
+			method: 'GET',
+			headers: {
+				Authorization: `token ${providerToken}`
+			}
+		})
+	).json();
+
+	return {
+		user: session.user,
+		allRepos
+	};
+});

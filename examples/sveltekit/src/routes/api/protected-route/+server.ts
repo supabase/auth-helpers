@@ -1,5 +1,5 @@
 import { withAuth } from '@supabase/auth-helpers-sveltekit';
-import { json } from '@sveltejs/kit';
+import { error, json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
 interface TestTable {
@@ -7,11 +7,11 @@ interface TestTable {
 	created_at: string;
 }
 
-export const GET: RequestHandler = withAuth(
-	{ status: 401, error: { message: 'Unauthorized' } },
-	async ({ getSupabaseClient }) => {
-		const { data } = await getSupabaseClient().from<TestTable>('test').select('*');
-
-		return json({ data });
+export const GET: RequestHandler = withAuth(async ({ getSupabaseClient, session }) => {
+	if (!session) {
+		throw error(401, { message: 'Unauthorized' });
 	}
-);
+	const { data } = await getSupabaseClient().from<TestTable>('test').select('*');
+
+	return json({ data });
+});
