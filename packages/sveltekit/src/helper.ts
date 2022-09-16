@@ -60,13 +60,11 @@ export function withAuth<E extends any, T extends any>(
       }
     }
 
-    return cb({
-      ...(event as any),
-      session,
-      getSupabaseClient() {
-        return supabaseServerClient(session?.accessToken);
-      }
-    });
+    const ev = event as E & ExtendedEvent;
+    ev.getSupabaseClient = () => supabaseServerClient(session?.accessToken);
+    ev.session = session;
+
+    return cb(ev);
   }
 
   return handle;
