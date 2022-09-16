@@ -93,13 +93,13 @@ setupSupabaseServer({
   }
 });
 
-export const handle = auth;
+export const handle = auth();
 
 // use the sequence helper if you have additional Handle methods
 import { sequence } from '@sveltejs/kit/hooks';
 
 export const handle = sequence(
-  auth,
+  auth(),
   yourHandler
 );
 ```

@@ -61,9 +61,11 @@ export async function getSupabaseSession(event: RequestEvent) {
 }
 
 export default function session(): Handle {
+  const { setSessionToLocals } = getServerConfig();
+
   return async ({ resolve, event }) => {
     const session = await getSupabaseSession(event);
-    getServerConfig().setSessionToLocals(event.locals, session);
+    setSessionToLocals(event.locals, session);
     return resolve(event);
   };
 }

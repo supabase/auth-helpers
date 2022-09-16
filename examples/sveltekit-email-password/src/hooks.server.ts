@@ -9,4 +9,4 @@ setupSupabaseServer({
 	}
 });
 
-export const handle = auth;
+export const handle = auth();
