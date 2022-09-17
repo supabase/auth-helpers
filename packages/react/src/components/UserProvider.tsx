@@ -65,7 +65,7 @@ export const UserProvider = (props: Props) => {
     profileUrl = '/api/auth/user',
     user: initialUser = null,
     fetcher = userFetcher,
-    autoRefreshToken = true
+    autoRefreshToken = true,
   } = props;
   const [user, setUser] = useState<User | null>(initialUser);
   const [accessToken, setAccessToken] = useState<string | null>(null);
@@ -130,6 +130,7 @@ export const UserProvider = (props: Props) => {
     const { data: authListener } = supabaseClient.auth.onAuthStateChange(
       async (event, session) => {
         if (event === 'TOKEN_REFRESHED') return; // ignore this as we're refreshing tokens server-side.
+        if (event === 'PASSWORD_RECOVERY') return;
         setIsLoading(true);
         // Forward session from client to server where it is set in a Cookie.
         // NOTE: this will eventually be removed when the Cookie can be set differently.
