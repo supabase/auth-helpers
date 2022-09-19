@@ -4,7 +4,7 @@ import {
 } from '@supabase/auth-helpers-shared';
 
 // Types
-export type { User } from '@supabase/supabase-js';
+export type { Session, User, SupabaseClient } from '@supabase/supabase-js';
 
 // Methods
 export * from './middleware';

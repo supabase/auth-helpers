@@ -11,7 +11,8 @@ export function createBrowserSupabaseClient({
     domain,
     path = '/',
     sameSite = 'lax',
-    secure = false
+    secure,
+    maxAge = 1000 * 60 * 60 * 24 * 365
   } = {}
 }: {
   supabaseUrl: string;
@@ -44,12 +45,11 @@ export function createBrowserSupabaseClient({
           document.cookie = serialize(key, value, {
             domain,
             path,
-            maxAge: 1000 * 60 * 60 * 24 * 365,
+            maxAge,
             // Allow supabase-js on the client to read the cookie as well
             httpOnly: false,
             sameSite,
-            // TODO: set this secure based on the browser location
-            secure
+            secure: secure ?? document.location?.protocol === 'https:'
           });
         },
         removeItem(key: string) {

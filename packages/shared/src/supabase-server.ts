@@ -15,7 +15,8 @@ export function createServerSupabaseClient({
     domain,
     path = '/',
     sameSite = 'lax',
-    secure
+    secure,
+    maxAge = 1000 * 60 * 60 * 24 * 365
   } = {}
 }: {
   supabaseUrl: string;
@@ -81,7 +82,7 @@ export function createServerSupabaseClient({
           const newSessionStr = serialize(key, value, {
             domain,
             path,
-            maxAge: 1000 * 60 * 60 * 24 * 365,
+            maxAge,
             // Allow supabase-js on the client to read the cookie as well
             httpOnly: false,
             sameSite,
