@@ -2,7 +2,7 @@ import {
   COOKIE_OPTIONS,
   ENDPOINT_PREFIX,
   TOKEN_REFRESH_MARGIN
-} from '$lib/constants';
+} from '../constants';
 import type { SetupServerOptions } from '../types';
 import { setServerConfig } from './config';
 
