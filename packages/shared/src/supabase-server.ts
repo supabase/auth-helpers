@@ -4,7 +4,12 @@ import { CookieOptions } from './types';
 import { filterCookies, isSecureEnvironment } from './utils/cookies';
 import { ensureArray } from './utils/helpers';
 
-export function createServerSupabaseClient({
+export function createServerSupabaseClient<
+  Database = any,
+  SchemaName extends string & keyof Database = 'public' extends keyof Database
+    ? 'public'
+    : string & keyof Database
+>({
   supabaseUrl,
   supabaseKey,
   getRequestHeader,
@@ -15,7 +20,8 @@ export function createServerSupabaseClient({
     domain,
     path = '/',
     sameSite = 'lax',
-    secure
+    secure,
+    maxAge = 1000 * 60 * 60 * 24 * 365
   } = {}
 }: {
   supabaseUrl: string;
@@ -51,7 +57,7 @@ export function createServerSupabaseClient({
       });
   }
 
-  return createClient(supabaseUrl, supabaseKey, {
+  return createClient<Database, SchemaName>(supabaseUrl, supabaseKey, {
     auth: {
       detectSessionInUrl: false,
       autoRefreshToken: false,
@@ -81,7 +87,7 @@ export function createServerSupabaseClient({
           const newSessionStr = serialize(key, value, {
             domain,
             path,
-            maxAge: 1000 * 60 * 60 * 24 * 365,
+            maxAge,
             // Allow supabase-js on the client to read the cookie as well
             httpOnly: false,
             sameSite,

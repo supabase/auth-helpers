@@ -3,7 +3,12 @@ import { parse, serialize } from 'cookie';
 import { CookieOptions } from './types';
 import { isBrowser } from './utils/helpers';
 
-export function createBrowserSupabaseClient({
+export function createBrowserSupabaseClient<
+  Database = any,
+  SchemaName extends string & keyof Database = 'public' extends keyof Database
+    ? 'public'
+    : string & keyof Database
+>({
   supabaseUrl,
   supabaseKey,
   cookieOptions: {
@@ -11,14 +16,15 @@ export function createBrowserSupabaseClient({
     domain,
     path = '/',
     sameSite = 'lax',
-    secure = false
+    secure,
+    maxAge = 1000 * 60 * 60 * 24 * 365
   } = {}
 }: {
   supabaseUrl: string;
   supabaseKey: string;
   cookieOptions?: CookieOptions;
 }) {
-  return createClient(supabaseUrl, supabaseKey, {
+  return createClient<Database, SchemaName>(supabaseUrl, supabaseKey, {
     auth: {
       storageKey: name,
       storage: {
@@ -44,12 +50,11 @@ export function createBrowserSupabaseClient({
           document.cookie = serialize(key, value, {
             domain,
             path,
-            maxAge: 1000 * 60 * 60 * 24 * 365,
+            maxAge,
             // Allow supabase-js on the client to read the cookie as well
             httpOnly: false,
             sameSite,
-            // TODO: set this secure based on the browser location
-            secure
+            secure: secure ?? document.location?.protocol === 'https:'
           });
         },
         removeItem(key: string) {

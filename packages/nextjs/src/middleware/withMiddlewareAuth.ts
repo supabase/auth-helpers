@@ -4,7 +4,7 @@ import {
   CookieOptions,
   createServerSupabaseClient
 } from '@supabase/auth-helpers-shared';
-import { User } from '@supabase/supabase-js';
+import { SupabaseClient, User } from '@supabase/supabase-js';
 
 class NoPermissionError extends Error {
   constructor(message: string) {
@@ -26,7 +26,7 @@ export interface withMiddlewareAuthOptions {
   redirectTo?: string;
   cookieOptions?: CookieOptions;
   authGuard?: {
-    isPermitted: (user: User) => Promise<boolean>;
+    isPermitted: (user: User, supabase: SupabaseClient) => Promise<boolean>;
     redirectTo: string;
   };
 }
@@ -77,7 +77,7 @@ export const withMiddlewareAuth: withMiddlewareAuth =
         throw new Error('No auth session, redirecting');
       } else if (
         options.authGuard &&
-        !(await options.authGuard.isPermitted(session.user))
+        !(await options.authGuard.isPermitted(session.user, supabase))
       ) {
         throw new NoPermissionError('User is not permitted, redirecting');
       }
