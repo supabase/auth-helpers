@@ -1,5 +1,13 @@
 # @supabase/auth-helpers-nextjs
 
+## 0.4.0-next.2
+
+### Patch Changes
+
+- fe5c4a6: chore: improve types.
+- Updated dependencies [fe5c4a6]
+  - @supabase/auth-helpers-shared@0.2.0-next.1
+
 ## 0.4.0-next.1
 
 ### Patch Changes
