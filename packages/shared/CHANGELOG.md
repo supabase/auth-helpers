@@ -1,5 +1,11 @@
 # shared
 
+## 0.2.0-next.1
+
+### Patch Changes
+
+- fe5c4a6: chore: improve types.
+
 ## 0.2.0-next.0
 
 ### Minor Changes

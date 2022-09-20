@@ -1,5 +1,13 @@
 # @supabase/auth-helpers-react
 
+## 0.3.0-next.1
+
+### Patch Changes
+
+- fe5c4a6: chore: improve types.
+- Updated dependencies [fe5c4a6]
+  - @supabase/auth-helpers-shared@0.2.0-next.1
+
 ## 0.3.0-next.0
 
 ### Minor Changes
