@@ -4,7 +4,12 @@ import { CookieOptions } from './types';
 import { filterCookies, isSecureEnvironment } from './utils/cookies';
 import { ensureArray } from './utils/helpers';
 
-export function createServerSupabaseClient({
+export function createServerSupabaseClient<
+  Database = any,
+  SchemaName extends string & keyof Database = 'public' extends keyof Database
+    ? 'public'
+    : string & keyof Database
+>({
   supabaseUrl,
   supabaseKey,
   getRequestHeader,
@@ -52,7 +57,7 @@ export function createServerSupabaseClient({
       });
   }
 
-  return createClient(supabaseUrl, supabaseKey, {
+  return createClient<Database, SchemaName>(supabaseUrl, supabaseKey, {
     auth: {
       detectSessionInUrl: false,
       autoRefreshToken: false,

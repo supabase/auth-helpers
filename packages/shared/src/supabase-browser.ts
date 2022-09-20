@@ -3,7 +3,12 @@ import { parse, serialize } from 'cookie';
 import { CookieOptions } from './types';
 import { isBrowser } from './utils/helpers';
 
-export function createBrowserSupabaseClient({
+export function createBrowserSupabaseClient<
+  Database = any,
+  SchemaName extends string & keyof Database = 'public' extends keyof Database
+    ? 'public'
+    : string & keyof Database
+>({
   supabaseUrl,
   supabaseKey,
   cookieOptions: {
@@ -19,7 +24,7 @@ export function createBrowserSupabaseClient({
   supabaseKey: string;
   cookieOptions?: CookieOptions;
 }) {
-  return createClient(supabaseUrl, supabaseKey, {
+  return createClient<Database, SchemaName>(supabaseUrl, supabaseKey, {
     auth: {
       storageKey: name,
       storage: {
