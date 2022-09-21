@@ -53,7 +53,7 @@ import logger from './log';
  *
  * @category Server
  */
-export default function withPageAuth({
+export default function withPageAuth<ResponseType = any>({
   authRequired = true,
   redirectTo = '/',
   getServerSideProps = undefined,
@@ -62,7 +62,7 @@ export default function withPageAuth({
 }: {
   authRequired?: boolean;
   redirectTo?: string;
-  getServerSideProps?: GetServerSideProps;
+  getServerSideProps?: GetServerSideProps<ResponseType>;
   cookieOptions?: CookieOptions;
   tokenRefreshMargin?: number;
 } = {}) {

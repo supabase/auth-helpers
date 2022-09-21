@@ -22,8 +22,8 @@ import getAccessToken from './getAccessToken';
  *
  * @category Server
  */
-export default function withApiAuth(
-  handler: NextApiHandler,
+export default function withApiAuth<ResponseType = any>(
+  handler: NextApiHandler<ResponseType>,
   options: { cookieOptions?: CookieOptions; tokenRefreshMargin?: number } = {}
 ) {
   return async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
