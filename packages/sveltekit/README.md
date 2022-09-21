@@ -80,6 +80,10 @@ Edit your `+layout.svelte` file and set up the client side.
 
 Our `hooks.ts` file is where the heavy lifting of this library happens, we need to import our function to parse the session from the cookie and populate it in locals.
 
+This will also create handlers under the hood that perform different parts of the authentication flow:
+
+- `/api/auth/callback`: The `client` forwards the session details here every time `onAuthStateChange` fires on the client side. This is needed to set up the cookies for your application so that SSR works seamlessly.
+
 ```ts
 // src/hooks.server.ts
 import { dev } from '$app/environment';
@@ -116,23 +120,6 @@ export const load: LayoutServerLoad = async ({ locals }) => {
   };
 };
 ```
-
-### Session sync
-
-Set up the `handleCallbackSession` helper to save the session on the server when the auth state changes on the client.
-
-```ts
-// src/routes/api/auth/callback/+server.ts
-import type { RequestHandler } from './$types';
-import { handleCallbackSession } from '@supabase/auth-helpers-sveltekit/server';
-
-export const POST: RequestHandler = handleCallbackSession;
-```
-
-<!-- TODO: Add this when the cookie issue is resolved
-These will create the handlers under the hood that perform different parts of the authentication flow:
-
-- `/api/auth/callback`: The `client` forwards the session details here every time `onAuthStateChange` fires on the client side. This is needed to set up the cookies for your application so that SSR works seamlessly. -->
 
 ### Typings
 
