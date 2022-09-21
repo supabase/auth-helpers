@@ -14,16 +14,18 @@ export async function handleCallbackSession({
 }: RequestEvent) {
   const { event: sessionEvent, session }: PostBody = await request.json();
 
+  const response = new Response(null, { status: 204 });
+
   if (sessionEvent === 'SIGNED_IN' && session) {
-    saveSession(cookies, session);
+    saveSession(cookies, session, response);
   } else if (sessionEvent === 'SIGNED_OUT') {
-    deleteSession(cookies);
+    deleteSession(cookies, response);
   }
 
-  return new Response(null, { status: 204 });
+  return response;
 }
 
-export default function callback(): Handle {
+export function callback(): Handle {
   const { endpointPrefix } = getServerConfig();
   const endpointPath = `${endpointPrefix}/callback`;
 

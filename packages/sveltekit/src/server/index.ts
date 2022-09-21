@@ -1,6 +1,6 @@
-export { default as auth } from './handlers/auth';
 export { deleteSession, saveSession, getProviderToken } from './helpers';
-
 export { setupSupabaseServer } from './server';
-export { getSupabaseSession } from './handlers/session';
-export { handleCallbackSession } from './handlers/callback';
+
+export { session, getSupabaseSession } from './handlers/session';
+export { callback, handleCallbackSession } from './handlers/callback';
+export { auth } from './handlers/auth';
