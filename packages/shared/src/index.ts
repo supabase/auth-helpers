@@ -6,9 +6,5 @@ export {
 export {
   NextRequestAdapter as NextRequestMiddlewareAdapter,
   NextResponseAdapter as NextResponseMiddlewareAdapter
-} from './adapters/NextMiddlewareAdapter';
-export {
-  SvelteKitRequestAdapter,
-  SvelteKitResponseAdapter
-} from './adapters/SvelteKitAdapter';
+} from './adapters/NextMiddlewareAdapter';;
 export * from './utils';
