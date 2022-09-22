@@ -1,9 +1,25 @@
 import type { Handle, RequestEvent } from '@sveltejs/kit';
-import { decodeJwt } from 'jose';
 import type { ApiError, User } from '@supabase/supabase-js';
 import { getServerConfig } from '../config';
 import { deleteSession, saveSession } from '../helpers';
-import type { SupabaseSession } from '../../types';
+import type { JWTPayload, SupabaseSession } from '../../types';
+
+function decodeJwt(jwt: string): JWTPayload {
+  const payloadBase64Encoded = jwt.split('.')[1];
+
+  try {
+    const payloadBase64Decoded = Buffer.from(
+      payloadBase64Encoded,
+      'base64'
+    ).toString('utf-8');
+
+    const payload = JSON.parse(payloadBase64Decoded);
+
+    return payload;
+  } catch (err) {
+    throw 'InvalidJWT';
+  }
+}
 
 export async function getSupabaseSession(event: RequestEvent) {
   const { supabaseClient, cookieName, tokenRefreshMargin } = getServerConfig();
