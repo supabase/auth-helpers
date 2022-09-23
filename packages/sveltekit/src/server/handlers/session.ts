@@ -1,28 +1,21 @@
 import type { Handle, RequestEvent } from '@sveltejs/kit';
 import type { ApiError, User } from '@supabase/supabase-js';
+import {
+  AccessTokenNotFound,
+  jwtDecoder,
+  JWTPayloadFailed,
+  RefreshTokenNotFound
+} from '@supabase/auth-helpers-shared';
 import { getServerConfig } from '../config';
 import { deleteSession, saveSession } from '../helpers';
-import type { JWTPayload, SupabaseSession } from '../../types';
-
-function decodeJwt(jwt: string): JWTPayload {
-  const payloadBase64Encoded = jwt.split('.')[1];
-
-  try {
-    const payloadBase64Decoded = Buffer.from(
-      payloadBase64Encoded,
-      'base64'
-    ).toString('utf-8');
-
-    const payload = JSON.parse(payloadBase64Decoded);
-
-    return payload;
-  } catch (err) {
-    throw 'InvalidJWT';
-  }
-}
+import type { SupabaseSession } from '../../types';
 
 export async function getSupabaseSession(event: RequestEvent) {
-  const { supabaseClient, cookieName, tokenRefreshMargin } = getServerConfig();
+  const {
+    supabaseClient,
+    cookieOptions: { name: cookieName },
+    tokenRefreshMargin
+  } = getServerConfig();
   const { cookies } = event;
 
   let session: SupabaseSession = null;
@@ -31,19 +24,19 @@ export async function getSupabaseSession(event: RequestEvent) {
     const accessToken = cookies.get(`${cookieName}-access-token`);
 
     if (!accessToken) {
-      throw 'AccessTokenNotFound';
+      throw new AccessTokenNotFound();
     }
 
-    const jwt = decodeJwt(accessToken);
+    const jwt = jwtDecoder(accessToken);
     if (!jwt.exp) {
-      throw 'JWTPayloadFailed';
+      throw new JWTPayloadFailed();
     }
 
     const timeNow = Math.round(Date.now() / 1000);
     if (jwt.exp < timeNow + tokenRefreshMargin) {
       const refreshToken = cookies.get(`${cookieName}-refresh-token`);
       if (!refreshToken) {
-        throw 'RefreshTokenNotFound';
+        throw new RefreshTokenNotFound();
       }
       const { data, error } = await supabaseClient.auth.api.refreshAccessToken(
         refreshToken

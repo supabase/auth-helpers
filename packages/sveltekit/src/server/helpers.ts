@@ -2,12 +2,30 @@ import type { Session } from '@supabase/supabase-js';
 import type { Cookies } from '@sveltejs/kit';
 import { getServerConfig } from './config';
 
+function getCookieOptions(): {
+  cookieName: string;
+  cookieOptions: Parameters<import('@sveltejs/kit').Cookies['serialize']>[2];
+} {
+  const { cookieOptions } = getServerConfig();
+  return {
+    cookieName: cookieOptions.name,
+    cookieOptions: {
+      domain: cookieOptions.domain,
+      maxAge: cookieOptions.lifetime,
+      httpOnly: true,
+      path: cookieOptions.path,
+      sameSite: cookieOptions.sameSite as any,
+      secure: cookieOptions.secure
+    }
+  };
+}
+
 export function saveSession(
   cookies: Cookies,
   session: Session,
   response?: Response
 ) {
-  const { cookieName, cookieOptions } = getServerConfig();
+  const { cookieName, cookieOptions } = getCookieOptions();
 
   const supabaseCookies = Object.entries({
     access: session.access_token,
@@ -21,7 +39,7 @@ export function saveSession(
       if (response) {
         response.headers.append(
           'set-cookie',
-          cookies.serialize(name, value, cookieOptions)
+          cookies.serialize(name, value, {})
         );
       } else {
         cookies.set(name, value, cookieOptions);
@@ -31,7 +49,7 @@ export function saveSession(
 }
 
 export function deleteSession(cookies: Cookies, response?: Response) {
-  const { cookieName, cookieOptions } = getServerConfig();
+  const { cookieName, cookieOptions } = getCookieOptions();
 
   const opts = {
     ...cookieOptions,
@@ -49,6 +67,6 @@ export function deleteSession(cookies: Cookies, response?: Response) {
 }
 
 export function getProviderToken(cookies: Cookies) {
-  const { cookieName } = getServerConfig();
-  return cookies.get(`${cookieName}-provider-token`);
+  const { cookieOptions } = getServerConfig();
+  return cookies.get(`${cookieOptions.name}-provider-token`);
 }

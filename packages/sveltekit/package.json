@@ -39,6 +39,9 @@
     "vite": "^3.1.0",
     "@supabase/supabase-js": "^1.35.3"
   },
+  "dependencies": {
+    "@supabase/auth-helpers-shared": "workspace:*"
+  },
   "peerDependencies": {
     "@supabase/supabase-js": "^1.35.3"
   }

@@ -1,13 +1,11 @@
+import { COOKIE_OPTIONS as SHARED_COOKIE_OPTIONS } from '@supabase/auth-helpers-shared';
 import type { CookieOptions } from './types';
+export {
+  TOKEN_REFRESH_MARGIN,
+  ENDPOINT_PREFIX
+} from '@supabase/auth-helpers-shared';
 
-export const ENDPOINT_PREFIX = '/api/auth';
-
-export const TOKEN_REFRESH_MARGIN = 10;
-
-export const COOKIE_OPTIONS: CookieOptions = {
-  maxAge: 365 * 24 * 60 * 60,
-  path: '/',
-  sameSite: 'strict',
-  httpOnly: true,
-  secure: false
+export const COOKIE_OPTIONS: Required<CookieOptions> = {
+  ...SHARED_COOKIE_OPTIONS,
+  secure: true
 };

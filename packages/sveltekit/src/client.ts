@@ -27,7 +27,12 @@ export function startSupabaseSessionSync() {
   if (!browser) {
     return;
   }
-  const { supabaseClient, tokenRefreshMargin } = getClientConfig();
+  const {
+    supabaseClient,
+    tokenRefreshMargin,
+    endpointPrefix,
+    getSessionFromPageData
+  } = getClientConfig();
 
   onMount(() => {
     let timeout: ReturnType<typeof setTimeout> | null;
@@ -39,7 +44,7 @@ export function startSupabaseSessionSync() {
     };
 
     const pageUnsub = page.subscribe(({ data }) => {
-      const session = data.session;
+      const session = getSessionFromPageData(data);
       if (!session) {
         resetTimout();
         // @ts-expect-error this is a private method but we have to clear the session
@@ -76,7 +81,7 @@ export function startSupabaseSessionSync() {
       (event, session) => {
         if (HANDLE_EVENTS.indexOf(event) === -1) return;
 
-        fetch('/api/auth/callback', {
+        fetch(`${endpointPrefix}/callback`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ event, session }),
