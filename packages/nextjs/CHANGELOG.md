@@ -1,5 +1,13 @@
 # @supabase/auth-helpers-nextjs
 
+## 0.4.0-next.3
+
+### Patch Changes
+
+- 2fdb094: chore: types and middleware improvements.
+- Updated dependencies [2fdb094]
+  - @supabase/auth-helpers-shared@0.2.0-next.2
+
 ## 0.4.0-next.2
 
 ### Patch Changes

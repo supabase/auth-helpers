@@ -1,5 +1,11 @@
 # shared
 
+## 0.2.0-next.2
+
+### Patch Changes
+
+- 2fdb094: chore: types and middleware improvements.
+
 ## 0.2.0-next.1
 
 ### Patch Changes
