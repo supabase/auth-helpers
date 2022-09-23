@@ -84,7 +84,10 @@ Our `hooks.ts` file is where the heavy lifting of this library happens:
 // src/hooks.server.ts
 import { dev } from '$app/environment';
 import { supabaseClient } from '$lib/db';
-import { setupSupabaseServer, auth } from '@supabase/auth-helpers-sveltekit/server';
+import {
+  setupSupabaseServer,
+  auth
+} from '@supabase/auth-helpers-sveltekit/server';
 
 setupSupabaseServer({
   supabaseClient,
@@ -98,10 +101,7 @@ export const handle = auth();
 // use the sequence helper if you have additional Handle methods
 import { sequence } from '@sveltejs/kit/hooks';
 
-export const handle = sequence(
-  auth(),
-  yourHandler
-);
+export const handle = sequence(auth(), yourHandler);
 ```
 
 There are three handle methods available:
@@ -152,7 +152,7 @@ declare namespace App {
   interface PageData {
     session: import('@supabase/auth-helpers-sveltekit').SupabaseSession;
   }
-  // interface PageError {}
+  // interface Error {}
   // interface Platform {}
 }
 ```
@@ -167,10 +167,10 @@ You can now determine if a user is authenticated on the client-side by checking 
 </script>
 
 {#if !$page.data.session}
-  <h1>I am not logged in</h1>
+<h1>I am not logged in</h1>
 {:else}
-  <h1>Welcome {$page.data.session.user.email}</h1>
-  <p>I am logged in!</p>
+<h1>Welcome {$page.data.session.user.email}</h1>
+<p>I am logged in!</p>
 {/if}
 ```
 
@@ -195,8 +195,8 @@ For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row
 </script>
 
 {#if $page.data.session}
-  <p>client-side data fetching with RLS</p>
-  <pre>{JSON.stringify(loadedData, null, 2)}</pre>
+<p>client-side data fetching with RLS</p>
+<pre>{JSON.stringify(loadedData, null, 2)}</pre>
 {/if}
 ```
 
@@ -343,9 +343,13 @@ export const actions: Actions = {
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
 
-    const { data, error } = await supabaseClient.auth.api.signInWithEmail(email, password, {
-      redirectTo: `${url.origin}/logging-in`
-    });
+    const { data, error } = await supabaseClient.auth.api.signInWithEmail(
+      email,
+      password,
+      {
+        redirectTo: `${url.origin}/logging-in`
+      }
+    );
 
     if (error || !data) {
       if (error?.status === 400) {
@@ -407,14 +411,14 @@ setupSupabaseServer({
     secure: !dev
   },
   // --- change location within locals ---
-  getSessionFromLocals: locals => locals.mySupabaseSession,
-  setSessionToLocals: (locals, session) => locals.mySupabaseSession = session
+  getSessionFromLocals: (locals) => locals.mySupabaseSession,
+  setSessionToLocals: (locals, session) => (locals.mySupabaseSession = session)
 });
 
 // src/lib/db.ts
 setupSupabaseClient({
   supabaseClient,
   // --- change location within pageData ---
-  getSessionFromPageData: data => data.mySupabaseSession
+  getSessionFromPageData: (data) => data.mySupabaseSession
 });
 ```

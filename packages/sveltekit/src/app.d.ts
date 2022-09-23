@@ -9,6 +9,6 @@ declare namespace App {
   interface PageData {
     session: import('./').SupabaseSession;
   }
-  // interface PageError {}
+  // interface Error {}
   // interface Platform {}
 }

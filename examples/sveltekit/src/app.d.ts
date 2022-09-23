@@ -10,6 +10,6 @@ declare namespace App {
 	interface PageData {
 		session: import('@supabase/auth-helpers-sveltekit').SupabaseSession;
 	}
-	// interface PageError {}
+	// interface Error {}
 	// interface Platform {}
 }

@@ -30,7 +30,7 @@
   },
   "homepage": "https://github.com/supabase/auth-helpers/tree/main/packages/sveltekit#readme",
   "devDependencies": {
-    "@sveltejs/kit": "1.0.0-next.492",
+    "@sveltejs/kit": "1.0.0-next.499",
     "@sveltejs/package": "1.0.0-next.5",
     "svelte": "^3.48.0",
     "svelte2tsx": "^0.5.16",
