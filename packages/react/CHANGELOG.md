@@ -1,5 +1,13 @@
 # @supabase/auth-helpers-react
 
+## 0.3.0-next.2
+
+### Patch Changes
+
+- 2fdb094: chore: types and middleware improvements.
+- Updated dependencies [2fdb094]
+  - @supabase/auth-helpers-shared@0.2.0-next.2
+
 ## 0.3.0-next.1
 
 ### Patch Changes
