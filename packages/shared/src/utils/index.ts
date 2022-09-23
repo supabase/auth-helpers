@@ -14,6 +14,7 @@ export {
   CallbackUrlFailed,
   CookieNotParsed,
   JWTPayloadFailed,
+  JWTInvalid,
   RefreshTokenNotFound,
   ProviderTokenNotFound,
   type ErrorPayload
