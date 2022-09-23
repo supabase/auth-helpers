@@ -8,7 +8,7 @@ interface TestTable {
 }
 
 export const GET: RequestHandler = withAuth(async ({ getSupabaseClient, session }) => {
-	if (!session) {
+	if (!session.user) {
 		throw error(401, { message: 'Unauthorized' });
 	}
 	const { data } = await getSupabaseClient().from<TestTable>('test').select('*');

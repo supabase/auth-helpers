@@ -2,13 +2,15 @@ import type { Handle, RequestEvent } from '@sveltejs/kit';
 import type { ApiError, User } from '@supabase/supabase-js';
 import {
   AccessTokenNotFound,
+  AuthHelperError,
   jwtDecoder,
   JWTPayloadFailed,
   RefreshTokenNotFound
 } from '@supabase/auth-helpers-shared';
 import { getServerConfig } from '../config';
-import { deleteSession, saveSession } from '../helpers';
+import { deleteSession, saveSession } from '../utils/cookies';
 import type { SupabaseSession } from '../../types';
+import logger from '../utils/log';
 
 /**
  * Get the session from a request event
@@ -27,7 +29,7 @@ export async function getSupabaseSession(event: RequestEvent) {
   } = getServerConfig();
   const { cookies } = event;
 
-  let session: SupabaseSession = null;
+  let session: SupabaseSession = {};
 
   try {
     const accessToken = cookies.get(`${cookieName}-access-token`);
@@ -71,8 +73,17 @@ export async function getSupabaseSession(event: RequestEvent) {
       };
     }
   } catch (err) {
-    if ((err as ApiError).message === 'Invalid Refresh Token') {
-      deleteSession(cookies);
+    if (err instanceof JWTPayloadFailed) {
+      logger.info('JWTPayloadFailed error has happened!');
+      session.error = err.toObj();
+    } else if (err instanceof AuthHelperError) {
+      // do nothing, these are all just to disrupt the control flow
+    } else {
+      const error = err as ApiError;
+      logger.error(error.message);
+      if (error.message === 'Invalid Refresh Token') {
+        deleteSession(cookies);
+      }
     }
   }
   return session;

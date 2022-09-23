@@ -1,5 +1,8 @@
 import type { SupabaseClient, User } from '@supabase/supabase-js';
-import type { CookieOptions as SharedCookieOptions } from '@supabase/auth-helpers-shared';
+import type {
+  CookieOptions as SharedCookieOptions,
+  ErrorPayload
+} from '@supabase/auth-helpers-shared';
 
 export interface SharedConfig {
   supabaseClient: SupabaseClient;
@@ -21,17 +24,24 @@ export interface CookieOptions extends SharedCookieOptions {
   secure?: boolean;
 }
 
-export interface AuthenticatedSupabaseSession {
-  user: User;
-  accessToken: string;
-}
+// it´s either an authenticated session and no error
+// or a not authenticated session and an optional error
+export type SupabaseSession =
+  | {
+      user: User;
+      accessToken: string;
+      error?: undefined;
+    }
+  | {
+      user?: undefined;
+      accessToken?: undefined;
+      error?: ErrorPayload;
+    };
 
-export type SupabaseSession = null | AuthenticatedSupabaseSession;
-
-export type ExtendedEvent = {
+export interface ExtendedEvent {
   getSupabaseClient(): SupabaseClient;
   session: SupabaseSession;
-};
+}
 
 export interface SetupClientOptions {
   supabaseClient: SupabaseClient;

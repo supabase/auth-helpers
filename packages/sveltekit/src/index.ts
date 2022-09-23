@@ -1,8 +1,9 @@
 export { setupSupabaseClient, startSupabaseSessionSync } from './client';
-export { enhanceAndInvalidate, supabaseServerClient, withAuth } from './helper';
+export { enhanceAndInvalidate } from './utils/enhanceAndInvalidate';
+export { supabaseServerClient } from './utils/supabaseServerClient';
+export { withAuth } from './utils/withAuth';
 export type {
   SupabaseSession,
-  AuthenticatedSupabaseSession,
   ClientConfig,
   CookieOptions,
   ServerConfig,

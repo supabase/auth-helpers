@@ -159,24 +159,24 @@ declare namespace App {
 
 ### Basic Setup
 
-You can now determine if a user is authenticated on the client-side by checking that the `session` object returned by `$page.data` is defined.
+You can now determine if a user is authenticated on the client-side by checking that the `user` object in `$page.data.session` is defined.
 
 ```html
 <script>
   import { page } from '$app/stores';
 </script>
 
-{#if !$page.data.session}
-<h1>I am not logged in</h1>
+{#if !$page.data.session.user}
+  <h1>I am not logged in</h1>
 {:else}
-<h1>Welcome {$page.data.session.user.email}</h1>
-<p>I am logged in!</p>
+  <h1>Welcome {$page.data.session.user.email}</h1>
+  <p>I am logged in!</p>
 {/if}
 ```
 
 ## Client-side data fetching with RLS
 
-For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row-level-security) to work properly when fetching data client-side, you need to make sure to import the `{ supabaseClient }` from `$lib/db` and only run your query once the session is defined client-side in `$page.data`:
+For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row-level-security) to work properly when fetching data client-side, you need to make sure to import the `{ supabaseClient }` from `$lib/db` and only run your query once the user is defined client-side in `$page.data.session`:
 
 ```html
 <script>
@@ -189,14 +189,14 @@ For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row
     loadedData = data;
   }
 
-  $: if ($page.data.session) {
+  $: if ($page.data.session.user) {
     loadData();
   }
 </script>
 
-{#if $page.data.session}
-<p>client-side data fetching with RLS</p>
-<pre>{JSON.stringify(loadedData, null, 2)}</pre>
+{#if $page.data.session.user}
+  <p>client-side data fetching with RLS</p>
+  <pre>{JSON.stringify(loadedData, null, 2)}</pre>
 {/if}
 ```
 
@@ -229,7 +229,7 @@ interface TestTable {
 }
 
 export const load: PageLoad = withAuth(async ({ getSupabaseClient, session }) => {
-  if (!session) {
+  if (!session.user) {
     throw redirect(303, '/');
   }
   const { data: tableData } = await getSupabaseClient()
@@ -275,7 +275,7 @@ interface TestTable {
 }
 
 export const GET: RequestHandler = withAuth(async ({ session, getSupabaseClient }) => {
-  if (!session) {
+  if (!session.user) {
     throw redirect(303, '/');
   }
   const { data } = await getSupabaseClient()
@@ -300,7 +300,7 @@ import { error, invalid } from '@sveltejs/kit';
 
 export const actions: Actions = {
   createPost: withAuth(async ({ session, getSupabaseClient, request }) => {
-    if (!session) {
+    if (!session.user) {
       // the user is not signed in
       throw error(403, { message: 'Unauthorized' });
     }

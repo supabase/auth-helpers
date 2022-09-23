@@ -1,6 +1,6 @@
 import type { Session } from '@supabase/supabase-js';
 import type { Cookies } from '@sveltejs/kit';
-import { getServerConfig } from './config';
+import { getServerConfig } from '../config';
 
 function getCookieOptions(): {
   cookieName: string;
@@ -75,9 +75,4 @@ export function deleteSession(cookies: Cookies, response?: Response) {
       cookies.set(name, '', opts);
     }
   });
-}
-
-export function getProviderToken(cookies: Cookies) {
-  const { cookieOptions } = getServerConfig();
-  return cookies.get(`${cookieOptions.name}-provider-token`);
 }

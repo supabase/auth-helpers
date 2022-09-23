@@ -53,7 +53,7 @@ export function startSupabaseSessionSync() {
 
     const pageUnsub = page.subscribe(({ data }) => {
       const session = getSessionFromPageData(data);
-      if (!session) {
+      if (!session?.accessToken) {
         resetTimout();
         // @ts-expect-error this is a private method but we have to clear the session
         supabaseClient.auth._removeSession();

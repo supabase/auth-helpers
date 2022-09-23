@@ -1,7 +1,7 @@
 import type { AuthChangeEvent, Session } from '@supabase/supabase-js';
 import type { Handle, RequestEvent } from '@sveltejs/kit';
 import { getServerConfig } from '../config';
-import { deleteSession, saveSession } from '../helpers';
+import { deleteSession, saveSession } from '../utils/cookies';
 
 interface PostBody {
   event: AuthChangeEvent;

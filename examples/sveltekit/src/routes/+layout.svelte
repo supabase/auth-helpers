@@ -11,7 +11,7 @@
 	}
 </script>
 
-{#if $page.data.session}
+{#if $page.data.session.user}
 	<button on:click={signout}>Sign out</button>
 {/if}
 

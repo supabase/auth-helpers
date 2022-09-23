@@ -11,7 +11,7 @@ interface GitHubOutput {
 }
 
 export const load: PageServerLoad = withAuth(async ({ session, cookies }) => {
-	if (!session) {
+	if (!session.user) {
 		throw redirect(303, '/');
 	}
 	const providerToken = getProviderToken(cookies);
