@@ -42,7 +42,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 
 ### Basic Setup
 
-Wrap your `pages/_app.js` component with the `UserProvider` component:
+Wrap your `pages/_app.js` component with the `SessionContextProvider` component:
 
 ```jsx
 // pages/_app.js
@@ -84,12 +84,11 @@ For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row
 ```js
 import { Auth, ThemeSupa } from '@supabase/auth-ui-react';
 import { useUser, useSessionContext } from '@supabase/auth-helpers-react';
-import { supabaseClient } from '@supabase/auth-helpers-nextjs';
 import { useEffect, useState } from 'react';
 
 const LoginPage = () => {
   const { isLoading, session, error, supabaseClient } = useSessionContext();
-  const { user, error } = useUser();
+  const user = useUser();
   const [data, setData] = useState();
 
   useEffect(() => {
@@ -151,7 +150,7 @@ user props. You can also access the user session data by calling `getUser` insid
 
 ```js
 // pages/protected-page.js
-import { withPageAuth, getUser } from '@supabase/auth-helpers-nextjs';
+import { withPageAuth } from '@supabase/auth-helpers-nextjs';
 
 export default function ProtectedPage({ user, customProp }) {
   return <div>Protected content</div>;
@@ -159,9 +158,11 @@ export default function ProtectedPage({ user, customProp }) {
 
 export const getServerSideProps = withPageAuth({
   redirectTo: '/foo',
-  async getServerSideProps(ctx) {
+  async getServerSideProps(ctx, supabase) {
     // Access the user object
-    const { user, accessToken } = await getUser(ctx);
+    const {
+      data: { user }
+    } = await supabase.auth.getUser();
     return { props: { email: user?.email } };
   }
 });
@@ -169,14 +170,10 @@ export const getServerSideProps = withPageAuth({
 
 ### Server-side data fetching with RLS
 
-For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row-level-security) to work in a server environment, you need to inject the request context into the supabase client:
+Both `withApiAuth` and `withPageAuth` return a supabase client that you can use to run [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row-level-security) authenticated queries server-side:
 
 ```js
-import {
-  User,
-  withPageAuth,
-  supabaseServerClient
-} from '@supabase/auth-helpers-nextjs';
+import { User, withPageAuth } from '@supabase/auth-helpers-nextjs';
 
 export default function ProtectedPage({
   user,
@@ -196,7 +193,7 @@ export default function ProtectedPage({
 
 export const getServerSideProps = withPageAuth({
   redirectTo: '/',
-  async getServerSideProps(ctx) {
+  async getServerSideProps(ctx, supabaseServerClient) {
     // Run queries with RLS on the server
     const { data } = await supabaseServerClient(ctx).from('test').select('*');
     return { props: { data } };
@@ -253,16 +250,15 @@ Wrap an API Route to check that the user has a valid session. If they're not log
 
 ```js
 // pages/api/protected-route.js
-import {
-  withApiAuth,
-  supabaseServerClient
-} from '@supabase/auth-helpers-nextjs';
+import { withApiAuth } from '@supabase/auth-helpers-nextjs';
 
-export default withApiAuth(async function ProtectedRoute(req, res) {
+export default withApiAuth(async function ProtectedRoute(
+  req,
+  res,
+  supabaseServerClient
+) {
   // Run queries with RLS on the server
-  const { data } = await supabaseServerClient({ req, res })
-    .from('test')
-    .select('*');
+  const { data } = await supabaseServerClient.from('test').select('*');
   res.json(data);
 });
 ```
@@ -302,18 +298,3 @@ export const config = {
   matcher: ['/middleware-protected/:path*']
 };
 ```
-
-## Migrating from `0.2.X` to `0.3.X`/`0.4.X`
-
-// TODO
-
-## Migrating from @supabase/supabase-auth-helpers to @supabase/auth-helpers
-
-This is a step by step guide on migrating away from the `@supabase/supabase-auth-helpers` to the newly released `@supabase/auth-helpers`.
-
-1. Install `@supabase/supabase-js`, `@supabase/auth-helpers-nextjs` and `@supabase/auth-helpers-react` libraries from npm.
-2. Replace all imports of `@supabase/supabase-auth-helpers/nextjs` in your project with `@supabase/auth-helpers-nextjs`.
-3. Replace all imports of `@supabase/supabase-auth-helpers/react` in your project with `@supabase/auth-helpers-react`.
-4. Replace all instances of `withAuthRequired` in any of your NextJS pages with `withPageAuth`.
-5. Replace all instances of `withAuthRequired` in any of your NextJS API endpoints with `withApiAuth`.
-6. Uninstall `@supabase/supabase-auth-helpers`.
