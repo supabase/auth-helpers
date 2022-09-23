@@ -45,7 +45,7 @@ export function saveSession(
       if (response) {
         response.headers.append(
           'set-cookie',
-          cookies.serialize(name, value, {})
+          cookies.serialize(name, value, cookieOptions)
         );
       } else {
         cookies.set(name, value, cookieOptions);
