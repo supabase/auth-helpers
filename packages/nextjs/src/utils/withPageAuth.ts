@@ -49,7 +49,13 @@ import { AddParameters } from '../types';
  *
  * @category Server
  */
-export default function withPageAuth({
+export default function withPageAuth<
+  Database = any,
+  SchemaName extends string & keyof Database = 'public' extends keyof Database
+    ? 'public'
+    : string & keyof Database,
+  ResponseType = any
+>({
   authRequired = true,
   redirectTo = '/',
   getServerSideProps = undefined,
@@ -58,8 +64,8 @@ export default function withPageAuth({
   authRequired?: boolean;
   redirectTo?: string;
   getServerSideProps?: AddParameters<
-    GetServerSideProps,
-    [SupabaseClient<any, 'public', any>]
+    GetServerSideProps<ResponseType>,
+    [SupabaseClient<Database, SchemaName>]
   >;
   cookieOptions?: CookieOptions;
 } = {}) {
@@ -86,7 +92,7 @@ export default function withPageAuth({
       //   )}/${PKG_VERSION}`
       // }
 
-      const supabase = createServerSupabaseClient({
+      const supabase = createServerSupabaseClient<Database, SchemaName>({
         supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
         supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
         getRequestHeader: (key) => context.req.headers[key],

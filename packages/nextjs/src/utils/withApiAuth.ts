@@ -27,8 +27,17 @@ import { AddParameters } from '../types';
  *
  * @category Server
  */
-export default function withApiAuth(
-  handler: AddParameters<NextApiHandler, [SupabaseClient<any, 'public', any>]>,
+export default function withApiAuth<
+  Database = any,
+  SchemaName extends string & keyof Database = 'public' extends keyof Database
+    ? 'public'
+    : string & keyof Database,
+  ResponseType = any
+>(
+  handler: AddParameters<
+    NextApiHandler<ResponseType>,
+    [SupabaseClient<Database, SchemaName>]
+  >,
   options: { cookieOptions?: CookieOptions } = {}
 ) {
   return async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
@@ -42,7 +51,7 @@ export default function withApiAuth(
         );
       }
 
-      const supabase = createServerSupabaseClient({
+      const supabase = createServerSupabaseClient<Database, SchemaName>({
         supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
         supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
         getRequestHeader: (key) => req.headers[key],

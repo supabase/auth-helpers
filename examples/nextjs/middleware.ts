@@ -4,7 +4,7 @@ export const middleware = withMiddlewareAuth({
   redirectTo: '/',
   authGuard: {
     isPermitted: async (user) => {
-      return user.email.endsWith('@gmail.com') ?? false;
+      return user.email?.endsWith('@gmail.com') ?? false;
     },
     redirectTo: '/insufficient-permissions'
   }

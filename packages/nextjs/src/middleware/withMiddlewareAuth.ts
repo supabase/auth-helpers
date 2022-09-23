@@ -9,33 +9,36 @@ import { SupabaseClient, User } from '@supabase/supabase-js';
 class NoPermissionError extends Error {
   constructor(message: string) {
     super(message);
-  }
-  get name() {
-    return this.constructor.name;
+    this.name = 'NoPermissionError';
   }
 }
 
-export interface withMiddlewareAuthOptions {
-  /**
-   * Path relative to the site root to redirect an
-   * unauthenticated visitor.
-   *
-   * The original request route will be appended via
-   * a `redirectedFrom` query parameter, ex: `?redirectedFrom=%2Fdashboard`
-   */
-  redirectTo?: string;
-  cookieOptions?: CookieOptions;
-  authGuard?: {
-    isPermitted: (user: User, supabase: SupabaseClient) => Promise<boolean>;
-    redirectTo: string;
-  };
-}
-export type withMiddlewareAuth = (
-  options?: withMiddlewareAuthOptions
-) => NextMiddleware;
-
-export const withMiddlewareAuth: withMiddlewareAuth =
-  (options: withMiddlewareAuthOptions = {}) =>
+export const withMiddlewareAuth =
+  <
+    Database = any,
+    SchemaName extends string & keyof Database = 'public' extends keyof Database
+      ? 'public'
+      : string & keyof Database
+  >(
+    options: {
+      /**
+       * Path relative to the site root to redirect an
+       * unauthenticated visitor.
+       *
+       * The original request route will be appended via
+       * a `redirectedFrom` query parameter, ex: `?redirectedFrom=%2Fdashboard`
+       */
+      redirectTo?: string;
+      cookieOptions?: CookieOptions;
+      authGuard?: {
+        isPermitted: (
+          user: User,
+          supabase: SupabaseClient<Database, SchemaName>
+        ) => Promise<boolean>;
+        redirectTo: string;
+      };
+    } = {}
+  ): NextMiddleware =>
   async (req) => {
     try {
       if (
@@ -49,7 +52,7 @@ export const withMiddlewareAuth: withMiddlewareAuth =
 
       const res = NextResponse.next();
 
-      const supabase = createServerSupabaseClient({
+      const supabase = createServerSupabaseClient<Database, SchemaName>({
         supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
         supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
         getRequestHeader: (key) => req.headers.get(key) ?? undefined,
