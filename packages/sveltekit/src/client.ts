@@ -5,7 +5,7 @@ import type { AuthChangeEvent, User } from '@supabase/supabase-js';
 import { onMount } from 'svelte';
 import { setClientConfig, getClientConfig } from './config';
 import { ENDPOINT_PREFIX, TOKEN_REFRESH_MARGIN } from './constants';
-import type { SetupClientOptions } from './types';
+import type { SetupClientOptions, SupabaseSession } from './types';
 
 const HANDLE_EVENTS: AuthChangeEvent[] = ['SIGNED_IN', 'SIGNED_OUT'];
 
@@ -50,10 +50,19 @@ export function startSupabaseSessionSync() {
       timeout && clearTimeout(timeout);
       timeout = null;
     };
+    let lastSession: SupabaseSession;
 
     const pageUnsub = page.subscribe(({ data }) => {
       const session = getSessionFromPageData(data);
-      if (!session?.accessToken) {
+
+      // skip duplicated runs
+      if (lastSession === session) {
+        return;
+      }
+      lastSession = session;
+
+      // accessToken is undefined if there is no user
+      if (!session.accessToken) {
         resetTimout();
         // @ts-expect-error this is a private method but we have to clear the session
         supabaseClient.auth._removeSession();
