@@ -78,11 +78,7 @@ Edit your `+layout.svelte` file and set up the client side.
 
 ### Hooks setup
 
-Our `hooks.ts` file is where the heavy lifting of this library happens, we need to import our function to parse the session from the cookie and populate it in locals.
-
-This will also create handlers under the hood that perform different parts of the authentication flow:
-
-- `/api/auth/callback`: The `client` forwards the session details here every time `onAuthStateChange` fires on the client side. This is needed to set up the cookies for your application so that SSR works seamlessly.
+Our `hooks.ts` file is where the heavy lifting of this library happens:
 
 ```ts
 // src/hooks.server.ts
@@ -108,7 +104,23 @@ export const handle = sequence(
 );
 ```
 
+There are three handle methods available:
+
+- `callback()`:
+
+  This will create a handler for `/api/auth/callback`. The `client` forwards the session details here every time `onAuthStateChange` fires on the client side. This is needed to set up the cookies for your application so that SSR works seamlessly.
+
+- `session()`:
+
+  This will parse the session from the cookie and populate it in locals
+
+- `auth()`:
+
+  a shorthand for `sequence(callback(), session())` that uses both handlers
+
 ### Send session to client
+
+In order to make the session available to the UI (pages, layouts) we need to pass the session in the root layout load function:
 
 ```ts
 // src/routes/+layout.server.ts
@@ -123,7 +135,7 @@ export const load: LayoutServerLoad = async ({ locals }) => {
 
 ### Typings
 
-In order to get the most out of TypeScript and its intellisense, you should import our types into the `app.d.ts` type definition file that comes with your SvelteKit project.
+In order to get the most out of TypeScript and it´s intellisense, you should import our types into the `app.d.ts` type definition file that comes with your SvelteKit project.
 
 ```ts
 // src/app.d.ts
@@ -150,7 +162,6 @@ declare namespace App {
 You can now determine if a user is authenticated on the client-side by checking that the `session` object returned by `$page.data` is defined.
 
 ```html
-<!-- example -->
 <script>
   import { page } from '$app/stores';
 </script>
@@ -169,7 +180,6 @@ For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row
 
 ```html
 <script>
-  import Auth from 'supabase-ui-svelte';
   import { supabaseClient } from '$lib/db';
   import { page } from '$app/stores';
 
@@ -182,21 +192,9 @@ For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row
   $: if ($page.data.session) {
     loadData();
   }
-
-  function signout() {
-    supabaseClient.auth.signOut();
-  }
 </script>
 
-{#if !$page.data.session}
-  <Auth
-    supabaseClient={supabaseClient}
-    providers={['google', 'github']}
-  />
-{:else}
-  <button on:click={signout}>Sign out</button>
-  <p>user:</p>
-  <pre>{JSON.stringify($page.data.session.user, null, 2)}</pre>
+{#if $page.data.session}
   <p>client-side data fetching with RLS</p>
   <pre>{JSON.stringify(loadedData, null, 2)}</pre>
 {/if}
@@ -276,7 +274,7 @@ interface TestTable {
   created_at: string;
 }
 
-export const GET: RequestHandler = withAuth(async ({ getSupabaseClient }) => {
+export const GET: RequestHandler = withAuth(async ({ session, getSupabaseClient }) => {
   if (!session) {
     throw redirect(303, '/');
   }
