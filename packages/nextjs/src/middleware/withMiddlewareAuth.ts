@@ -15,7 +15,9 @@ class NoPermissionError extends Error {
   constructor(message: string) {
     super(message);
   }
-  get name() { return this.constructor.name }
+  get name() {
+    return this.constructor.name;
+  }
 }
 
 export interface withMiddlewareAuthOptions {
@@ -56,8 +58,12 @@ export const withMiddlewareAuth: withMiddlewareAuth =
       const cookieOptions = { ...COOKIE_OPTIONS, ...options.cookieOptions };
       const tokenRefreshMargin =
         options.tokenRefreshMargin ?? TOKEN_REFRESH_MARGIN;
-      const access_token = req.cookies[`${cookieOptions.name!}-access-token`];
-      const refresh_token = req.cookies[`${cookieOptions.name!}-refresh-token`];
+      const access_token = req.cookies.get(
+        `${cookieOptions.name!}-access-token`
+      );
+      const refresh_token = req.cookies.get(
+        `${cookieOptions.name!}-refresh-token`
+      );
 
       const res = NextResponse.next();
 

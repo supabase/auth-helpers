@@ -1,4 +1,4 @@
-import { withMiddlewareAuth } from '@supabase/auth-helpers-nextjs/dist/middleware';
+import { withMiddlewareAuth } from '@supabase/auth-helpers-nextjs';
 
 export const middleware = withMiddlewareAuth({
   redirectTo: '/login',
@@ -7,3 +7,7 @@ export const middleware = withMiddlewareAuth({
     redirectTo: '/insufficient-permissions'
   }
 });
+
+export const config = {
+  matcher: ['/middleware-protected/:path*']
+};

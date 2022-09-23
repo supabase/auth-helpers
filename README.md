@@ -37,8 +37,8 @@ This turborepo has some additional tools already setup for you:
 - [ESLint](https://eslint.org/) for code linting
 - [Prettier](https://prettier.io) for code formatting
 
-## Development
+## Development & Contributing
 
-Read the [development.md](./development.md) for more information.
+Read the [development.md](./development.md) guide for more information on local setup, testing, and preparaing a release.
 
 Using a `@supabase/auth-helpers-[framework-name]` naming convention for packages

@@ -38,6 +38,7 @@ export default function supabaseServerClient(
   }
   const access_token =
     context.req.cookies[`${cookieOptions.name}-access-token`];
-  supabaseClient.auth.setAuth(access_token);
+
+  if (access_token) supabaseClient.auth.setAuth(access_token);
   return supabaseClient;
 }
