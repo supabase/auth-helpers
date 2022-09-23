@@ -4,22 +4,6 @@ import type {
   ErrorPayload
 } from '@supabase/auth-helpers-shared';
 
-export interface SharedConfig {
-  supabaseClient: SupabaseClient;
-  tokenRefreshMargin: number;
-  endpointPrefix: string;
-}
-
-export interface ClientConfig extends SharedConfig {
-  getSessionFromPageData: (data: App.PageData) => SupabaseSession;
-}
-
-export interface ServerConfig extends SharedConfig {
-  cookieOptions: Required<CookieOptions>;
-  getSessionFromLocals: (locals: App.Locals) => SupabaseSession;
-  setSessionToLocals: (locals: App.Locals, session: SupabaseSession) => void;
-}
-
 export interface CookieOptions extends SharedCookieOptions {
   secure?: boolean;
 }
@@ -43,18 +27,16 @@ export interface ExtendedEvent {
   session: SupabaseSession;
 }
 
-export interface SetupClientOptions {
-  supabaseClient: SupabaseClient;
-  tokenRefreshMargin?: number;
-  endpointPrefix?: string;
-  getSessionFromPageData?: (data: App.PageData) => SupabaseSession;
-}
-
-export interface SetupServerOptions {
+export interface SetupOptions {
   supabaseClient: SupabaseClient;
   tokenRefreshMargin?: number;
   endpointPrefix?: string;
   cookieOptions?: CookieOptions;
+  getSessionFromPageData?: (data: App.PageData) => SupabaseSession;
   getSessionFromLocals?: (locals: App.Locals) => SupabaseSession;
   setSessionToLocals?: (locals: App.Locals, session: SupabaseSession) => void;
+}
+
+export interface Config extends Omit<Required<SetupOptions>, 'cookieOptions'> {
+  cookieOptions: Required<CookieOptions>;
 }

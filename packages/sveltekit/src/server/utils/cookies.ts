@@ -1,12 +1,12 @@
 import type { Session } from '@supabase/supabase-js';
 import type { Cookies } from '@sveltejs/kit';
-import { getServerConfig } from '../config';
+import { getConfig } from '../../config';
 
 function getCookieOptions(): {
   cookieName: string;
   cookieOptions: Parameters<import('@sveltejs/kit').Cookies['serialize']>[2];
 } {
-  const { cookieOptions } = getServerConfig();
+  const { cookieOptions } = getConfig();
   return {
     cookieName: cookieOptions.name,
     cookieOptions: {

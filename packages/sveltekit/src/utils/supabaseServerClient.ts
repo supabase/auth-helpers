@@ -1,7 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { browser } from '$app/environment';
-import { getClientConfig } from '../config';
-import { getServerConfig } from '../server/config';
+import { getConfig } from '../config';
 
 /**
  * Use this helper to get the global supabaseClient
@@ -23,7 +22,7 @@ import { getServerConfig } from '../server/config';
 export function supabaseServerClient(
   access_token: string | null | undefined
 ): SupabaseClient {
-  const { supabaseClient } = browser ? getClientConfig() : getServerConfig();
+  const { supabaseClient } = getConfig();
   if (!access_token) {
     throw new Error(
       'No access token provided, make sure to check if the user is authenticated.'

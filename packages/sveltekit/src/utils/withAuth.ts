@@ -1,6 +1,5 @@
 import type { LoadEvent, RequestEvent } from '@sveltejs/kit';
-import { getClientConfig } from '../config';
-import { getServerConfig } from '../server/config';
+import { getConfig } from '../config';
 import type { ExtendedEvent, SupabaseSession } from '../types';
 import { supabaseServerClient } from './supabaseServerClient';
 
@@ -29,14 +28,14 @@ export function withAuth<E extends any, T extends any>(
     // ServerLoad, Action, RequestHander
     const requestEvent = event as unknown as RequestEvent;
     if (typeof requestEvent.locals === 'object') {
-      session = getServerConfig().getSessionFromLocals(requestEvent.locals);
+      session = getConfig().getSessionFromLocals(requestEvent.locals);
     }
 
     // Load
     const loadEvent = event as unknown as LoadEvent;
     if (typeof loadEvent.parent === 'function') {
       const parentData = (await loadEvent.parent()) as App.PageData;
-      session = getClientConfig().getSessionFromPageData(parentData);
+      session = getConfig().getSessionFromPageData(parentData);
     }
 
     /*

@@ -39,23 +39,24 @@ We will start off by creating a `db.ts` file inside of our `src/lib` directory. 
 ```ts
 // src/lib/db.ts
 import { createClient } from '@supabase/supabase-js';
-import { setupSupabaseClient } from '@supabase/auth-helpers-sveltekit';
+import { setupSupabaseHelpers } from '@supabase/auth-helpers-sveltekit';
+import { dev } from '$app/environment';
 import { env } from '$env/dynamic/public';
 // or use the static env
 // import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public';
 
-export const supabaseClient = createClient(
-  env.PUBLIC_SUPABASE_URL,
-  env.PUBLIC_SUPABASE_ANON_KEY,
-  {
-    persistSession: false,
-    autoRefreshToken: false
-  }
-);
-
-setupSupabaseClient({
-  supabaseClient
+export const supabaseClient = createClient(env.PUBLIC_SUPABASE_URL, env.PUBLIC_SUPABASE_ANON_KEY, {
+	persistSession: false,
+	autoRefreshToken: false
 });
+
+setupSupabaseHelpers({
+	supabaseClient,
+	cookieOptions: {
+		secure: !dev
+	}
+});
+
 ```
 
 ### Initialize the client
@@ -65,7 +66,7 @@ Edit your `+layout.svelte` file and set up the client side.
 ```html
 <!-- src/routes/+layout.svelte -->
 <script lang="ts">
-  // make sure the supabase instance is initialized on the client
+  // we need to make sure the supabase instance is initialized on the client
   import '$lib/db';
   import { startSupabaseSessionSync } from '@supabase/auth-helpers-sveltekit';
 
@@ -82,19 +83,11 @@ Our `hooks.ts` file is where the heavy lifting of this library happens:
 
 ```ts
 // src/hooks.server.ts
-import { dev } from '$app/environment';
-import { supabaseClient } from '$lib/db';
-import {
-  setupSupabaseServer,
-  auth
-} from '@supabase/auth-helpers-sveltekit/server';
 
-setupSupabaseServer({
-  supabaseClient,
-  cookieOptions: {
-    secure: !dev
-  }
-});
+// we need to make sure the supabase instance is initialized on the server
+import '$lib/db';
+import { dev } from '$app/environment';
+import { auth } from '@supabase/auth-helpers-sveltekit/server';
 
 export const handle = auth();
 
@@ -162,6 +155,7 @@ declare namespace App {
 You can now determine if a user is authenticated on the client-side by checking that the `user` object in `$page.data.session` is defined.
 
 ```html
+<!-- src/routes/+page.svelte -->
 <script>
   import { page } from '$app/stores';
 </script>

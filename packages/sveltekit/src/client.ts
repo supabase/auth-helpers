@@ -3,28 +3,10 @@ import { invalidateAll } from '$app/navigation';
 import { page } from '$app/stores';
 import type { AuthChangeEvent, User } from '@supabase/supabase-js';
 import { onMount } from 'svelte';
-import { setClientConfig, getClientConfig } from './config';
-import { ENDPOINT_PREFIX, TOKEN_REFRESH_MARGIN } from './constants';
-import type { SetupClientOptions, SupabaseSession } from './types';
+import { getConfig } from './config';
+import type { SupabaseSession } from './types';
 
 const HANDLE_EVENTS: AuthChangeEvent[] = ['SIGNED_IN', 'SIGNED_OUT'];
-
-/**
- * Setup the global client configuration
- */
-export function setupSupabaseClient({
-  supabaseClient,
-  tokenRefreshMargin = TOKEN_REFRESH_MARGIN,
-  endpointPrefix = ENDPOINT_PREFIX,
-  getSessionFromPageData = (data) => data.session
-}: SetupClientOptions) {
-  setClientConfig({
-    supabaseClient,
-    tokenRefreshMargin,
-    endpointPrefix,
-    getSessionFromPageData
-  });
-}
 
 /**
  * Setup session sync.
@@ -40,7 +22,7 @@ export function startSupabaseSessionSync() {
     tokenRefreshMargin,
     endpointPrefix,
     getSessionFromPageData
-  } = getClientConfig();
+  } = getConfig();
 
   onMount(() => {
     let timeout: ReturnType<typeof setTimeout> | null;

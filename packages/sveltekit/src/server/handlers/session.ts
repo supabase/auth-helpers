@@ -7,7 +7,7 @@ import {
   JWTPayloadFailed,
   RefreshTokenNotFound
 } from '@supabase/auth-helpers-shared';
-import { getServerConfig } from '../config';
+import { getConfig } from '../../config';
 import { deleteSession, saveSession } from '../utils/cookies';
 import type { SupabaseSession } from '../../types';
 import logger from '../utils/log';
@@ -26,7 +26,7 @@ export async function getSupabaseSession(event: RequestEvent) {
     supabaseClient,
     cookieOptions: { name: cookieName },
     tokenRefreshMargin
-  } = getServerConfig();
+  } = getConfig();
   const { cookies } = event;
 
   let session: SupabaseSession = {};
@@ -99,7 +99,7 @@ export async function getSupabaseSession(event: RequestEvent) {
  * export const handle = sequence(session(), ...);
  */
 export function session(): Handle {
-  const { setSessionToLocals } = getServerConfig();
+  const { setSessionToLocals } = getConfig();
 
   return async ({ resolve, event }) => {
     const session = await getSupabaseSession(event);

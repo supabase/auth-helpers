@@ -1,7 +1,7 @@
 import type { Cookies } from '@sveltejs/kit';
-import { getServerConfig } from '../config';
+import { getConfig } from '../../config';
 
 export function getProviderToken(cookies: Cookies) {
-  const { cookieOptions } = getServerConfig();
+  const { cookieOptions } = getConfig();
   return cookies.get(`${cookieOptions.name}-provider-token`);
 }
