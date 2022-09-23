@@ -9,6 +9,9 @@ import type { SetupClientOptions } from './types';
 
 const HANDLE_EVENTS: AuthChangeEvent[] = ['SIGNED_IN', 'SIGNED_OUT'];
 
+/**
+ * Setup the global client configuration
+ */
 export function setupSupabaseClient({
   supabaseClient,
   tokenRefreshMargin = TOKEN_REFRESH_MARGIN,
@@ -23,6 +26,11 @@ export function setupSupabaseClient({
   });
 }
 
+/**
+ * Setup session sync.
+ * Sends the session to the server when it´s retrieved from a browser only authentication method
+ * and calls `invalidateAll()` when the accessToken is about to expire to get the updated session from the server.
+ */
 export function startSupabaseSessionSync() {
   if (!browser) {
     return;

@@ -10,6 +10,15 @@ import { getServerConfig } from '../config';
 import { deleteSession, saveSession } from '../helpers';
 import type { SupabaseSession } from '../../types';
 
+/**
+ * Get the session from a request event
+ *
+ * @example
+ * export async function handle({ event, resolve }) {
+ *  event.locals.session = await getSupabaseSession(event);
+ *  return resolve(event);
+ * }
+ */
 export async function getSupabaseSession(event: RequestEvent) {
   const {
     supabaseClient,
@@ -69,6 +78,15 @@ export async function getSupabaseSession(event: RequestEvent) {
   return session;
 }
 
+/**
+ * Reads the cookies and populates the session to `event.locals`.
+ *
+ * A shorthand for `getSupabaseSession`.
+ * @example
+ * // src/hooks.server.ts
+ * export const handle = session();
+ * export const handle = sequence(session(), ...);
+ */
 export function session(): Handle {
   const { setSessionToLocals } = getServerConfig();
 

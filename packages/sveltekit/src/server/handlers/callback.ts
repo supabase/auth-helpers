@@ -8,6 +8,13 @@ interface PostBody {
   session: Session | null;
 }
 
+/**
+ * A `RequestHandler` that receives the client session and saves it in cookies.
+ *
+ * @example
+ * // src/routes/api/auth/callback/+server.js
+ * export const POST = handleCallbackSession;
+ */
 export async function handleCallbackSession({
   cookies,
   request
@@ -15,6 +22,7 @@ export async function handleCallbackSession({
   const { event: sessionEvent, session }: PostBody = await request.json();
 
   const response = new Response(null, { status: 204 });
+  response.headers.set('Cache-Control', 'no-store');
 
   if (sessionEvent === 'SIGNED_IN' && session) {
     saveSession(cookies, session, response);
@@ -25,6 +33,16 @@ export async function handleCallbackSession({
   return response;
 }
 
+/**
+ * Creates the callback endpoint that receives the client session and saves it in cookies.
+ *
+ * If you prefer defining the endpoint in a file use `handleCallbackSession` instead
+ *
+ * @example
+ * // src/hooks.server.ts
+ * export const handle = callback();
+ * export const handle = sequence(callback(), ...);
+ */
 export function callback(): Handle {
   const { endpointPrefix } = getServerConfig();
   const endpointPath = `${endpointPrefix}/callback`;

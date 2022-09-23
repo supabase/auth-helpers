@@ -6,6 +6,9 @@ import {
 import type { SetupServerOptions } from '../types';
 import { setServerConfig } from './config';
 
+/**
+ * Setup the global server configuration
+ */
 export function setupSupabaseServer({
   supabaseClient,
   cookieOptions = {},

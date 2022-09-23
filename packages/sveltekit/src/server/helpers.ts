@@ -20,6 +20,12 @@ function getCookieOptions(): {
   };
 }
 
+/**
+ * Save the session using cookies
+ * @param cookies sveltekit´s Cookie API
+ * @param session Supabase Session
+ * @param response an optional `Response` to append the cookie header to
+ */
 export function saveSession(
   cookies: Cookies,
   session: Session,
@@ -48,6 +54,11 @@ export function saveSession(
   });
 }
 
+/**
+ * Clear the session cookies
+ * @param cookies sveltekit´s Cookie API
+ * @param response an optional `Response` to append the cookie header to
+ */
 export function deleteSession(cookies: Cookies, response?: Response) {
   const { cookieName, cookieOptions } = getCookieOptions();
 
