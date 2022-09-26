@@ -1,13 +1,42 @@
-import type { User } from '@supabase/supabase-js';
-import type { ErrorPayload } from '@supabase/auth-helpers-shared';
+import type { SupabaseClient, User } from '@supabase/supabase-js';
+import type {
+  CookieOptions as SharedCookieOptions,
+  ErrorPayload
+} from '@supabase/auth-helpers-shared';
 
-export interface Locals {
-  user: User | null;
-  accessToken: string | null;
-  error: ErrorPayload;
+export interface CookieOptions extends SharedCookieOptions {
+  secure?: boolean;
 }
 
-export interface RequestResponse {
-  req: Request;
-  res: Response;
+// it´s either an authenticated session and no error
+// or a not authenticated session and an optional error
+export type SupabaseSession =
+  | {
+      user: User;
+      accessToken: string;
+      error?: undefined;
+    }
+  | {
+      user?: undefined;
+      accessToken?: undefined;
+      error?: ErrorPayload;
+    };
+
+export interface ExtendedEvent {
+  getSupabaseClient(): SupabaseClient;
+  session: SupabaseSession;
+}
+
+export interface SetupOptions {
+  supabaseClient: SupabaseClient;
+  tokenRefreshMargin?: number;
+  endpointPrefix?: string;
+  cookieOptions?: CookieOptions;
+  getSessionFromPageData?: (data: App.PageData) => SupabaseSession;
+  getSessionFromLocals?: (locals: App.Locals) => SupabaseSession;
+  setSessionToLocals?: (locals: App.Locals, session: SupabaseSession) => void;
+}
+
+export interface Config extends Omit<Required<SetupOptions>, 'cookieOptions'> {
+  cookieOptions: Required<CookieOptions>;
 }
