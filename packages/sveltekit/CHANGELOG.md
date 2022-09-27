@@ -1,5 +1,11 @@
 # @supabase/auth-helpers-sveltekit
 
+## 0.7.0
+
+### Minor Changes
+
+- cd9150c: [breaking] Update to work with latest SvelteKit RC
+
 ## 0.6.11
 
 ### Patch Changes
