@@ -69,13 +69,13 @@ Edit your `+layout.svelte` file and set up the client side.
   // we need to make sure the supabase instance is initialized on the client
   import '$lib/db';
   import { startSupabaseSessionSync } from '@supabase/auth-helpers-sveltekit';
-	import { invalidateAll } from '$app/navigation';
-	import { page } from '$app/stores';
+  import { invalidateAll } from '$app/navigation';
+  import { page } from '$app/stores';
 
   // this sets up automatic token refreshing
   startSupabaseSessionSync({
     page,
-		handleRefresh: () => invalidateAll()
+    handleRefresh: () => invalidateAll()
   });
 </script>
 
@@ -342,9 +342,7 @@ export const actions: Actions = {
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
 
-    const { data, error } = await supabaseClient.auth.api.signInWithEmail(
-      email,
-      password,
+    const { data, error } = await supabaseClient.auth.signIn({ email, password },
       {
         redirectTo: `${url.origin}/logging-in`
       }

@@ -282,6 +282,7 @@ importers:
       '@sveltejs/kit': 1.0.0-next.499
       '@sveltejs/package': 1.0.0-next.5
       del-cli: ^5.0.0
+      fix-esm-import-path: ^1.3.1
       svelte: ^3.48.0
       svelte2tsx: ^0.5.16
       tslib: ^2.4.0
@@ -294,6 +295,7 @@ importers:
       '@sveltejs/kit': 1.0.0-next.499_svelte@3.48.0+vite@3.1.0
       '@sveltejs/package': 1.0.0-next.5_sef34mbipkdngofoeuutt4axsu
       del-cli: 5.0.0
+      fix-esm-import-path: 1.3.1
       svelte: 3.48.0
       svelte2tsx: 0.5.16_sef34mbipkdngofoeuutt4axsu
       tslib: 2.4.0
@@ -2729,7 +2731,6 @@ packages:
       eslint: '>=7.0.0'
     dependencies:
       eslint: 8.16.0
-    dev: false
 
   /eslint-import-resolver-node/0.3.6:
     resolution: {integrity: sha512-0En0w03NRVMn9Uiyn8YRPDKvWjxCWkslUEhGNTdGx15RvPJYQ+lbOlqrlNI2vEAs4pDYK4f/HN2TbDmk5TP0iw==}
@@ -3214,6 +3215,15 @@ packages:
     dependencies:
       micromatch: 4.0.5
       pkg-dir: 4.2.0
+    dev: true
+
+  /fix-esm-import-path/1.3.1:
+    resolution: {integrity: sha512-9s7qVhKCthswNVcJi+yCoLFRavS5c/z9GxBazuCCTdGIVyEQVmLdmZpxu3+iv0hUl/daHSHFtahyLZmJ91vPrA==}
+    hasBin: true
+    dependencies:
+      debug: 4.3.4
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /flat-cache/3.0.4:
