@@ -1,8 +1,7 @@
-export { setupSupabaseHelpers } from './config';
-export { startSupabaseSessionSync } from './client';
-export { enhanceAndInvalidate } from './utils/enhanceAndInvalidate';
-export { supabaseServerClient } from './utils/supabaseServerClient';
-export { withAuth } from './utils/withAuth';
+export { setupSupabaseHelpers } from './config.js';
+export { startSupabaseSessionSync } from './client.js';
+export { supabaseServerClient } from './utils/supabaseServerClient.js';
+export { withAuth } from './utils/withAuth.js';
 export type {
   SupabaseSession,
   CookieOptions,

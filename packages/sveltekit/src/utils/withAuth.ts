@@ -1,7 +1,7 @@
 import type { LoadEvent, RequestEvent } from '@sveltejs/kit';
-import { getConfig } from '../config';
-import type { ExtendedEvent, SupabaseSession } from '../types';
-import { supabaseServerClient } from './supabaseServerClient';
+import { getConfig } from '../config.js';
+import type { ExtendedEvent, SupabaseSession } from '../types.js';
+import { supabaseServerClient } from './supabaseServerClient.js';
 
 /**
  * Use this helper to authenticate load functions, actions and request-handlers

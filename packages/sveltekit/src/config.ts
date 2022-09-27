@@ -1,9 +1,9 @@
-import type { Config, SetupOptions } from './types';
+import type { Config, SetupOptions } from './types.js';
 import {
   ENDPOINT_PREFIX,
   TOKEN_REFRESH_MARGIN,
   COOKIE_OPTIONS
-} from './constants';
+} from './constants.js';
 
 let config: Config;
 

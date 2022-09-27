@@ -1,10 +1,9 @@
-import { browser } from '$app/environment';
-import { invalidateAll } from '$app/navigation';
-import { page } from '$app/stores';
+import type { Page } from '@sveltejs/kit';
 import type { AuthChangeEvent, User } from '@supabase/supabase-js';
 import { onMount } from 'svelte';
-import { getConfig } from './config';
-import type { SupabaseSession } from './types';
+import { getConfig } from './config.js';
+import type { SupabaseSession } from './types.js';
+import type { Readable } from 'svelte/store';
 
 const HANDLE_EVENTS: AuthChangeEvent[] = ['SIGNED_IN', 'SIGNED_OUT'];
 
@@ -13,8 +12,14 @@ const HANDLE_EVENTS: AuthChangeEvent[] = ['SIGNED_IN', 'SIGNED_OUT'];
  * Sends the session to the server when it´s retrieved from a browser only authentication method
  * and calls `invalidateAll()` when the accessToken is about to expire to get the updated session from the server.
  */
-export function startSupabaseSessionSync() {
-  if (!browser) {
+export function startSupabaseSessionSync({
+  page,
+  handleRefresh
+}: {
+  page: Readable<Page>;
+  handleRefresh: () => void;
+}) {
+  if (typeof window === 'undefined') {
     return;
   }
   const {
@@ -71,7 +76,7 @@ export function startSupabaseSessionSync() {
 
         timeout = setTimeout(() => {
           // refresh token
-          invalidateAll();
+          handleRefresh();
         }, (expiresIn - refreshDurationBeforeExpires) * 1000);
       }
     });
@@ -87,7 +92,7 @@ export function startSupabaseSessionSync() {
           credentials: 'same-origin'
         }).then((response) => {
           if (response.ok) {
-            invalidateAll();
+            handleRefresh();
           }
         });
       }

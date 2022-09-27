@@ -7,10 +7,10 @@ import {
   JWTPayloadFailed,
   RefreshTokenNotFound
 } from '@supabase/auth-helpers-shared';
-import { getConfig } from '../../config';
-import { deleteSession, saveSession } from '../utils/cookies';
-import type { SupabaseSession } from '../../types';
-import logger from '../utils/log';
+import { getConfig } from '../../config.js';
+import { deleteSession, saveSession } from '../utils/cookies.js';
+import type { SupabaseSession } from '../../types.js';
+import logger from '../utils/log.js';
 
 /**
  * Get the session from a request event

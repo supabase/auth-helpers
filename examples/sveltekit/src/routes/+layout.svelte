@@ -1,10 +1,14 @@
 <script lang="ts">
 	import { supabaseClient } from '$lib/db';
-	import { page } from '$app/stores';
 	import { startSupabaseSessionSync } from '@supabase/auth-helpers-sveltekit';
+	import { page } from '$app/stores';
+	import { invalidateAll } from '$app/navigation';
 
 	// this sets up automatic token refreshing
-	startSupabaseSessionSync();
+	startSupabaseSessionSync({
+		page,
+		handleRefresh: () => invalidateAll()
+	});
 
 	function signout() {
 		supabaseClient.auth.signOut();

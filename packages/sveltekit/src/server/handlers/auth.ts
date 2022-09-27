@@ -1,7 +1,7 @@
 import type { Handle } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
-import { callback } from './callback';
-import { session } from './session';
+import { callback } from './callback.js';
+import { session } from './session.js';
 
 /**
  * All in one handler.
