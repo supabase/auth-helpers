@@ -1,6 +1,14 @@
 <script lang="ts">
+	import { applyAction, enhance, type SubmitFunction } from '$app/forms';
+	import { invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { enhanceAndInvalidate } from '@supabase/auth-helpers-sveltekit';
+
+	const logout: SubmitFunction = () => {
+		return async ({ result }) => {
+			await invalidateAll();
+			applyAction(result);
+		};
+	};
 </script>
 
 <svelte:head>
@@ -14,7 +22,7 @@
 		</div>
 		<div class="navbar-end">
 			{#if $page.data.session.user}
-				<form action="/logout" method="post" use:enhanceAndInvalidate>
+				<form action="/logout" method="post" use:enhance={logout}>
 					<button type="submit">Sign out</button>
 				</form>
 			{/if}

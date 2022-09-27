@@ -1,6 +1,6 @@
-export { deleteSession, saveSession } from './utils/cookies';
-export { getProviderToken } from './utils/getProviderToken';
+export { deleteSession, saveSession } from './utils/cookies.js';
+export { getProviderToken } from './utils/getProviderToken.js';
 
-export { session, getSupabaseSession } from './handlers/session';
-export { callback, handleCallbackSession } from './handlers/callback';
-export { auth } from './handlers/auth';
+export { session, getSupabaseSession } from './handlers/session.js';
+export { callback, handleCallbackSession } from './handlers/callback.js';
+export { auth } from './handlers/auth.js';

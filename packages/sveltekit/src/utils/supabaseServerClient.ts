@@ -1,6 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import { browser } from '$app/environment';
-import { getConfig } from '../config';
+import { getConfig } from '../config.js';
 
 /**
  * Use this helper to get the global supabaseClient

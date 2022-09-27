@@ -69,9 +69,14 @@ Edit your `+layout.svelte` file and set up the client side.
   // we need to make sure the supabase instance is initialized on the client
   import '$lib/db';
   import { startSupabaseSessionSync } from '@supabase/auth-helpers-sveltekit';
+	import { invalidateAll } from '$app/navigation';
+	import { page } from '$app/stores';
 
   // this sets up automatic token refreshing
-  startSupabaseSessionSync();
+  startSupabaseSessionSync({
+    page,
+		handleRefresh: () => invalidateAll()
+  });
 </script>
 
 <slot />

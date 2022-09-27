@@ -1,5 +1,5 @@
 import { COOKIE_OPTIONS as SHARED_COOKIE_OPTIONS } from '@supabase/auth-helpers-shared';
-import type { CookieOptions } from './types';
+import type { CookieOptions } from './types.js';
 export {
   TOKEN_REFRESH_MARGIN,
   ENDPOINT_PREFIX
