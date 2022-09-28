@@ -1,13 +1,8 @@
 // pages/api/protected-route.ts
-import {
-  withApiAuth,
-  supabaseServerClient
-} from '@supabase/auth-helpers-nextjs';
+import { withApiAuth } from '@supabase/auth-helpers-nextjs';
 
-export default withApiAuth(async function ProtectedRoute(req, res) {
+export default withApiAuth(async function ProtectedRoute(req, res, supabase) {
   // Run queries with RLS on the server
-  const { data } = await supabaseServerClient({ req, res })
-    .from('test')
-    .select('*');
+  const { data } = await supabase.from('test').select('*');
   res.json(data);
 });

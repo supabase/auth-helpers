@@ -1,12 +1,37 @@
 # @supabase/auth-helpers-nextjs
 
-## 0.2.8
+## 0.4.0-next.3
 
 ### Patch Changes
 
-- 63b1da0: chore: Upgrades nextjs to 12.2.X
-- Updated dependencies [63b1da0]
-  - @supabase/auth-helpers-shared@0.1.4
+- 2fdb094: chore: types and middleware improvements.
+- Updated dependencies [2fdb094]
+  - @supabase/auth-helpers-shared@0.2.0-next.2
+
+## 0.4.0-next.2
+
+### Patch Changes
+
+- fe5c4a6: chore: improve types.
+- Updated dependencies [fe5c4a6]
+  - @supabase/auth-helpers-shared@0.2.0-next.1
+
+## 0.4.0-next.1
+
+### Patch Changes
+
+- af28db1: chore: export middleware at root.
+
+## 0.4.0-next.0
+
+### Minor Changes
+
+- 1b33e44: Update to work with supabase-js v2 RC
+
+### Patch Changes
+
+- Updated dependencies [1b33e44]
+  - @supabase/auth-helpers-shared@0.2.0-next.0
 
 ## 0.2.7
 

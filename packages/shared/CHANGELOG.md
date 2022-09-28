@@ -1,10 +1,22 @@
 # shared
 
-## 0.1.4
+## 0.2.0-next.2
 
 ### Patch Changes
 
-- 63b1da0: chore: Upgrades nextjs to 12.2.X
+- 2fdb094: chore: types and middleware improvements.
+
+## 0.2.0-next.1
+
+### Patch Changes
+
+- fe5c4a6: chore: improve types.
+
+## 0.2.0-next.0
+
+### Minor Changes
+
+- 1b33e44: Update to work with supabase-js v2 RC
 
 ## 0.1.3
 
