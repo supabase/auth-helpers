@@ -1,6 +1,6 @@
 {
   "name": "@supabase/auth-helpers-nextjs",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "description": "A collection of framework specific Auth utilities for working with Supabase.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

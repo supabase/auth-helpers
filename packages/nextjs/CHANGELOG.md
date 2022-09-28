@@ -1,5 +1,11 @@
 # @supabase/auth-helpers-nextjs
 
+## 0.2.9
+
+### Patch Changes
+
+- 3ec2c64: allow passing cookie domain and path in handleLogout
+
 ## 0.2.8
 
 ### Patch Changes
