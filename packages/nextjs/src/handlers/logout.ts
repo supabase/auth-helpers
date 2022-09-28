@@ -34,6 +34,8 @@ export default function handleLogout(
     new NextResponseAdapter(res),
     ['access-token', 'refresh-token', 'provider-token'].map((key) => ({
       name: `${cookieOptions.name}-${key}`,
+      domain: cookieOptions.domain,
+      path: cookieOptions.path,
       value: '',
       maxAge: -1
     }))
