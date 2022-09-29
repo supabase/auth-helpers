@@ -1,7 +1,6 @@
 import { getConfig } from '../config';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-shared';
 import type { RequestEvent } from '@sveltejs/kit';
-import { PKG_NAME, PKG_VERSION } from '../constants';
 
 const CACHE_KEY = Symbol('supabase-client');
 
@@ -30,16 +29,7 @@ export function createRequestSupabaseClient(event: RequestEvent) {
     getRequestHeader(name) {
       return request.headers.get(name) ?? undefined;
     },
-    options: {
-      ...options,
-      global: {
-        ...options.global,
-        headers: {
-          ...options.global?.headers,
-          'X-Client-Info': `${PKG_NAME}@${PKG_VERSION}`
-        }
-      }
-    },
+    options,
     cookieOptions
   });
 

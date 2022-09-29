@@ -61,7 +61,7 @@ Edit your `+layout.svelte` file and set up the client side.
 
 ```html
 <!-- src/routes/+layout.svelte -->
-<script lang="ts">
+<script>
   import { supabaseClient } from '$lib/db';
   import { invalidateAll } from '$app/navigation';
   import { onMount } from 'svelte';
@@ -70,7 +70,7 @@ Edit your `+layout.svelte` file and set up the client side.
     const {
       data: { subscription }
     } = supabaseClient.auth.onAuthStateChange(() => {
-      invalidateAll();
+      invalidate('supabase:auth');
     });
 
     return () => {
@@ -82,9 +82,13 @@ Edit your `+layout.svelte` file and set up the client side.
 <slot />
 ```
 
+Every `PageLoad` or `LayoutLoad` wrapped with `withAuth` will update when `invalidate('supabase:auth')` is called.
+
+If some data is not updated on signin/signout you can fall back to `invalidateAll()`.
+
 ### Send session to client
 
-In order to make the session available to the UI (pages, layouts) we need to pass the session in the root layout load function:
+In order to make the session available to the UI (pages, layouts) we need to pass the session in the root layout server load function:
 
 ```ts
 // src/routes/+layout.server.ts
@@ -97,6 +101,20 @@ export const load: LayoutServerLoad = async (event) => {
   };
 };
 ```
+
+In addition you can create a layout load function if you are using `invalidate('supabase:auth')`:
+
+```ts
+// src/routes/+layout.ts
+import type { LayoutLoad } from './$types';
+import { withAuth } from '@supabase/auth-helpers-sveltekit';
+
+export const load: LayoutLoad = withAuth(async ({ session }) => {
+	return { session };
+});
+```
+
+This results in less server calls as the client manages the session on it´s own.
 
 ### Typings
 

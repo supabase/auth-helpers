@@ -15,6 +15,13 @@ export function createClient(
 ) {
   const opts: SupabaseClientOptions<App.Supabase['SchemaName']> = {
     ...options,
+    global: {
+      ...options?.global,
+      headers: {
+        ...options?.global?.headers,
+        'X-Client-Info': `${PKG_NAME}@${PKG_VERSION}`
+      }
+    },
     auth: {
       storageKey: cookieOptions?.name ?? 'supabase-auth-token'
     }
@@ -23,16 +30,7 @@ export function createClient(
   const globalInstance = createBrowserSupabaseClient<App.Supabase['Database']>({
     supabaseUrl,
     supabaseKey,
-    options: {
-      ...options,
-      global: {
-        ...options?.global,
-        headers: {
-          ...options?.global?.headers,
-          'X-Client-Info': `${PKG_NAME}@${PKG_VERSION}`
-        }
-      }
-    },
+    options: opts,
     cookieOptions
   });
 

@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { supabaseClient } from '$lib/db';
-	import { invalidateAll } from '$app/navigation';
+	import { invalidate } from '$app/navigation';
 	import { onMount } from 'svelte';
 
 	onMount(() => {
 		const {
 			data: { subscription }
 		} = supabaseClient.auth.onAuthStateChange(() => {
-			invalidateAll();
+			invalidate('supabase:auth');
 		});
 
 		return () => {

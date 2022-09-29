@@ -1,11 +1,13 @@
 import { getConfig } from '../config';
 import { isBrowser } from '@supabase/auth-helpers-shared';
-import { createClient } from '@supabase/supabase-js';
+import { createClient, type Session } from '@supabase/supabase-js';
 import type { LoadEvent } from '@sveltejs/kit';
-import { PKG_NAME, PKG_VERSION } from '../constants';
 
 export function createLoadSupabaseClient(event: LoadEvent) {
   const { supabaseUrl, supabaseKey, options, globalInstance } = getConfig();
+
+  event.depends('supabase:auth');
+
   if (isBrowser()) {
     return globalInstance;
   }
@@ -15,17 +17,16 @@ export function createLoadSupabaseClient(event: LoadEvent) {
     supabaseKey,
     {
       ...options,
-      global: {
-        ...options.global,
-        headers: {
-          ...options.global?.headers,
-          'X-Client-Info': `${PKG_NAME}@${PKG_VERSION}`
-        }
-      },
       auth: {
         storage: {
           async getItem(key) {
-            const { session } = await event.parent();
+            let session: Session | null = null;
+            if (typeof event.data?.session !== 'undefined') {
+              session = event.data.session;
+            } else {
+              const parentData = await event.parent();
+              session = parentData?.session;
+            }
             return session ? JSON.stringify(session) : null;
           },
           async removeItem(key) {
