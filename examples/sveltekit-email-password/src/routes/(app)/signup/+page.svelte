@@ -1,10 +1,8 @@
 <script lang="ts">
 	import { applyAction, enhance, type SubmitFunction } from '$app/forms';
-	import { invalidateAll } from '$app/navigation';
+	import type { ActionData } from './$types';
 
-	export let errors: Record<string, string> = {};
-	export let values: Record<string, string> = {};
-	export let message: string = '';
+	export let form: ActionData;
 	let loading = false;
 
 	const handleSubmit: SubmitFunction = () => {
@@ -12,9 +10,6 @@
 		return async ({ result }) => {
 			loading = false;
 			await applyAction(result);
-			if (result.type === 'redirect') {
-				await invalidateAll();
-			}
 		};
 	};
 </script>
@@ -22,11 +17,11 @@
 <section class="columns mt-6 pt-6">
 	<div class="column is-half is-offset-one-quarter">
 		<h1 class="title">Sign up</h1>
-		{#if errors}
-			<div class="block notification is-danger">{errors.form}</div>
+		{#if form?.error}
+			<div class="block notification is-danger">{form.error}</div>
 		{/if}
-		{#if message}
-			<div class="block notification is-primary">{message}</div>
+		{#if form?.message}
+			<div class="block notification is-primary">{form.message}</div>
 		{/if}
 		<form method="post" use:enhance={handleSubmit}>
 			<div class="field">
@@ -35,7 +30,7 @@
 					<input
 						id="email"
 						name="email"
-						value={values?.email ?? ''}
+						value={form?.values?.email ?? ''}
 						class="input"
 						type="email"
 						placeholder="Email"
@@ -49,7 +44,6 @@
 					<input
 						id="password"
 						name="password"
-						value={values?.password ?? ''}
 						class="input"
 						type="password"
 						placeholder="Password"

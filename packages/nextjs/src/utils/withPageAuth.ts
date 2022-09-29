@@ -2,7 +2,10 @@ import {
   CookieNotParsed,
   CookieOptions,
   createServerSupabaseClient,
-  AuthHelperError
+  AuthHelperError,
+  filterCookies,
+  ensureArray,
+  serializeCookie
 } from '@supabase/auth-helpers-shared';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
@@ -96,15 +99,26 @@ export default function withPageAuth<
         supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
         supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
         getRequestHeader: (key) => context.req.headers[key],
-        getResponseHeader: (key) => {
-          const header = context.res.getHeader(key);
-          if (typeof header === 'number') {
-            return String(header);
-          }
 
-          return header;
+        getCookie(name) {
+          return context.req.cookies[name];
         },
-        setHeader: (key, value) => context.res.setHeader(key, value),
+        setCookie(name, value, options) {
+          const newSetCookies = filterCookies(
+            ensureArray(context.res.getHeader('set-cookie')?.toString() ?? []),
+            name
+          );
+          const newSessionStr = serializeCookie(name, value, {
+            ...options,
+            // Allow supabase-js on the client to read the cookie as well
+            httpOnly: true
+          });
+
+          context.res.setHeader('set-cookie', [
+            ...newSetCookies,
+            newSessionStr
+          ]);
+        },
         cookieOptions
       });
 

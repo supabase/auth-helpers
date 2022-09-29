@@ -2,16 +2,12 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 
-	let redirectPath = '/dashboard';
-
 	$: {
 		const redirectTo = $page.url.searchParams.get('redirect');
-		if (redirectTo) {
-			redirectPath = redirectTo;
-		}
+
 		// check if user has been set in session store then redirect
-		if ($page.data.session.user) {
-			goto(redirectPath);
+		if ($page.data.session) {
+			goto(redirectTo ?? '/dashboard');
 		}
 	}
 </script>

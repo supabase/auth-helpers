@@ -1,21 +1,27 @@
 <script lang="ts">
 	import { supabaseClient } from '$lib/db';
-	import { startSupabaseSessionSync } from '@supabase/auth-helpers-sveltekit';
-	import { page } from '$app/stores';
 	import { invalidateAll } from '$app/navigation';
-
-	// this sets up automatic token refreshing
-	startSupabaseSessionSync({
-		page,
-		handleRefresh: () => invalidateAll()
-	});
+	import { onMount } from 'svelte';
+	import { page } from '$app/stores';
 
 	function signout() {
 		supabaseClient.auth.signOut();
 	}
+
+	onMount(() => {
+		const {
+			data: { subscription }
+		} = supabaseClient.auth.onAuthStateChange(() => {
+			invalidateAll();
+		});
+
+		return () => {
+			subscription.unsubscribe();
+		};
+	});
 </script>
 
-{#if $page.data.session.user}
+{#if $page.data.session}
 	<button on:click={signout}>Sign out</button>
 {/if}
 

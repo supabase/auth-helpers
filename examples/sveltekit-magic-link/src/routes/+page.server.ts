@@ -1,16 +1,18 @@
-import { supabaseClient } from '$lib/db';
+import { withAuth } from '@supabase/auth-helpers-sveltekit';
 import { invalid } from '@sveltejs/kit';
 import type { Actions } from './$types';
 
 export const actions: Actions = {
-	async default({ request, url }) {
+	default: withAuth(async ({ request, url, supabaseClient }) => {
 		const formData = await request.formData();
 		const email = formData.get('email') as string;
 
-		const { error } = await supabaseClient.auth.signIn(
-			{ email },
-			{ redirectTo: `${url.origin}/logging-in` }
-		);
+		const { error } = await supabaseClient.auth.signInWithOtp({
+			email,
+			options: {
+				emailRedirectTo: `${url.origin}/logging-in`
+			}
+		});
 
 		if (error) {
 			return invalid(400, {
@@ -23,5 +25,5 @@ export const actions: Actions = {
 			success: true,
 			message: 'Please check your email for a magic link to log into the website.'
 		};
-	}
+	})
 };

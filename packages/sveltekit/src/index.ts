@@ -1,10 +1,5 @@
-export { setupSupabaseHelpers } from './config.js';
-export { startSupabaseSessionSync } from './client.js';
-export { supabaseServerClient } from './utils/supabaseServerClient.js';
+export type { ExtendedEvent, Config } from './types';
 export { withAuth } from './utils/withAuth.js';
-export type {
-  SupabaseSession,
-  CookieOptions,
-  Config,
-  SetupOptions
-} from './types';
+export { getSupabase } from './utils/getSupabase';
+export { getServerSession } from './utils/getServerSession';
+export { createClient } from './createClient';

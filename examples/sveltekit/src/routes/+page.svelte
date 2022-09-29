@@ -1,13 +1,6 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import { supabaseClient } from '$lib/db';
 	import { page } from '$app/stores';
-
-	let auth: typeof import('supabase-ui-svelte').default;
-	onMount(async () => {
-		const { default: Auth } = await import('supabase-ui-svelte');
-		auth = Auth;
-	});
 
 	let loadedData: any[] = [];
 	async function loadData() {
@@ -15,7 +8,7 @@
 		loadedData = data;
 	}
 
-	$: if ($page.data.session.user) {
+	$: if ($page.data.session) {
 		loadData();
 	}
 </script>
@@ -23,27 +16,23 @@
 <h1>Welcome to SvelteKit</h1>
 <p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
 
-{#if !$page.data.session.user}
+{#if !$page.data.session}
 	<button
 		on:click={() => {
-			supabaseClient.auth.signIn({ provider: 'github' }, { scopes: 'public_repo user:email' });
+			supabaseClient.auth.signInWithOAuth({
+				provider: 'github',
+				options: { scopes: 'public_repo user:email' }
+			});
 		}}
 	>
 		GitHub with scopes
 	</button>
-	<svelte:component
-		this={auth}
-		{supabaseClient}
-		providers={['google', 'github']}
-		socialLayout="horizontal"
-		socialButtonSize="large"
-	/>
 {:else}
 	<p>
 		[<a href="/profile">withPageAuth</a>] | [<a href="/protected-page">supabaseServerClient</a>] | [<a
 			href="/github-provider-token">GitHub Token</a
 		>] |
-		<button on:click={() => supabaseClient.auth.update({ data: { test5: 'updated' } })}>
+		<button on:click={() => supabaseClient.auth.updateUser({ data: { test5: 'updated' } })}>
 			Update
 		</button>
 	</p>

@@ -1,11 +1,12 @@
-import { supabaseClient } from '$lib/db';
-import { invalid, redirect } from '@sveltejs/kit';
+import { getSupabase } from '@supabase/auth-helpers-sveltekit';
+import { AuthApiError } from '@supabase/supabase-js';
+import { invalid, redirect, type ValidationError } from '@sveltejs/kit';
 import type { Actions } from './$types';
-import { saveSession } from '@supabase/auth-helpers-sveltekit/server';
 
 export const actions: Actions = {
-	async default({ request, cookies, url }) {
-		const formData = await request.formData();
+	async default(event): Promise<ValidationError<{ error: string; values?: { email: string } }>> {
+		const supabaseClient = getSupabase(event);
+		const formData = await event.request.formData();
 
 		const email = formData.get('email') as string;
 		const password = formData.get('password') as string;
@@ -24,19 +25,18 @@ export const actions: Actions = {
 			});
 		}
 
-		const { data, error } = await supabaseClient.auth.api.signInWithEmail(email, password, {
-			redirectTo: `${url.origin}/logging-in`
-		});
+		const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
 
-		if (error || !data) {
-			if (error?.status === 400) {
+		if (error) {
+			if (error instanceof AuthApiError && error.status === 400) {
 				return invalid(400, {
-					error: 'Invalid credentials',
+					error: 'Invalid credentials.',
 					values: {
 						email
 					}
 				});
 			}
+
 			return invalid(500, {
 				error: 'Server error. Try again later.',
 				values: {
@@ -45,7 +45,6 @@ export const actions: Actions = {
 			});
 		}
 
-		saveSession(cookies, data);
 		throw redirect(303, '/dashboard');
 	}
 };

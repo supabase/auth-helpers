@@ -1,13 +1,18 @@
 <script lang="ts">
-	import '$lib/db';
-	import { startSupabaseSessionSync } from '@supabase/auth-helpers-sveltekit';
+	import { supabaseClient } from '$lib/db';
 	import { invalidateAll } from '$app/navigation';
-	import { page } from '$app/stores';
+	import { onMount } from 'svelte';
 
-	// this sets up automatic token refreshing
-	startSupabaseSessionSync({
-		page,
-		handleRefresh: () => invalidateAll()
+	onMount(() => {
+		const {
+			data: { subscription }
+		} = supabaseClient.auth.onAuthStateChange(() => {
+			invalidateAll();
+		});
+
+		return () => {
+			subscription.unsubscribe();
+		};
 	});
 </script>
 

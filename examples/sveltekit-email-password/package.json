@@ -14,7 +14,7 @@
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "next",
-		"@sveltejs/kit": "1.0.0-next.499",
+		"@sveltejs/kit": "1.0.0-next.504",
 		"@typescript-eslint/eslint-plugin": "^5.10.1",
 		"@typescript-eslint/parser": "^5.10.1",
 		"eslint": "^7.32.0",
@@ -33,7 +33,8 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"cookie": "^0.5.0",
 		"@supabase/auth-helpers-sveltekit": "workspace:*",
-		"@supabase/supabase-js": "^1.35.3"
+		"@supabase/supabase-js": "2.0.0-rc.10"
 	}
 }
