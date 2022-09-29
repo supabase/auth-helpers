@@ -1,14 +1,19 @@
 <script lang="ts">
 	import { applyAction, enhance, type SubmitFunction } from '$app/forms';
-	import { invalidateAll } from '$app/navigation';
+	import { invalidate } from '$app/navigation';
 	import { page } from '$app/stores';
 
+	let loading = false;
+
 	const handleLogout: SubmitFunction = () => {
+		loading = true;
 		return async ({ result }) => {
 			if (result.type === 'redirect') {
-				await invalidateAll();
+				await invalidate('supabase:auth');
+			} else {
+				await applyAction(result);
 			}
-			await applyAction(result);
+			loading = false;
 		};
 	};
 </script>
@@ -25,7 +30,7 @@
 		<div class="navbar-end">
 			{#if $page.data.session}
 				<form action="/logout" method="post" use:enhance={handleLogout}>
-					<button type="submit">Sign out</button>
+					<button disabled={loading} type="submit">Sign out</button>
 				</form>
 			{/if}
 		</div>
