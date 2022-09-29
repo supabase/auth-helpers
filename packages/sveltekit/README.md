@@ -43,7 +43,10 @@ import { env } from '$env/dynamic/public';
 // or use the static env
 // import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public';
 
-export const supabaseClient = createClient(env.PUBLIC_SUPABASE_URL, env.PUBLIC_SUPABASE_ANON_KEY);
+export const supabaseClient = createClient(
+  env.PUBLIC_SUPABASE_URL,
+  env.PUBLIC_SUPABASE_ANON_KEY
+);
 ```
 
 To make sure the client is initialized on the server and the client we include this file in `src/hooks.server.js` and `src/hooks.client.js`:
@@ -59,21 +62,21 @@ Edit your `+layout.svelte` file and set up the client side.
 ```html
 <!-- src/routes/+layout.svelte -->
 <script lang="ts">
-	import { supabaseClient } from '$lib/db';
-	import { invalidateAll } from '$app/navigation';
-	import { onMount } from 'svelte';
+  import { supabaseClient } from '$lib/db';
+  import { invalidateAll } from '$app/navigation';
+  import { onMount } from 'svelte';
 
-	onMount(() => {
-		const {
-			data: { subscription }
-		} = supabaseClient.auth.onAuthStateChange(() => {
-			invalidateAll();
-		});
+  onMount(() => {
+    const {
+      data: { subscription }
+    } = supabaseClient.auth.onAuthStateChange(() => {
+      invalidateAll();
+    });
 
-		return () => {
-			subscription.unsubscribe();
-		};
-	});
+    return () => {
+      subscription.unsubscribe();
+    };
+  });
 </script>
 
 <slot />
@@ -89,9 +92,9 @@ import type { LayoutServerLoad } from './$types';
 import { getServerSession } from '@supabase/auth-helpers-sveltekit';
 
 export const load: LayoutServerLoad = async (event) => {
-	return {
-		session: await getServerSession(event)
-	};
+  return {
+    session: await getServerSession(event)
+  };
 };
 ```
 
@@ -133,10 +136,10 @@ You can now determine if a user is authenticated on the client-side by checking 
 </script>
 
 {#if !$page.data.session}
-  <h1>I am not logged in</h1>
+<h1>I am not logged in</h1>
 {:else}
-  <h1>Welcome {$page.data.session.user.email}</h1>
-  <p>I am logged in!</p>
+<h1>Welcome {$page.data.session.user.email}</h1>
+<p>I am logged in!</p>
 {/if}
 ```
 
@@ -161,8 +164,8 @@ For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row
 </script>
 
 {#if $page.data.session}
-  <p>client-side data fetching with RLS</p>
-  <pre>{JSON.stringify(loadedData, null, 2)}</pre>
+<p>client-side data fetching with RLS</p>
+<pre>{JSON.stringify(loadedData, null, 2)}</pre>
 {/if}
 ```
 
@@ -280,7 +283,8 @@ export const actions: Actions = {
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
 
-    const { error } = await supabaseClient.auth.signIn({ email, password },
+    const { error } = await supabaseClient.auth.signIn(
+      { email, password },
       {
         redirectTo: `${url.origin}/logging-in`
       }
@@ -306,8 +310,8 @@ export const actions: Actions = {
   }),
 
   signout: withAuth(async ({ supabaseClient }) => {
-		await supabaseClient.auth.signOut();
-		throw redirect(303, '/');
-	})
+    await supabaseClient.auth.signOut();
+    throw redirect(303, '/');
+  })
 };
 ```

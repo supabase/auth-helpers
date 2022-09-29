@@ -9,6 +9,7 @@ import {
 } from '@supabase/auth-helpers-shared';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
+import { PKG_NAME, PKG_VERSION } from '../constants';
 import { AddParameters } from '../types';
 
 /**
@@ -118,6 +119,13 @@ export default function withPageAuth<
             ...newSetCookies,
             newSessionStr
           ]);
+        },
+        options: {
+          global: {
+            headers: {
+              'X-Client-Info': `${PKG_NAME}@${PKG_VERSION}`
+            }
+          }
         },
         cookieOptions
       });

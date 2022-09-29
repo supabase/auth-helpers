@@ -5,6 +5,7 @@ import {
   type SupabaseClientOptions as SupabaseClientOptionsWithoutAuth
 } from '@supabase/auth-helpers-shared';
 import { setConfig } from './config';
+import { PKG_NAME, PKG_VERSION } from './constants';
 
 export function createClient(
   supabaseUrl: string,
@@ -22,7 +23,16 @@ export function createClient(
   const globalInstance = createBrowserSupabaseClient<App.Supabase['Database']>({
     supabaseUrl,
     supabaseKey,
-    options,
+    options: {
+      ...options,
+      global: {
+        ...options?.global,
+        headers: {
+          ...options?.global?.headers,
+          'X-Client-Info': `${PKG_NAME}@${PKG_VERSION}`
+        }
+      }
+    },
     cookieOptions
   });
 

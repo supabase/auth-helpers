@@ -11,6 +11,7 @@ import {
   NextApiRequest,
   NextApiResponse
 } from 'next';
+import { PKG_NAME, PKG_VERSION } from './constants';
 
 // Types
 export type { Session, User, SupabaseClient } from '@supabase/supabase-js';
@@ -91,6 +92,13 @@ export function createServerSupabaseClient<
       });
 
       context.res.setHeader('set-cookie', [...newSetCookies, newSessionStr]);
+    },
+    options: {
+      global: {
+        headers: {
+          'X-Client-Info': `${PKG_NAME}@${PKG_VERSION}`
+        }
+      }
     },
     cookieOptions
   });

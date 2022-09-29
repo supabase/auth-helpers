@@ -2,6 +2,7 @@ import { getConfig } from '../config';
 import { isBrowser } from '@supabase/auth-helpers-shared';
 import { createClient } from '@supabase/supabase-js';
 import type { LoadEvent } from '@sveltejs/kit';
+import { PKG_NAME, PKG_VERSION } from '../constants';
 
 export function createLoadSupabaseClient(event: LoadEvent) {
   const { supabaseUrl, supabaseKey, options, globalInstance } = getConfig();
@@ -14,6 +15,13 @@ export function createLoadSupabaseClient(event: LoadEvent) {
     supabaseKey,
     {
       ...options,
+      global: {
+        ...options.global,
+        headers: {
+          ...options.global?.headers,
+          'X-Client-Info': `${PKG_NAME}@${PKG_VERSION}`
+        }
+      },
       auth: {
         storage: {
           async getItem(key) {
