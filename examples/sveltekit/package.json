@@ -23,7 +23,6 @@
 		"prettier": "^2.5.1",
 		"prettier-plugin-svelte": "^2.5.0",
 		"rimraf": "^3.0.2",
-		"supabase-ui-svelte": "^0.1.1",
 		"svelte": "^3.44.0",
 		"svelte-check": "^2.2.6",
 		"svelte-preprocess": "^4.10.1",
