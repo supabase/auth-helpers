@@ -6,6 +6,7 @@ import {
 } from '@supabase/auth-helpers-shared';
 import { setConfig } from './config';
 import { PKG_NAME, PKG_VERSION } from './constants';
+import type { TypedSupabaseClient } from './types';
 
 export function createClient(
   supabaseUrl: string,
@@ -27,7 +28,7 @@ export function createClient(
     }
   };
 
-  const globalInstance = createBrowserSupabaseClient<App.Supabase['Database']>({
+  const globalInstance: TypedSupabaseClient = createBrowserSupabaseClient({
     supabaseUrl,
     supabaseKey,
     options: opts,

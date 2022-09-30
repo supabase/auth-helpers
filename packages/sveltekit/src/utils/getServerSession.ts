@@ -1,11 +1,11 @@
 import type { ServerLoadEvent } from '@sveltejs/kit';
-import { getSupabase } from './getSupabase';
+import { getRequestSupabaseClient } from './supabase-request';
 
 export async function getServerSession(
-  event: Pick<ServerLoadEvent, 'cookies' | 'locals' | 'request'>,
+  event: ServerLoadEvent,
   expiry_margin = 60
 ) {
-  const supabase = getSupabase(event);
+  const supabase = getRequestSupabaseClient(event);
 
   let {
     data: { session }

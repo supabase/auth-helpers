@@ -1,10 +1,13 @@
 import { getConfig } from '../config';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-shared';
 import type { RequestEvent } from '@sveltejs/kit';
+import type { TypedSupabaseClient } from '../types';
 
 const CACHE_KEY = Symbol('supabase-client');
 
-export function createRequestSupabaseClient(event: RequestEvent) {
+export function getRequestSupabaseClient(
+  event: RequestEvent
+): TypedSupabaseClient {
   const { cookies, request } = event;
   const locals = event.locals as any;
 
@@ -14,10 +17,7 @@ export function createRequestSupabaseClient(event: RequestEvent) {
 
   const { supabaseUrl, supabaseKey, options, cookieOptions } = getConfig();
 
-  const client = createServerSupabaseClient<
-    App.Supabase['Database'],
-    App.Supabase['SchemaName']
-  >({
+  const client = createServerSupabaseClient({
     supabaseUrl,
     supabaseKey,
     getCookie(name) {

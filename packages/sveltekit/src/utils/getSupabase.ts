@@ -1,22 +1,25 @@
-import type { SupabaseClient } from '@supabase/supabase-js';
-import type { LoadEvent, RequestEvent } from '@sveltejs/kit';
-import { createLoadSupabaseClient } from './supabase-load';
-import { createRequestSupabaseClient } from './supabase-request';
+import type { LoadEvent, RequestEvent, ServerLoadEvent } from '@sveltejs/kit';
+import type { TypedSupabaseClient } from '../types';
+import { getLoadSupabaseClient } from './supabase-load';
+import { getRequestSupabaseClient } from './supabase-request';
 
 export function getSupabase(
-  event:
-    | Pick<RequestEvent, 'cookies' | 'locals' | 'request'>
-    | Pick<LoadEvent, 'parent' | 'fetch'>
-): SupabaseClient<App.Supabase['Database'], App.Supabase['SchemaName']> {
-  const requestOrServerLoadEvent = event as RequestEvent;
+  event: RequestEvent | ServerLoadEvent | LoadEvent
+): TypedSupabaseClient {
+  const requestOrServerLoadEvent = event as ServerLoadEvent | RequestEvent;
+  const loadEvent = event as LoadEvent;
 
-  if (requestOrServerLoadEvent.locals) {
-    return createRequestSupabaseClient(requestOrServerLoadEvent);
+  if (typeof loadEvent.depends === 'function') {
+    // depend on `supabase:auth` to allow reloading all data fetched with rls
+    loadEvent.depends('supabase:auth');
   }
 
-  const loadEvent = event as LoadEvent;
+  // prefer request/server-load over load
+  if (requestOrServerLoadEvent.locals) {
+    return getRequestSupabaseClient(requestOrServerLoadEvent);
+  }
   if (typeof loadEvent.parent === 'function') {
-    return createLoadSupabaseClient(loadEvent);
+    return getLoadSupabaseClient(loadEvent);
   }
 
   throw new Error('invalid event');

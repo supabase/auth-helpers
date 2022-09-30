@@ -1,6 +1,6 @@
 import type { LoadEvent, RequestEvent } from '@sveltejs/kit';
-import type { ExtendedEvent } from '../types.js';
-import { getSupabase } from './getSupabase.js';
+import type { ExtendedEvent } from '../types';
+import { getSupabase } from './getSupabase';
 
 /**
  * Use this helper to authenticate load functions, actions and request-handlers
@@ -22,7 +22,7 @@ export function withAuth<E extends any, T extends any>(
   cb: (event: E & ExtendedEvent) => T | Promise<T>
 ): (event: E) => T | Promise<T> {
   async function handle(event: E) {
-    const supabaseClient = getSupabase(event as RequestEvent | LoadEvent);
+    const supabaseClient = await getSupabase(event as RequestEvent | LoadEvent);
 
     const {
       data: { session }

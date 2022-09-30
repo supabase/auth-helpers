@@ -5,16 +5,18 @@ import type {
   SupabaseClientOptions
 } from '@supabase/supabase-js';
 
+export type TypedSupabaseClient = SupabaseClient<
+  App.Supabase['Database'],
+  App.Supabase['SchemaName']
+>;
+
 export interface ExtendedEvent {
   session: Session | null;
-  supabaseClient: SupabaseClient;
+  supabaseClient: TypedSupabaseClient;
 }
 
 export interface Config {
-  globalInstance: SupabaseClient<
-    App.Supabase['Database'],
-    App.Supabase['SchemaName']
-  >;
+  globalInstance: TypedSupabaseClient;
   supabaseUrl: string;
   supabaseKey: string;
   options: SupabaseClientOptions<App.Supabase['SchemaName']>;
