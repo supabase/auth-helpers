@@ -58,7 +58,7 @@ export default function withPageAuth<
   SchemaName extends string & keyof Database = 'public' extends keyof Database
     ? 'public'
     : string & keyof Database,
-  ResponseType = any
+  ResponseType extends Record<string, any> = any
 >({
   authRequired = true,
   redirectTo = '/',
