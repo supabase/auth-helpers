@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { supabaseClient } from '$lib/db';
 	import { page } from '$app/stores';
+	import { browser } from '$app/environment';
 
 	let auth: typeof import('supabase-ui-svelte').default;
 	onMount(async () => {
@@ -15,7 +16,7 @@
 		loadedData = data;
 	}
 
-	$: if ($page.data.session.user) {
+	$: if (browser && $page.data.session.user) {
 		loadData();
 	}
 </script>
