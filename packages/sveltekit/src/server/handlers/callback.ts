@@ -48,17 +48,13 @@ export function callback(): Handle {
   const endpointPath = `${endpointPrefix}/callback`;
 
   return async ({ resolve, event }) => {
-    if (event.url.pathname !== endpointPath) {
-      return resolve(event);
+    if (
+      event.url.pathname === endpointPath &&
+      event.request.method === 'POST'
+    ) {
+      return handleCallbackSession(event);
     }
 
-    if (event.request.method !== 'POST') {
-      const headers = new Headers({
-        Allow: 'POST'
-      });
-      return new Response('Method Not Allowed', { headers, status: 405 });
-    }
-
-    return handleCallbackSession(event);
+    return resolve(event);
   };
 }
