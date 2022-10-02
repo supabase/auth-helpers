@@ -29,58 +29,58 @@ export function startSupabaseSessionSync({
     getSessionFromPageData
   } = getConfig();
 
+  let timeout: ReturnType<typeof setTimeout> | null = null;
+  let expiresAt: number | undefined;
+
+  const resetTimout = () => {
+    timeout && clearTimeout(timeout);
+    timeout = null;
+  };
+  let lastSession: SupabaseSession;
+
+  const pageUnsub = page.subscribe(({ data }) => {
+    const session = getSessionFromPageData(data);
+
+    // skip duplicated runs
+    if (lastSession === session) {
+      return;
+    }
+    lastSession = session;
+
+    // accessToken is undefined if there is no user
+    if (!session.accessToken) {
+      resetTimout();
+      // @ts-expect-error this is a private method but we have to clear the session
+      supabaseClient.auth._removeSession();
+      return;
+    }
+
+    supabaseClient.auth.setAuth(session.accessToken);
+
+    const exp = (session.user as User & { exp: number })?.exp;
+    if (!exp) {
+      resetTimout();
+      return;
+    }
+
+    if (exp !== expiresAt) {
+      expiresAt = exp;
+
+      const timeNow = Math.round(Date.now() / 1000);
+      const expiresIn = expiresAt - timeNow;
+      const refreshDurationBeforeExpires =
+        expiresIn > tokenRefreshMargin ? tokenRefreshMargin : 0.5;
+
+      resetTimout();
+
+      timeout = setTimeout(() => {
+        // refresh token
+        handleRefresh();
+      }, (expiresIn - refreshDurationBeforeExpires) * 1000);
+    }
+  });
+
   onMount(() => {
-    let timeout: ReturnType<typeof setTimeout> | null;
-    let expiresAt: number | undefined;
-
-    const resetTimout = () => {
-      timeout && clearTimeout(timeout);
-      timeout = null;
-    };
-    let lastSession: SupabaseSession;
-
-    const pageUnsub = page.subscribe(({ data }) => {
-      const session = getSessionFromPageData(data);
-
-      // skip duplicated runs
-      if (lastSession === session) {
-        return;
-      }
-      lastSession = session;
-
-      // accessToken is undefined if there is no user
-      if (!session.accessToken) {
-        resetTimout();
-        // @ts-expect-error this is a private method but we have to clear the session
-        supabaseClient.auth._removeSession();
-        return;
-      }
-
-      supabaseClient.auth.setAuth(session.accessToken);
-
-      const exp = (session.user as User & { exp: number })?.exp;
-      if (!exp) {
-        resetTimout();
-        return;
-      }
-
-      if (exp !== expiresAt) {
-        expiresAt = exp;
-
-        const timeNow = Math.round(Date.now() / 1000);
-        const expiresIn = expiresAt - timeNow;
-        const refreshDurationBeforeExpires =
-          expiresIn > tokenRefreshMargin ? tokenRefreshMargin : 0.5;
-
-        resetTimout();
-
-        timeout = setTimeout(() => {
-          // refresh token
-          handleRefresh();
-        }, (expiresIn - refreshDurationBeforeExpires) * 1000);
-      }
-    });
-
     const { data: subscription } = supabaseClient.auth.onAuthStateChange(
       (event, session) => {
         if (HANDLE_EVENTS.indexOf(event) === -1) return;
@@ -99,7 +99,7 @@ export function startSupabaseSessionSync({
     );
 
     return () => {
-      timeout && clearTimeout(timeout);
+      resetTimout();
       pageUnsub();
       subscription?.unsubscribe();
     };
