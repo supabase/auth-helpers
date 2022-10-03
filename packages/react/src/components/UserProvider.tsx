@@ -152,7 +152,7 @@ export const UserProvider = (props: Props) => {
 
     return () => {
       window?.removeEventListener('visibilitychange', handleVisibilityChange);
-      authListener?.unsubscribe();
+      authListener?.subscription.unsubscribe();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
