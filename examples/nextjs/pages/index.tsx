@@ -3,7 +3,6 @@ import { supabaseClient } from '@supabase/auth-helpers-nextjs';
 import type { NextPage } from 'next';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { Auth } from '@supabase/ui';
 
 const LoginPage: NextPage = () => {
   const { isLoading, user, error } = useUser();
@@ -26,20 +25,12 @@ const LoginPage: NextPage = () => {
           onClick={() => {
             supabaseClient.auth.signIn(
               { provider: 'github' },
-              { scopes: 'repo' }
+              { redirectTo: 'http://localhost:3000'}
             );
           }}
         >
-          GitHub with scopes
+          Login with github
         </button>
-        <Auth
-          // view="update_password"
-          supabaseClient={supabaseClient}
-          providers={['google', 'github']}
-          // scopes={{github: 'repo'}} // TODO: enable scopes in Auth component.
-          socialLayout="horizontal"
-          socialButtonSize="xlarge"
-        />
       </>
     );
 
