@@ -15,10 +15,11 @@
     "tsconfig": "0.1.0"
   },
   "changesets": [
+    "dull-frogs-smile",
     "many-weeks-rush",
+    "serious-snakes-wave",
     "sixty-kangaroos-drop",
     "strong-avocados-invite",
-    "tiny-crabs-share",
-    "serious-snakes-wave"
+    "tiny-crabs-share"
   ]
 }

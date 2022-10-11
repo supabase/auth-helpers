@@ -1,5 +1,12 @@
 # @supabase/auth-helpers-react
 
+## 0.3.0-next.4
+
+### Patch Changes
+
+- Updated dependencies [20fa944]
+  - @supabase/auth-helpers-shared@0.2.0-next.3
+
 ## 0.3.0-next.3
 
 ### Patch Changes
