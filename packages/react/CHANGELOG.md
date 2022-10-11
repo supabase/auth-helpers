@@ -1,5 +1,22 @@
 # @supabase/auth-helpers-react
 
+## 0.3.0
+
+### Minor Changes
+
+- fd30e33: Update to work with supabase-js v2 RC
+
+### Patch Changes
+
+- 3154f16: fix: typing for useSupabaseClient.
+- fe5c4a6: chore: improve types.
+- 2fdb094: chore: types and middleware improvements.
+- Updated dependencies [20fa944]
+- Updated dependencies [fd30e33]
+- Updated dependencies [fe5c4a6]
+- Updated dependencies [2fdb094]
+  - @supabase/auth-helpers-shared@0.2.0
+
 ## 0.3.0-next.4
 
 ### Patch Changes

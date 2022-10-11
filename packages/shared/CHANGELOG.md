@@ -1,5 +1,17 @@
 # shared
 
+## 0.2.0
+
+### Minor Changes
+
+- fd30e33: Update to work with supabase-js v2 RC
+
+### Patch Changes
+
+- 20fa944: add sveltekit supabase v2 support
+- fe5c4a6: chore: improve types.
+- 2fdb094: chore: types and middleware improvements.
+
 ## 0.2.0-next.3
 
 ### Patch Changes
