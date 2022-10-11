@@ -36,7 +36,7 @@ const LoginPage: NextPage = () => {
             });
           }}
         >
-          GitHub with scopes
+          Login with github
         </button>
         <Auth
           redirectTo="http://localhost:3000/"

@@ -37,7 +37,6 @@ export const actions: Actions = {
 					}
 				});
 			}
-
 			return invalid(500, {
 				error: 'Server error. Try again later.',
 				values: {
