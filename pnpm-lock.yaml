@@ -61,7 +61,6 @@ importers:
       '@sveltejs/kit': 1.0.0-next.504
       '@typescript-eslint/eslint-plugin': ^5.10.1
       '@typescript-eslint/parser': ^5.10.1
-      cookie: ^0.5.0
       eslint: ^7.32.0
       eslint-config-prettier: ^8.3.0
       eslint-plugin-svelte3: ^3.2.1
@@ -78,7 +77,6 @@ importers:
     dependencies:
       '@supabase/auth-helpers-sveltekit': link:../../packages/sveltekit
       '@supabase/supabase-js': 2.0.0-rc.10
-      cookie: 0.5.0
     devDependencies:
       '@sveltejs/adapter-auto': 1.0.0-next.81
       '@sveltejs/kit': 1.0.0-next.504_svelte@3.48.0+vite@3.1.7
@@ -106,7 +104,6 @@ importers:
       '@sveltejs/kit': 1.0.0-next.504
       '@typescript-eslint/eslint-plugin': ^5.10.1
       '@typescript-eslint/parser': ^5.10.1
-      cookie: ^0.5.0
       eslint: ^7.32.0
       eslint-config-prettier: ^8.3.0
       eslint-plugin-svelte3: ^3.2.1
@@ -123,7 +120,6 @@ importers:
     dependencies:
       '@supabase/auth-helpers-sveltekit': link:../../packages/sveltekit
       '@supabase/supabase-js': 2.0.0-rc.10
-      cookie: 0.5.0
     devDependencies:
       '@sveltejs/adapter-auto': 1.0.0-next.81
       '@sveltejs/kit': 1.0.0-next.504_svelte@3.48.0+vite@3.1.7
@@ -151,7 +147,6 @@ importers:
       '@sveltejs/kit': 1.0.0-next.504
       '@typescript-eslint/eslint-plugin': ^5.10.1
       '@typescript-eslint/parser': ^5.10.1
-      cookie: ^0.5.0
       eslint: ^7.32.0
       eslint-config-prettier: ^8.3.0
       eslint-plugin-svelte3: ^3.2.1
@@ -168,7 +163,6 @@ importers:
     dependencies:
       '@supabase/auth-helpers-sveltekit': link:../../packages/sveltekit
       '@supabase/supabase-js': 2.0.0-rc.10
-      cookie: 0.5.0
     devDependencies:
       '@sveltejs/adapter-auto': 1.0.0-next.81
       '@sveltejs/kit': 1.0.0-next.504_svelte@3.48.0+vite@3.1.7
@@ -273,11 +267,10 @@ importers:
       react-dom: ^17.0.2 || ^18.0.0-0
       tsconfig: workspace:*
       tsup: ^5.12.5
-    dependencies:
-      cookie: 0.5.0
     devDependencies:
       '@supabase/supabase-js': 2.0.0-rc.10
       '@types/cookie': 0.5.1
+      cookie: 0.5.0
       next: 12.1.6_ef5jwxihqo6n7gxfmzogljlgcm
       react: 18.1.0
       react-dom: 18.1.0_react@18.1.0
@@ -1976,6 +1969,7 @@ packages:
   /cookie/0.5.0:
     resolution: {integrity: sha512-YZ3GUyn/o8gfKJlnlX7g7xq4gyO6OSuhGPKaaGssGB2qgDUS0gPgtTvoyZLTt9Ab6dC4hfc9dV5arkvc/OCmrw==}
     engines: {node: '>= 0.6'}
+    dev: true
 
   /core-js-pure/3.22.8:
     resolution: {integrity: sha512-bOxbZIy9S5n4OVH63XaLVXZ49QKicjowDx/UELyJ68vxfCRpYsbyh/WNZNfEfAk+ekA8vSjt+gCDpvh672bc3w==}
@@ -5520,7 +5514,7 @@ packages:
     resolution: {integrity: sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==}
 
   /tr46/1.0.1:
-    resolution: {integrity: sha1-qLE/1r/SSJUZZ0zN5VujaTtwbQk=}
+    resolution: {integrity: sha512-dTpowEjclQ7Kgx5SdBkqRzVhERQXov8/l9Ft9dVM9fmg0W0KQSVaXX9T4i6twCPNtYiZM53lpSSUAwJbFPOHxA==}
     dependencies:
       punycode: 2.1.1
     dev: true
@@ -6013,7 +6007,7 @@ packages:
     engines: {node: '>=0.10.32'}
 
   /yallist/2.1.2:
-    resolution: {integrity: sha1-HBH5IY8HYImkfdUS+TxmmaaoHVI=}
+    resolution: {integrity: sha512-ncTzHV7NvsQZkYe1DW7cbDLm0YpzHmZF5r/iyP3ZnQtMiJ+pjzisCiMNI+Sj+xQF5pXhSHxSB3uDbsBTzY/c2A==}
     dev: true
 
   /yallist/4.0.0:
