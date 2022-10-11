@@ -1,2 +1,11 @@
-export const PKG_NAME = "@supabase/auth-helpers-sveltekit";
-export const PKG_VERSION = "0.6.10";
+import { COOKIE_OPTIONS as SHARED_COOKIE_OPTIONS } from '@supabase/auth-helpers-shared';
+import type { CookieOptions } from './types.js';
+export {
+  TOKEN_REFRESH_MARGIN,
+  ENDPOINT_PREFIX
+} from '@supabase/auth-helpers-shared';
+
+export const COOKIE_OPTIONS: Required<CookieOptions> = {
+  ...SHARED_COOKIE_OPTIONS,
+  secure: true
+};

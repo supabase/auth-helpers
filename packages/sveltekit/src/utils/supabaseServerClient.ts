@@ -1,64 +1,32 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import { createSupabaseClient } from '../instance';
-import {
-  type CookieOptions,
-  COOKIE_OPTIONS,
-  parseCookie
-} from '@supabase/auth-helpers-shared';
+import { getConfig } from '../config.js';
 
 /**
- * This is a helper method to wrap your SupabaseClient to inject a user's access_token to make use of RLS on the server side.
- * @param accessToken
- * @param cookieOptions
- */
-function supabaseServerClient(
-  accessToken: string,
-  cookieOptions?: CookieOptions
-): SupabaseClient;
-
-/**
- * This is a helper method to wrap your SupabaseClient to inject a user's access_token from the request header to make use of RLS on the server side.
- * @param request
- * @param cookieOptions
- * @returns SupabaseClient
- */
-function supabaseServerClient(
-  request: Request,
-  cookieOptions?: CookieOptions
-): SupabaseClient;
-
-/**
- * This is a helper method to wrap your SupabaseClient to inject a user's access_token to make use of RLS on the server side.
+ * Use this helper to get the global supabaseClient
+ * configured to send the accessToken on every request
  *
- * ```js
- * import { supabaseServerClient } from '@supabase/auth-helpers-sveltekit';
+ * **Always use the returned instance directly**
  *
- * export const get: RequestHandler = ({ request }) => {
- *   // Run queries with RLS on the server
- *   const { data } = await supabaseServerClient(request)
- *     .from('test')
- *     .select('*');
- *   return {
- *     body: { data }, // will be passed to the page component as props
- *   }
- * }
+ * _GOOD_:
+ * ```ts
+ * await supabaseServerClient(accessToken).from('posts').select();
+ * ```
+ *
+ * _BAD_:
+ * ```ts
+ * const supabaseClient = supabaseServerClient(accessToken)
+ * await supabaseClient.from('posts').select();
  * ```
  */
-function supabaseServerClient(
-  requestOrAccessToken: Request | string,
-  cookieOptions: CookieOptions = COOKIE_OPTIONS
+export function supabaseServerClient(
+  access_token: string | null | undefined
 ): SupabaseClient {
-  const { supabaseClient } = createSupabaseClient();
-  const access_token =
-    typeof requestOrAccessToken !== 'string'
-      ? parseCookie(requestOrAccessToken?.headers.get('cookie'))?.[
-          `${cookieOptions.name}-access-token`
-        ]
-      : requestOrAccessToken;
-  if (access_token !== null) {
-    supabaseClient?.auth.setAuth(access_token);
+  const { supabaseClient } = getConfig();
+  if (!access_token) {
+    throw new Error(
+      'No access token provided, make sure to check if the user is authenticated.'
+    );
   }
-  return supabaseClient!;
+  supabaseClient.auth.setAuth(access_token);
+  return supabaseClient;
 }
-
-export default supabaseServerClient;

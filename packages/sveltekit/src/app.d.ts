@@ -1,9 +1,14 @@
-/// <reference types="@sveltejs/kit" />
-
-// See https://kit.svelte.dev/docs/typescript
+// See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
+// and what to do when importing types
 declare namespace App {
-	type AuthSession = import('./types').Locals
-	interface Locals extends AuthSession {
-	}
+  interface Locals {
+    session: import('./').SupabaseSession;
+  }
+
+  interface PageData {
+    session: import('./').SupabaseSession;
+  }
+  // interface Error {}
+  // interface Platform {}
 }

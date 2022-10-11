@@ -1,6 +1,6 @@
 {
   "name": "@supabase/auth-helpers-sveltekit",
-  "version": "0.6.11-next.2",
+  "version": "0.7.1",
   "description": "A collection of framework specific Auth utilities for working with Supabase.",
   "type": "module",
   "main": "./dist/index.js",
@@ -11,19 +11,27 @@
   },
   "exports": {
     "./package.json": "./package.json",
-    ".": "./dist/index.js"
+    ".": "./dist/index.js",
+    "./server": "./dist/server/index.js"
+  },
+  "typesVersions": {
+    "*": {
+      "server": [
+        "./dist/server/index.d.ts"
+      ],
+      "./": [
+        "./dist/index.d.ts"
+      ]
+    }
   },
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "pnpm package",
-    "build:watch": "pnpm package:watch",
-    "prepare": "svelte-kit sync",
-    "package": "pnpm run make:constants && svelte-kit package && del-cli dist/package.json && pnpm fix:esm",
-    "package:watch": "svelte-kit package -w && del-cli dist/package.json && pnpm fix:esm",
-    "fix:esm": "fix-esm-import-path dist/index.js",
-    "make:constants": "node ./scripts/make_constants.cjs > src/constants.ts"
+    "build": "svelte-kit sync && svelte-package && pnpm del:dup",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+    "del:dup": "del-cli dist/package.json dist/CHANGELOG.md dist/README.md"
   },
   "repository": {
     "type": "git",
@@ -42,17 +50,21 @@
   },
   "homepage": "https://github.com/supabase/auth-helpers/tree/main/packages/sveltekit#readme",
   "devDependencies": {
-    "@sveltejs/kit": "1.0.0-next.355",
-    "del-cli": "^4.0.1",
-    "fix-esm-import-path": "^1.2.1",
+    "@supabase/supabase-js": "^1.35.3",
+    "@sveltejs/kit": "1.0.0-next.499",
+    "@sveltejs/package": "1.0.0-next.5",
+    "del-cli": "^5.0.0",
+    "fix-esm-import-path": "^1.3.1",
     "svelte": "^3.48.0",
-    "svelte2tsx": "^0.5.10",
-    "tslib": "^2.3.1",
-    "typescript": "^4.7.2",
-    "vite": "^2.9.13"
+    "svelte2tsx": "^0.5.16",
+    "tslib": "^2.4.0",
+    "typescript": "^4.7.4",
+    "vite": "^3.1.0"
   },
   "dependencies": {
-    "@supabase/auth-helpers-shared": "workspace:*",
-    "@supabase/supabase-js": "^1.36.0-next.17"
+    "@supabase/auth-helpers-shared": "workspace:*"
+  },
+  "peerDependencies": {
+    "@supabase/supabase-js": "^1.35.3"
   }
 }
