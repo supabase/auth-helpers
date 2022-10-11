@@ -112,7 +112,7 @@ export default function withPageAuth<
           const newSessionStr = serializeCookie(name, value, {
             ...options,
             // Allow supabase-js on the client to read the cookie as well
-            httpOnly: true
+            httpOnly: false
           });
 
           context.res.setHeader('set-cookie', [

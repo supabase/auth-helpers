@@ -88,7 +88,7 @@ export function createServerSupabaseClient<
       const newSessionStr = serializeCookie(name, value, {
         ...options,
         // Allow supabase-js on the client to read the cookie as well
-        httpOnly: true
+        httpOnly: false
       });
 
       context.res.setHeader('set-cookie', [...newSetCookies, newSessionStr]);

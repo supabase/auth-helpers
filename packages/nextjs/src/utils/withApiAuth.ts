@@ -69,7 +69,7 @@ export default function withApiAuth<
           const newSessionStr = serializeCookie(name, value, {
             ...options,
             // Allow supabase-js on the client to read the cookie as well
-            httpOnly: true
+            httpOnly: false
           });
 
           res.setHeader('set-cookie', [...newSetCookies, newSessionStr]);
