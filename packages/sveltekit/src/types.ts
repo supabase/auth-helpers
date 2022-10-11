@@ -1,13 +1,24 @@
-import type { User } from '@supabase/supabase-js';
-import type { ErrorPayload } from '@supabase/auth-helpers-shared';
+import type { CookieOptions } from '@supabase/auth-helpers-shared';
+import type {
+  Session,
+  SupabaseClient,
+  SupabaseClientOptions
+} from '@supabase/supabase-js';
 
-export interface Locals {
-  user: User | null;
-  accessToken: string | null;
-  error: ErrorPayload;
+export type TypedSupabaseClient = SupabaseClient<
+  App.Supabase['Database'],
+  App.Supabase['SchemaName']
+>;
+
+export interface ExtendedEvent {
+  session: Session | null;
+  supabaseClient: TypedSupabaseClient;
 }
 
-export interface RequestResponse {
-  req: Request;
-  res: Response;
+export interface Config {
+  globalInstance: TypedSupabaseClient;
+  supabaseUrl: string;
+  supabaseKey: string;
+  options: SupabaseClientOptions<App.Supabase['SchemaName']>;
+  cookieOptions: CookieOptions;
 }

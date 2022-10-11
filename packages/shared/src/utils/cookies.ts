@@ -1,4 +1,6 @@
-import { parse } from 'cookie';
+import { parse, serialize } from 'cookie';
+
+export { parse as parseCookies, serialize as serializeCookie };
 
 /**
  * Filter out the cookies based on a key

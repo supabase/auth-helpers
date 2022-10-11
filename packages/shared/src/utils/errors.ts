@@ -74,3 +74,9 @@ export class JWTPayloadFailed extends AuthHelperError {
     super('Not able to parse JWT payload!', 'jwt_payload_failed');
   }
 }
+
+export class JWTInvalid extends AuthHelperError {
+  constructor() {
+    super('Invalid jwt!', 'jwt_invalid');
+  }
+}

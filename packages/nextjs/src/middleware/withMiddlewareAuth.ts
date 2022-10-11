@@ -2,9 +2,12 @@ import { NextResponse } from 'next/server';
 import { NextMiddleware } from 'next/server';
 import {
   CookieOptions,
-  createServerSupabaseClient
+  createServerSupabaseClient,
+  parseCookies,
+  serializeCookie
 } from '@supabase/auth-helpers-shared';
 import { SupabaseClient, User } from '@supabase/supabase-js';
+import { PKG_NAME, PKG_VERSION } from '../constants';
 
 class NoPermissionError extends Error {
   constructor(message: string) {
@@ -55,13 +58,28 @@ export const withMiddlewareAuth =
       const supabase = createServerSupabaseClient<Database, SchemaName>({
         supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
         supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-        getRequestHeader: (key) => req.headers.get(key) ?? undefined,
-        getResponseHeader: (key) => res.headers.get(key) ?? undefined,
-        setHeader: (key, value) => {
-          if (Array.isArray(value)) {
-            value.forEach((v) => res.headers.append(key, v));
-          } else {
-            res.headers.set(key, value);
+        getCookie(name) {
+          const cookies = parseCookies(req.headers.get('cookie') ?? '');
+          return cookies[name];
+        },
+        setCookie(name, value, options) {
+          const newSessionStr = serializeCookie(name, value, {
+            ...options,
+            // Allow supabase-js on the client to read the cookie as well
+            httpOnly: false
+          });
+          res.headers.append(name, newSessionStr);
+        },
+        getRequestHeader: (key) => {
+          const header = res.headers.get(key) ?? undefined;
+
+          return header;
+        },
+        options: {
+          global: {
+            headers: {
+              'X-Client-Info': `${PKG_NAME}@${PKG_VERSION}`
+            }
           }
         },
         cookieOptions: options.cookieOptions

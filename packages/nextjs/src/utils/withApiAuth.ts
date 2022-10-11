@@ -1,10 +1,14 @@
 import {
   AuthHelperError,
   CookieOptions,
-  createServerSupabaseClient
+  createServerSupabaseClient,
+  ensureArray,
+  filterCookies,
+  serializeCookie
 } from '@supabase/auth-helpers-shared';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
+import { PKG_NAME, PKG_VERSION } from '../constants';
 import { AddParameters } from '../types';
 
 /**
@@ -54,8 +58,23 @@ export default function withApiAuth<
       const supabase = createServerSupabaseClient<Database, SchemaName>({
         supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
         supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-        getRequestHeader: (key) => req.headers[key],
-        getResponseHeader: (key) => {
+        getCookie(name) {
+          return req.cookies[name];
+        },
+        setCookie(name, value, options) {
+          const newSetCookies = filterCookies(
+            ensureArray(res.getHeader('set-cookie')?.toString() ?? []),
+            name
+          );
+          const newSessionStr = serializeCookie(name, value, {
+            ...options,
+            // Allow supabase-js on the client to read the cookie as well
+            httpOnly: false
+          });
+
+          res.setHeader('set-cookie', [...newSetCookies, newSessionStr]);
+        },
+        getRequestHeader: (key) => {
           const header = res.getHeader(key);
           if (typeof header === 'number') {
             return String(header);
@@ -63,7 +82,13 @@ export default function withApiAuth<
 
           return header;
         },
-        setHeader: (key, value) => res.setHeader(key, value),
+        options: {
+          global: {
+            headers: {
+              'X-Client-Info': `${PKG_NAME}@${PKG_VERSION}`
+            }
+          }
+        },
         cookieOptions: options.cookieOptions
       });
 
