@@ -1,5 +1,11 @@
 # @supabase/auth-helpers-react
 
+## 0.3.0-next.3
+
+### Patch Changes
+
+- 3154f16: fix: typing for useSupabaseClient.
+
 ## 0.3.0-next.2
 
 ### Patch Changes
