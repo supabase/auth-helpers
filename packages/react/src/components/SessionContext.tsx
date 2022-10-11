@@ -42,7 +42,7 @@ const SessionContext = createContext<SessionContext>({
 });
 
 interface _SessionContextProviderProps {
-  supabaseClient: SupabaseClient<any>;
+  supabaseClient: SupabaseClient;
   initialSession?: Session | null;
 }
 
