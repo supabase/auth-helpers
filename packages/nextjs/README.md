@@ -77,6 +77,27 @@ function MyApp({ Component, pageProps }: AppProps) {
 
 You can now determine if a user is authenticated by checking that the `user` object returned by the `useUser()` hook is defined.
 
+### Usage with TypeScript
+
+You can pass types that were [generated with the Supabase CLI](https://supabase.com/docs/reference/javascript/next/typescript-support#generating-types) to the Supabase Client to get enhanced type safety and auto completion:
+
+```js
+// Creating a new supabase client object:
+import { Database } from '../db_types';
+
+const [supabaseClient] = useState(() =>
+    createBrowserSupabaseClient<Database>()
+  );
+```
+
+```js
+// Retrieving a supabase client object from the SessionContext:
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import { Database } from '../db_types';
+
+const supabaseClient = useSupabaseClient<Database>();
+```
+
 ## Client-side data fetching with RLS
 
 For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row-level-security) to work properly when fetching data client-side, you need to make sure to use the `supabaseClient` from the `useSessionContext` hook and only run your query once the user is defined client-side in the `useUser()` hook:

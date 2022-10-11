@@ -36,9 +36,28 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 }
 ```
 
-- The `UserProvider` has been replaced by the `SessionContextProvider`. Make sure to wrap your `pages/_app.js` componenent with the `SessionContextProvider`. Then, throughout your application you can use the `useSessionContext` hook to get the `session` as well as an authenticated `supabaseClient`.
+- The `UserProvider` has been replaced by the `SessionContextProvider`. Make sure to wrap your `pages/_app.js` componenent with the `SessionContextProvider`. Then, throughout your application you can use the `useSessionContext` hook to get the `session` and the `useSupabaseClient` hook to get an authenticated `supabaseClient`.
 
 - The `useUser` hook now returns the `user` object or `null`.
+
+- Usage with TypeScript: You can pass types that were [generated with the Supabase CLI](https://supabase.com/docs/reference/javascript/next/typescript-support#generating-types) to the Supabase Client to get enhanced type safety and auto completion:
+
+```js
+// Creating a new supabase client object:
+import { Database } from '../db_types';
+
+const [supabaseClient] = useState(() =>
+    createBrowserSupabaseClient<Database>()
+  );
+```
+
+```js
+// Retrieving a supabase client object from the SessionContext:
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import { Database } from '../db_types';
+
+const supabaseClient = useSupabaseClient<Database>();
+```
 
 ## Migrating from @supabase/supabase-auth-helpers to @supabase/auth-helpers
 

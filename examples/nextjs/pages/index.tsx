@@ -1,11 +1,16 @@
-import { useSessionContext } from '@supabase/auth-helpers-react';
+import {
+  useSessionContext,
+  useSupabaseClient
+} from '@supabase/auth-helpers-react';
 import { Auth, ThemeSupa } from '@supabase/auth-ui-react';
 import type { NextPage } from 'next';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { Database } from '../db_types';
 
 const LoginPage: NextPage = () => {
-  const { isLoading, session, error, supabaseClient } = useSessionContext();
+  const { isLoading, session, error } = useSessionContext();
+  const supabaseClient = useSupabaseClient<Database>();
 
   const [data, setData] = useState(null);
 
