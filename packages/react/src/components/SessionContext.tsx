@@ -169,7 +169,7 @@ export function createSessionContext(supabaseClient: SupabaseClient) {
       );
     }
 
-    return context.supabaseClient;
+    return context.supabaseClient as typeof supabaseClient;
   };
 
   const useSession = () => {
