@@ -1,5 +1,13 @@
 # @supabase/auth-helpers-nextjs
 
+## 0.3.0-next.4
+
+### Patch Changes
+
+- 20fa944: add sveltekit supabase v2 support
+- Updated dependencies [20fa944]
+  - @supabase/auth-helpers-shared@0.2.0-next.3
+
 ## 0.3.0-next.3
 
 ### Patch Changes

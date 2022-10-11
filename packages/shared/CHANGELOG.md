@@ -1,5 +1,11 @@
 # shared
 
+## 0.2.0-next.3
+
+### Patch Changes
+
+- 20fa944: add sveltekit supabase v2 support
+
 ## 0.2.0-next.2
 
 ### Patch Changes
