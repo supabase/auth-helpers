@@ -141,7 +141,12 @@ export const useSessionContext = () => {
   return context;
 };
 
-export const useSupabaseClient = () => {
+export function useSupabaseClient<
+  Database = any,
+  SchemaName extends string & keyof Database = 'public' extends keyof Database
+    ? 'public'
+    : string & keyof Database
+>() {
   const context = useContext(SessionContext);
   if (context === undefined) {
     throw new Error(
@@ -149,8 +154,8 @@ export const useSupabaseClient = () => {
     );
   }
 
-  return context.supabaseClient;
-};
+  return context.supabaseClient as SupabaseClient<Database, SchemaName>;
+}
 
 export const useSession = () => {
   const context = useContext(SessionContext);
