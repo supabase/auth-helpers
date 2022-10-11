@@ -5,8 +5,9 @@ import type { Actions } from './$types';
 
 export const actions: Actions = {
 	async default(event): Promise<ValidationError<{ error: string; values?: { email: string } }>> {
-		const supabaseClient = getSupabase(event);
-		const formData = await event.request.formData();
+		const { request } = event;
+		const { supabaseClient } = await getSupabase(event);
+		const formData = await request.formData();
 
 		const email = formData.get('email') as string;
 		const password = formData.get('password') as string;

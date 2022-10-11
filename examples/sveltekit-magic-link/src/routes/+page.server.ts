@@ -1,9 +1,12 @@
-import { withAuth } from '@supabase/auth-helpers-sveltekit';
+import { getSupabase } from '@supabase/auth-helpers-sveltekit';
 import { invalid } from '@sveltejs/kit';
 import type { Actions } from './$types';
 
 export const actions: Actions = {
-	default: withAuth(async ({ request, url, supabaseClient }) => {
+	async default(event) {
+		const { request, url } = event;
+		const { supabaseClient } = await getSupabase(event);
+
 		const formData = await request.formData();
 		const email = formData.get('email') as string;
 
@@ -25,5 +28,5 @@ export const actions: Actions = {
 			success: true,
 			message: 'Please check your email for a magic link to log into the website.'
 		};
-	})
+	}
 };

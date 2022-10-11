@@ -12,7 +12,7 @@ importers:
     devDependencies:
       '@changesets/cli': 2.22.0
       prettier: 2.6.2
-      turbo: 1.5.4
+      turbo: 1.5.6
       typedoc: 0.22.17_typescript@4.6.4
       typescript: 4.6.4
 
@@ -68,7 +68,6 @@ importers:
       prettier: ^2.5.1
       prettier-plugin-svelte: ^2.5.0
       rimraf: ^3.0.2
-      supabase-ui-svelte: ^0.1.1
       svelte: ^3.44.0
       svelte-check: ^2.2.6
       svelte-preprocess: ^4.10.1
@@ -81,7 +80,7 @@ importers:
       '@supabase/supabase-js': 2.0.0-rc.10
       cookie: 0.5.0
     devDependencies:
-      '@sveltejs/adapter-auto': 1.0.0-next.80
+      '@sveltejs/adapter-auto': 1.0.0-next.81
       '@sveltejs/kit': 1.0.0-next.504_svelte@3.48.0+vite@3.1.0
       '@typescript-eslint/eslint-plugin': 5.27.0_hatonczsu7ve3fyw6burvz5sxq
       '@typescript-eslint/parser': 5.27.0_dyxdave6dwjbccc5dgiifcmuza
@@ -91,7 +90,6 @@ importers:
       prettier: 2.6.2
       prettier-plugin-svelte: 2.7.0_kkjbqzpydplecjtkxrgomroeru
       rimraf: 3.0.2
-      supabase-ui-svelte: 0.1.1
       svelte: 3.48.0
       svelte-check: 2.7.1_svelte@3.48.0
       svelte-preprocess: 4.10.6_sef34mbipkdngofoeuutt4axsu
@@ -127,7 +125,7 @@ importers:
       '@supabase/supabase-js': 2.0.0-rc.10
       cookie: 0.5.0
     devDependencies:
-      '@sveltejs/adapter-auto': 1.0.0-next.80
+      '@sveltejs/adapter-auto': 1.0.0-next.81
       '@sveltejs/kit': 1.0.0-next.504_svelte@3.48.0+vite@3.1.0
       '@typescript-eslint/eslint-plugin': 5.27.0_hatonczsu7ve3fyw6burvz5sxq
       '@typescript-eslint/parser': 5.27.0_dyxdave6dwjbccc5dgiifcmuza
@@ -172,7 +170,7 @@ importers:
       '@supabase/supabase-js': 2.0.0-rc.10
       cookie: 0.5.0
     devDependencies:
-      '@sveltejs/adapter-auto': 1.0.0-next.80
+      '@sveltejs/adapter-auto': 1.0.0-next.81
       '@sveltejs/kit': 1.0.0-next.504_svelte@3.48.0+vite@3.1.0
       '@typescript-eslint/eslint-plugin': 5.27.0_hatonczsu7ve3fyw6burvz5sxq
       '@typescript-eslint/parser': 5.27.0_dyxdave6dwjbccc5dgiifcmuza
@@ -1181,11 +1179,11 @@ packages:
       - encoding
       - supports-color
 
-  /@sveltejs/adapter-auto/1.0.0-next.80:
-    resolution: {integrity: sha512-352WoZr9fQgxJqgNENvxRr2gsA+wTF6V9AVaQaaatDYd3RVEBaXTYOOalFaRLSa25mRUJaLYP2aaliqczMl23g==}
+  /@sveltejs/adapter-auto/1.0.0-next.81:
+    resolution: {integrity: sha512-q+0Rh2upU7i3m0fVi/CHrkt+BbTR7bkQ2OoVTVMKwSqrBenr6utPB/7y8tyRrZ21gzUihMSbeFpzbpmzVOI+2g==}
     dependencies:
       '@sveltejs/adapter-cloudflare': 1.0.0-next.38
-      '@sveltejs/adapter-netlify': 1.0.0-next.78
+      '@sveltejs/adapter-netlify': 1.0.0-next.79
       '@sveltejs/adapter-vercel': 1.0.0-next.77
     transitivePeerDependencies:
       - encoding
@@ -1200,8 +1198,8 @@ packages:
       worktop: 0.8.0-next.14
     dev: true
 
-  /@sveltejs/adapter-netlify/1.0.0-next.78:
-    resolution: {integrity: sha512-Yyn/j/0QcLK3Db442ducLUZmyvkO74j7Gdcwu9xN0fQN3kBlCJP9Itx5o4SySrPFGc4Q8cLJ5ELNg+mWduLBAA==}
+  /@sveltejs/adapter-netlify/1.0.0-next.79:
+    resolution: {integrity: sha512-XaihONVwUeXVVt9f2xcFgRExfG8jWKPkyqi715kzPbrgpqH3zaRgLJM2ABEGQ3g2MEn+6op+Z2olIWhM+RA0Cg==}
     dependencies:
       '@iarna/toml': 2.2.5
       esbuild: 0.15.8
@@ -5520,12 +5518,6 @@ packages:
       ts-interface-checker: 0.1.13
     dev: true
 
-  /supabase-ui-svelte/0.1.1:
-    resolution: {integrity: sha512-tDnkU2ma2C8gmwBTr476FFeckt1kHxOxParTfrHLFtOkb30MuBABQ6zAE8ytImF12v3VGuSSniOB9cAYKaSxJA==}
-    dependencies:
-      svelte-feather-icons: 3.6.0
-    dev: true
-
   /supports-color/5.5.0:
     resolution: {integrity: sha512-QjVjwdXIt408MIiAqCX4oUKsgU2EqAGzs2Ppkm4aQYbjm+ZEWEcW4SfFNTr4uMNZma0ey4f5lgLrkB0aX0QMow==}
     engines: {node: '>=4'}
@@ -5568,12 +5560,6 @@ packages:
       - sass
       - stylus
       - sugarss
-    dev: true
-
-  /svelte-feather-icons/3.6.0:
-    resolution: {integrity: sha512-pdRmJwrYUxTI00uTJvGtrMoWXI56n4iX+7fBuxVG/TdBtnqZ8RlGPPvgXmH9+yGOMvWOF5SbZ7h4I+FiORbs2A==}
-    dependencies:
-      svelte: 3.48.0
     dev: true
 
   /svelte-hmr/0.14.12_svelte@3.48.0:
@@ -5876,65 +5862,65 @@ packages:
       yargs: 15.4.1
     dev: true
 
-  /turbo-darwin-64/1.5.4:
-    resolution: {integrity: sha512-Bdxnwf+m0bnRb5HsVZLe+GRer+MOUgLNjOxluwD7POETgH8CTWu99DXfIMAVDWNILVmPCZbWv8Qh2XwhmPlBqw==}
+  /turbo-darwin-64/1.5.6:
+    resolution: {integrity: sha512-CWdXMwenBS2+QXIR2Czx7JPnAcoMzWx/QwTDcHVxZyeayMHgz8Oq5AHCtfaHDSfV8YhD3xa0GLSk6+cFt+W8BQ==}
     cpu: [x64]
     os: [darwin]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo-darwin-arm64/1.5.4:
-    resolution: {integrity: sha512-1Jdv6bl0v9TITEYDxwNFXdWMlYOifWdnrzkTDyaUV/IM0iL1oGiuD4ZdM9VfbR1D7y573dCmVPvbzgV3GQbJZA==}
+  /turbo-darwin-arm64/1.5.6:
+    resolution: {integrity: sha512-c/aXgW9JuXT2bJSKf01pdSDQKnrdcdj3WFKmKiVldb9We6eqFzI0fLHBK97k5LM/OesmRMfCMQ2Cv2DU8RqBAA==}
     cpu: [arm64]
     os: [darwin]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo-linux-64/1.5.4:
-    resolution: {integrity: sha512-FbsXHOIkFnjX4Qu7ZtoCimmy5GlnTYuy66TO2re3i+jy+a59XOAnhU8tT/+FcA73oDAnSv/SAbz1gbsknCU4PA==}
+  /turbo-linux-64/1.5.6:
+    resolution: {integrity: sha512-y/jNF7SG+XJEwk2GxIqy3g4dj/a0PgZKDGyOkp24qp4KBRcHBl6dI1ZEfNed30EhEqmW4F5Dr7IpeCZoqgbrMg==}
     cpu: [x64]
     os: [linux]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo-linux-arm64/1.5.4:
-    resolution: {integrity: sha512-dYX2ekvYsHGSEsLI+NdoYskr1IEmUES+rup3vc9fFziYX+qOoQuttB7VYA9z6+E4fPpLCxAShPwzxmaXhplCNg==}
+  /turbo-linux-arm64/1.5.6:
+    resolution: {integrity: sha512-FRcxPtW7eFrbR3QaYBVX8cK7i+2Cerqi6F0t5ulcq+d1OGSdSW3l35rPPyJdwCzCy+k/S9sBcyCV0RtbS6RKCQ==}
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo-windows-64/1.5.4:
-    resolution: {integrity: sha512-xMmmfplaPrN2Bac+tmOo7bncKhcjv2a/6UGXobNspWzwf6dEboHtxbsP0kIfqoi/22gyj66jg/K/gFJgX08pnw==}
+  /turbo-windows-64/1.5.6:
+    resolution: {integrity: sha512-/5KIExY7zbrbeL5fhKGuO85u5VtJ3Ue4kI0MbYCNnTGe7a10yTYkwswgtGihsgEF4AW0Nm0159aHmXZS2Le8IA==}
     cpu: [x64]
     os: [win32]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo-windows-arm64/1.5.4:
-    resolution: {integrity: sha512-6/DfBdUK+FrbRavQQY9XnxW+1SHPMsuooVjrW8nSh9KFXxTccbFvslUO38usl/lZ0EMKu7MC8D7Vf/zQ9pYGyw==}
+  /turbo-windows-arm64/1.5.6:
+    resolution: {integrity: sha512-p+LQN9O39+rZuOAyc6BzyVGvdEKo+v+XmtdeyZsZpfj4xuOLtsEptW1w6cUD439u0YcPknuccGq1MQ0lXQ6Xuw==}
     cpu: [arm64]
     os: [win32]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo/1.5.4:
-    resolution: {integrity: sha512-8txVfU6J4H5ZkSxr6N6Qn7H+W2Cpr0Uh67VeCH4/ZIbH4u24qPFZA9emlGcss0tI1pZHKGJ0+KjoSzC7vWqN2g==}
+  /turbo/1.5.6:
+    resolution: {integrity: sha512-xJO/fhiMo4lI62iGR9OgUfJTC9tnnuoMwNC52IfvvBDEPlA8RWGMS8SFpDVG9bNCXvVRrtUTNJXMe6pJWBiOTA==}
     hasBin: true
     requiresBuild: true
     optionalDependencies:
-      turbo-darwin-64: 1.5.4
-      turbo-darwin-arm64: 1.5.4
-      turbo-linux-64: 1.5.4
-      turbo-linux-arm64: 1.5.4
-      turbo-windows-64: 1.5.4
-      turbo-windows-arm64: 1.5.4
+      turbo-darwin-64: 1.5.6
+      turbo-darwin-arm64: 1.5.6
+      turbo-linux-64: 1.5.6
+      turbo-linux-arm64: 1.5.6
+      turbo-windows-64: 1.5.6
+      turbo-windows-arm64: 1.5.6
     dev: true
 
   /type-check/0.4.0:

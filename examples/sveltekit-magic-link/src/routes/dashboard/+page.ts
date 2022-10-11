@@ -1,8 +1,9 @@
 import type { PageLoad } from './$types';
-import { withAuth } from '@supabase/auth-helpers-sveltekit';
+import { getSupabase } from '@supabase/auth-helpers-sveltekit';
 import { redirect } from '@sveltejs/kit';
 
-export const load: PageLoad = withAuth(async ({ session, supabaseClient }) => {
+export const load: PageLoad = async (event) => {
+	const { session, supabaseClient } = await getSupabase(event);
 	if (!session) {
 		throw redirect(303, '/');
 	}
@@ -11,4 +12,4 @@ export const load: PageLoad = withAuth(async ({ session, supabaseClient }) => {
 		testTable,
 		user: session.user
 	};
-});
+};
