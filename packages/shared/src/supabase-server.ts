@@ -1,8 +1,7 @@
 import { createClient, Session } from '@supabase/supabase-js';
-import { parse, serialize } from 'cookie';
-import { CookieOptions } from './types';
-import { filterCookies, isSecureEnvironment } from './utils/cookies';
-import { ensureArray } from './utils/helpers';
+import type { CookieSerializeOptions } from 'cookie';
+import { CookieOptions, SupabaseClientOptions } from './types';
+import { isSecureEnvironment } from './utils/cookies';
 
 export function createServerSupabaseClient<
   Database = any,
@@ -12,9 +11,10 @@ export function createServerSupabaseClient<
 >({
   supabaseUrl,
   supabaseKey,
+  getCookie,
+  setCookie,
   getRequestHeader,
-  getResponseHeader,
-  setHeader,
+  options,
   cookieOptions: {
     name = 'supabase-auth-token',
     domain,
@@ -26,38 +26,20 @@ export function createServerSupabaseClient<
 }: {
   supabaseUrl: string;
   supabaseKey: string;
-  getRequestHeader: (key: string) => string | string[] | undefined;
-  getResponseHeader: (key: string) => string | string[] | undefined;
-  setHeader: (key: string, value: string | string[]) => void;
+  getCookie: (name: string) => string | undefined;
+  setCookie: (
+    name: string,
+    value: string,
+    options: CookieSerializeOptions
+  ) => void;
+  getRequestHeader: (name: string) => string | string[] | undefined;
+  options?: SupabaseClientOptions<SchemaName>;
   cookieOptions?: CookieOptions;
 }) {
-  let currentSessionStr: string | null = null;
-
-  const cookieStr = getRequestHeader('cookie');
-  if (cookieStr) {
-    ensureArray(cookieStr)
-      .map((cookieStr) => parse(cookieStr))
-      .forEach((cookie) => {
-        if (cookie[name]) {
-          currentSessionStr = cookie[name];
-        }
-      });
-  }
-
-  // preference the set-cookie header in case the session was already refreshed
-  // for example in next middleware
-  const setCookieStr = getRequestHeader('set-cookie');
-  if (setCookieStr) {
-    ensureArray(setCookieStr)
-      .map((setCookieStr) => parse(setCookieStr))
-      .forEach((cookie) => {
-        if (cookie[name]) {
-          currentSessionStr = cookie[name];
-        }
-      });
-  }
+  let currentSessionStr: string | null = getCookie(name) ?? null;
 
   return createClient<Database, SchemaName>(supabaseUrl, supabaseKey, {
+    ...options,
     auth: {
       detectSessionInUrl: false,
       autoRefreshToken: false,
@@ -79,12 +61,7 @@ export function createServerSupabaseClient<
 
           currentSessionStr = value;
 
-          const newSetCookies = filterCookies(
-            ensureArray(getResponseHeader('set-cookie') ?? []),
-            key
-          );
-
-          const newSessionStr = serialize(key, value, {
+          setCookie(key, value, {
             domain,
             path,
             maxAge,
@@ -93,8 +70,6 @@ export function createServerSupabaseClient<
             sameSite,
             secure: secure ?? isSecureEnvironment(getRequestHeader('host'))
           });
-
-          setHeader('set-cookie', [...newSetCookies, newSessionStr]);
         },
         removeItem(key: string) {
           // don't remove the session if there isn't one
@@ -102,12 +77,7 @@ export function createServerSupabaseClient<
             return;
           }
 
-          const newSetCookies = filterCookies(
-            ensureArray(getResponseHeader('set-cookie') ?? []),
-            key
-          );
-
-          const newSessionStr = serialize(key, '', {
+          setCookie(key, '', {
             domain,
             path,
             expires: new Date(0),
@@ -115,8 +85,6 @@ export function createServerSupabaseClient<
             sameSite,
             secure: secure ?? isSecureEnvironment(getRequestHeader('host'))
           });
-
-          setHeader('set-cookie', [...newSetCookies, newSessionStr]);
         }
       }
     }

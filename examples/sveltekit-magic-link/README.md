@@ -13,8 +13,9 @@ pnpm install
 1. Create a project on the Supabase dashboard
 2. Get the `URL` and `anon` key from your [Settings > API](https://app.supabase.com/project/_/settings/api) section
 3. Copy the `.env.example` file in this project and create a new `.env` file from it
-4. Replace `VITE_SUPABASE_URL` with the `URL` from step 2 and `VITE_SUPABASE_ANON_KEY` with `anon` key from step 2
+4. Replace `PUBLIC_SUPABASE_URL` with the `URL` from step 2 and `PUBLIC_SUPABASE_ANON_KEY` with `anon` key from step 2
 5. Copy the `SQL` below and paste it inside of the [SQL Editor](https://app.supabase.com/project/_/sql) section
+
 ```sql
 DROP TABLE IF EXISTS "public"."test";
 
@@ -25,11 +26,15 @@ CREATE TABLE "public"."test" (
     PRIMARY KEY ("id")
 );
 ```
-6. Build all the packages that this example relies on using the following command 
+
+6. Build the package that this example relies on using the following command
+
 ```bash
-pnpm build:svelteandkit
+pnpm build:sveltekit
 ```
-7. Run the following command from the repository root 
+
+7. Run the following command from the repository root
+
 ```bash
 pnpm dev --filter=@example/sveltekit-magic-link -- --open
 ```

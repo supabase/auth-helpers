@@ -1,25 +1,25 @@
 # @supabase/auth-helpers-sveltekit
 
-## 0.6.11-next.2
+## 0.7.1
 
 ### Patch Changes
 
-- Updated dependencies [2fdb094]
-  - @supabase/auth-helpers-shared@0.2.0-next.2
+- 3a09401: Add type intellisense for @supabase/auth-helpers-sveltekit/server
+  Add .js to fix ERR_MODULE_NOT_FOUND (can´t use the script, it throws an error @sveltejs/kit/hooks not found)
+  Pass page store and invalidation to startSupabaseSessionSync as \$app module is not available in npm packages
 
-## 0.6.11-next.1
+## 0.7.0
+
+### Minor Changes
+
+- cd9150c: [breaking] Update to work with latest SvelteKit RC
+
+## 0.6.11
 
 ### Patch Changes
 
-- Updated dependencies [fe5c4a6]
-  - @supabase/auth-helpers-shared@0.2.0-next.1
-
-## 0.6.11-next.0
-
-### Patch Changes
-
-- Updated dependencies [1b33e44]
-  - @supabase/auth-helpers-shared@0.2.0-next.0
+- Updated dependencies [63b1da0]
+  - @supabase/auth-helpers-shared@0.1.4
 
 ## 0.6.10
 

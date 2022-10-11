@@ -3,13 +3,12 @@ export default {
   kit: {
     files: {
       lib: 'src'
-    },
-
-    package: {
-      dir: 'dist',
-      exports: (file) => {
-        return file === 'index.ts';
-      }
+    }
+  },
+  package: {
+    dir: 'dist',
+    exports(filepath) {
+      return ['index.ts', 'server/index.ts'].includes(filepath);
     }
   }
 };
