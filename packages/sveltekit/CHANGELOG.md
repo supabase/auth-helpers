@@ -1,5 +1,11 @@
 # @supabase/auth-helpers-sveltekit
 
+## 0.8.0
+
+### Minor Changes
+
+- 58e6287: Update to supabase-js v2
+
 ## 0.7.1
 
 ### Patch Changes
