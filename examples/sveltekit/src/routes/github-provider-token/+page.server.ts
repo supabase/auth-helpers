@@ -1,5 +1,4 @@
-import { withAuth } from '@supabase/auth-helpers-sveltekit';
-import { getProviderToken } from '@supabase/auth-helpers-sveltekit/server';
+import { getSupabase } from '@supabase/auth-helpers-sveltekit';
 import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
@@ -10,23 +9,26 @@ interface GitHubOutput {
 	items: any[];
 }
 
-export const load: PageServerLoad = withAuth(async ({ session, cookies }) => {
-	if (!session.user) {
+export const load: PageServerLoad = async (event) => {
+	const { session } = await getSupabase(event);
+	if (!session) {
 		throw redirect(303, '/');
 	}
-	const providerToken = getProviderToken(cookies);
+
+	const providerToken = session.provider_token;
 	const userId = session.user.user_metadata.user_name;
-	const allRepos: GitHubOutput = await (
-		await fetch(`https://api.github.com/search/repositories?q=user:${userId}`, {
+	const allRepos: GitHubOutput = await fetch(
+		`https://api.github.com/search/repositories?q=user:${userId}`,
+		{
 			method: 'GET',
 			headers: {
 				Authorization: `token ${providerToken}`
 			}
-		})
-	).json();
+		}
+	).then((res) => res.json());
 
 	return {
 		user: session.user,
 		allRepos
 	};
-});
+};

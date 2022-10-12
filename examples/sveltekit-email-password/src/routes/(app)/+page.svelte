@@ -1,18 +1,20 @@
 <script lang="ts">
+	import type { ActionData } from './$types';
 	import { applyAction, enhance, type SubmitFunction } from '$app/forms';
-	import { invalidateAll } from '$app/navigation';
+	import { invalidate } from '$app/navigation';
 
-	export let form: any;
+	export let form: ActionData;
 	let loading = false;
 
 	const handleSubmit: SubmitFunction = () => {
 		loading = true;
 		return async ({ result }) => {
-			loading = false;
-			await applyAction(result);
 			if (result.type === 'redirect') {
-				await invalidateAll();
+				await invalidate('supabase:auth');
+			} else {
+				await applyAction(result);
 			}
+			loading = false;
 		};
 	};
 </script>

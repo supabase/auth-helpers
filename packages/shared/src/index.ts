@@ -1,10 +1,4 @@
-export type { CookieOptions, ApiError, User, UserFetcher, UserState } from './types';
-export {
-  NextRequestAdapter,
-  NextResponseAdapter
-} from './adapters/NextAdapter';
-export {
-  NextRequestAdapter as NextRequestMiddlewareAdapter,
-  NextResponseAdapter as NextResponseMiddlewareAdapter
-} from './adapters/NextMiddlewareAdapter';;
+export * from './supabase-browser';
+export * from './supabase-server';
+export * from './types';
 export * from './utils';

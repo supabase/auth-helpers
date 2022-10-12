@@ -1,13 +1,13 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 
 	$: {
-		const redirectTo = $page.url.searchParams.get('redirect') ?? '/dashboard';
+		const redirectTo = $page.url.searchParams.get('redirect');
+
 		// check if user has been set in session store then redirect
-		if (browser && $page.data.session.user) {
-			goto(redirectTo);
+		if ($page.data.session) {
+			goto(redirectTo ?? '/dashboard');
 		}
 	}
 </script>

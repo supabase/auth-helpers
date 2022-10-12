@@ -1,11 +1,61 @@
 # @supabase/auth-helpers-react
 
-## 0.2.4
+## 0.3.0
+
+### Minor Changes
+
+- fd30e33: Update to work with supabase-js v2 RC
 
 ### Patch Changes
 
-- Updated dependencies [63b1da0]
-  - @supabase/auth-helpers-shared@0.1.4
+- 3154f16: fix: typing for useSupabaseClient.
+- fe5c4a6: chore: improve types.
+- 2fdb094: chore: types and middleware improvements.
+- Updated dependencies [20fa944]
+- Updated dependencies [fd30e33]
+- Updated dependencies [fe5c4a6]
+- Updated dependencies [2fdb094]
+  - @supabase/auth-helpers-shared@0.2.0
+
+## 0.3.0-next.4
+
+### Patch Changes
+
+- Updated dependencies [20fa944]
+  - @supabase/auth-helpers-shared@0.2.0-next.3
+
+## 0.3.0-next.3
+
+### Patch Changes
+
+- 3154f16: fix: typing for useSupabaseClient.
+
+## 0.3.0-next.2
+
+### Patch Changes
+
+- 2fdb094: chore: types and middleware improvements.
+- Updated dependencies [2fdb094]
+  - @supabase/auth-helpers-shared@0.2.0-next.2
+
+## 0.3.0-next.1
+
+### Patch Changes
+
+- fe5c4a6: chore: improve types.
+- Updated dependencies [fe5c4a6]
+  - @supabase/auth-helpers-shared@0.2.0-next.1
+
+## 0.3.0-next.0
+
+### Minor Changes
+
+- 1b33e44: Update to work with supabase-js v2 RC
+
+### Patch Changes
+
+- Updated dependencies [1b33e44]
+  - @supabase/auth-helpers-shared@0.2.0-next.0
 
 ## 0.2.3
 

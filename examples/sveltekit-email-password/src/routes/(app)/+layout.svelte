@@ -1,12 +1,19 @@
 <script lang="ts">
 	import { applyAction, enhance, type SubmitFunction } from '$app/forms';
-	import { invalidateAll } from '$app/navigation';
+	import { invalidate } from '$app/navigation';
 	import { page } from '$app/stores';
 
-	const logout: SubmitFunction = () => {
+	let loading = false;
+
+	const handleLogout: SubmitFunction = () => {
+		loading = true;
 		return async ({ result }) => {
-			await invalidateAll();
-			applyAction(result);
+			if (result.type === 'redirect') {
+				await invalidate('supabase:auth');
+			} else {
+				await applyAction(result);
+			}
+			loading = false;
 		};
 	};
 </script>
@@ -21,9 +28,9 @@
 			<a class="my-2" href="/">Supabase Auth Helpers Demo</a>
 		</div>
 		<div class="navbar-end">
-			{#if $page.data.session.user}
-				<form action="/logout" method="post" use:enhance={logout}>
-					<button type="submit">Sign out</button>
+			{#if $page.data.session}
+				<form action="/logout" method="post" use:enhance={handleLogout}>
+					<button disabled={loading} type="submit">Sign out</button>
 				</form>
 			{/if}
 		</div>

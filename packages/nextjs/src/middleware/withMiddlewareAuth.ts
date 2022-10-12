@@ -2,46 +2,46 @@ import { NextResponse } from 'next/server';
 import { NextMiddleware } from 'next/server';
 import {
   CookieOptions,
-  setCookies,
-  COOKIE_OPTIONS,
-  TOKEN_REFRESH_MARGIN,
-  NextRequestMiddlewareAdapter,
-  NextResponseMiddlewareAdapter,
-  jwtDecoder,
-  User
+  createServerSupabaseClient,
+  parseCookies,
+  serializeCookie
 } from '@supabase/auth-helpers-shared';
+import { SupabaseClient, User } from '@supabase/supabase-js';
+import { PKG_NAME, PKG_VERSION } from '../constants';
 
 class NoPermissionError extends Error {
   constructor(message: string) {
     super(message);
-  }
-  get name() {
-    return this.constructor.name;
+    this.name = 'NoPermissionError';
   }
 }
 
-export interface withMiddlewareAuthOptions {
-  /**
-   * Path relative to the site root to redirect an
-   * unauthenticated visitor.
-   *
-   * The original request route will be appended via
-   * a `redirectedFrom` query parameter, ex: `?redirectedFrom=%2Fdashboard`
-   */
-  redirectTo?: string;
-  cookieOptions?: CookieOptions;
-  tokenRefreshMargin?: number;
-  authGuard?: {
-    isPermitted: (user: User) => Promise<boolean>;
-    redirectTo: string;
-  };
-}
-export type withMiddlewareAuth = (
-  options?: withMiddlewareAuthOptions
-) => NextMiddleware;
-
-export const withMiddlewareAuth: withMiddlewareAuth =
-  (options: withMiddlewareAuthOptions = {}) =>
+export const withMiddlewareAuth =
+  <
+    Database = any,
+    SchemaName extends string & keyof Database = 'public' extends keyof Database
+      ? 'public'
+      : string & keyof Database
+  >(
+    options: {
+      /**
+       * Path relative to the site root to redirect an
+       * unauthenticated visitor.
+       *
+       * The original request route will be appended via
+       * a `redirectedFrom` query parameter, ex: `?redirectedFrom=%2Fdashboard`
+       */
+      redirectTo?: string;
+      cookieOptions?: CookieOptions;
+      authGuard?: {
+        isPermitted: (
+          user: User,
+          supabase: SupabaseClient<Database, SchemaName>
+        ) => Promise<boolean>;
+        redirectTo: string;
+      };
+    } = {}
+  ): NextMiddleware =>
   async (req) => {
     try {
       if (
@@ -52,92 +52,53 @@ export const withMiddlewareAuth: withMiddlewareAuth =
           'NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY env variables are required!'
         );
       }
-      if (!req.cookies) {
-        throw new Error('Not able to parse cookies!');
-      }
-      const cookieOptions = { ...COOKIE_OPTIONS, ...options.cookieOptions };
-      const tokenRefreshMargin =
-        options.tokenRefreshMargin ?? TOKEN_REFRESH_MARGIN;
-      const access_token = req.cookies.get(
-        `${cookieOptions.name!}-access-token`
-      );
-      const refresh_token = req.cookies.get(
-        `${cookieOptions.name!}-refresh-token`
-      );
 
       const res = NextResponse.next();
 
-      const getUser = async (): Promise<{
-        user: any;
-        error: any;
-      }> => {
-        if (!access_token) {
-          throw new Error('No cookie found!');
-        }
-        // Get payload from access token.
-        const jwtUser = jwtDecoder(access_token);
-        if (!jwtUser?.exp) {
-          throw new Error('Not able to parse JWT payload!');
-        }
-        const timeNow = Math.round(Date.now() / 1000);
-        if (jwtUser.exp < timeNow + tokenRefreshMargin) {
-          if (!refresh_token) {
-            throw new Error('No refresh_token cookie found!');
-          }
-          const requestHeaders: HeadersInit = new Headers();
-          requestHeaders.set('accept', 'json');
-          requestHeaders.set(
-            'apiKey',
-            process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-          );
-          requestHeaders.set(
-            'authorization',
-            `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`
-          );
+      const supabase = createServerSupabaseClient<Database, SchemaName>({
+        supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
+        supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+        getCookie(name) {
+          const cookies = parseCookies(req.headers.get('cookie') ?? '');
+          return cookies[name];
+        },
+        setCookie(name, value, options) {
+          const newSessionStr = serializeCookie(name, value, {
+            ...options,
+            // Allow supabase-js on the client to read the cookie as well
+            httpOnly: false
+          });
+          res.headers.append(name, newSessionStr);
+        },
+        getRequestHeader: (key) => {
+          const header = res.headers.get(key) ?? undefined;
 
-          const data = await fetch(
-            `${process.env.NEXT_PUBLIC_SUPABASE_URL}/auth/v1/token?grant_type=refresh_token`,
-            {
-              method: 'POST',
-              headers: requestHeaders,
-              body: JSON.stringify({ refresh_token })
+          return header;
+        },
+        options: {
+          global: {
+            headers: {
+              'X-Client-Info': `${PKG_NAME}@${PKG_VERSION}`
             }
-          )
-            .then((res) => res.json())
-            .catch((e) => ({
-              error: String(e)
-            }));
-          setCookies(
-            new NextRequestMiddlewareAdapter(req),
-            new NextResponseMiddlewareAdapter(res),
-            [
-              { key: 'access-token', value: data!.access_token },
-              { key: 'refresh-token', value: data!.refresh_token! }
-            ].map((token) => ({
-              name: `${cookieOptions.name}-${token.key}`,
-              value: token.value,
-              domain: cookieOptions.domain,
-              maxAge: cookieOptions.lifetime ?? 0,
-              path: cookieOptions.path,
-              sameSite: cookieOptions.sameSite
-            }))
-          );
-          return { user: data?.user ?? null, error: data?.error };
-        }
-        return { user: jwtUser, error: null };
-      };
+          }
+        },
+        cookieOptions: options.cookieOptions
+      });
 
-      const authResult = await getUser();
+      const {
+        data: { session },
+        error
+      } = await supabase.auth.getSession();
 
-      if (authResult.error) {
+      if (error) {
         throw new Error(
-          `Authorization error, redirecting to login page: ${authResult.error.message}`
+          `Authorization error, redirecting to login page: ${error.message}`
         );
-      } else if (!authResult.user) {
-        throw new Error('No auth user, redirecting');
+      } else if (!session) {
+        throw new Error('No auth session, redirecting');
       } else if (
         options.authGuard &&
-        !(await options.authGuard.isPermitted(authResult.user))
+        !(await options.authGuard.isPermitted(session.user, supabase))
       ) {
         throw new NoPermissionError('User is not permitted, redirecting');
       }
