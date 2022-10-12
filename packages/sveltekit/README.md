@@ -63,7 +63,7 @@ Edit your `+layout.svelte` file and set up the client side.
 <!-- src/routes/+layout.svelte -->
 <script>
   import { supabaseClient } from '$lib/db';
-  import { invalidateAll } from '$app/navigation';
+  import { invalidate } from '$app/navigation';
   import { onMount } from 'svelte';
 
   onMount(() => {
@@ -82,7 +82,7 @@ Edit your `+layout.svelte` file and set up the client side.
 <slot />
 ```
 
-Every `PageLoad` or `LayoutLoad` wrapped with `withAuth` will update when `invalidate('supabase:auth')` is called.
+Every `PageLoad` or `LayoutLoad` using `getSupabase()` will update when `invalidate('supabase:auth')` is called.
 
 If some data is not updated on signin/signout you can fall back to `invalidateAll()`.
 
@@ -107,11 +107,12 @@ In addition you can create a layout load function if you are using `invalidate('
 ```ts
 // src/routes/+layout.ts
 import type { LayoutLoad } from './$types';
-import { withAuth } from '@supabase/auth-helpers-sveltekit';
+import { getSupabase } from '@supabase/auth-helpers-sveltekit';
 
-export const load: LayoutLoad = withAuth(async ({ session }) => {
+export const load: LayoutLoad = async (event) => {
+  const { session } = await getSupabase(event);
   return { session };
-});
+};
 ```
 
 This results in less server calls as the client manages the session on it´s own.
@@ -202,15 +203,16 @@ For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row
 <pre>{JSON.stringify(user, null, 2)}</pre>
 ```
 
-For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row-level-security) to work in a server environment, you need to use the `withAuth` helper to check if the user is authenticated. The helper extends the event with `session` and `supabaseClient`:
+For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row-level-security) to work in a server environment, you need to use the `getSupabase` helper to check if the user is authenticated. The helper requires the `event` and returns `session` and `supabaseClient`:
 
 ```ts
 // src/routes/profile/+page.ts
 import type { PageLoad } from './$types';
-import { withAuth } from '@supabase/auth-helpers-sveltekit';
+import { getSupabase } from '@supabase/auth-helpers-sveltekit';
 import { redirect } from '@sveltejs/kit';
 
-export const load: PageLoad = withAuth(async ({ supabaseClient, session }) => {
+export const load: PageLoad = async (event) => {
+  const { session, supabaseClient } = await getSupabase(event);
   if (!session) {
     throw redirect(303, '/');
   }
@@ -222,7 +224,7 @@ export const load: PageLoad = withAuth(async ({ supabaseClient, session }) => {
     user: session.user,
     tableData
   };
-);
+};
 ```
 
 ## Protecting API routes
@@ -232,10 +234,11 @@ Wrap an API Route to check that the user has a valid session. If they're not log
 ```ts
 // src/routes/api/protected-route/+server.ts
 import type { RequestHandler } from './$types';
-import { withAuth } from '@supabase/auth-helpers-sveltekit';
+import { getSupabase } from '@supabase/auth-helpers-sveltekit';
 import { json, redirect } from '@sveltejs/kit';
 
-export const GET: RequestHandler = withAuth(async ({ session, supabaseClient }) => {
+export const GET: RequestHandler = async (event) => {
+  const { session, supabaseClient } = await getSupabase(event);
   if (!session) {
     throw redirect(303, '/');
   }
@@ -244,7 +247,7 @@ export const GET: RequestHandler = withAuth(async ({ session, supabaseClient }) 
     .select('*');
 
   return json({ data });
-);
+};
 ```
 
 If you visit `/api/protected-route` without a valid session cookie, you will get a 303 response.
@@ -256,11 +259,13 @@ Wrap an Action to check that the user has a valid session. If they're not logged
 ```ts
 // src/routes/posts/+page.server.ts
 import type { Actions } from './$types';
-import { withAuth } from '@supabase/auth-helpers-sveltekit';
+import { getSupabase } from '@supabase/auth-helpers-sveltekit';
 import { error, invalid } from '@sveltejs/kit';
 
 export const actions: Actions = {
-  createPost: withAuth(async ({ session, supabaseClient, request }) => {
+  createPost: async (event) => {
+    const { request } = event;
+    const { session, supabaseClient } = await getSupabase(event);
     if (!session) {
       // the user is not signed in
       throw error(403, { message: 'Unauthorized' });
@@ -281,7 +286,7 @@ export const actions: Actions = {
     return {
       newPost
     };
-  })
+  }
 };
 ```
 
@@ -292,44 +297,43 @@ If you try to submit a form with the action `?/createPost` without a valid sessi
 ```ts
 import type { Actions } from './$types';
 import { invalid, redirect } from '@sveltejs/kit';
-import { withAuth } from '@supabase/auth-helpers-sveltekit';
+import { getSupabase } from '@supabase/auth-helpers-sveltekit';
 
 export const actions: Actions = {
-  signin: withAuth(async ({ request, cookies, url, supabaseClient }) => {
+  signin: async (event) => {
+    const { request, cookies, url } = event;
+    const { session, supabaseClient } = await getSupabase(event);
     const formData = await request.formData();
 
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
 
-    const { error } = await supabaseClient.auth.signIn(
-      { email, password },
-      {
-        redirectTo: `${url.origin}/logging-in`
-      }
-    );
+    const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
 
-    if (error?.status === 400) {
-      return invalid(400, {
-        error: 'Invalid credentials',
-        values: {
-          email
-        }
-      });
-    }
     if (error) {
-      return invalid(500, {
-        error: 'Server error. Try again later.',
-        values: {
-          email
-        }
-      });
-    }
-    throw redirect(303, '/dashboard');
-  }),
+			if (error instanceof AuthApiError && error.status === 400) {
+				return invalid(400, {
+					error: 'Invalid credentials.',
+					values: {
+						email
+					}
+				});
+			}
+			return invalid(500, {
+				error: 'Server error. Try again later.',
+				values: {
+					email
+				}
+			});
+		}
 
-  signout: withAuth(async ({ supabaseClient }) => {
+    throw redirect(303, '/dashboard');
+  },
+
+  signout: async (event) => {
+    const { supabaseClient } = await getSupabase(event);
     await supabaseClient.auth.signOut();
     throw redirect(303, '/');
-  })
+  }
 };
 ```
