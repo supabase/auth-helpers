@@ -1,24 +1,5 @@
 # @supabase/auth-helpers-sveltekit
 
-## 0.7.2
-
-### Patch Changes
-
-- 20fa944: add sveltekit supabase v2 support
-- Updated dependencies [20fa944]
-- Updated dependencies [fd30e33]
-- Updated dependencies [fe5c4a6]
-- Updated dependencies [2fdb094]
-  - @supabase/auth-helpers-shared@0.2.0
-
-## 0.7.2-next.0
-
-### Patch Changes
-
-- 20fa944: add sveltekit supabase v2 support
-- Updated dependencies [20fa944]
-  - @supabase/auth-helpers-shared@0.2.0-next.3
-
 ## 0.7.1
 
 ### Patch Changes
