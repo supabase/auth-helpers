@@ -1,5 +1,64 @@
 # @supabase/auth-helpers-nextjs
 
+## 0.4.0
+
+### Minor Changes
+
+- fd30e33: Update to work with supabase-js v2 RC
+
+### Patch Changes
+
+- 20fa944: add sveltekit supabase v2 support
+- fe5c4a6: chore: improve types.
+- 2fdb094: chore: types and middleware improvements.
+- af28db1: chore: export middleware at root.
+- Updated dependencies [20fa944]
+- Updated dependencies [fd30e33]
+- Updated dependencies [fe5c4a6]
+- Updated dependencies [2fdb094]
+  - @supabase/auth-helpers-shared@0.2.0
+
+## 0.4.0-next.4
+
+### Patch Changes
+
+- 20fa944: add sveltekit supabase v2 support
+- Updated dependencies [20fa944]
+  - @supabase/auth-helpers-shared@0.2.0-next.3
+
+## 0.4.0-next.3
+
+### Patch Changes
+
+- 2fdb094: chore: types and middleware improvements.
+- Updated dependencies [2fdb094]
+  - @supabase/auth-helpers-shared@0.2.0-next.2
+
+## 0.4.0-next.2
+
+### Patch Changes
+
+- fe5c4a6: chore: improve types.
+- Updated dependencies [fe5c4a6]
+  - @supabase/auth-helpers-shared@0.2.0-next.1
+
+## 0.4.0-next.1
+
+### Patch Changes
+
+- af28db1: chore: export middleware at root.
+
+## 0.4.0-next.0
+
+### Minor Changes
+
+- 1b33e44: Update to work with supabase-js v2 RC
+
+### Patch Changes
+
+- Updated dependencies [1b33e44]
+  - @supabase/auth-helpers-shared@0.2.0-next.0
+
 ## 0.2.7
 
 ### Patch Changes

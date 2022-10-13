@@ -1,6 +1,6 @@
 {
   "name": "@supabase/auth-helpers-react",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "publishConfig": {
@@ -23,7 +23,7 @@
   "author": "Supabase",
   "license": "MIT",
   "devDependencies": {
-    "@supabase/supabase-js": "^1.35.3",
+    "@supabase/supabase-js": "2.0.0",
     "@types/react": "^17.0.20",
     "@types/react-dom": "^17.0.9",
     "config": "workspace:*",
