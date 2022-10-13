@@ -20,7 +20,7 @@ jobs:
 
       - uses: pnpm/action-setup@v2.2.3
         with:
-          version: 7.1.7
+          version: 7.13.4
 
       - name: Set up Node
         uses: actions/setup-node@v2

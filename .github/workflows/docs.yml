@@ -12,16 +12,16 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        node: ['12']
+        node: ['16']
 
     runs-on: ${{ matrix.os }}
 
     steps:
       - uses: actions/checkout@v2
 
-      - uses: pnpm/action-setup@v2.0.1
+      - uses: pnpm/action-setup@v2.2.3
         with:
-          version: 6.32.3
+          version: 7.13.4
 
       - name: Set up Node
         uses: actions/setup-node@v1
