@@ -11,17 +11,17 @@
   },
   "exports": {
     "./package.json": "./package.json",
-    ".": "./dist/index.js",
-    "./": "./dist/index.js"
+    ".": "./dist/index.js"
   },
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "pnpm make:constants && svelte-kit sync && svelte-package && pnpm del:dup",
+    "build": "pnpm make:constants && svelte-kit sync && svelte-package && pnpm del:dup && pnpm fix:esm",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "del:dup": "del-cli dist/package.json dist/CHANGELOG.md dist/README.md",
+    "fix:esm": "fix-esm-import-path dist/index.js",
     "make:constants": "node ./scripts/make_constants.cjs > src/constants.ts"
   },
   "repository": {
