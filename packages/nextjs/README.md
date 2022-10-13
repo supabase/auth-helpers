@@ -46,7 +46,7 @@ Wrap your `pages/_app.js` component with the `SessionContextProvider` component:
 
 ```jsx
 // pages/_app.js
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { SessionContextProvider } from '@supabase/auth-helpers-react';
