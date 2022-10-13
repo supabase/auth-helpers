@@ -27,9 +27,11 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node }}
+          cache: pnpm
 
       - run: |
           pnpm install --frozen-lockfile
+          pnpm run build
           pnpm run docs
 
       - name: Publish
