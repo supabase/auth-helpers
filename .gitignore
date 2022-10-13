@@ -32,6 +32,7 @@ yarn-error.log*
 # Distribution directories
 dist/
 package/
+docs/
 
 # turbo
 .turbo
