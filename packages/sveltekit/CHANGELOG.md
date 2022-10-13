@@ -1,5 +1,12 @@
 # @supabase/auth-helpers-sveltekit
 
+## 0.8.1
+
+### Patch Changes
+
+- 7a6377a: Add fix for esm package build
+- 7a6377a: Remove old files from 0.7.x
+
 ## 0.8.0
 
 ### Minor Changes
