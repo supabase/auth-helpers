@@ -1,5 +1,11 @@
 # @supabase/auth-helpers-sveltekit
 
+## 0.8.2
+
+### Patch Changes
+
+- 8f6a474: Fix type issue in the getServerSession function
+
 ## 0.8.1
 
 ### Patch Changes
