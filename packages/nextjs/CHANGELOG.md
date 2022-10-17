@@ -1,5 +1,11 @@
 # @supabase/auth-helpers-nextjs
 
+## 0.4.1
+
+### Patch Changes
+
+- 5140f5a: fix: withPageAuth return user. [#314](https://github.com/supabase/auth-helpers/issues/314)
+
 ## 0.4.0
 
 ### Minor Changes
