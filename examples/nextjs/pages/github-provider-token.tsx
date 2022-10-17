@@ -54,6 +54,6 @@ export const getServerSideProps = withPageAuth({
       )
     ).json();
 
-    return { props: { allRepos, user } };
+    return { props: { allRepos } };
   }
 });
