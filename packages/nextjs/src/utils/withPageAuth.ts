@@ -88,14 +88,6 @@ export default function withPageAuth<
         );
       }
 
-      // TODO: add this
-      // headers: {
-      //   'X-Client-Info': `${PKG_NAME.replace('@', '').replace(
-      //     '/',
-      //     '-'
-      //   )}/${PKG_VERSION}`
-      // }
-
       const supabase = createServerSupabaseClient<Database, SchemaName>({
         supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
         supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
@@ -159,6 +151,7 @@ export default function withPageAuth<
         ...ret,
         props: {
           initialSession: session,
+          user: session?.user,
           ...ret.props
         }
       };

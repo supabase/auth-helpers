@@ -7,6 +7,7 @@ import { Database } from '../db_types';
 import '../styles/globals.css';
 
 function MyApp({ Component, pageProps }: AppProps) {
+  console.log('PAGEPROPS:', pageProps, pageProps.initialSession);
   const router = useRouter();
   const [supabaseClient] = useState(() =>
     createBrowserSupabaseClient<Database>()
