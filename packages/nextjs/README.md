@@ -214,9 +214,9 @@ export default function ProtectedPage({
 
 export const getServerSideProps = withPageAuth({
   redirectTo: '/',
-  async getServerSideProps(ctx, supabaseServerClient) {
+  async getServerSideProps(ctx, supabase) {
     // Run queries with RLS on the server
-    const { data } = await supabaseServerClient(ctx).from('test').select('*');
+    const { data } = await supabase.from('test').select('*');
     return { props: { data } };
   }
 });
@@ -227,39 +227,57 @@ export const getServerSideProps = withPageAuth({
 When using third-party auth providers, sessions are initiated with an additional `provider_token` field which is persisted as an HTTPOnly cookie upon logging in to enabled usage on the server side. The `provider_token` can be used to make API requests to the OAuth provider's API endpoints on behalf of the logged-in user. In the following example, we fetch the user's full profile from the third-party API during SSR using their id and auth token:
 
 ```js
-import { User, withPageAuth, getUser } from '@supabase/auth-helpers-nextjs';
-
-interface Profile {
-  /* ... */
-}
+import { User, withPageAuth } from '@supabase/auth-helpers-nextjs';
 
 export default function ProtectedPage({
   user,
-  data
+  allRepos
 }: {
   user: User,
-  profile: Profile
+  allRepos: any
 }) {
-  return <div>Protected content</div>;
+  return (
+    <>
+      <div>Protected content for {user.email}</div>
+      <p>Data fetched with provider token:</p>
+      <pre>{JSON.stringify(allRepos, null, 2)}</pre>
+      <p>user:</p>
+      <pre>{JSON.stringify(user, null, 2)}</pre>
+    </>
+  );
 }
 
 export const getServerSideProps = withPageAuth({
   redirectTo: '/',
-  async getServerSideProps(ctx) {
-    // Retrieve provider_token from cookies
-    const provider_token = ctx.req.cookies['sb-provider-token'];
-    // Get logged in user's third-party id from metadata
-    const { user } = await getUser(ctx);
-    const userId = user?.user_metadata.provider_id;
-    const profile: Profile = await (
-      await fetch(`https://api.example.com/users/${userId}`, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${provider_token}`
+  async getServerSideProps(ctx, supabase) {
+    const {
+      data: { session },
+      error
+    } = await supabase.auth.getSession();
+    if (error) {
+      throw error;
+    }
+    if (!session) {
+      return { props: {} };
+    }
+
+    // Retrieve provider_token & logged in user's third-party id from metadata
+    const { provider_token, user } = session;
+    const userId = user.user_metadata.user_name;
+
+    const allRepos = await (
+      await fetch(
+        `https://api.github.com/search/repositories?q=user:${userId}`,
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `token ${provider_token}`
+          }
         }
-      })
+      )
     ).json();
-    return { props: { profile } };
+
+    return { props: { allRepos, user } };
   }
 });
 ```
