@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/supabase/auth-helpers/tree/main/packages/nextjs#readme",
   "devDependencies": {
-    "@supabase/supabase-js": "2.0.0",
+    "@supabase/supabase-js": "2.0.4",
     "config": "workspace:*",
     "next": "^12.2.5",
     "react": "^18.0.0",

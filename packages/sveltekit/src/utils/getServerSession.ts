@@ -15,7 +15,7 @@ export async function getServerSession(
     session?.expires_at &&
     session.expires_at + expiry_margin <= Date.now() / 1000
   ) {
-    const refreshed = await supabase.auth.setSession(session);
+    const refreshed = await supabase.auth.refreshSession(session);
 
     session = refreshed.data.session;
   }
