@@ -41,9 +41,9 @@
   },
   "homepage": "https://github.com/supabase/auth-helpers/tree/main/packages/sveltekit#readme",
   "devDependencies": {
-    "@supabase/supabase-js": "^2.0.0",
-    "@sveltejs/kit": "^1.0.0-next.504",
-    "@sveltejs/package": "^1.0.0-next.5",
+    "@supabase/supabase-js": "2.0.0",
+    "@sveltejs/kit": "1.0.0-next.504",
+    "@sveltejs/package": "1.0.0-next.5",
     "del-cli": "^5.0.0",
     "fix-esm-import-path": "^1.3.1",
     "svelte": "^3.48.0",
