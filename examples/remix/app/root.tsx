@@ -1,0 +1,135 @@
+import {
+  ActionFunction,
+  json,
+  LoaderFunction,
+  MetaFunction
+} from '@remix-run/node';
+import {
+  Form,
+  Links,
+  LiveReload,
+  Meta,
+  Outlet,
+  Scripts,
+  ScrollRestoration,
+  useLoaderData
+} from '@remix-run/react';
+import { getSupabase } from '@supabase/auth-helpers-remix';
+
+export const meta: MetaFunction = () => ({
+  charset: 'utf-8',
+  title: 'New Remix App',
+  viewport: 'width=device-width,initial-scale=1'
+});
+
+export const loader: LoaderFunction = () => {
+  // environment variables may be stored somewhere other than
+  // `process.env` in runtimes other than node
+  // we need to pipe these Supabase environment variables to the browser
+  const { SUPABASE_URL, SUPABASE_ANON_KEY } = process.env;
+  return json({
+    env: {
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
+    }
+  });
+};
+
+export const action: ActionFunction = async ({
+  request
+}: {
+  request: Request;
+}) => {
+  const { _action, email, password } = Object.fromEntries(
+    await request.formData()
+  );
+  const response = new Response();
+  const supabaseClient = getSupabase({ request, response });
+
+  // `_action` is a convention as `action` is a reserved keyword that may break the web
+  // this can be named anything that is not a reserved keyword
+  // Ryan's excellent explanation: https://www.youtube.com/watch?v=w2i-9cYxSdc
+  if (_action === 'login') {
+    let { data, error } = await supabaseClient.auth.signInWithPassword({
+      email: String(email),
+      password: String(password)
+    });
+
+    // in order for the set-cookie header to be set,
+    // headers must be returned as part of the loader response
+    return json(
+      { data, error },
+      {
+        headers: response.headers
+      }
+    );
+  }
+
+  if (_action === 'logout') {
+    let { error } = await supabaseClient.auth.signOut();
+
+    // in order for the set-cookie header to be set,
+    // headers must be returned as part of the loader response
+    return json(
+      { error },
+      {
+        headers: response.headers
+      }
+    );
+  }
+};
+
+// this route demonstrates how to login and logout
+// with Supabase on the server. It also shows how to
+// pipe environment variables from the server to the browser
+export default function App() {
+  const { env } = useLoaderData();
+
+  return (
+    <html lang="en">
+      <head>
+        <Meta />
+        <Links />
+      </head>
+      <body>
+        <Form method="post">
+          <div>
+            <label htmlFor="email">Email:</label>
+            <input
+              type="text"
+              id="email"
+              name="email"
+              defaultValue="jon@supabase.com"
+            />
+          </div>
+          <div>
+            <label htmlFor="password">Password:</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              defaultValue="very-secur3-password"
+            />
+          </div>
+          <button type="submit" name="_action" value="login">
+            Login
+          </button>
+        </Form>
+        <Form method="post">
+          <button type="submit" name="_action" value="logout">
+            Logout
+          </button>
+        </Form>
+        <Outlet />
+        <ScrollRestoration />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.env = ${JSON.stringify(env)}`
+          }}
+        />
+        <Scripts />
+        <LiveReload />
+      </body>
+    </html>
+  );
+}
