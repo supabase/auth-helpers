@@ -92,10 +92,10 @@ In order to make the session available to the UI (pages, layouts) we need to pas
 
 ```ts
 // src/routes/+layout.server.ts
-import type { LayoutServerLoad } from './$types';
+import type { LayoutServerLoad, LayoutServerLoadEvent } from './$types';
 import { getServerSession } from '@supabase/auth-helpers-sveltekit';
 
-export const load: LayoutServerLoad = async (event) => {
+export const load: LayoutServerLoad = async (event: LayoutServerLoadEvent) => {
   return {
     session: await getServerSession(event)
   };
