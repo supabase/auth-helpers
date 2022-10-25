@@ -38,5 +38,8 @@
     "tsconfig": "workspace:*",
     "tsup": "^5.12.5",
     "cookie": "^0.5.0"
+  },
+  "peerDependencies": {
+    "@supabase/supabase-js": "^2.0.4"
   }
 }
