@@ -1,6 +1,6 @@
 import { json, LoaderFunction, redirect } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
-import { createSupabaseClient } from '@supabase/auth-helpers-remix';
+import { createSupabaseClient, User } from '@supabase/auth-helpers-remix';
 import { Database } from '../../db_types';
 
 export const loader: LoaderFunction = async ({
@@ -9,6 +9,7 @@ export const loader: LoaderFunction = async ({
   request: Request;
 }) => {
   const response = new Response();
+
   const supabaseClient = createSupabaseClient<Database>(
     process.env.SUPABASE_URL,
     process.env.SUPABASE_ANON_KEY,
@@ -16,10 +17,8 @@ export const loader: LoaderFunction = async ({
   );
 
   const {
-    data: { session }
-  } = await supabaseClient.auth.getSession();
-
-  const user = session?.user;
+    data: { user }
+  } = await supabaseClient.auth.getUser();
 
   if (!user) {
     // there is no user, therefore, we are redirecting
@@ -43,7 +42,7 @@ export const loader: LoaderFunction = async ({
 export default function ProtectedPage() {
   // by fetching the user in the loader, we ensure it is available
   // for first SSR render - no flashing of incorrect state
-  const { user } = useLoaderData();
+  const { user } = useLoaderData<{ user: User }>();
 
   return (
     <div style={{ fontFamily: 'system-ui, sans-serif', lineHeight: '1.4' }}>

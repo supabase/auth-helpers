@@ -3,6 +3,10 @@ import { useLoaderData } from '@remix-run/react';
 import { createSupabaseClient, User } from '@supabase/auth-helpers-remix';
 import { Database } from '../../db_types';
 
+type LoaderData = {
+  user: User | null;
+};
+
 // this route demonstrates how to subscribe to fetch the user
 // on the server to ensure it is available for first SSR render
 export const loader: LoaderFunction = async ({
@@ -18,10 +22,8 @@ export const loader: LoaderFunction = async ({
   );
 
   const {
-    data: { session }
-  } = await supabaseClient.auth.getSession();
-
-  const user = session?.user;
+    data: { user }
+  } = await supabaseClient.auth.getUser();
 
   // in order for the set-cookie header to be set,
   // headers must be returned as part of the loader response
@@ -36,7 +38,7 @@ export const loader: LoaderFunction = async ({
 export default function ConditionalSSR() {
   // by fetching the user in the loader, we ensure it is available
   // for first SSR render - no flashing of incorrect state
-  const { user } = useLoaderData<{ user: User | undefined }>();
+  const { user } = useLoaderData<LoaderData>();
 
   return (
     <div style={{ fontFamily: 'system-ui, sans-serif', lineHeight: '1.4' }}>
