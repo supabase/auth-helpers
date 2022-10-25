@@ -17,8 +17,10 @@ export const loader: LoaderFunction = async ({
   );
 
   const {
-    data: { user }
-  } = await supabaseClient.auth.getUser();
+    data: { session }
+  } = await supabaseClient.auth.getSession();
+
+  const user = session?.user;
 
   if (!user) {
     // there is no user, therefore, we are redirecting

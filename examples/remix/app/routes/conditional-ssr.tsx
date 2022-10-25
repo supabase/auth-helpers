@@ -4,7 +4,7 @@ import { createSupabaseClient, User } from '@supabase/auth-helpers-remix';
 import { Database } from '../../db_types';
 
 type LoaderData = {
-  user: User | null;
+  user: User | undefined;
 };
 
 // this route demonstrates how to subscribe to fetch the user
@@ -22,8 +22,10 @@ export const loader: LoaderFunction = async ({
   );
 
   const {
-    data: { user }
-  } = await supabaseClient.auth.getUser();
+    data: { session }
+  } = await supabaseClient.auth.getSession();
+
+  const user = session?.user;
 
   // in order for the set-cookie header to be set,
   // headers must be returned as part of the loader response

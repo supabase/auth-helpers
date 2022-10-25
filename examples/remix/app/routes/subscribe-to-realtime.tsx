@@ -18,9 +18,9 @@ export const loader: LoaderFunction = async ({
     { request, response }
   );
 
-  let {
-    data: { user }
-  } = await supabaseClient.auth.getUser();
+  const {
+    data: { session }
+  } = await supabaseClient.auth.getSession();
 
   const { data, error } = await supabaseClient.from('test').select('*');
 
@@ -31,7 +31,7 @@ export const loader: LoaderFunction = async ({
   // in order for the set-cookie header to be set,
   // headers must be returned as part of the loader response
   return json(
-    { data, user },
+    { data, session },
     {
       headers: response.headers
     }
@@ -39,7 +39,7 @@ export const loader: LoaderFunction = async ({
 };
 
 export default function SubscribeToRealtime() {
-  const { data, user } = useLoaderData();
+  const { data, session } = useLoaderData();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -71,7 +71,7 @@ export default function SubscribeToRealtime() {
     return () => {
       supabaseClient.removeChannel(channel);
     };
-  }, [user]);
+  }, [session]);
 
   return (
     <div style={{ fontFamily: 'system-ui, sans-serif', lineHeight: '1.4' }}>
