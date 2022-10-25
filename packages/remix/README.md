@@ -84,7 +84,7 @@ import {
   ScrollRestoration,
   useLoaderData
 } from '@remix-run/react';
-import { getSupabase } from '@supabase/auth-helpers-remix';
+import { createSupabaseClient } from '@supabase/auth-helpers-remix';
 
 export const meta: MetaFunction = () => ({
   charset: 'utf-8',
@@ -127,15 +127,15 @@ export default function App() {
 }
 ```
 
-You can now call the `getSupabase` function on the server - `Loader` and `Action` functions - or on the client - `useEffect`.
+You can now call the `createSupabaseClient` function on the server - `Loader` and `Action` functions - or on the client - `useEffect`.
 
 ### Loader
 
-Loaders run on the server immediately before the component is rendered. You can create an authenticated Supabase client by calling the `getSupabase` function and passing it a `Request` and `Response`.
+Loaders run on the server immediately before the component is rendered. You can create an authenticated Supabase client by calling the `createSupabaseClient` function and passing it your `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and a `Request` and `Response`.
 
 ```jsx
 import { LoaderFunction } from '@remix-run/node'; // change this import to whatever runtime you are using
-import { getSupabase } from '@supabase/auth-helpers-remix';
+import { createSupabaseClient } from '@supabase/auth-helpers-remix';
 
 export const loader: LoaderFunction = async ({
   request
@@ -143,7 +143,11 @@ export const loader: LoaderFunction = async ({
   request: Request
 }) => {
   const response = new Response();
-  const supabaseClient = getSupabase({ request, response });
+  const supabaseClient = createSupabaseClient(
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_ANON_KEY,
+    { request, response }
+  );
   // send queries to Supabase here!
   // return results
 };
@@ -153,7 +157,7 @@ Supabase will set cookie headers to manage the user's auth session, therefore, t
 
 ```jsx
 import { LoaderFunction, json } from '@remix-run/node'; // change this import to whatever runtime you are using
-import { getSupabase } from '@supabase/auth-helpers-remix';
+import { createSupabaseClient } from '@supabase/auth-helpers-remix';
 
 export const loader: LoaderFunction = async ({
   request
@@ -161,7 +165,11 @@ export const loader: LoaderFunction = async ({
   request: Request
 }) => {
   const response = new Response();
-  const supabaseClient = getSupabase({ request, response });
+  const supabaseClient = createSupabaseClient(
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_ANON_KEY,
+    { request, response }
+  );
 
   // send queries to Supabase here!
 
@@ -178,11 +186,11 @@ export const loader: LoaderFunction = async ({
 
 ### Action
 
-Actions are functions that run server-side. You can create an authenticated Supabase client in a Remix action by calling the `getSupabase` function and passing it a `Request` and `Response`.
+Actions are functions that run server-side. You can create an authenticated Supabase client in a Remix action by calling the `createSupabaseClient` function and passing it your `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and a `Request` and `Response`.
 
 ```jsx
 import { ActionFunction } from '@remix-run/node'; // change this import to whatever runtime you are using
-import { getSupabase } from '@supabase/auth-helpers-remix';
+import { createSupabaseClient } from '@supabase/auth-helpers-remix';
 
 export const action: ActionFunction = async ({
   request
@@ -190,7 +198,11 @@ export const action: ActionFunction = async ({
   request: Request
 }) => {
   const response = new Response();
-  const supabaseClient = getSupabase({ request, response });
+  const supabaseClient = createSupabaseClient(
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_ANON_KEY,
+    { request, response }
+  );
   // send queries to Supabase here!
   // return results
 };
@@ -200,7 +212,7 @@ Supabase will set cookie headers to manage the user's auth session, therefore, t
 
 ```jsx
 import { ActionFunction, json } from '@remix-run/node'; // change this import to whatever runtime you are using
-import { getSupabase } from '@supabase/auth-helpers-remix';
+import { createSupabaseClient } from '@supabase/auth-helpers-remix';
 
 export const action: ActionFunction = async ({
   request
@@ -208,7 +220,11 @@ export const action: ActionFunction = async ({
   request: Request
 }) => {
   const response = new Response();
-  const supabaseClient = getSupabase({ request, response });
+  const supabaseClient = createSupabaseClient(
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_ANON_KEY,
+    { request, response }
+  );
 
   // send queries to Supabase here!
 
@@ -228,14 +244,17 @@ export const action: ActionFunction = async ({
 The Supabase client can be used client-side to subscribe to realtime events - data changing in the database.
 
 ```jsx
-import { getSupabase } from '@supabase/auth-helpers-remix';
+import { createSupabaseClient } from '@supabase/auth-helpers-remix';
 import { useState, useEffect } from 'react';
 
 export default function SubscribeToRealtime() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    const supabaseClient = getSupabase();
+    const supabaseClient = createSupabaseClient(
+      window.env.SUPABASE_URL,
+      window.env.SUPABASE_ANON_KEY
+    );
     const channel = supabaseClient
       .channel('test')
       .on(
@@ -256,6 +275,8 @@ export default function SubscribeToRealtime() {
 }
 ```
 
+> Note: window.env is not automatically populated by Remix. Check out the [example in this repo](../../examples/remix/app/root.tsx) or [Remix docs](https://remix.run/docs/en/v1/guides/envvars#browser-environment-variables) for more info
+
 In this example we are listening to `INSERT` events on the `test` table. Anytime new rows are added to Supabase's `test` table, our UI will automatically update new data.
 
 ### Protected page
@@ -263,9 +284,9 @@ In this example we are listening to `INSERT` events on the `test` table. Anytime
 Since loaders run immediately before rendering the page on the server, this is the perfect place to redirect a user to the login page if they are not signed in.
 
 ```jsx
-import { json, LoaderFunction, redirect } from '@remix-run/node';
+import { json, LoaderFunction, redirect } from '@remix-run/node'; // change this import to whatever runtime you are using
 import { useLoaderData } from '@remix-run/react';
-import { getSupabase } from '@supabase/auth-helpers-remix';
+import { createSupabaseClient } from '@supabase/auth-helpers-remix';
 
 export const loader: LoaderFunction = async ({
   request
@@ -273,7 +294,12 @@ export const loader: LoaderFunction = async ({
   request: Request
 }) => {
   const response = new Response();
-  const supabaseClient = getSupabase({ request, response });
+
+  const supabaseClient = createSupabaseClient(
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_ANON_KEY,
+    { request, response }
+  );
 
   const {
     data: { session }
@@ -315,13 +341,13 @@ export default function ProtectedPage() {
 
 ### Usage with TypeScript
 
-You can pass types that were [generated with the Supabase CLI](https://supabase.com/docs/reference/cli/usage#supabase-gen-types-typescript) to the `getSupabase` function to get enhanced type safety and auto completion on the `supabaseClient`:
+You can pass types that were [generated with the Supabase CLI](https://supabase.com/docs/reference/cli/usage#supabase-gen-types-typescript) to the `createSupabaseClient` function to get enhanced type safety and auto completion on the `supabaseClient`:
 
-```js
+```jsx
 // Creating a new supabase client object:
 import { Database } from '../db_types';
 import { ActionFunction, LoaderFunction, json } from '@remix-run/node'; // change this import to whatever runtime you are using
-import { getSupabase } from '@supabase/auth-helpers-remix';
+import { createSupabaseClient } from '@supabase/auth-helpers-remix';
 
 export const loader: LoaderFunction = async ({
   request
@@ -329,7 +355,12 @@ export const loader: LoaderFunction = async ({
   request: Request
 }) => {
   const response = new Response();
-  const supabaseClient = getSupabase<Database>({ request, response });
+  const supabaseClient =
+    createSupabaseClient <
+    Database >
+    (process.env.SUPABASE_URL,
+    process.env.SUPABASE_ANON_KEY,
+    { request, response });
 
   // send queries to Supabase here!
   // send response
@@ -341,16 +372,24 @@ export const action: ActionFunction = async ({
   request: Request
 }) => {
   const response = new Response();
-  const supabaseClient = getSupabase<Database>({ request, response });
+  const supabaseClient =
+    createSupabaseClient <
+    Database >
+    (process.env.SUPABASE_URL,
+    process.env.SUPABASE_ANON_KEY,
+    { request, response });
 
   // send queries to Supabase here!
   // send response
 };
 
 export default Component = () => {
-  const supabaseClient = getSupabase<Database>();
+  const supabaseClient =
+    createSupabaseClient <
+    Database >
+    (window.env.SUPABASE_URL, window.env.SUPABASE_ANON_KEY);
   // return jsx
-}
+};
 ```
 
 ### Server-side data fetching to OAuth APIs using `provider_token`
@@ -358,9 +397,9 @@ export default Component = () => {
 When using third-party auth providers, sessions are initiated with an additional `provider_token` field which is persisted as an HTTPOnly cookie upon logging in to enabled usage on the server-side. The `provider_token` can be used to make API requests to the OAuth provider's API endpoints on behalf of the logged-in user. In the following example, we fetch the user's full profile from the third-party API during SSR using their id and auth token:
 
 ```js
-import { User, getSupabase } from '@supabase/auth-helpers-remix';
+import { User, createSupabaseClient } from '@supabase/auth-helpers-remix';
 import { ActionFunction, json, redirect } from '@remix-run/node'; // change this import to whatever runtime you are using
-import { getSupabase } from '@supabase/auth-helpers-remix';
+import { createSupabaseClient } from '@supabase/auth-helpers-remix';
 
 interface Profile {
   /* ... */
@@ -372,7 +411,11 @@ export const loader: LoaderFunction = async ({
   request: Request
 }) => {
   const response = new Response();
-  const supabaseClient = getSupabase({ request, response });
+  const supabaseClient = createSupabaseClient(
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_ANON_KEY,
+    { request, response }
+  );
 
   const {
     data: { session }
