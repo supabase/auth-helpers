@@ -1,5 +1,4 @@
 ---
-'@example/remix': minor
 '@supabase/auth-helpers-remix': minor
 ---
 
