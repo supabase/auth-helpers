@@ -41,19 +41,39 @@ export const action: ActionFunction = async ({
 }: {
   request: Request;
 }) => {
-  const { _action, email, password } = Object.fromEntries(
-    await request.formData()
-  );
+  const {
+    _action,
+    registerEmail,
+    registerPassword,
+    loginEmail,
+    loginPassword
+  } = Object.fromEntries(await request.formData());
   const response = new Response();
   const supabaseClient = getSupabase<Database>({ request, response });
 
   // `_action` is a convention as `action` is a reserved keyword that may break the web
   // this can be named anything that is not a reserved keyword
   // Ryan's excellent explanation: https://www.youtube.com/watch?v=w2i-9cYxSdc
+  if (_action === 'register') {
+    let { data, error } = await supabaseClient.auth.signUp({
+      email: String(registerEmail),
+      password: String(registerPassword)
+    });
+
+    // in order for the set-cookie header to be set,
+    // headers must be returned as part of the loader response
+    return json(
+      { data, error },
+      {
+        headers: response.headers
+      }
+    );
+  }
+
   if (_action === 'login') {
     let { data, error } = await supabaseClient.auth.signInWithPassword({
-      email: String(email),
-      password: String(password)
+      email: String(loginEmail),
+      password: String(loginPassword)
     });
 
     // in order for the set-cookie header to be set,
@@ -95,20 +115,44 @@ export default function App() {
       <body>
         <Form method="post">
           <div>
-            <label htmlFor="email">Email:</label>
+            <label htmlFor="registerEmail">Email:</label>
             <input
               type="text"
-              id="email"
-              name="email"
+              id="registerEmail"
+              name="registerEmail"
               defaultValue="jon@supabase.com"
             />
           </div>
           <div>
-            <label htmlFor="password">Password:</label>
+            <label htmlFor="registerPassword">Password:</label>
             <input
               type="password"
-              id="password"
-              name="password"
+              id="registerPassword"
+              name="registerPassword"
+              defaultValue="very-secur3-password"
+            />
+          </div>
+          <button type="submit" name="_action" value="register">
+            Register
+          </button>
+        </Form>
+        <hr />
+        <Form method="post">
+          <div>
+            <label htmlFor="loginEmail">Email:</label>
+            <input
+              type="text"
+              id="loginEmail"
+              name="loginEmail"
+              defaultValue="jon@supabase.com"
+            />
+          </div>
+          <div>
+            <label htmlFor="loginPassword">Password:</label>
+            <input
+              type="password"
+              id="loginPassword"
+              name="loginPassword"
               defaultValue="very-secur3-password"
             />
           </div>
@@ -116,11 +160,13 @@ export default function App() {
             Login
           </button>
         </Form>
+        <hr />
         <Form method="post">
           <button type="submit" name="_action" value="logout">
             Logout
           </button>
         </Form>
+        <hr />
         <Outlet />
         <ScrollRestoration />
         <script
