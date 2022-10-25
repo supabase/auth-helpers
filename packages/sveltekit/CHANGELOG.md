@@ -1,5 +1,15 @@
 # @supabase/auth-helpers-sveltekit
 
+## 0.8.3
+
+### Patch Changes
+
+- 2fda843: Switch to refreshSession
+- 2fda843: update supabase-js
+- Updated dependencies [2fda843]
+- Updated dependencies [2fda843]
+  - @supabase/auth-helpers-shared@0.2.1
+
 ## 0.8.2
 
 ### Patch Changes

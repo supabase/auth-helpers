@@ -1,5 +1,12 @@
 # shared
 
+## 0.2.1
+
+### Patch Changes
+
+- 2fda843: add missing supabase-js peerDependency
+- 2fda843: update supabase-js
+
 ## 0.2.0
 
 ### Minor Changes
