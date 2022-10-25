@@ -1,5 +1,13 @@
 # @supabase/auth-helpers-react
 
+## 0.3.1
+
+### Patch Changes
+
+- 2fda843: add missing supabase-js peerDependency
+- 2fda843: remove auth-helpers-shared dependency in react package
+- 2fda843: update supabase-js
+
 ## 0.3.0
 
 ### Minor Changes
