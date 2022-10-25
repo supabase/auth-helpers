@@ -1,6 +1,6 @@
 import { json, LoaderFunction } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
-import { getSupabase, User } from '@supabase/auth-helpers-remix';
+import { createSupabaseClient, User } from '@supabase/auth-helpers-remix';
 import { Database } from '../../db_types';
 
 // this route demonstrates how to subscribe to fetch the user
@@ -11,7 +11,7 @@ export const loader: LoaderFunction = async ({
   request: Request;
 }) => {
   const response = new Response();
-  const supabaseClient = getSupabase<Database>({ request, response });
+  const supabaseClient = createSupabaseClient<Database>({ request, response });
 
   const {
     data: { session }

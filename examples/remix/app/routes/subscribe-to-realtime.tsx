@@ -1,6 +1,6 @@
 import { json, LoaderFunction } from '@remix-run/node';
 import { useLoaderData, useNavigate } from '@remix-run/react';
-import { getSupabase } from '@supabase/auth-helpers-remix';
+import { createSupabaseClient } from '@supabase/auth-helpers-remix';
 import { useEffect } from 'react';
 import { Database } from '../../db_types';
 
@@ -12,7 +12,7 @@ export const loader: LoaderFunction = async ({
   request: Request;
 }) => {
   const response = new Response();
-  const supabaseClient = getSupabase<Database>({ request, response });
+  const supabaseClient = createSupabaseClient<Database>({ request, response });
 
   let {
     data: { session }
@@ -39,7 +39,7 @@ export default function SubscribeToRealtime() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const supabaseClient = getSupabase<Database>();
+    const supabaseClient = createSupabaseClient<Database>();
     // make sure you have enabled `Replication` for your table to receive realtime events
     // https://supabase.com/docs/guides/database/replication
     const channel = supabaseClient

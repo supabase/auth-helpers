@@ -57,7 +57,7 @@ declare global {
   }
 }
 
-export function getBrowserClient<
+function createBrowserClient<
   Database = any,
   SchemaName extends string & keyof Database = 'public' extends keyof Database
     ? 'public'
@@ -91,7 +91,7 @@ export function getBrowserClient<
   });
 }
 
-export function getServerClient<
+function createServerClient<
   Database = any,
   SchemaName extends string & keyof Database = 'public' extends keyof Database
     ? 'public'
@@ -139,7 +139,7 @@ export function getServerClient<
   });
 }
 
-export default function getSupabase<
+export default function createSupabaseClient<
   Database = any,
   SchemaName extends string & keyof Database = 'public' extends keyof Database
     ? 'public'
@@ -154,7 +154,7 @@ export default function getSupabase<
   cookieOptions?: CookieOptions;
 } = {}): SupabaseClient<Database, SchemaName> {
   if (!request && !response) {
-    return getBrowserClient<Database, SchemaName>({ cookieOptions });
+    return createBrowserClient<Database, SchemaName>({ cookieOptions });
   }
 
   if (!request || !response) {
@@ -163,7 +163,7 @@ export default function getSupabase<
     );
   }
 
-  return getServerClient<Database, SchemaName>({
+  return createServerClient<Database, SchemaName>({
     request,
     response,
     cookieOptions

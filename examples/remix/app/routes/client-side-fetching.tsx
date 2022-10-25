@@ -1,4 +1,4 @@
-import { getSupabase } from '@supabase/auth-helpers-remix';
+import { createSupabaseClient } from '@supabase/auth-helpers-remix';
 import { useEffect, useState } from 'react';
 import { Database } from '../../db_types';
 
@@ -8,7 +8,7 @@ export default function ClientSideFetching() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const supabaseClient = getSupabase<Database>();
+    const supabaseClient = createSupabaseClient<Database>();
 
     const getData = async () => {
       const { data: supabaseData } = await supabaseClient
