@@ -13,8 +13,8 @@
 		"clean:all": "rimraf .svelte-kit node_modules"
 	},
 	"devDependencies": {
-		"@sveltejs/adapter-auto": "next",
-		"@sveltejs/kit": "1.0.0-next.504",
+		"@sveltejs/adapter-auto": "1.0.0-next.84",
+		"@sveltejs/kit": "1.0.0-next.522",
 		"@typescript-eslint/eslint-plugin": "^5.10.1",
 		"@typescript-eslint/parser": "^5.10.1",
 		"eslint": "^7.32.0",
@@ -34,6 +34,6 @@
 	"type": "module",
 	"dependencies": {
 		"@supabase/auth-helpers-sveltekit": "workspace:*",
-		"@supabase/supabase-js": "2.0.0"
+		"@supabase/supabase-js": "2.0.4"
 	}
 }
