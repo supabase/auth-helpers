@@ -7,10 +7,7 @@ A collection of framework specific Auth utilities for working with Supabase.
 - [Next.js](https://nextjs.org) [[Documentation](./packages/nextjs/README.md)]
 - [Nuxt - via @nuxtjs/supabase](https://supabase.nuxtjs.org/)
 - [SvelteKit](https://kit.svelte.dev) [[Documentation](./packages/sveltekit/README.md)]
-
-### Coming soon
-
-- [Remix](https://github.com/supabase/auth-helpers/issues/57)
+- [Remix](https://remix.run/) [[Documentation](./packages/remix/README.md)]
 
 ### Examples and Packages
 
@@ -19,10 +16,12 @@ A collection of framework specific Auth utilities for working with Supabase.
   - `@examples/sveltekit`: a [SvelteKit](https://kit.svelte.dev) app
   - `@examples/sveltekit-email-password`: a [SvelteKit](https://kit.svelte.dev) app with SSR sign in
   - `@examples/sveltekit-magic-link`: a [SvelteKit](https://kit.svelte.dev) app with magic links
+  - `@examples/remix`: a [Remix](https://remix.run/) app
 - Packages
   - `@supabase/auth-helpers-nextjs`: the supabase auth helper nextjs library used by `nextjs` application
   - `@supabase/auth-helpers-react`: the supabase auth helper reactjs library used by `react` application
   - `@supabase/auth-helpers-sveltekit`: the supabase auth helper sveltekit library used by `sveltekit` application
+  - `@supabase/auth-helpers-remix`: the supabase auth helper remix library used by `remix` application
   - `shared`: shared typescript types used by `@supabase/auth-helpers-nextjs` library
   - `config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
   - `tsconfig`: `tsconfig.json`s used throughout the monorepo
