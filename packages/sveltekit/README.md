@@ -106,10 +106,10 @@ In addition you can create a layout load function if you are using `invalidate('
 
 ```ts
 // src/routes/+layout.ts
-import type { LayoutLoad } from './$types';
+import type { LayoutLoad, LayoutLoadEvent } from './$types';
 import { getSupabase } from '@supabase/auth-helpers-sveltekit';
 
-export const load: LayoutLoad = async (event) => {
+export const load: LayoutLoad = async (event: LayoutLoadEvent) => {
   const { session } = await getSupabase(event);
   return { session };
 };
