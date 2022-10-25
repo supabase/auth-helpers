@@ -232,7 +232,6 @@ importers:
 
   packages/react:
     specifiers:
-      '@supabase/auth-helpers-shared': workspace:*
       '@supabase/supabase-js': 2.0.4
       '@types/react': ^17.0.20
       '@types/react-dom': ^17.0.9
@@ -243,8 +242,6 @@ importers:
       tsconfig: workspace:*
       tsup: ^5.12.5
       typescript: ^4.5.3
-    dependencies:
-      '@supabase/auth-helpers-shared': link:../shared
     devDependencies:
       '@supabase/supabase-js': 2.0.4
       '@types/react': 17.0.45
