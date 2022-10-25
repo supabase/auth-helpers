@@ -13,11 +13,17 @@ import { SupabaseClient } from '../';
  * ### Server
  *
  * ```ts
- * import { getSupabase } from '@supabase/auth-helpers-remix';
+ * import { createSupabaseClient } from '@supabase/auth-helpers-remix';
  *
  * export const loader = async ({ request }: { request: Request }) => {
  *   const response = new Response();
- *   const supabaseClient = getSupabase({ request, response });
+ *
+ *   const supabaseClient = createSupabaseClient(
+ *     process.env.SUPABASE_URL,
+ *     process.env.SUPABASE_ANON_KEY,
+ *     { request, response }
+ *   );
+ *
  *   const { data } = await supabaseClient.from('test').select('*');
  *
  *   return json(
@@ -27,13 +33,18 @@ import { SupabaseClient } from '../';
  * };
  * ```
  *
+ * > Note: process.env is used by Node for managing environment variables, but might not be the case in your runtime
+ *
  * ### Client
  *
  * ```ts
- * import { getSupabase } from '@supabase/auth-helpers-remix';
+ * import { createSupabaseClient } from '@supabase/auth-helpers-remix';
  *
  * useEffect(() => {
- *   const supabaseClient = getSupabase();
+ *   const supabaseClient = createSupabaseClient(
+ *     window.env.SUPABASE_URL,
+ *     window.env.SUPABASE_ANON_KEY
+ *   );
  *
  *   const getData = async () => {
  *     const { data: supabaseData } = await supabaseClient
@@ -46,74 +57,53 @@ import { SupabaseClient } from '../';
  *   getData();
  * }, []);
  * ```
+ *
+ * Note: window.env is not automatically populated by Remix
+ * Check out the [example app](../../../../examples/remix/app/root.tsx) or
+ * [Remix docs](https://remix.run/docs/en/v1/guides/envvars#browser-environment-variables) for more info
  */
 
-declare global {
-  interface Window {
-    env: {
-      SUPABASE_URL: string;
-      SUPABASE_ANON_KEY: string;
-    };
-  }
-}
-
-function createBrowserClient<
+export default function createSupabaseClient<
   Database = any,
   SchemaName extends string & keyof Database = 'public' extends keyof Database
     ? 'public'
     : string & keyof Database
->({ cookieOptions }: { cookieOptions: CookieOptions }) {
-  const isSSR = typeof document === 'undefined';
+>(
+  supabaseUrl?: string,
+  supabaseKey?: string,
+  {
+    request,
+    response,
+    cookieOptions = {}
+  }: {
+    request?: Request;
+    response?: Response;
+    cookieOptions?: CookieOptions;
+  } = {}
+): SupabaseClient<Database, SchemaName> {
+  if (!supabaseUrl || !supabaseKey) {
+    throw new Error(
+      'supabaseUrl and supabaseKey are required to create a Supabase client! Find these under `Settings` > `API` in your Supabase dashboard.'
+    );
+  }
 
-  if (isSSR) {
-    if (!process.env.SUPABASE_URL || !process.env.SUPABASE_ANON_KEY) {
-      throw new Error(
-        'SUPABASE_URL and SUPABASE_ANON_KEY env variables are required!'
-      );
-    }
+  if (!request && !response) {
     return createBrowserSupabaseClient<Database, SchemaName>({
-      supabaseUrl: process.env.SUPABASE_URL,
-      supabaseKey: process.env.SUPABASE_ANON_KEY,
+      supabaseUrl,
+      supabaseKey,
       cookieOptions
     });
   }
 
-  if (!window.env.SUPABASE_URL || !window.env.SUPABASE_ANON_KEY) {
+  if (!request || !response) {
     throw new Error(
-      'SUPABASE_URL and SUPABASE_ANON_KEY env variables are required on the window!'
-    );
-  }
-
-  return createBrowserSupabaseClient<Database, SchemaName>({
-    supabaseUrl: window.env.SUPABASE_URL,
-    supabaseKey: window.env.SUPABASE_ANON_KEY,
-    cookieOptions
-  });
-}
-
-function createServerClient<
-  Database = any,
-  SchemaName extends string & keyof Database = 'public' extends keyof Database
-    ? 'public'
-    : string & keyof Database
->({
-  request,
-  response,
-  cookieOptions
-}: {
-  request: Request;
-  response: Response;
-  cookieOptions: CookieOptions;
-}) {
-  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_ANON_KEY) {
-    throw new Error(
-      'SUPABASE_URL and SUPABASE_ANON_KEY env variables are required!'
+      'request and response must be passed to createSupabaseClient function, when called from loader or action'
     );
   }
 
   return createServerSupabaseClient<Database, SchemaName>({
-    supabaseUrl: process.env.SUPABASE_URL,
-    supabaseKey: process.env.SUPABASE_ANON_KEY,
+    supabaseUrl,
+    supabaseKey,
     getRequestHeader: (key) => {
       return request.headers.get(key) ?? undefined;
     },
@@ -135,37 +125,6 @@ function createServerClient<
         }
       }
     },
-    cookieOptions
-  });
-}
-
-export default function createSupabaseClient<
-  Database = any,
-  SchemaName extends string & keyof Database = 'public' extends keyof Database
-    ? 'public'
-    : string & keyof Database
->({
-  request,
-  response,
-  cookieOptions = {}
-}: {
-  request?: Request;
-  response?: Response;
-  cookieOptions?: CookieOptions;
-} = {}): SupabaseClient<Database, SchemaName> {
-  if (!request && !response) {
-    return createBrowserClient<Database, SchemaName>({ cookieOptions });
-  }
-
-  if (!request || !response) {
-    throw new Error(
-      'request and response must be passed to getSupabase function'
-    );
-  }
-
-  return createServerClient<Database, SchemaName>({
-    request,
-    response,
     cookieOptions
   });
 }

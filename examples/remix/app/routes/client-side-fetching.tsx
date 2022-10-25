@@ -8,7 +8,10 @@ export default function ClientSideFetching() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const supabaseClient = createSupabaseClient<Database>();
+    const supabaseClient = createSupabaseClient<Database>(
+      window.env.SUPABASE_URL,
+      window.env.SUPABASE_ANON_KEY
+    );
 
     const getData = async () => {
       const { data: supabaseData } = await supabaseClient

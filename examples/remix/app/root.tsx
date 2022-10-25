@@ -23,6 +23,15 @@ export const meta: MetaFunction = () => ({
   viewport: 'width=device-width,initial-scale=1'
 });
 
+declare global {
+  interface Window {
+    env: {
+      SUPABASE_URL: string;
+      SUPABASE_ANON_KEY: string;
+    };
+  }
+}
+
 export const loader: LoaderFunction = () => {
   // environment variables may be stored somewhere other than
   // `process.env` in runtimes other than node
@@ -49,7 +58,11 @@ export const action: ActionFunction = async ({
     loginPassword
   } = Object.fromEntries(await request.formData());
   const response = new Response();
-  const supabaseClient = createSupabaseClient<Database>({ request, response });
+  const supabaseClient = createSupabaseClient<Database>(
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_ANON_KEY,
+    { request, response }
+  );
 
   // `_action` is a convention as `action` is a reserved keyword that may break the web
   // this can be named anything that is not a reserved keyword

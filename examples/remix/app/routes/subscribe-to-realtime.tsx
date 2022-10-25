@@ -12,7 +12,11 @@ export const loader: LoaderFunction = async ({
   request: Request;
 }) => {
   const response = new Response();
-  const supabaseClient = createSupabaseClient<Database>({ request, response });
+  const supabaseClient = createSupabaseClient<Database>(
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_ANON_KEY,
+    { request, response }
+  );
 
   let {
     data: { session }
@@ -39,7 +43,13 @@ export default function SubscribeToRealtime() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const supabaseClient = createSupabaseClient<Database>();
+    // Note: window.env is not automatically populated by Remix
+    // Check out the [example in this repo](../root.tsx) or
+    // [Remix docs](https://remix.run/docs/en/v1/guides/envvars#browser-environment-variables) for more info
+    const supabaseClient = createSupabaseClient<Database>(
+      window.env.SUPABASE_URL,
+      window.env.SUPABASE_ANON_KEY
+    );
     // make sure you have enabled `Replication` for your table to receive realtime events
     // https://supabase.com/docs/guides/database/replication
     const channel = supabaseClient

@@ -11,7 +11,11 @@ export const loader: LoaderFunction = async ({
   request: Request;
 }) => {
   const response = new Response();
-  const supabaseClient = createSupabaseClient<Database>({ request, response });
+  const supabaseClient = createSupabaseClient<Database>(
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_ANON_KEY,
+    { request, response }
+  );
 
   const {
     data: { session }
