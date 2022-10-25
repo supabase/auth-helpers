@@ -317,7 +317,7 @@ export default function ProtectedPage() {
 
 ### Usage with TypeScript
 
-You can pass types that were [generated with the Supabase CLI](https://supabase.com/docs/reference/javascript/next/typescript-support#generating-types) to the `getSupabase` function to get enhanced type safety and auto completion on the `supabaseClient`:
+You can pass types that were [generated with the Supabase CLI](https://supabase.com/docs/reference/cli/usage#supabase-gen-types-typescript) to the `getSupabase` function to get enhanced type safety and auto completion on the `supabaseClient`:
 
 ```js
 // Creating a new supabase client object:
@@ -423,6 +423,6 @@ export default function ProtectedPage({
   profile: Profile
 }) {
   const { user, data } = useLoaderData();
-  return <div>Protected content</div>;
+  return <pre>{JSON.stringify({ user, data }, null, 2)}</pre>;
 }
 ```

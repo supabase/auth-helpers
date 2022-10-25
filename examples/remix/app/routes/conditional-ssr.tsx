@@ -1,6 +1,7 @@
 import { json, LoaderFunction } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
-import { getSupabase } from '@supabase/auth-helpers-remix';
+import { getSupabase, User } from '@supabase/auth-helpers-remix';
+import { Database } from '../../db_types';
 
 // this route demonstrates how to subscribe to fetch the user
 // on the server to ensure it is available for first SSR render
@@ -10,7 +11,7 @@ export const loader: LoaderFunction = async ({
   request: Request;
 }) => {
   const response = new Response();
-  const supabaseClient = getSupabase({ request, response });
+  const supabaseClient = getSupabase<Database>({ request, response });
 
   const {
     data: { session }
@@ -31,7 +32,7 @@ export const loader: LoaderFunction = async ({
 export default function ConditionalSSR() {
   // by fetching the user in the loader, we ensure it is available
   // for first SSR render - no flashing of incorrect state
-  const { user } = useLoaderData();
+  const { user } = useLoaderData<{ user: User | undefined }>();
 
   return (
     <div style={{ fontFamily: 'system-ui, sans-serif', lineHeight: '1.4' }}>

@@ -15,6 +15,7 @@ import {
   useLoaderData
 } from '@remix-run/react';
 import { getSupabase } from '@supabase/auth-helpers-remix';
+import { Database } from '../db_types';
 
 export const meta: MetaFunction = () => ({
   charset: 'utf-8',
@@ -44,7 +45,7 @@ export const action: ActionFunction = async ({
     await request.formData()
   );
   const response = new Response();
-  const supabaseClient = getSupabase({ request, response });
+  const supabaseClient = getSupabase<Database>({ request, response });
 
   // `_action` is a convention as `action` is a reserved keyword that may break the web
   // this can be named anything that is not a reserved keyword

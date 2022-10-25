@@ -1,5 +1,5 @@
 // Types
-export type { SupabaseClient } from '@supabase/supabase-js';
+export type { SupabaseClient, User } from '@supabase/supabase-js';
 
 // Methods
 export { default as getSupabase } from './utils/getSupabase';

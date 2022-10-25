@@ -1,5 +1,6 @@
 import { getSupabase } from '@supabase/auth-helpers-remix';
 import { useEffect, useState } from 'react';
+import { Database } from '../../db_types';
 
 // this route demonstrates how to query Supabase client-side
 export default function ClientSideFetching() {
@@ -7,7 +8,7 @@ export default function ClientSideFetching() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const supabaseClient = getSupabase();
+    const supabaseClient = getSupabase<Database>();
 
     const getData = async () => {
       const { data: supabaseData } = await supabaseClient

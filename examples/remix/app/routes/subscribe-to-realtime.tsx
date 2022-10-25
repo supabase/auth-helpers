@@ -2,6 +2,7 @@ import { json, LoaderFunction } from '@remix-run/node';
 import { useLoaderData, useNavigate } from '@remix-run/react';
 import { getSupabase } from '@supabase/auth-helpers-remix';
 import { useEffect } from 'react';
+import { Database } from '../../db_types';
 
 // this route demonstrates how to subscribe to realtime updates
 // and synchronize data between server and client
@@ -11,7 +12,7 @@ export const loader: LoaderFunction = async ({
   request: Request;
 }) => {
   const response = new Response();
-  const supabaseClient = getSupabase({ request, response });
+  const supabaseClient = getSupabase<Database>({ request, response });
 
   let {
     data: { session }
@@ -38,7 +39,7 @@ export default function SubscribeToRealtime() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const supabaseClient = getSupabase();
+    const supabaseClient = getSupabase<Database>();
     const channel = supabaseClient
       .channel('test')
       .on(
