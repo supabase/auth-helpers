@@ -258,12 +258,12 @@ Wrap an Action to check that the user has a valid session. If they're not logged
 
 ```ts
 // src/routes/posts/+page.server.ts
-import type { Actions } from './$types';
+import type { Actions, RequestEvent } from './$types';
 import { getSupabase } from '@supabase/auth-helpers-sveltekit';
 import { error, invalid } from '@sveltejs/kit';
 
 export const actions: Actions = {
-  createPost: async (event) => {
+  createPost: async (event: RequestEvent) => {
     const { request } = event;
     const { session, supabaseClient } = await getSupabase(event);
     if (!session) {
@@ -295,12 +295,12 @@ If you try to submit a form with the action `?/createPost` without a valid sessi
 ## Saving and deleting the session
 
 ```ts
-import type { Actions } from './$types';
+import type { Actions, RequestEvent } from './$types';
 import { invalid, redirect } from '@sveltejs/kit';
 import { getSupabase } from '@supabase/auth-helpers-sveltekit';
 
 export const actions: Actions = {
-  signin: async (event) => {
+  signin: async (event: RequestEvent) => {
     const { request, cookies, url } = event;
     const { session, supabaseClient } = await getSupabase(event);
     const formData = await request.formData();
@@ -330,7 +330,7 @@ export const actions: Actions = {
     throw redirect(303, '/dashboard');
   },
 
-  signout: async (event) => {
+  signout: async (event: RequestEvent) => {
     const { supabaseClient } = await getSupabase(event);
     await supabaseClient.auth.signOut();
     throw redirect(303, '/');
