@@ -40,6 +40,8 @@ export default function SubscribeToRealtime() {
 
   useEffect(() => {
     const supabaseClient = getSupabase<Database>();
+    // make sure you have enabled `Replication` for your table to receive realtime events
+    // https://supabase.com/docs/guides/database/replication
     const channel = supabaseClient
       .channel('test')
       .on(
