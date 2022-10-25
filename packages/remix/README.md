@@ -18,8 +18,6 @@ yarn add @supabase/auth-helpers-remix
 
 This library supports the following tooling versions:
 
-- Node.js: `^10.13.0 || >=12.0.0`
-
 - Remix: `>=1.7.2`
 
 ## Getting Started
