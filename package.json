@@ -11,6 +11,7 @@
     "build:sveltekit:watch": "turbo run build:watch --filter=@supabase/auth-helpers-sveltekit",
     "build:nextjs": "turbo run build --filter=@supabase/auth-helpers-nextjs",
     "build:react": "turbo run build --filter=@supabase/auth-helpers-react",
+    "build:remix": "turbo run build --filter=@supabase/auth-helpers-remix",
     "build:shared": "turbo run build --filter=@supabase/auth-helpers-shared",
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
