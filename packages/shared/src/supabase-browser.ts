@@ -1,6 +1,7 @@
 import { createClient, Session } from '@supabase/supabase-js';
 import { parse, serialize } from 'cookie';
 import { CookieOptions, SupabaseClientOptions } from './types';
+import { parseSupabaseCookie, stringifySupabaseSession } from './utils/cookies';
 import { isBrowser } from './utils/helpers';
 
 export function createBrowserSupabaseClient<
@@ -37,18 +38,18 @@ export function createBrowserSupabaseClient<
           }
 
           const cookies = parse(document.cookie);
-          return cookies[key] || null;
+          const session = parseSupabaseCookie(cookies[key]);
+
+          return session ? JSON.stringify(session) : null;
         },
         setItem(key: string, _value: string) {
           if (!isBrowser()) {
             return;
           }
 
-          // remove identities from the user as it sometimes can make the cookie too large
-          // TODO: note this in docs
           let session: Session = JSON.parse(_value);
-          delete session.user.identities;
-          const value = JSON.stringify(session);
+          const value = stringifySupabaseSession(session);
+          console.log('set', key, value);
 
           document.cookie = serialize(key, value, {
             domain,

@@ -1,7 +1,11 @@
 import { createClient, Session } from '@supabase/supabase-js';
 import type { CookieSerializeOptions } from 'cookie';
 import { CookieOptions, SupabaseClientOptions } from './types';
-import { isSecureEnvironment } from './utils/cookies';
+import {
+  isSecureEnvironment,
+  parseSupabaseCookie,
+  stringifySupabaseSession
+} from './utils/cookies';
 
 export function createServerSupabaseClient<
   Database = any,
@@ -36,7 +40,7 @@ export function createServerSupabaseClient<
   options?: SupabaseClientOptions<SchemaName>;
   cookieOptions?: CookieOptions;
 }) {
-  let currentSessionStr: string | null = getCookie(name) ?? null;
+  let currentSession = parseSupabaseCookie(getCookie(name)) ?? null;
 
   return createClient<Database, SchemaName>(supabaseUrl, supabaseKey, {
     ...options,
@@ -46,20 +50,14 @@ export function createServerSupabaseClient<
       storageKey: name,
       storage: {
         getItem(key: string) {
-          return currentSessionStr;
+          return JSON.stringify(currentSession);
         },
         setItem(key: string, _value: string) {
           // remove identities from the user as it sometimes can make the cookie too large
           let session: Session = JSON.parse(_value);
-          delete session.user.identities;
-          const value = JSON.stringify(session);
+          const value = stringifySupabaseSession(session);
 
-          // don't set the session if it's already set
-          if (currentSessionStr === value) {
-            return;
-          }
-
-          currentSessionStr = value;
+          currentSession = session;
 
           setCookie(key, value, {
             domain,
@@ -73,7 +71,7 @@ export function createServerSupabaseClient<
         },
         removeItem(key: string) {
           // don't remove the session if there isn't one
-          if (!currentSessionStr) {
+          if (!currentSession) {
             return;
           }
 

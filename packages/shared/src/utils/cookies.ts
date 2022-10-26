@@ -1,3 +1,4 @@
+import { Session } from '@supabase/supabase-js';
 import { parse, serialize } from 'cookie';
 
 export { parse as parseCookies, serialize as serializeCookie };
@@ -42,4 +43,56 @@ export function isSecureEnvironment(headerHost?: string | string[]) {
   }
 
   return true;
+}
+
+export function parseSupabaseCookie(
+  str: string | null | undefined
+): Partial<Session> | null {
+  if (!str) {
+    return null;
+  }
+
+  try {
+    const session = JSON.parse(str);
+    if (!session) {
+      return null;
+    }
+
+    const [_header, payloadStr, _signature] = session[0].split('.');
+    const payload = base64urlToString(payloadStr);
+
+    const { exp, sub, ...user } = JSON.parse(payload);
+
+    return {
+      expires_at: exp,
+      expires_in: exp - Date.now() / 1000,
+      token_type: 'bearer',
+      access_token: session[0],
+      refresh_token: session[1],
+      provider_token: session[2],
+      provider_refresh_token: session[3],
+      user: {
+        id: sub,
+        ...user
+      }
+    };
+  } catch (err) {
+    return null;
+  }
+}
+
+export function stringifySupabaseSession(session: Session): string {
+  return JSON.stringify([
+    session.access_token,
+    session.refresh_token,
+    session.provider_token,
+    session.provider_refresh_token
+  ]);
+}
+
+function base64urlToString(base64url: string) {
+  if (typeof Buffer !== 'undefined') {
+    return Buffer.from(base64url, 'base64url').toString('utf-8');
+  }
+  return atob(base64url);
 }
