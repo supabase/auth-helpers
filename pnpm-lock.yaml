@@ -291,7 +291,7 @@ importers:
       '@remix-run/react': ^1.7.3
       '@remix-run/serve': ^1.7.3
       '@supabase/auth-helpers-shared': workspace:*
-      '@supabase/supabase-js': 2.0.0
+      '@supabase/supabase-js': 2.0.4
       config: workspace:*
       next: ^12.2.5
       react: ^18.0.0
@@ -306,7 +306,7 @@ importers:
       '@remix-run/node': 1.7.3_biqbaboplfbrettd7655fr4n2y
       '@remix-run/react': 1.7.3_biqbaboplfbrettd7655fr4n2y
       '@remix-run/serve': 1.7.3_biqbaboplfbrettd7655fr4n2y
-      '@supabase/supabase-js': 2.0.0
+      '@supabase/supabase-js': 2.0.4
       config: link:../config
       next: 12.3.1_biqbaboplfbrettd7655fr4n2y
       react: 18.2.0
@@ -2613,20 +2613,6 @@ packages:
       cross-fetch: 3.1.5
     transitivePeerDependencies:
       - encoding
-
-  /@supabase/supabase-js/2.0.0:
-    resolution: {integrity: sha512-8nNMXYzBlQVSDONFaNgyyxsAdUY+C9Q/7vEDYDdTFTyC3i+luXTDOSjHMLcjIky/+x5rIAcNQqqIJ48HJUluXA==}
-    dependencies:
-      '@supabase/functions-js': 2.0.0
-      '@supabase/gotrue-js': 2.2.1
-      '@supabase/postgrest-js': 1.1.0
-      '@supabase/realtime-js': 2.1.0
-      '@supabase/storage-js': 2.0.0
-      cross-fetch: 3.1.5
-    transitivePeerDependencies:
-      - encoding
-      - supports-color
-    dev: true
 
   /@supabase/supabase-js/2.0.4:
     resolution: {integrity: sha512-Z5uLyJm9bz5LMFnt5d1I6ccxVTdvKbJa0RsYGgKlA+QiyGvBxRRvVh8pqlYP1571DlycGG7bWngNwdv7/pehrg==}

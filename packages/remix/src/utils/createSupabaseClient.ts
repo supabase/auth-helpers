@@ -6,7 +6,7 @@ import {
   createBrowserSupabaseClient
 } from '@supabase/auth-helpers-shared';
 import { PKG_NAME, PKG_VERSION } from '../constants';
-import { SupabaseClient } from '../';
+import { SupabaseClient } from '@supabase/supabase-js';
 
 /**
  * ## Authenticated Supabase client
