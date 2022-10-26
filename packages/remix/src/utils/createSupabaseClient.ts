@@ -9,16 +9,16 @@ import { PKG_NAME, PKG_VERSION } from '../constants';
 import { SupabaseClient } from '../';
 
 /**
- * ## Isomorphic Authenticated Supabase Queries
- * ### Server
+ * ## Authenticated Supabase client
+ * ### Loader
  *
  * ```ts
- * import { createSupabaseClient } from '@supabase/auth-helpers-remix';
+ * import { createServerClient } from '@supabase/auth-helpers-remix';
  *
  * export const loader = async ({ request }: { request: Request }) => {
  *   const response = new Response();
  *
- *   const supabaseClient = createSupabaseClient(
+ *   const supabaseClient = createServerClient(
  *     process.env.SUPABASE_URL,
  *     process.env.SUPABASE_ANON_KEY,
  *     { request, response }
@@ -33,15 +33,36 @@ import { SupabaseClient } from '../';
  * };
  * ```
  *
- * > Note: process.env is used by Node for managing environment variables, but might not be the case in your runtime
- *
- * ### Client
+ * ### Action
  *
  * ```ts
- * import { createSupabaseClient } from '@supabase/auth-helpers-remix';
+ * import { createServerClient } from '@supabase/auth-helpers-remix';
+ *
+ * export const action = async ({ request }: { request: Request }) => {
+ *   const response = new Response();
+ *
+ *   const supabaseClient = createServerClient(
+ *     process.env.SUPABASE_URL,
+ *     process.env.SUPABASE_ANON_KEY,
+ *     { request, response }
+ *   );
+ *
+ *   const { data } = await supabaseClient.from('test').select('*');
+ *
+ *   return json(
+ *    { data },
+ *    { headers: response.headers }
+ *   );
+ * };
+ * ```
+ *
+ * ### Component
+ *
+ * ```ts
+ * import { createBrowserClient } from '@supabase/auth-helpers-remix';
  *
  * useEffect(() => {
- *   const supabaseClient = createSupabaseClient(
+ *   const supabaseClient = createBrowserClient(
  *     window.env.SUPABASE_URL,
  *     window.env.SUPABASE_ANON_KEY
  *   );
@@ -63,21 +84,17 @@ import { SupabaseClient } from '../';
  * [Remix docs](https://remix.run/docs/en/v1/guides/envvars#browser-environment-variables) for more info
  */
 
-export default function createSupabaseClient<
+export function createBrowserClient<
   Database = any,
   SchemaName extends string & keyof Database = 'public' extends keyof Database
     ? 'public'
     : string & keyof Database
 >(
-  supabaseUrl?: string,
-  supabaseKey?: string,
+  supabaseUrl: string,
+  supabaseKey: string,
   {
-    request,
-    response,
-    cookieOptions = {}
+    cookieOptions
   }: {
-    request?: Request;
-    response?: Response;
     cookieOptions?: CookieOptions;
   } = {}
 ): SupabaseClient<Database, SchemaName> {
@@ -87,12 +104,35 @@ export default function createSupabaseClient<
     );
   }
 
-  if (!request && !response) {
-    return createBrowserSupabaseClient<Database, SchemaName>({
-      supabaseUrl,
-      supabaseKey,
-      cookieOptions
-    });
+  return createBrowserSupabaseClient<Database, SchemaName>({
+    supabaseUrl,
+    supabaseKey,
+    cookieOptions
+  });
+}
+
+export function createServerClient<
+  Database = any,
+  SchemaName extends string & keyof Database = 'public' extends keyof Database
+    ? 'public'
+    : string & keyof Database
+>(
+  supabaseUrl: string,
+  supabaseKey: string,
+  {
+    request,
+    response,
+    cookieOptions
+  }: {
+    request: Request;
+    response: Response;
+    cookieOptions?: CookieOptions;
+  }
+): SupabaseClient<Database, SchemaName> {
+  if (!supabaseUrl || !supabaseKey) {
+    throw new Error(
+      'supabaseUrl and supabaseKey are required to create a Supabase client! Find these under `Settings` > `API` in your Supabase dashboard.'
+    );
   }
 
   if (!request || !response) {

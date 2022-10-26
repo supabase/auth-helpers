@@ -1,6 +1,6 @@
 import { json, LoaderFunction } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
-import { createSupabaseClient } from '@supabase/auth-helpers-remix';
+import { createServerClient } from '@supabase/auth-helpers-remix';
 import { Database } from '../../db_types';
 
 // this route demonstrates a simple server-side authenticated supabase query
@@ -10,9 +10,9 @@ export const loader: LoaderFunction = async ({
   request: Request;
 }) => {
   const response = new Response();
-  const supabaseClient = createSupabaseClient<Database>(
-    process.env.SUPABASE_URL,
-    process.env.SUPABASE_ANON_KEY,
+  const supabaseClient = createServerClient<Database>(
+    process.env.SUPABASE_URL!,
+    process.env.SUPABASE_ANON_KEY!,
     { request, response }
   );
   const { data, error } = await supabaseClient.from('test').select('*');

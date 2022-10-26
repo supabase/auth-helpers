@@ -1,6 +1,9 @@
 import { json, LoaderFunction } from '@remix-run/node';
 import { useLoaderData, useNavigate } from '@remix-run/react';
-import { createSupabaseClient } from '@supabase/auth-helpers-remix';
+import {
+  createServerClient,
+  createBrowserClient
+} from '@supabase/auth-helpers-remix';
 import { useEffect } from 'react';
 import { Database } from '../../db_types';
 
@@ -12,9 +15,9 @@ export const loader: LoaderFunction = async ({
   request: Request;
 }) => {
   const response = new Response();
-  const supabaseClient = createSupabaseClient<Database>(
-    process.env.SUPABASE_URL,
-    process.env.SUPABASE_ANON_KEY,
+  const supabaseClient = createServerClient<Database>(
+    process.env.SUPABASE_URL!,
+    process.env.SUPABASE_ANON_KEY!,
     { request, response }
   );
 
@@ -46,7 +49,7 @@ export default function SubscribeToRealtime() {
     // Note: window.env is not automatically populated by Remix
     // Check out the [example in this repo](../root.tsx) or
     // [Remix docs](https://remix.run/docs/en/v1/guides/envvars#browser-environment-variables) for more info
-    const supabaseClient = createSupabaseClient<Database>(
+    const supabaseClient = createBrowserClient<Database>(
       window.env.SUPABASE_URL,
       window.env.SUPABASE_ANON_KEY
     );
@@ -57,7 +60,7 @@ export default function SubscribeToRealtime() {
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'test' },
-        (payload) => {
+        (payload: any) => {
           // you could manually merge the `payload` with `data` here
           // the `navigate` trick below causes all active loaders to be called again
           // this handles inserts, updates and deletes, keeping everything in sync

@@ -14,7 +14,7 @@ import {
   ScrollRestoration,
   useLoaderData
 } from '@remix-run/react';
-import { createSupabaseClient } from '@supabase/auth-helpers-remix';
+import { createServerClient } from '@supabase/auth-helpers-remix';
 import { Database } from '../db_types';
 
 export const meta: MetaFunction = () => ({
@@ -58,9 +58,10 @@ export const action: ActionFunction = async ({
     loginPassword
   } = Object.fromEntries(await request.formData());
   const response = new Response();
-  const supabaseClient = createSupabaseClient<Database>(
-    process.env.SUPABASE_URL,
-    process.env.SUPABASE_ANON_KEY,
+
+  const supabaseClient = createServerClient<Database>(
+    process.env.SUPABASE_URL!,
+    process.env.SUPABASE_ANON_KEY!,
     { request, response }
   );
 

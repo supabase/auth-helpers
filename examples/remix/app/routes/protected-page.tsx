@@ -1,6 +1,6 @@
 import { json, LoaderFunction, redirect } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
-import { createSupabaseClient, User } from '@supabase/auth-helpers-remix';
+import { createServerClient, User } from '@supabase/auth-helpers-remix';
 import { Database } from '../../db_types';
 
 export const loader: LoaderFunction = async ({
@@ -10,9 +10,9 @@ export const loader: LoaderFunction = async ({
 }) => {
   const response = new Response();
 
-  const supabaseClient = createSupabaseClient<Database>(
-    process.env.SUPABASE_URL,
-    process.env.SUPABASE_ANON_KEY,
+  const supabaseClient = createServerClient<Database>(
+    process.env.SUPABASE_URL!,
+    process.env.SUPABASE_ANON_KEY!,
     { request, response }
   );
 

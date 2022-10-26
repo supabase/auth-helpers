@@ -29,9 +29,9 @@
   },
   "homepage": "https://github.com/supabase/auth-helpers/tree/main/packages/remix#readme",
   "devDependencies": {
-    "@remix-run/node": "^1.7.2",
-    "@remix-run/react": "^1.7.2",
-    "@remix-run/serve": "^1.7.2",
+    "@remix-run/node": "^1.7.3",
+    "@remix-run/react": "^1.7.3",
+    "@remix-run/serve": "^1.7.3",
     "@supabase/supabase-js": "2.0.0",
     "config": "workspace:*",
     "next": "^12.2.5",
