@@ -14,6 +14,7 @@ export function getLoadSupabaseClient(event: LoadEvent): TypedSupabaseClient {
   return createClient(supabaseUrl, supabaseKey, {
     ...options,
     auth: {
+      autoRefreshToken: false,
       storage: {
         async getItem(key) {
           let session: Session | null = null;
