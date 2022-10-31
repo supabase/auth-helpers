@@ -1,5 +1,11 @@
 # @supabase/auth-helpers-sveltekit
 
+## 0.8.4
+
+### Patch Changes
+
+- 075a92f: sveltekit ssr disable auto token refresh
+
 ## 0.8.3
 
 ### Patch Changes
