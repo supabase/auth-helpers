@@ -45,6 +45,24 @@ export function isSecureEnvironment(headerHost?: string | string[]) {
   return true;
 }
 
+const decodeBase64URL = (value: string): string => {
+  try {
+    // atob is present in all browsers and nodejs >= 16
+    // but if it is not it will throw a ReferenceError in which case we can try to use Buffer
+    // replace are here to convert the Base64-URL into Base64 which is what atob supports
+    // replace with //g regex acts like replaceAll
+    return atob(value.replace(/[-]/g, '+').replace(/[_]/g, '/'));
+  } catch (e) {
+    if (e instanceof ReferenceError) {
+      // running on nodejs < 16
+      // Buffer supports Base64-URL transparently
+      return Buffer.from(value, 'base64').toString('utf-8');
+    } else {
+      throw e;
+    }
+  }
+};
+
 export function parseSupabaseCookie(
   str: string | null | undefined
 ): Partial<Session> | null {
@@ -59,13 +77,13 @@ export function parseSupabaseCookie(
     }
 
     const [_header, payloadStr, _signature] = session[0].split('.');
-    const payload = base64urlToString(payloadStr);
+    const payload = decodeBase64URL(payloadStr);
 
     const { exp, sub, ...user } = JSON.parse(payload);
 
     return {
       expires_at: exp,
-      expires_in: exp - Date.now() / 1000,
+      expires_in: exp - Math.round(Date.now() / 1000),
       token_type: 'bearer',
       access_token: session[0],
       refresh_token: session[1],
@@ -88,11 +106,4 @@ export function stringifySupabaseSession(session: Session): string {
     session.provider_token,
     session.provider_refresh_token
   ]);
-}
-
-function base64urlToString(base64url: string) {
-  if (typeof Buffer !== 'undefined') {
-    return Buffer.from(base64url, 'base64url').toString('utf-8');
-  }
-  return atob(base64url);
 }

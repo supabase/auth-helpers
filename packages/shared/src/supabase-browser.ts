@@ -49,7 +49,6 @@ export function createBrowserSupabaseClient<
 
           let session: Session = JSON.parse(_value);
           const value = stringifySupabaseSession(session);
-          console.log('set', key, value);
 
           document.cookie = serialize(key, value, {
             domain,

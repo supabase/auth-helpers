@@ -53,7 +53,6 @@ export function createServerSupabaseClient<
           return JSON.stringify(currentSession);
         },
         setItem(key: string, _value: string) {
-          // remove identities from the user as it sometimes can make the cookie too large
           let session: Session = JSON.parse(_value);
           const value = stringifySupabaseSession(session);
 
