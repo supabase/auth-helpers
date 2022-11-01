@@ -75,6 +75,13 @@ export function parseSupabaseCookie(
     if (!session) {
       return null;
     }
+    // Support previous cookie which was a stringified session object.
+    if (session.constructor.name === 'Object') {
+      return session;
+    }
+    if (session.constructor.name !== 'Array') {
+      throw new Error(`Unexpected format: ${session.constructor.name}`);
+    }
 
     const [_header, payloadStr, _signature] = session[0].split('.');
     const payload = decodeBase64URL(payloadStr);
@@ -95,6 +102,7 @@ export function parseSupabaseCookie(
       }
     };
   } catch (err) {
+    console.warn('Failed to parse cookie string:', err);
     return null;
   }
 }
