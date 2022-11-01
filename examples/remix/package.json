@@ -4,8 +4,8 @@
   "sideEffects": false,
   "scripts": {
     "build:example": "remix build",
-    "dev": "remix dev",
-    "start": "remix-serve build"
+    "dev": "PORT=3004 remix dev",
+    "start": "PORT=3004 remix-serve build"
   },
   "dependencies": {
     "@remix-run/node": "^1.7.3",

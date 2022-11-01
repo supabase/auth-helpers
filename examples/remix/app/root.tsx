@@ -1,6 +1,7 @@
 import {
   ActionFunction,
   json,
+  redirect,
   LoaderFunction,
   MetaFunction
 } from '@remix-run/node';
@@ -100,6 +101,28 @@ export const action: ActionFunction = async ({
     );
   }
 
+  // GitHub OAuth
+  if (_action === 'github') {
+    const { error, data } = await supabaseClient.auth.signInWithOAuth({
+      provider: 'github',
+      options: { scopes: 'repo', redirectTo: 'http://localhost:3004' }
+    });
+
+    // in order for the set-cookie header to be set,
+    // headers must be returned as part of the loader response
+    if (error)
+      return json(
+        { error },
+        {
+          headers: response.headers
+        }
+      );
+
+    return redirect(data.url, {
+      headers: response.headers
+    });
+  }
+
   if (_action === 'logout') {
     let { error } = await supabaseClient.auth.signOut();
 
@@ -130,12 +153,7 @@ export default function App() {
         <Form method="post">
           <div>
             <label htmlFor="registerEmail">Email:</label>
-            <input
-              type="text"
-              id="registerEmail"
-              name="registerEmail"
-              defaultValue="jon@supabase.com"
-            />
+            <input type="text" id="registerEmail" name="registerEmail" />
           </div>
           <div>
             <label htmlFor="registerPassword">Password:</label>
@@ -143,7 +161,6 @@ export default function App() {
               type="password"
               id="registerPassword"
               name="registerPassword"
-              defaultValue="very-secur3-password"
             />
           </div>
           <button type="submit" name="_action" value="register">
@@ -154,24 +171,20 @@ export default function App() {
         <Form method="post">
           <div>
             <label htmlFor="loginEmail">Email:</label>
-            <input
-              type="text"
-              id="loginEmail"
-              name="loginEmail"
-              defaultValue="jon@supabase.com"
-            />
+            <input type="text" id="loginEmail" name="loginEmail" />
           </div>
           <div>
             <label htmlFor="loginPassword">Password:</label>
-            <input
-              type="password"
-              id="loginPassword"
-              name="loginPassword"
-              defaultValue="very-secur3-password"
-            />
+            <input type="password" id="loginPassword" name="loginPassword" />
           </div>
           <button type="submit" name="_action" value="login">
             Login
+          </button>
+        </Form>
+        <hr />
+        <Form method="post">
+          <button type="submit" name="_action" value="github">
+            GitHub Oauth
           </button>
         </Form>
         <hr />
