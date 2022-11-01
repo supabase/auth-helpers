@@ -151,7 +151,7 @@ export default function withPageAuth<
         ...ret,
         props: {
           initialSession: session,
-          user: session?.user,
+          user: session?.user ?? null,
           ...ret.props
         }
       };
