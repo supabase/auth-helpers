@@ -1,13 +1,18 @@
 import { useRouter } from 'next/router';
-import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs';
+import {
+  createBrowserSupabaseClient,
+  Session
+} from '@supabase/auth-helpers-nextjs';
 import { SessionContextProvider } from '@supabase/auth-helpers-react';
 import type { AppProps } from 'next/app';
 import { useState } from 'react';
 import { Database } from '../db_types';
 import '../styles/globals.css';
 
-function MyApp({ Component, pageProps }: AppProps) {
-  console.log('PAGEPROPS:', pageProps, pageProps.initialSession);
+function MyApp({
+  Component,
+  pageProps
+}: AppProps<{ initialSession: Session }>) {
   const router = useRouter();
   const [supabaseClient] = useState(() =>
     createBrowserSupabaseClient<Database>()

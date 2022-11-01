@@ -27,6 +27,16 @@
 	>
 		GitHub with scopes
 	</button>
+	<button
+		on:click={() => {
+			supabaseClient.auth.signInWithOAuth({
+				provider: 'google',
+				options: { scopes: 'https://www.googleapis.com/auth/userinfo.email' }
+			});
+		}}
+	>
+		Google
+	</button>
 {:else}
 	<p>
 		[<a href="/profile">withPageAuth</a>] | [<a href="/protected-page">supabaseServerClient</a>] | [<a

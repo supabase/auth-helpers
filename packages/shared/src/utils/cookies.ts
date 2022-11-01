@@ -1,3 +1,4 @@
+import { Session } from '@supabase/supabase-js';
 import { parse, serialize } from 'cookie';
 
 export { parse as parseCookies, serialize as serializeCookie };
@@ -42,4 +43,75 @@ export function isSecureEnvironment(headerHost?: string | string[]) {
   }
 
   return true;
+}
+
+const decodeBase64URL = (value: string): string => {
+  try {
+    // atob is present in all browsers and nodejs >= 16
+    // but if it is not it will throw a ReferenceError in which case we can try to use Buffer
+    // replace are here to convert the Base64-URL into Base64 which is what atob supports
+    // replace with //g regex acts like replaceAll
+    return atob(value.replace(/[-]/g, '+').replace(/[_]/g, '/'));
+  } catch (e) {
+    if (e instanceof ReferenceError) {
+      // running on nodejs < 16
+      // Buffer supports Base64-URL transparently
+      return Buffer.from(value, 'base64').toString('utf-8');
+    } else {
+      throw e;
+    }
+  }
+};
+
+export function parseSupabaseCookie(
+  str: string | null | undefined
+): Partial<Session> | null {
+  if (!str) {
+    return null;
+  }
+
+  try {
+    const session = JSON.parse(str);
+    if (!session) {
+      return null;
+    }
+    // Support previous cookie which was a stringified session object.
+    if (session.constructor.name === 'Object') {
+      return session;
+    }
+    if (session.constructor.name !== 'Array') {
+      throw new Error(`Unexpected format: ${session.constructor.name}`);
+    }
+
+    const [_header, payloadStr, _signature] = session[0].split('.');
+    const payload = decodeBase64URL(payloadStr);
+
+    const { exp, sub, ...user } = JSON.parse(payload);
+
+    return {
+      expires_at: exp,
+      expires_in: exp - Math.round(Date.now() / 1000),
+      token_type: 'bearer',
+      access_token: session[0],
+      refresh_token: session[1],
+      provider_token: session[2],
+      provider_refresh_token: session[3],
+      user: {
+        id: sub,
+        ...user
+      }
+    };
+  } catch (err) {
+    console.warn('Failed to parse cookie string:', err);
+    return null;
+  }
+}
+
+export function stringifySupabaseSession(session: Session): string {
+  return JSON.stringify([
+    session.access_token,
+    session.refresh_token,
+    session.provider_token,
+    session.provider_refresh_token
+  ]);
 }
