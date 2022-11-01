@@ -6,6 +6,18 @@
 
 - 999e57e: chore: reduce cookie size.
 
+WARNING: this patch changes the structure of the `supabase-auth-token` cookie. It is patched in a backwards compatible manner as long as your application doesn't access the cookie directly. If your application accesses the cookie directly, you will need to update your application to support the new cookies structure:
+
+```js
+// The new shape of the `supabase-auth-token` cookie.
+JSON.stringify([
+  session.access_token,
+  session.refresh_token,
+  session.provider_token,
+  session.provider_refresh_token
+]);
+```
+
 ## 0.2.1
 
 ### Patch Changes
