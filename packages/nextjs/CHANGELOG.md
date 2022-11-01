@@ -1,5 +1,11 @@
 # @supabase/auth-helpers-nextjs
 
+## 0.4.4
+
+### Patch Changes
+
+- 5cdc84c: Fix a bug with withPageAuth when a session is null and authRequired is set to false
+
 ## 0.4.3
 
 ### Patch Changes
