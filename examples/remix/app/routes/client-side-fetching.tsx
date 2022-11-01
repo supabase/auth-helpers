@@ -1,29 +1,23 @@
-import { createBrowserClient } from '@supabase/auth-helpers-remix';
 import { useEffect, useState } from 'react';
-import { Database } from '../../db_types';
+import { useOutletContext } from '@remix-run/react';
+import type { ContextType } from '../root';
 
 // this route demonstrates how to query Supabase client-side
 export default function ClientSideFetching() {
+  const { session, supabase } = useOutletContext<ContextType>();
   const [data, setData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const supabaseClient = createBrowserClient<Database>(
-      window.env.SUPABASE_URL,
-      window.env.SUPABASE_ANON_KEY
-    );
-
     const getData = async () => {
-      const { data: supabaseData } = await supabaseClient
-        .from('test')
-        .select('*');
+      const { data: supabaseData } = await supabase!.from('users').select('*');
 
       setIsLoading(false);
       setData(supabaseData);
     };
 
-    getData();
-  }, []);
+    if (supabase && session) getData();
+  }, [session, supabase]);
 
   if (isLoading) {
     return <p>Loading...</p>;

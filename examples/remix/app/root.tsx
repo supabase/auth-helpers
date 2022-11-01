@@ -1,12 +1,6 @@
+import { useEffect, useState } from 'react';
+import { json, LoaderFunction, MetaFunction } from '@remix-run/node';
 import {
-  ActionFunction,
-  json,
-  redirect,
-  LoaderFunction,
-  MetaFunction
-} from '@remix-run/node';
-import {
-  Form,
   Links,
   LiveReload,
   Meta,
@@ -15,8 +9,18 @@ import {
   ScrollRestoration,
   useLoaderData
 } from '@remix-run/react';
-import { createServerClient } from '@supabase/auth-helpers-remix';
+import { Auth, ThemeSupa } from '@supabase/auth-ui-react';
+import {
+  createBrowserClient,
+  SupabaseClient,
+  Session
+} from '@supabase/auth-helpers-remix';
 import { Database } from '../db_types';
+
+export type ContextType = {
+  supabase: SupabaseClient<Database> | null;
+  session: Session | null;
+};
 
 export const meta: MetaFunction = () => ({
   charset: 'utf-8',
@@ -46,102 +50,25 @@ export const loader: LoaderFunction = () => {
   });
 };
 
-export const action: ActionFunction = async ({
-  request
-}: {
-  request: Request;
-}) => {
-  const {
-    _action,
-    registerEmail,
-    registerPassword,
-    loginEmail,
-    loginPassword
-  } = Object.fromEntries(await request.formData());
-  const response = new Response();
-
-  const supabaseClient = createServerClient<Database>(
-    process.env.SUPABASE_URL!,
-    process.env.SUPABASE_ANON_KEY!,
-    { request, response }
-  );
-
-  // `_action` is a convention as `action` is a reserved keyword that may break the web
-  // this can be named anything that is not a reserved keyword
-  // Ryan's excellent explanation: https://www.youtube.com/watch?v=w2i-9cYxSdc
-  if (_action === 'register') {
-    let { data, error } = await supabaseClient.auth.signUp({
-      email: String(registerEmail),
-      password: String(registerPassword)
-    });
-
-    // in order for the set-cookie header to be set,
-    // headers must be returned as part of the loader response
-    return json(
-      { data, error },
-      {
-        headers: response.headers
-      }
-    );
-  }
-
-  if (_action === 'login') {
-    let { data, error } = await supabaseClient.auth.signInWithPassword({
-      email: String(loginEmail),
-      password: String(loginPassword)
-    });
-
-    // in order for the set-cookie header to be set,
-    // headers must be returned as part of the loader response
-    return json(
-      { data, error },
-      {
-        headers: response.headers
-      }
-    );
-  }
-
-  // GitHub OAuth
-  if (_action === 'github') {
-    const { error, data } = await supabaseClient.auth.signInWithOAuth({
-      provider: 'github',
-      options: { scopes: 'repo', redirectTo: 'http://localhost:3004' }
-    });
-
-    // in order for the set-cookie header to be set,
-    // headers must be returned as part of the loader response
-    if (error)
-      return json(
-        { error },
-        {
-          headers: response.headers
-        }
-      );
-
-    return redirect(data.url, {
-      headers: response.headers
-    });
-  }
-
-  if (_action === 'logout') {
-    let { error } = await supabaseClient.auth.signOut();
-
-    // in order for the set-cookie header to be set,
-    // headers must be returned as part of the loader response
-    return json(
-      { error },
-      {
-        headers: response.headers
-      }
-    );
-  }
-};
-
-// this route demonstrates how to login and logout
-// with Supabase on the server. It also shows how to
-// pipe environment variables from the server to the browser
 export default function App() {
   const { env } = useLoaderData();
+  const [supabase, setSupabase] = useState<SupabaseClient | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
+
+  const context: ContextType = { supabase, session };
+
+  useEffect(() => {
+    if (!supabase) {
+      const supabaseClient = createBrowserClient<Database>(
+        env.SUPABASE_URL,
+        env.SUPABASE_ANON_KEY
+      );
+      setSupabase(supabaseClient);
+      supabaseClient.auth.onAuthStateChange((_, session) =>
+        setSession(session)
+      );
+    }
+  }, [supabase]);
 
   return (
     <html lang="en">
@@ -150,57 +77,25 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Form method="post">
-          <div>
-            <label htmlFor="registerEmail">Email:</label>
-            <input type="text" id="registerEmail" name="registerEmail" />
-          </div>
-          <div>
-            <label htmlFor="registerPassword">Password:</label>
-            <input
-              type="password"
-              id="registerPassword"
-              name="registerPassword"
-            />
-          </div>
-          <button type="submit" name="_action" value="register">
-            Register
-          </button>
-        </Form>
-        <hr />
-        <Form method="post">
-          <div>
-            <label htmlFor="loginEmail">Email:</label>
-            <input type="text" id="loginEmail" name="loginEmail" />
-          </div>
-          <div>
-            <label htmlFor="loginPassword">Password:</label>
-            <input type="password" id="loginPassword" name="loginPassword" />
-          </div>
-          <button type="submit" name="_action" value="login">
-            Login
-          </button>
-        </Form>
-        <hr />
-        <Form method="post">
-          <button type="submit" name="_action" value="github">
-            GitHub Oauth
-          </button>
-        </Form>
-        <hr />
-        <Form method="post">
-          <button type="submit" name="_action" value="logout">
-            Logout
-          </button>
-        </Form>
-        <hr />
-        <Outlet />
-        <ScrollRestoration />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `window.env = ${JSON.stringify(env)}`
+        <button
+          onClick={async () => {
+            supabase?.auth.signOut();
           }}
-        />
+        >
+          Logout
+        </button>
+        <hr />
+        {supabase && !session && (
+          <Auth
+            redirectTo="http://localhost:3004"
+            appearance={{ theme: ThemeSupa }}
+            supabaseClient={supabase}
+            providers={['google', 'github']}
+            socialLayout="horizontal"
+          />
+        )}
+        <Outlet context={context} />
+        <ScrollRestoration />
         <Scripts />
         <LiveReload />
       </body>
