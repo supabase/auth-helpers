@@ -1,5 +1,11 @@
 # shared
 
+## 0.2.2
+
+### Patch Changes
+
+- 999e57e: chore: reduce cookie size.
+
 ## 0.2.1
 
 ### Patch Changes
