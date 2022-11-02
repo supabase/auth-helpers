@@ -10,13 +10,14 @@ export default function ClientSideFetching() {
 
   useEffect(() => {
     const getData = async () => {
-      const { data: supabaseData } = await supabase!.from('users').select('*');
+      if (!supabase) return;
+      const { data: supabaseData } = await supabase.from('test').select('*');
 
       setIsLoading(false);
       setData(supabaseData);
     };
 
-    if (supabase && session) getData();
+    if (session) getData();
   }, [session, supabase]);
 
   if (isLoading) {

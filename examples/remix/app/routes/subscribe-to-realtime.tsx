@@ -8,11 +8,7 @@ import { Database } from '../../db_types';
 type TestData = Database['public']['Tables']['test']['Row'];
 
 // Fetch the initial data server-side, then subscribe to updates client-side.
-export const loader: LoaderFunction = async ({
-  request
-}: {
-  request: Request;
-}) => {
+export const loader: LoaderFunction = async ({ request }) => {
   const response = new Response();
   const supabaseClient = createServerClient<Database>(
     process.env.SUPABASE_URL!,
