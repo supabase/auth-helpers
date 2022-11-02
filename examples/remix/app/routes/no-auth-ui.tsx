@@ -48,6 +48,19 @@ export default function Index() {
         </div>
         <button type="submit">Login</button>
       </form>
+      <hr />
+      <button
+        onClick={() => {
+          supabase?.auth.signInWithOAuth({
+            provider: 'github',
+            options: {
+              redirectTo: 'http://localhost:3004'
+            }
+          });
+        }}
+      >
+        GitHub OAuth
+      </button>
     </div>
   );
 }
