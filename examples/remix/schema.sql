@@ -10,7 +10,23 @@ create table if not exists test (
 alter table public.test
   enable row level security;
 
-create policy "Users can select their test records" on "public"."test"
+create policy "Users can select their test records" on test
   as permissive for select
   to authenticated
-  using (uid() = user_id);
+  using (auth.uid() = user_id);
+
+create policy "Users can insert their own records." on test
+  for insert with check (auth.uid() = user_id);
+
+
+-- Set up realtime 
+begin;
+  -- remove the supabase_realtime publication
+  drop publication if exists supabase_realtime;
+
+  -- re-create the supabase_realtime publication with no tables and only for insert
+  create publication supabase_realtime with (publish = 'insert');
+commit;
+
+-- add a table to the publication
+alter publication supabase_realtime add table test;

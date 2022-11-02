@@ -1,30 +1,56 @@
 import { useEffect, useState } from 'react';
+import { json, LoaderFunction } from '@remix-run/node';
+import { useLoaderData } from '@remix-run/react';
 import { useOutletContext } from '@remix-run/react';
-import { Database } from '../../db_types';
+import { createServerClient } from '@supabase/auth-helpers-remix';
 import type { ContextType } from '../root';
-
+import { Database } from '../../db_types';
 type TestData = Database['public']['Tables']['test']['Row'];
 
+// Fetch the initial data server-side, then subscribe to updates client-side.
+export const loader: LoaderFunction = async ({
+  request
+}: {
+  request: Request;
+}) => {
+  const response = new Response();
+  const supabaseClient = createServerClient<Database>(
+    process.env.SUPABASE_URL!,
+    process.env.SUPABASE_ANON_KEY!,
+    { request, response }
+  );
+
+  const { data, error } = await supabaseClient.from('test').select('*');
+
+  if (error) {
+    throw error;
+  }
+
+  // in order for the set-cookie header to be set,
+  // headers must be returned as part of the loader response
+  return json(
+    { data },
+    {
+      headers: response.headers
+    }
+  );
+};
+
 export default function SubscribeToRealtime() {
-  const [data, setData] = useState<TestData[]>([]);
   const { session, supabase } = useOutletContext<ContextType>();
+  const { data: serverLoadedData } = useLoaderData<{ data: TestData[] }>();
+  const [data, setData] = useState<TestData[]>(serverLoadedData);
 
   useEffect(() => {
     if (supabase && session) {
-      // Fetch initial data
-      supabase
-        .from('test')
-        .select('*')
-        .then(({ data }) => setData(data ?? []));
-
-      // Subscribe to updates
+      // Subscribe to updates client-side
       const channel = supabase
         .channel('test')
         .on(
           'postgres_changes',
-          { event: '*', schema: 'public', table: 'test' },
+          { event: 'INSERT', schema: 'public', table: 'test' },
           (payload) => {
-            console.log(payload);
+            setData((data) => [...data, payload.new as TestData]);
           }
         )
         .subscribe();
@@ -39,17 +65,18 @@ export default function SubscribeToRealtime() {
     <div style={{ fontFamily: 'system-ui, sans-serif', lineHeight: '1.4' }}>
       <button
         onClick={async (e) => {
-          console.log('adding entry', session?.user.id);
           e.preventDefault();
-          const { error } = await supabase!
-            .from('test')
-            .insert([{ user_id: session!.user.id }]);
-          console.log(error);
+          if (supabase) {
+            const { error } = await supabase
+              .from('test')
+              .insert([{ user_id: session!.user.id }]);
+            if (error) console.log(error);
+          }
         }}
       >
         Add entry
       </button>
-      <pre>{JSON.stringify({ data }, null, 2)}</pre>
+      <pre>{JSON.stringify(data, null, 2)}</pre>
     </div>
   );
 }
