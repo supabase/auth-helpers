@@ -57,5 +57,5 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     })
   ).json();
 
-  return { props: { allRepos } };
+  return { props: { user, allRepos } };
 };
