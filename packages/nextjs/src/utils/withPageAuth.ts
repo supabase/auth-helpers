@@ -13,45 +13,7 @@ import { PKG_NAME, PKG_VERSION } from '../constants';
 import { AddParameters } from '../types';
 
 /**
- * ## Protecting Pages with Server Side Rendering (SSR)
- * If you wrap your `getServerSideProps` with {@link withPageAuth} your props object will be augmented with
- * the user object {@link User}
- *
- * ```js
- * // pages/profile.js
- * import { withPageAuth } from '@supabase/auth-helpers-nextjs';
- *
- * export default function Profile({ user }) {
- *   return <div>Hello {user.name}</div>;
- * }
- *
- * export const getServerSideProps = withPageAuth({ redirectTo: '/login' });
- * ```
- *
- * If there is no authenticated user, they will be redirect to your home page, unless you specify the `redirectTo` option.
- *
- * You can pass in your own `getServerSideProps` method, the props returned from this will be merged with the
- * user props.
- *
- * ```js
- * // pages/protected-page.js
- * import { withPageAuth } from '@supabase/auth-helpers-nextjs';
- *
- * export default function ProtectedPage({ user, customProp }) {
- *   return <div>Protected content</div>;
- * }
- *
- * export const getServerSideProps = withPageAuth({
- *   redirectTo: '/foo',
- *   async getServerSideProps(ctx, supabase) {
- *     // Run queries with RLS on the server
- *     const { data } = await supabase.from('test').select('*');
- *     return { props: { data } };
- *   }
- * });
- * ```
- *
- * @category Server
+ * @deprecated Use `createServerSupabaseClient` within `getServerSideProps` instead. See the [docs](https://github.com/supabase/auth-helpers/blob/main/packages/nextjs/MIGRATION_GUIDE.md#migrating-to-05x) for examples.
  */
 export default function withPageAuth<
   Database = any,

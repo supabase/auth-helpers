@@ -4,13 +4,15 @@ import {
   createServerSupabaseClient as _createServerSupabaseClient,
   ensureArray,
   filterCookies,
-  serializeCookie
+  serializeCookie,
+  parseCookies
 } from '@supabase/auth-helpers-shared';
 import {
   GetServerSidePropsContext,
   NextApiRequest,
   NextApiResponse
 } from 'next';
+import { NextRequest, NextResponse } from 'next/server';
 import { PKG_NAME, PKG_VERSION } from './constants';
 
 // Types
@@ -92,6 +94,59 @@ export function createServerSupabaseClient<
       });
 
       context.res.setHeader('set-cookie', [...newSetCookies, newSessionStr]);
+    },
+    options: {
+      global: {
+        headers: {
+          'X-Client-Info': `${PKG_NAME}@${PKG_VERSION}`
+        }
+      }
+    },
+    cookieOptions
+  });
+}
+
+export function createMiddlewareSupabaseClient<
+  Database = any,
+  SchemaName extends string & keyof Database = 'public' extends keyof Database
+    ? 'public'
+    : string & keyof Database
+>(
+  context: { req: NextRequest; res: NextResponse },
+  {
+    cookieOptions
+  }: {
+    cookieOptions?: CookieOptions;
+  } = {}
+) {
+  if (
+    !process.env.NEXT_PUBLIC_SUPABASE_URL ||
+    !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  ) {
+    throw new Error(
+      'NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY env variables are required!'
+    );
+  }
+
+  return _createServerSupabaseClient<Database, SchemaName>({
+    supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
+    supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    getCookie(name) {
+      const cookies = parseCookies(context.req.headers.get('cookie') ?? '');
+      return cookies[name];
+    },
+    setCookie(name, value, options) {
+      const newSessionStr = serializeCookie(name, value, {
+        ...options,
+        // Allow supabase-js on the client to read the cookie as well
+        httpOnly: false
+      });
+      context.res.headers.append(name, newSessionStr);
+    },
+    getRequestHeader: (key) => {
+      const header = context.req.headers.get(key) ?? undefined;
+
+      return header;
     },
     options: {
       global: {

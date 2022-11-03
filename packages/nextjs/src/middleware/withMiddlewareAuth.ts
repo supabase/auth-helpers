@@ -16,6 +16,9 @@ class NoPermissionError extends Error {
   }
 }
 
+/**
+ * @deprecated Use `createMiddlewareSupabaseClient` instead. See the [docs](https://github.com/supabase/auth-helpers/blob/main/packages/nextjs/MIGRATION_GUIDE.md#migrating-to-05x) for examples.
+ */
 export const withMiddlewareAuth =
   <
     Database = any,
@@ -71,7 +74,7 @@ export const withMiddlewareAuth =
           res.headers.append(name, newSessionStr);
         },
         getRequestHeader: (key) => {
-          const header = res.headers.get(key) ?? undefined;
+          const header = req.headers.get(key) ?? undefined;
 
           return header;
         },

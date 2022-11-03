@@ -55,8 +55,8 @@ const LoginPage: NextPage = () => {
   return (
     <>
       <p>
-        [<Link href="/profile">withPageAuth</Link>] | [
-        <Link href="/protected-page">supabaseServerClient</Link>] |{' '}
+        [<Link href="/profile">getServerSideProps</Link>] | [
+        <Link href="/protected-page">server-side RLS</Link>] |{' '}
         <button
           onClick={() =>
             supabaseClient.auth.updateUser({ data: { test1: 'updated' } })

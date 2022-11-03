@@ -12,24 +12,7 @@ import { PKG_NAME, PKG_VERSION } from '../constants';
 import { AddParameters } from '../types';
 
 /**
- * ## Protecting API routes
- * Wrap an API Route to check that the user has a valid session. If they're not logged in the handler will return a
- * 401 Unauthorized.
- *
- * ```js
- * // pages/api/protected-route.js
- * import { withApiAuth } from '@supabase/auth-helpers-nextjs';
- *
- * export default withApiAuth(async function ProtectedRoute(req, res, supabase) {
- *   // Run queries with RLS on the server
- *   const { data } = await supabase.from('test').select('*');
- *   res.json(data)
- * });
- * ```
- *
- * If you visit `/api/protected-route` without a valid session cookie, you will get a 401 response.
- *
- * @category Server
+ * @deprecated Use `createServerSupabaseClient` within your `NextApiHandler` instead. See the [docs](https://github.com/supabase/auth-helpers/blob/main/packages/nextjs/MIGRATION_GUIDE.md#migrating-to-05x) for examples.
  */
 export default function withApiAuth<
   Database = any,
@@ -75,7 +58,7 @@ export default function withApiAuth<
           res.setHeader('set-cookie', [...newSetCookies, newSessionStr]);
         },
         getRequestHeader: (key) => {
-          const header = res.getHeader(key);
+          const header = req.headers[key];
           if (typeof header === 'number') {
             return String(header);
           }
