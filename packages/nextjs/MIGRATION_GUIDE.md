@@ -166,7 +166,7 @@ export const config = {
 };
 ```
 
-## Migrating to `0.4.X`
+## Migrating to `0.4.X` and supabase-js v2
 
 - With the update to `supabase-js` v2 the `auth` API routes are no longer required, therefore you can go ahead and delete your `auth` directory under the `/pages/api/` directory. Please refer to the [v2 migration guide](https://supabase.com/docs/reference/javascript/upgrade-guide) for the full set of changes within supabase-js.
 
