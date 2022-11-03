@@ -75,7 +75,8 @@ export default function withApiAuth<
           res.setHeader('set-cookie', [...newSetCookies, newSessionStr]);
         },
         getRequestHeader: (key) => {
-          const header = res.getHeader(key);
+          const header = req.headers[key];
+
           if (typeof header === 'number') {
             return String(header);
           }
