@@ -71,7 +71,7 @@ export const withMiddlewareAuth =
           res.headers.append(name, newSessionStr);
         },
         getRequestHeader: (key) => {
-          const header = res.headers.get(key) ?? undefined;
+          const header = req.headers.get(key) ?? undefined;
 
           return header;
         },
