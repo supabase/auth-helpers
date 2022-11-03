@@ -2,4 +2,4 @@
 '@supabase/auth-helpers-nextjs': patch
 ---
 
-Added in a fix to read the right request headers
+fix: "host" request header is not available. #358
