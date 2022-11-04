@@ -1,5 +1,11 @@
 # @supabase/auth-helpers-nextjs
 
+## 0.5.0
+
+### Minor Changes
+
+- d8f7446: chore: deprecate withApiAuth, withPageAuth, and withMiddlewareAuth.
+
 ## 0.4.5
 
 ### Patch Changes
