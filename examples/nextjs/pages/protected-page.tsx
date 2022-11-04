@@ -1,5 +1,9 @@
 // pages/protected-page.js
-import { withPageAuth, User } from '@supabase/auth-helpers-nextjs';
+import {
+  createServerSupabaseClient,
+  User
+} from '@supabase/auth-helpers-nextjs';
+import { GetServerSidePropsContext } from 'next';
 import Link from 'next/link';
 
 export default function ProtectedPage({
@@ -13,7 +17,7 @@ export default function ProtectedPage({
     <>
       <p>
         [<Link href="/">Home</Link>] | [
-        <Link href="/profile">withPageAuth</Link>]
+        <Link href="/profile">getServerSideProps</Link>]
       </p>
       <div>Protected content for {user?.email}</div>
       <p>server-side fetched data with RLS:</p>
@@ -24,12 +28,30 @@ export default function ProtectedPage({
   );
 }
 
-export const getServerSideProps = withPageAuth({
-  redirectTo: '/',
-  async getServerSideProps(ctx, supabase) {
-    // Run queries with RLS on the server
-    const { data } = await supabase.from('users').select('*');
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  // Create authenticated Supabase Client
+  const supabase = createServerSupabaseClient(ctx);
+  // Check if we have a session
+  const {
+    data: { session }
+  } = await supabase.auth.getSession();
 
-    return { props: { data: data ?? [] } };
-  }
-});
+  if (!session)
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false
+      }
+    };
+
+  // Run queries with RLS on the server
+  const { data } = await supabase.from('users').select('*');
+
+  return {
+    props: {
+      initialSession: session,
+      user: session.user,
+      data: data ?? []
+    }
+  };
+};
