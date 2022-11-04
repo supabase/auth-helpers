@@ -51,7 +51,7 @@ const decodeBase64URL = (value: string): string => {
     // but if it is not it will throw a ReferenceError in which case we can try to use Buffer
     // replace are here to convert the Base64-URL into Base64 which is what atob supports
     // replace with //g regex acts like replaceAll
-    // map first encodes the string to percent-encoding before being decoded to utf-8
+    // map first encodes the string to percent-encoding before being decoded
     return decodeURIComponent(
       atob(value.replace(/[-]/g, '+').replace(/[_]/g, '/'))
         .split('')
