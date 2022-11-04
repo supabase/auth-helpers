@@ -1,5 +1,11 @@
 # shared
 
+## 0.2.3
+
+### Patch Changes
+
+- bee77c7: fix: session data comes back encoded #359
+
 ## 0.2.2
 
 ### Patch Changes
