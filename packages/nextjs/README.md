@@ -25,8 +25,8 @@ yarn add @supabase/auth-helpers-react
 This library supports the following tooling versions:
 
 - Node.js: `^10.13.0 || >=12.0.0`
-
 - Next.js: `>=10`
+- Note: Next.js 13 is supported except for the new `app` directory approach. We're working on adding support for this and you can follow along [here](https://github.com/supabase/auth-helpers/issues/341).
 
 ## Getting Started
 
@@ -81,16 +81,14 @@ You can now determine if a user is authenticated by checking that the `user` obj
 
 You can pass types that were [generated with the Supabase CLI](https://supabase.com/docs/reference/javascript/next/typescript-support#generating-types) to the Supabase Client to get enhanced type safety and auto completion:
 
-```js
+```tsx
 // Creating a new supabase client object:
 import { Database } from '../db_types';
 
-const [supabase] = useState(() =>
-    createBrowserSupabaseClient<Database>()
-  );
+const [supabase] = useState(() => createBrowserSupabaseClient<Database>());
 ```
 
-```js
+```tsx
 // Retrieving a supabase client object from the SessionContext:
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { Database } from '../db_types';
@@ -102,7 +100,7 @@ const supabase = useSupabaseClient<Database>();
 
 For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row-level-security) to work properly when fetching data client-side, you need to make sure to use the `supabaseClient` from the `useSessionContext` hook and only run your query once the user is defined client-side in the `useUser()` hook:
 
-```js
+```jsx
 import { Auth, ThemeSupa } from '@supabase/auth-ui-react';
 import {
   useUser,
@@ -158,7 +156,7 @@ export default LoginPage;
 
 Create a server supabase client to retrieve the logged in user's session:
 
-```js
+```jsx
 // pages/profile.js
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 
@@ -195,7 +193,7 @@ export const getServerSideProps = async (ctx) => {
 
 You can use the server supabase client to run [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row-level-security) authenticated queries server-side:
 
-```js
+```tsx
 import {
   User,
   createServerSupabaseClient
@@ -206,8 +204,8 @@ export default function ProtectedPage({
   user,
   data
 }: {
-  user: User,
-  data: any
+  user: User;
+  data: any;
 }) {
   return (
     <>
@@ -251,7 +249,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 
 When using third-party auth providers, sessions are initiated with an additional `provider_token` field which is persisted in the auth cookie and can be accessed within the session object. The `provider_token` can be used to make API requests to the OAuth provider's API endpoints on behalf of the logged-in user.
 
-```js
+```tsx
 import {
   User,
   createServerSupabaseClient
@@ -262,8 +260,8 @@ export default function ProtectedPage({
   user,
   allRepos
 }: {
-  user: User,
-  allRepos: any
+  user: User;
+  allRepos: any;
 }) {
   return (
     <>
@@ -313,7 +311,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 
 Create a server supabase client to retrieve the logged in user's session:
 
-```js
+```tsx
 // pages/api/protected-route.ts
 import { NextApiHandler } from 'next';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
