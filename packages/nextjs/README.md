@@ -79,7 +79,7 @@ You can now determine if a user is authenticated by checking that the `user` obj
 
 ### Usage with TypeScript
 
-You can pass types that were [generated with the Supabase CLI](https://supabase.com/docs/reference/javascript/next/typescript-support#generating-types) to the Supabase Client to get enhanced type safety and auto completion:
+You can pass types that were [generated with the Supabase CLI](https://supabase.com/docs/guides/api/generating-types) to the Supabase Client to get enhanced type safety and auto completion:
 
 ```tsx
 // Creating a new supabase client object:
@@ -105,13 +105,13 @@ import { Auth, ThemeSupa } from '@supabase/auth-ui-react';
 import {
   useUser,
   useSessionContext,
-  useSupabase
+  useSupabaseClient
 } from '@supabase/auth-helpers-react';
 import { useEffect, useState } from 'react';
 
 const LoginPage = () => {
   const { isLoading, session, error } = useSessionContext();
-  const supabase = useSupabase();
+  const supabase = useSupabaseClient();
   const user = useUser();
   const [data, setData] = useState();
 
