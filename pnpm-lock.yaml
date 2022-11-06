@@ -21,7 +21,7 @@ importers:
       '@babel/core': '>=7.0.0 <8.0.0'
       '@supabase/auth-helpers-nextjs': workspace:*
       '@supabase/auth-helpers-react': workspace:*
-      '@supabase/auth-ui-react': ^0.1.8
+      '@supabase/auth-ui-react': ^0.2.5
       '@types/node': ^17.0.12
       '@types/react': 17.0.37
       config: workspace:*
@@ -37,7 +37,7 @@ importers:
     dependencies:
       '@supabase/auth-helpers-nextjs': link:../../packages/nextjs
       '@supabase/auth-helpers-react': link:../../packages/react
-      '@supabase/auth-ui-react': 0.1.8_sfoxds7t5ydpegc3knd667wn6m
+      '@supabase/auth-ui-react': 0.2.5_sfoxds7t5ydpegc3knd667wn6m
       next: 12.3.1_tjezdj2cz5djnduyhfh3jev7gi
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
@@ -2572,22 +2572,6 @@ packages:
       react: 18.2.0
     dev: false
 
-  /@supabase/auth-ui-react/0.1.8_sfoxds7t5ydpegc3knd667wn6m:
-    resolution: {integrity: sha512-G4/E7s5xC4NuDK+qR2NSgjvCbBnJtDssabpKJ5RWYf1ciR0xW2s7pMdqH9Dc9rLP44LDEj6HGwI4fSarhzAXSg==}
-    peerDependencies:
-      react: ^16.13.1 || ^17.0.1
-      react-dom: ^16.13.1 || ^17.0.1
-    dependencies:
-      '@stitches/core': 1.2.8
-      '@stitches/react': 1.2.8_react@17.0.2
-      lodash: 4.17.21
-      prop-types: 15.8.1
-      react: 17.0.2
-      react-dom: 17.0.2_react@17.0.2
-    optionalDependencies:
-      fsevents: 2.3.2
-    dev: false
-
   /@supabase/auth-ui-react/0.2.3_biqbaboplfbrettd7655fr4n2y:
     resolution: {integrity: sha512-qKeJVrzMpaufTY/oH5SglY6pJrLELi5UYkVZML3/INNo2fiQektEvNiHrbBc7ttaeuVnDejoZn5gsSJ559kNlw==}
     peerDependencies:
@@ -2600,6 +2584,22 @@ packages:
       prop-types: 15.8.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
+    optionalDependencies:
+      fsevents: 2.3.2
+    dev: false
+
+  /@supabase/auth-ui-react/0.2.5_sfoxds7t5ydpegc3knd667wn6m:
+    resolution: {integrity: sha512-YJ0iurSF44/UUg9ZQvgMI0ZEV76tYHoSdRXhmIWMmXH+s08MGu/4cxIKyAjjmeOQ2k1E0t2DfITJZS1jeNis7g==}
+    peerDependencies:
+      react: ^16.13.1 || ^17.0.1 || ^18.0.0
+      react-dom: ^16.13.1 || ^17.0.1 || ^18.0.0
+    dependencies:
+      '@stitches/core': 1.2.8
+      '@stitches/react': 1.2.8_react@17.0.2
+      just-merge: 3.1.1
+      prop-types: 15.8.1
+      react: 17.0.2
+      react-dom: 17.0.2_react@17.0.2
     optionalDependencies:
       fsevents: 2.3.2
     dev: false
@@ -7236,6 +7236,10 @@ packages:
     dependencies:
       array-includes: 3.1.5
       object.assign: 4.1.4
+
+  /just-merge/3.1.1:
+    resolution: {integrity: sha512-q0VS9owVgV9BcD2cy+E8MB8sIYpqmGAhoAGHH2PHtGwkC0CoITB8FJPMTg38GDO20cuaEGsR8SxCb+kf+g3G2Q==}
+    dev: false
 
   /keyv/4.5.0:
     resolution: {integrity: sha512-2YvuMsA+jnFGtBareKqgANOEKe1mk3HKiXu2fRmAfyxG0MJAywNhi5ttWA3PMjl4NmpyjZNbFifR2vNjW1znfA==}
