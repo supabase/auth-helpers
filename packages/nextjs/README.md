@@ -50,6 +50,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { SessionContextProvider } from '@supabase/auth-helpers-react';
+import { AppProps } from "next/app";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
