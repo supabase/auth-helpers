@@ -71,7 +71,7 @@ export function createBrowserSupabaseClient<
             expires: new Date(0),
             httpOnly: false,
             sameSite,
-            secure
+            secure: secure ?? document.location?.protocol === 'https:'
           });
         }
       }
