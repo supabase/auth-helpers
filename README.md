@@ -4,10 +4,10 @@ A collection of framework specific Auth utilities for working with Supabase.
 
 ## Supported Frameworks
 
-- [Next.js](https://nextjs.org) [[Documentation](./packages/nextjs/README.md)]
+- [Next.js](https://nextjs.org) [[Documentation](https://supabase.com/docs/guides/auth/auth-helpers/nextjs)]
 - [Nuxt - via @nuxtjs/supabase](https://supabase.nuxtjs.org/)
-- [SvelteKit](https://kit.svelte.dev) [[Documentation](./packages/sveltekit/README.md)]
-- [Remix](https://remix.run/) [[Documentation](./packages/remix/README.md)]
+- [SvelteKit](https://kit.svelte.dev) [[Documentation](https://supabase.com/docs/guides/auth/auth-helpers/sveltekit)]
+- [Remix](https://remix.run/) [[Documentation](https://supabase.com/docs/guides/auth/auth-helpers/remix)]
 
 ### Examples and Packages
 
