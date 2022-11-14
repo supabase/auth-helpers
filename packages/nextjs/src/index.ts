@@ -141,12 +141,60 @@ export function createMiddlewareSupabaseClient<
         // Allow supabase-js on the client to read the cookie as well
         httpOnly: false
       });
+      context.req.headers.append(name, newSessionStr);
       context.res.headers.append(name, newSessionStr);
     },
     getRequestHeader: (key) => {
       const header = context.req.headers.get(key) ?? undefined;
-
       return header;
+    },
+    options: {
+      global: {
+        headers: {
+          'X-Client-Info': `${PKG_NAME}@${PKG_VERSION}`
+        }
+      }
+    },
+    cookieOptions
+  });
+}
+
+export function createServerComponentSupabaseClient<
+  Database = any,
+  SchemaName extends string & keyof Database = 'public' extends keyof Database
+    ? 'public'
+    : string & keyof Database
+>({
+  headers,
+  cookies,
+  cookieOptions
+}: {
+  headers: () => any; // TODO update this to be ReadonlyRequestCookies when we upgrade to Next.js 13
+  cookies: () => any; // TODO update this to be ReadonlyHeaders when we upgrade to Next.js 13
+  cookieOptions?: CookieOptions;
+}) {
+  if (
+    !process.env.NEXT_PUBLIC_SUPABASE_URL ||
+    !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  ) {
+    throw new Error(
+      'NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY env variables are required!'
+    );
+  }
+
+  return _createServerSupabaseClient<Database, SchemaName>({
+    supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
+    supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    getRequestHeader: (key) => {
+      const headerList = headers();
+      return headerList.get(key);
+    },
+    getCookie(name) {
+      const nextCookies = cookies();
+      return nextCookies.get(name)?.value;
+    },
+    setCookie() {
+      // noop
     },
     options: {
       global: {
