@@ -1,0 +1,26 @@
+{
+  "name": "nextjs-server-components",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build:example": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@supabase/auth-helpers-nextjs": "workspace:*",
+    "@types/node": "18.11.9",
+    "@types/react": "18.0.25",
+    "@types/react-dom": "18.0.8",
+    "config": "workspace:*",
+    "eslint": "8.27.0",
+    "eslint-config-next": "13.0.2",
+    "next": "13.0.2",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "server-only": "^0.0.1",
+    "tsconfig": "workspace:*",
+    "typescript": "4.8.4"
+  }
+}
