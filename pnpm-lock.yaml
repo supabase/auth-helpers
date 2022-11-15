@@ -53,7 +53,7 @@ importers:
       tsconfig: link:../../packages/tsconfig
       typescript: 4.8.4
 
-  examples/nextjs-app-dir:
+  examples/nextjs-server-components:
     specifiers:
       '@supabase/auth-helpers-nextjs': workspace:*
       '@types/node': 18.11.9

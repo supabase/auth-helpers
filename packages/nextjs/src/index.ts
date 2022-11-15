@@ -141,8 +141,9 @@ export function createMiddlewareSupabaseClient<
         // Allow supabase-js on the client to read the cookie as well
         httpOnly: false
       });
-      context.req.headers.append(name, newSessionStr);
-      context.res.headers.append(name, newSessionStr);
+
+      context.req.headers.append('cookie', newSessionStr);
+      context.res.headers.append('set-cookie', newSessionStr);
     },
     getRequestHeader: (key) => {
       const header = context.req.headers.get(key) ?? undefined;
@@ -194,7 +195,9 @@ export function createServerComponentSupabaseClient<
       return nextCookies.get(name)?.value;
     },
     setCookie() {
-      // noop
+      // Note: The Next.js team at Vercel is working on adding the ability to
+      // set cookies in addition to the cookies function.
+      // https://beta.nextjs.org/docs/api-reference/cookies
     },
     options: {
       global: {
