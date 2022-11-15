@@ -143,7 +143,7 @@ export function createMiddlewareSupabaseClient<
       });
 
       context.req.headers.append('cookie', newSessionStr);
-      context.res.headers.append('set-cookie', newSessionStr);
+      context.res.headers.set('set-cookie', newSessionStr);
     },
     getRequestHeader: (key) => {
       const header = context.req.headers.get(key) ?? undefined;
