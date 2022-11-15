@@ -1,5 +1,11 @@
 # @supabase/auth-helpers-nextjs
 
+## 0.5.2
+
+### Patch Changes
+
+- 2be3f10: feat: add helper for Next.js Server Components.
+
 ## 0.5.1
 
 ### Patch Changes
