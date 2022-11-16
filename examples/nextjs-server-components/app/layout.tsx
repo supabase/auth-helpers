@@ -7,6 +7,9 @@ import './globals.css';
 import { createServerComponentSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { Database } from '../db_types';
 
+// do not cache this layout
+export const revalidate = 0;
+
 export default async function RootLayout({
   children
 }: {
