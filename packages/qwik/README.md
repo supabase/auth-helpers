@@ -7,13 +7,13 @@ This submodule provides convenience helpers for implementing user authentication
 Using [npm](https://npmjs.org):
 
 ```sh
-npm install @supabase/auth-helpers-qwik
+npm install @supabase/auth-helpers-qwik @thedeveloper/qwik-supabase
 ```
 
 Using [yarn](https://yarnpkg.com/):
 
 ```sh
-yarn add @supabase/auth-helpers-qwik
+yarn add @supabase/auth-helpers-qwik @thedeveloper/qwik-supabase
 ```
 
 This library supports the following tooling versions:
@@ -40,7 +40,8 @@ Add `SupabaseProvider` to your `src/root.tsx`:
 
 ```tsx
 import { $ } from '@builder.io/qwik';
-import { SupabaseProvider, createBrowserSupabaseClient } from '@supabase/auth-helpers-qwik';
+import { createBrowserSupabaseClient } from '@supabase/auth-helpers-qwik';
+import { SupabaseProvider } from '@thedeveloper/qwik-supabase';
 
 export default component$(() => {
   const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
@@ -99,10 +100,22 @@ export async function onGet(req) {
 
 export default component$(() => {
   const getSupabase = useSupabase();
+  const store = useStore({ session: {} });
+
+  // invoke supabase on client to process auth cookie
+  useClientEffect$(async () => {
+    const supabase = await getSupabase();
+    const auth = supabase.auth;
+    const session = await auth.getSession();
+    // do something with session e.g. set on store
+    store.session = session;
+  });
+
   const data = useEndpoint();
 
   return (
     <>
+      {JSON.stringify(store)}
       <div onClick$={e => googleLogin(e, getSupabase)}>sign in</div>
       <Resource
         value={data}
