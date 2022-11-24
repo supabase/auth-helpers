@@ -1,0 +1,19 @@
+{
+  "name": "@supabase/auth-helpers-qwik",
+  "version": "0.4.0-next.3",
+  "description": "A collection of framework specific Auth utilities for working with Supabase.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@supabase/auth-helpers-shared": "workspace:*"
+  },
+  "devDependencies": {
+    "@builder.io/qwik": "^0.11.0",
+    "@builder.io/qwik-city": "^0.0.112",
+    "@supabase/supabase-js": "2.0.0-rc.10",
+    "tsup": "^5.12.5"
+  }
+}
