@@ -74,7 +74,10 @@ Example `src/routes/index.tsx`:
 
 ```tsx
 
-import { useSupabase } from '@supabase/auth-helpers-qwik';
+import { component$, Resource, useClientEffect$, useStore } from "@builder.io/qwik";
+import { useEndpoint } from "@builder.io/qwik-city";
+import { QRLSupaBase, useSupabase } from "@thedeveloper/qwik-supabase";
+import { createServerSupabaseClient } from "@supabase/auth-helpers-qwik";
 
 export async function googleLogin(e: Event, getSupabase: QRLSupaBase) {
   const supabase = await getSupabase();
