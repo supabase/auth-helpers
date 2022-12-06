@@ -1,9 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useSupabase } from '../../components/supabase-provider';
 
-import { Database } from '../../db_types';
-import supabase from '../../utils/supabase';
+import type { Database } from '../../db_types';
 
 type Post = Database['public']['Tables']['posts']['Row'];
 
@@ -16,6 +16,7 @@ export default function RealtimePosts({
   serverPosts: Post[];
 }) {
   const [posts, setPosts] = useState(serverPosts);
+  const { supabase } = useSupabase();
 
   useEffect(() => {
     // this overwrites `posts` any time the `serverPosts` prop changes
@@ -31,14 +32,14 @@ export default function RealtimePosts({
       .on(
         'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'posts' },
-        (payload) => setPosts((posts) => [...posts, payload.new as Post])
+        (payload) => setPosts([...posts, payload.new as Post])
       )
       .subscribe();
 
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [serverPosts]);
+  }, [supabase, setPosts, posts]);
 
   return <pre>{JSON.stringify(posts, null, 2)}</pre>;
 }

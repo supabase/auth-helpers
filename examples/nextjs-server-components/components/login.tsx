@@ -1,9 +1,11 @@
 'use client';
 
-import supabase from '../utils/supabase';
+import { useSupabase } from './supabase-provider';
 
 // Supabase auth needs to be triggered client-side
 export default function Login() {
+  const { supabase } = useSupabase();
+
   const handleEmailLogin = async () => {
     const { error } = await supabase.auth.signInWithPassword({
       email: 'jon@supabase.com',
