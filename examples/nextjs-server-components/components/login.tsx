@@ -1,9 +1,11 @@
 'use client';
 
-import supabase from '../utils/supabase';
+import { useSupabase } from './supabase-provider';
 
 // Supabase auth needs to be triggered client-side
 export default function Login() {
+  const { supabase, session } = useSupabase();
+
   const handleEmailLogin = async () => {
     const { error } = await supabase.auth.signInWithPassword({
       email: 'jon@supabase.com',
@@ -33,11 +35,15 @@ export default function Login() {
     }
   };
 
-  return (
+  // this `session` is from the root loader - server-side
+  // therefore, it can safely be used to conditionally render
+  // SSR pages without issues with hydration
+  return session ? (
+    <button onClick={handleLogout}>Logout</button>
+  ) : (
     <>
       <button onClick={handleEmailLogin}>Email Login</button>
       <button onClick={handleGitHubLogin}>GitHub Login</button>
-      <button onClick={handleLogout}>Logout</button>
     </>
   );
 }
