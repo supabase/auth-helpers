@@ -13,20 +13,20 @@ export interface Database {
         Row: {
           id: string
           created_at: string
-          title: string
-          user_id: string | null
+          content: string
+          user_id: string
         }
         Insert: {
           id?: string
           created_at?: string
-          title: string
-          user_id?: string | null
+          content: string
+          user_id?: string
         }
         Update: {
           id?: string
           created_at?: string
-          title?: string
-          user_id?: string | null
+          content?: string
+          user_id?: string
         }
       }
     }

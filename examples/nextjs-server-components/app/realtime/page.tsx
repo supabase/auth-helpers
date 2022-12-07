@@ -1,6 +1,7 @@
 import 'server-only';
 
 import { createServerClient } from '../../utils/supabase-server';
+import NewPost from './new-post';
 import RealtimePosts from './realtime-posts';
 
 // do not cache this page
@@ -15,5 +16,10 @@ export default async function Realtime() {
   // data can be passed from server components to client components
   // this allows us to fetch the initial posts before rendering the page
   // our <RealtimePosts /> component will then subscribe to new posts client-side
-  return <RealtimePosts serverPosts={data || []} />;
+  return (
+    <>
+      <RealtimePosts serverPosts={data || []} />
+      <NewPost />
+    </>
+  );
 }
