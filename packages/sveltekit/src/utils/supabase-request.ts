@@ -29,7 +29,14 @@ export function getRequestSupabaseClient(
     getRequestHeader(name) {
       return request.headers.get(name) ?? undefined;
     },
-    options,
+    options: {
+      ...options,
+      global: {
+        // Inject the event fetch function as default, but allow overriding
+        fetch: event.fetch,
+        ...options.global,
+      }
+    },
     cookieOptions
   });
 

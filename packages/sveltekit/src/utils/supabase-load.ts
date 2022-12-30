@@ -1,18 +1,18 @@
 import { getConfig } from '../config';
-import { isBrowser } from '@supabase/auth-helpers-shared';
 import { createClient, type Session } from '@supabase/supabase-js';
 import type { LoadEvent } from '@sveltejs/kit';
 import type { TypedSupabaseClient } from '../types';
 
 export function getLoadSupabaseClient(event: LoadEvent): TypedSupabaseClient {
-  const { supabaseUrl, supabaseKey, options, globalInstance } = getConfig();
-
-  if (isBrowser()) {
-    return globalInstance;
-  }
+  const { supabaseUrl, supabaseKey, options } = getConfig();
 
   return createClient(supabaseUrl, supabaseKey, {
     ...options,
+    global: {
+      // Inject the event fetch function as default, but allow overriding
+      fetch: event.fetch,
+      ...options.global,
+    },
     auth: {
       autoRefreshToken: false,
       storage: {

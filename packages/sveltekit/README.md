@@ -55,6 +55,37 @@ To make sure the client is initialized on the server and the client we include t
 import '$lib/db';
 ```
 
+In the `src/hooks.server.js` we also need to whitelist some Supabase headers to prevent them from being stripped out by SvelteKit:
+
+If you don't have a custom `handle` hook, then you can add the following:
+
+```ts
+import { allowSupabaseServerSideRequests } from '@supabase/auth-helpers-sveltekit';
+
+export const handle = allowSupabaseServerSideRequests;
+```
+
+Otherwise, you can add the following to your existing `handle` hook:
+
+```ts
+import { RequiredWhitelistedHeaders } from '@supabase/auth-helpers-sveltekit';
+
+export async function handle({ event, resolve }) {
+  // ... your existing code
+  
+  const response = await resolve(event, {
+    // This is the important bits. 
+    filterSerializedResponseHeaders(name: string, _value: string): boolean {
+      return RequiredWhitelistedHeaders.includes(name);
+    }
+  });
+
+  // ... More of your code
+  
+  return response;
+}
+```
+
 ### Synchronizing the page store
 
 Edit your `+layout.svelte` file and set up the client side.
