@@ -1,5 +1,5 @@
 import { getSupabase } from '@supabase/auth-helpers-sveltekit';
-import { invalid } from '@sveltejs/kit';
+import { fail } from '@sveltejs/kit';
 import type { Actions } from './$types';
 
 export const actions: Actions = {
@@ -18,7 +18,7 @@ export const actions: Actions = {
 		});
 
 		if (error) {
-			return invalid(400, {
+			return fail(400, {
 				error: error.message,
 				values: { email }
 			});
