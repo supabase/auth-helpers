@@ -3,10 +3,11 @@ import {
   createServerSupabaseClient,
   parseCookies,
   serializeCookie,
-  createBrowserSupabaseClient
+  createBrowserSupabaseClient,
+  SupabaseClientOptions
 } from '@supabase/auth-helpers-shared';
 import { PKG_NAME, PKG_VERSION } from '../constants';
-import { SupabaseClient, SupabaseClientOptions } from '@supabase/supabase-js';
+import { SupabaseClient } from '@supabase/supabase-js';
 
 /**
  * ## Authenticated Supabase client
@@ -96,7 +97,7 @@ export function createBrowserClient<
     options,
     cookieOptions
   }: {
-    options?: Omit<SupabaseClientOptions<SchemaName>, 'auth'>;
+    options?: SupabaseClientOptions<SchemaName>;
     cookieOptions?: CookieOptions;
   } = {}
 ): SupabaseClient<Database, SchemaName> {
@@ -139,7 +140,7 @@ export function createServerClient<
   }: {
     request: Request;
     response: Response;
-    options?: Omit<SupabaseClientOptions<SchemaName>, 'auth'>;
+    options?: SupabaseClientOptions<SchemaName>;
     cookieOptions?: CookieOptions;
   }
 ): SupabaseClient<Database, SchemaName> {

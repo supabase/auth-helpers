@@ -1,8 +1,7 @@
-import type { SupabaseClientOptions } from '@supabase/supabase-js';
 import {
   createBrowserSupabaseClient,
   type CookieOptions,
-  type SupabaseClientOptions as SupabaseClientOptionsWithoutAuth
+  type SupabaseClientOptions
 } from '@supabase/auth-helpers-shared';
 import { setConfig } from './config';
 import { PKG_NAME, PKG_VERSION } from './constants';
@@ -11,7 +10,7 @@ import type { TypedSupabaseClient } from './types';
 export function createClient(
   supabaseUrl: string,
   supabaseKey: string,
-  options?: SupabaseClientOptionsWithoutAuth<App.Supabase['SchemaName']>,
+  options?: SupabaseClientOptions<App.Supabase['SchemaName']>,
   cookieOptions?: CookieOptions
 ) {
   const opts: SupabaseClientOptions<App.Supabase['SchemaName']> = {
@@ -22,9 +21,6 @@ export function createClient(
         ...options?.global?.headers,
         'X-Client-Info': `${PKG_NAME}@${PKG_VERSION}`
       }
-    },
-    auth: {
-      storageKey: cookieOptions?.name ?? 'supabase-auth-token'
     }
   };
 

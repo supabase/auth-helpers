@@ -1,5 +1,6 @@
 import {
   CookieOptions,
+  SupabaseClientOptions,
   createBrowserSupabaseClient as _createBrowserSupabaseClient,
   createServerSupabaseClient as _createServerSupabaseClient,
   ensureArray,
@@ -7,7 +8,6 @@ import {
   serializeCookie,
   parseCookies
 } from '@supabase/auth-helpers-shared';
-import { SupabaseClientOptions } from '@supabase/supabase-js';
 import {
   GetServerSidePropsContext,
   NextApiRequest,
@@ -34,7 +34,7 @@ export function createBrowserSupabaseClient<
   options,
   cookieOptions
 }: {
-  options?: Omit<SupabaseClientOptions<SchemaName>, 'auth'>;
+  options?: SupabaseClientOptions<SchemaName>;
   cookieOptions?: CookieOptions;
 } = {}) {
   if (
@@ -76,7 +76,7 @@ export function createServerSupabaseClient<
     options,
     cookieOptions
   }: {
-    options?: Omit<SupabaseClientOptions<SchemaName>, 'auth'>;
+    options?: SupabaseClientOptions<SchemaName>;
     cookieOptions?: CookieOptions;
   } = {}
 ) {
@@ -135,7 +135,7 @@ export function createMiddlewareSupabaseClient<
     options,
     cookieOptions
   }: {
-    options?: Omit<SupabaseClientOptions<SchemaName>, 'auth'>;
+    options?: SupabaseClientOptions<SchemaName>;
     cookieOptions?: CookieOptions;
   } = {}
 ) {
