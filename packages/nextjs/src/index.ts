@@ -1,6 +1,6 @@
 import {
   CookieOptions,
-  SupabaseClientOptions,
+  SupabaseClientOptionsWithoutAuth,
   createBrowserSupabaseClient as _createBrowserSupabaseClient,
   createServerSupabaseClient as _createServerSupabaseClient,
   ensureArray,
@@ -34,7 +34,7 @@ export function createBrowserSupabaseClient<
   options,
   cookieOptions
 }: {
-  options?: SupabaseClientOptions<SchemaName>;
+  options?: SupabaseClientOptionsWithoutAuth<SchemaName>;
   cookieOptions?: CookieOptions;
 } = {}) {
   if (
@@ -76,7 +76,7 @@ export function createServerSupabaseClient<
     options,
     cookieOptions
   }: {
-    options?: SupabaseClientOptions<SchemaName>;
+    options?: SupabaseClientOptionsWithoutAuth<SchemaName>;
     cookieOptions?: CookieOptions;
   } = {}
 ) {
@@ -135,7 +135,7 @@ export function createMiddlewareSupabaseClient<
     options,
     cookieOptions
   }: {
-    options?: SupabaseClientOptions<SchemaName>;
+    options?: SupabaseClientOptionsWithoutAuth<SchemaName>;
     cookieOptions?: CookieOptions;
   } = {}
 ) {

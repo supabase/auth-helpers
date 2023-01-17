@@ -6,7 +6,7 @@ export type CookieOptions = { name?: string } & Pick<
   'domain' | 'secure' | 'path' | 'sameSite' | 'maxAge'
 >;
 
-export type SupabaseClientOptions<T = 'public'> = Omit<
+export type SupabaseClientOptionsWithoutAuth<T = 'public'> = Omit<
   _SupabaseClientOptions<T>,
   'auth'
 >;
