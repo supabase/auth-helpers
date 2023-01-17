@@ -6,7 +6,7 @@ import {
   createBrowserSupabaseClient
 } from '@supabase/auth-helpers-shared';
 import { PKG_NAME, PKG_VERSION } from '../constants';
-import { SupabaseClient } from '@supabase/supabase-js';
+import { SupabaseClient, SupabaseClientOptions } from '@supabase/supabase-js';
 
 /**
  * ## Authenticated Supabase client
@@ -93,8 +93,10 @@ export function createBrowserClient<
   supabaseUrl: string,
   supabaseKey: string,
   {
+    options,
     cookieOptions
   }: {
+    options?: Omit<SupabaseClientOptions<SchemaName>, 'auth'>;
     cookieOptions?: CookieOptions;
   } = {}
 ): SupabaseClient<Database, SchemaName> {
@@ -107,6 +109,16 @@ export function createBrowserClient<
   return createBrowserSupabaseClient<Database, SchemaName>({
     supabaseUrl,
     supabaseKey,
+    options: {
+      ...options,
+      global: {
+        ...options?.global,
+        headers: {
+          ...options?.global?.headers,
+          'X-Client-Info': `${PKG_NAME}@${PKG_VERSION}`
+        }
+      }
+    },
     cookieOptions
   });
 }
@@ -122,10 +134,12 @@ export function createServerClient<
   {
     request,
     response,
+    options,
     cookieOptions
   }: {
     request: Request;
     response: Response;
+    options?: Omit<SupabaseClientOptions<SchemaName>, 'auth'>;
     cookieOptions?: CookieOptions;
   }
 ): SupabaseClient<Database, SchemaName> {
@@ -158,9 +172,13 @@ export function createServerClient<
       });
       response.headers.set('set-cookie', cookieStr);
     },
+
     options: {
+      ...options,
       global: {
+        ...options?.global,
         headers: {
+          ...options?.global?.headers,
           'X-Client-Info': `${PKG_NAME}@${PKG_VERSION}`
         }
       }

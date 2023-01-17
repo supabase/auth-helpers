@@ -7,6 +7,7 @@ import {
   serializeCookie,
   parseCookies
 } from '@supabase/auth-helpers-shared';
+import { SupabaseClientOptions } from '@supabase/supabase-js';
 import {
   GetServerSidePropsContext,
   NextApiRequest,
@@ -30,8 +31,10 @@ export function createBrowserSupabaseClient<
     ? 'public'
     : string & keyof Database
 >({
+  options,
   cookieOptions
 }: {
+  options?: Omit<SupabaseClientOptions<SchemaName>, 'auth'>;
   cookieOptions?: CookieOptions;
 } = {}) {
   if (
@@ -46,6 +49,16 @@ export function createBrowserSupabaseClient<
   return _createBrowserSupabaseClient<Database, SchemaName>({
     supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
     supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    options: {
+      ...options,
+      global: {
+        ...options?.global,
+        headers: {
+          ...options?.global?.headers,
+          'X-Client-Info': `${PKG_NAME}@${PKG_VERSION}`
+        }
+      }
+    },
     cookieOptions
   });
 }
@@ -60,8 +73,10 @@ export function createServerSupabaseClient<
     | GetServerSidePropsContext
     | { req: NextApiRequest; res: NextApiResponse },
   {
+    options,
     cookieOptions
   }: {
+    options?: Omit<SupabaseClientOptions<SchemaName>, 'auth'>;
     cookieOptions?: CookieOptions;
   } = {}
 ) {
@@ -96,8 +111,11 @@ export function createServerSupabaseClient<
       context.res.setHeader('set-cookie', [...newSetCookies, newSessionStr]);
     },
     options: {
+      ...options,
       global: {
+        ...options?.global,
         headers: {
+          ...options?.global?.headers,
           'X-Client-Info': `${PKG_NAME}@${PKG_VERSION}`
         }
       }
@@ -114,8 +132,10 @@ export function createMiddlewareSupabaseClient<
 >(
   context: { req: NextRequest; res: NextResponse },
   {
+    options,
     cookieOptions
   }: {
+    options?: Omit<SupabaseClientOptions<SchemaName>, 'auth'>;
     cookieOptions?: CookieOptions;
   } = {}
 ) {
@@ -149,8 +169,11 @@ export function createMiddlewareSupabaseClient<
       return header;
     },
     options: {
+      ...options,
       global: {
+        ...options?.global,
         headers: {
+          ...options?.global?.headers,
           'X-Client-Info': `${PKG_NAME}@${PKG_VERSION}`
         }
       }
