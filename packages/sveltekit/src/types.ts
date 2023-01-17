@@ -1,6 +1,5 @@
 import type { CookieOptions } from '@supabase/auth-helpers-shared';
 import type {
-  Session,
   SupabaseClient,
   SupabaseClientOptions
 } from '@supabase/supabase-js';
@@ -9,11 +8,6 @@ export type TypedSupabaseClient = SupabaseClient<
   App.Supabase['Database'],
   App.Supabase['SchemaName']
 >;
-
-export interface ExtendedEvent {
-  session: Session | null;
-  supabaseClient: TypedSupabaseClient;
-}
 
 export interface Config {
   globalInstance: TypedSupabaseClient;
