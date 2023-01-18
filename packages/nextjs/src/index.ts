@@ -31,24 +31,25 @@ export function createBrowserSupabaseClient<
     ? 'public'
     : string & keyof Database
 >({
+  supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL,
+  supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
   options,
   cookieOptions
 }: {
+  supabaseUrl?: string;
+  supabaseKey?: string;
   options?: SupabaseClientOptionsWithoutAuth<SchemaName>;
   cookieOptions?: CookieOptions;
 } = {}) {
-  if (
-    !process.env.NEXT_PUBLIC_SUPABASE_URL ||
-    !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  ) {
+  if (!supabaseUrl || !supabaseKey) {
     throw new Error(
-      'NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY env variables are required!'
+      'either NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY env variables or supabaseUrl and supabaseKey are required!'
     );
   }
 
   return _createBrowserSupabaseClient<Database, SchemaName>({
-    supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
-    supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    supabaseUrl,
+    supabaseKey,
     options: {
       ...options,
       global: {
@@ -73,25 +74,26 @@ export function createServerSupabaseClient<
     | GetServerSidePropsContext
     | { req: NextApiRequest; res: NextApiResponse },
   {
+    supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL,
+    supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     options,
     cookieOptions
   }: {
+    supabaseUrl?: string;
+    supabaseKey?: string;
     options?: SupabaseClientOptionsWithoutAuth<SchemaName>;
     cookieOptions?: CookieOptions;
   } = {}
 ) {
-  if (
-    !process.env.NEXT_PUBLIC_SUPABASE_URL ||
-    !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  ) {
+  if (!supabaseUrl || !supabaseKey) {
     throw new Error(
-      'NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY env variables are required!'
+      'either NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY env variables or supabaseUrl and supabaseKey are required!'
     );
   }
 
   return _createServerSupabaseClient<Database, SchemaName>({
-    supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
-    supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    supabaseUrl,
+    supabaseKey,
     getRequestHeader: (key) => context.req.headers[key],
 
     getCookie(name) {
@@ -132,25 +134,26 @@ export function createMiddlewareSupabaseClient<
 >(
   context: { req: NextRequest; res: NextResponse },
   {
+    supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL,
+    supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     options,
     cookieOptions
   }: {
+    supabaseUrl?: string;
+    supabaseKey?: string;
     options?: SupabaseClientOptionsWithoutAuth<SchemaName>;
     cookieOptions?: CookieOptions;
   } = {}
 ) {
-  if (
-    !process.env.NEXT_PUBLIC_SUPABASE_URL ||
-    !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  ) {
+  if (!supabaseUrl || !supabaseKey) {
     throw new Error(
-      'NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY env variables are required!'
+      'either NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY env variables or supabaseUrl and supabaseKey are required!'
     );
   }
 
   return _createServerSupabaseClient<Database, SchemaName>({
-    supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
-    supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    supabaseUrl,
+    supabaseKey,
     getCookie(name) {
       const cookies = parseCookies(context.req.headers.get('cookie') ?? '');
       return cookies[name];
@@ -189,26 +192,29 @@ export function createServerComponentSupabaseClient<
     ? 'public'
     : string & keyof Database
 >({
+  supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL,
+  supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
   headers,
   cookies,
+  options,
   cookieOptions
 }: {
+  supabaseUrl?: string;
+  supabaseKey?: string;
   headers: () => any; // TODO update this to be ReadonlyRequestCookies when we upgrade to Next.js 13
   cookies: () => any; // TODO update this to be ReadonlyHeaders when we upgrade to Next.js 13
+  options?: SupabaseClientOptionsWithoutAuth<SchemaName>;
   cookieOptions?: CookieOptions;
 }) {
-  if (
-    !process.env.NEXT_PUBLIC_SUPABASE_URL ||
-    !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  ) {
+  if (!supabaseUrl || !supabaseKey) {
     throw new Error(
-      'NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY env variables are required!'
+      'either NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY env variables or supabaseUrl and supabaseKey are required!'
     );
   }
 
   return _createServerSupabaseClient<Database, SchemaName>({
-    supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
-    supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    supabaseUrl,
+    supabaseKey,
     getRequestHeader: (key) => {
       const headerList = headers();
       return headerList.get(key);
@@ -223,8 +229,11 @@ export function createServerComponentSupabaseClient<
       // https://beta.nextjs.org/docs/api-reference/cookies
     },
     options: {
+      ...options,
       global: {
+        ...options?.global,
         headers: {
+          ...options?.global?.headers,
           'X-Client-Info': `${PKG_NAME}@${PKG_VERSION}`
         }
       }
