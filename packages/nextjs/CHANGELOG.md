@@ -1,5 +1,13 @@
 # @supabase/auth-helpers-nextjs
 
+## 0.5.3
+
+### Patch Changes
+
+- d3366e4: Allow passing client options
+- Updated dependencies [d3366e4]
+  - @supabase/auth-helpers-shared@0.2.4
+
 ## 0.5.2
 
 ### Patch Changes
