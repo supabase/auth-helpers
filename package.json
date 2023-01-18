@@ -15,7 +15,7 @@
     "build:shared": "turbo run build --filter=@supabase/auth-helpers-shared",
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\" --ignore-path .gitignore",
     "docs": "typedoc",
     "clean:all": "turbo run clean:all",
     "ci:version": "changeset version",
