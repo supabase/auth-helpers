@@ -1,6 +1,6 @@
 import { createClient, Session } from '@supabase/supabase-js';
 import type { CookieSerializeOptions } from 'cookie';
-import { CookieOptions, SupabaseClientOptions } from './types';
+import { CookieOptions, SupabaseClientOptionsWithoutAuth } from './types';
 import {
   isSecureEnvironment,
   parseSupabaseCookie,
@@ -37,7 +37,7 @@ export function createServerSupabaseClient<
     options: CookieSerializeOptions
   ) => void;
   getRequestHeader: (name: string) => string | string[] | undefined;
-  options?: SupabaseClientOptions<SchemaName>;
+  options?: SupabaseClientOptionsWithoutAuth<SchemaName>;
   cookieOptions?: CookieOptions;
 }) {
   let currentSession = parseSupabaseCookie(getCookie(name)) ?? null;
