@@ -1,13 +1,14 @@
-import { getSupabase } from '@supabase/auth-helpers-sveltekit';
 import { error, json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
-export const GET: RequestHandler = async (event) => {
-	const { session, supabaseClient } = await getSupabase(event);
+export const GET: RequestHandler = async ({ locals: { supabase } }) => {
+	const {
+		data: { session }
+	} = await supabase.auth.getSession();
 	if (!session) {
 		throw error(401, { message: 'Unauthorized' });
 	}
-	const { data } = await supabaseClient.from('test').select('*');
+	const { data } = await supabase.from('test').select('*');
 
 	return json({ data });
 };

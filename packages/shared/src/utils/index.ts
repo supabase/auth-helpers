@@ -12,5 +12,11 @@ export {
   type ErrorPayload
 } from './errors';
 
-export { parseCookies, serializeCookie, filterCookies } from './cookies';
+export {
+  parseCookies,
+  serializeCookie,
+  filterCookies,
+  parseSupabaseCookie,
+  stringifySupabaseSession
+} from './cookies';
 export { ensureArray, isBrowser } from './helpers';

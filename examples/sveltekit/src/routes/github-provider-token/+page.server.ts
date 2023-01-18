@@ -1,4 +1,3 @@
-import { getSupabase } from '@supabase/auth-helpers-sveltekit';
 import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
@@ -9,8 +8,10 @@ interface GitHubOutput {
 	items: any[];
 }
 
-export const load: PageServerLoad = async (event) => {
-	const { session } = await getSupabase(event);
+export const load: PageServerLoad = async ({ locals: { supabase } }) => {
+	const {
+		data: { session }
+	} = await supabase.auth.getSession();
 	if (!session) {
 		throw redirect(303, '/');
 	}
