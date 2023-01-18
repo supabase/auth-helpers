@@ -5,7 +5,6 @@ import {
   type SupabaseClientOptionsWithoutAuth
 } from '@supabase/auth-helpers-shared';
 import { setConfig } from './config';
-import { PKG_NAME, PKG_VERSION } from './constants';
 import type { TypedSupabaseClient } from './types';
 
 export function createClient(
@@ -20,7 +19,7 @@ export function createClient(
       ...options?.global,
       headers: {
         ...options?.global?.headers,
-        'X-Client-Info': `${PKG_NAME}@${PKG_VERSION}`
+        'X-Client-Info': `${PACKAGE_NAME}@${PACKAGE_VERSION}`
       }
     }
   };

@@ -22,3 +22,13 @@ export interface Config {
   options: SupabaseClientOptions<App.Supabase['SchemaName']>;
   cookieOptions: CookieOptions;
 }
+
+// Default Supabase interface that can be extended by the user
+declare global {
+  namespace App {
+    interface Supabase {
+      Database: any;
+      SchemaName: 'public';
+    }
+  }
+}
