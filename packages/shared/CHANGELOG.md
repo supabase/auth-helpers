@@ -1,5 +1,11 @@
 # shared
 
+## 0.2.4
+
+### Patch Changes
+
+- d3366e4: Allow passing client options
+
 ## 0.2.3
 
 ### Patch Changes
