@@ -191,11 +191,13 @@ export function createServerComponentSupabaseClient<
 >({
   headers,
   cookies,
-  cookieOptions
+  cookieOptions,
+  options
 }: {
   headers: () => any; // TODO update this to be ReadonlyRequestCookies when we upgrade to Next.js 13
   cookies: () => any; // TODO update this to be ReadonlyHeaders when we upgrade to Next.js 13
   cookieOptions?: CookieOptions;
+  options?: SupabaseClientOptionsWithoutAuth<SchemaName>;
 }) {
   if (
     !process.env.NEXT_PUBLIC_SUPABASE_URL ||
@@ -223,8 +225,11 @@ export function createServerComponentSupabaseClient<
       // https://beta.nextjs.org/docs/api-reference/cookies
     },
     options: {
+      ...options,
       global: {
+        ...options?.global,
         headers: {
+          ...options?.global?.headers,
           'X-Client-Info': `${PKG_NAME}@${PKG_VERSION}`
         }
       }
