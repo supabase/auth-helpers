@@ -1,5 +1,11 @@
 # @supabase/auth-helpers-nextjs
 
+## 0.5.4
+
+### Patch Changes
+
+- 849e447: allow overwriting client url and key
+
 ## 0.5.3
 
 ### Patch Changes
