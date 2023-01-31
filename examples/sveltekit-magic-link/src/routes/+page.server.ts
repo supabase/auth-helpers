@@ -1,16 +1,12 @@
-import { getSupabase } from '@supabase/auth-helpers-sveltekit';
 import { fail } from '@sveltejs/kit';
 import type { Actions } from './$types';
 
 export const actions: Actions = {
-	async default(event) {
-		const { request, url } = event;
-		const { supabaseClient } = await getSupabase(event);
-
+	async default({ request, url, locals: { supabase } }) {
 		const formData = await request.formData();
 		const email = formData.get('email') as string;
 
-		const { error } = await supabaseClient.auth.signInWithOtp({
+		const { error } = await supabase.auth.signInWithOtp({
 			email,
 			options: {
 				emailRedirectTo: `${url.origin}/logging-in`

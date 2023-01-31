@@ -8,8 +8,8 @@
 	const handleSubmit: SubmitFunction = () => {
 		loading = true;
 		return async ({ result }) => {
-			loading = false;
 			await applyAction(result);
+			loading = false;
 		};
 	};
 </script>

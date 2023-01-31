@@ -6,6 +6,9 @@ export const load: PageLoad = async ({ parent }) => {
 	if (!session) {
 		throw redirect(303, '/');
 	}
-	const { data: tableData } = await supabase.from('test').select('*');
+	const { data: tableData, error } = await supabase.from('test').select('*');
+	console.log(error);
+	// console.log(tableData);
+
 	return { tableData, user: session.user };
 };

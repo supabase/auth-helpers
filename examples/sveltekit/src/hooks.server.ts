@@ -1,18 +1,24 @@
 import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public';
-import { createSupabaseServerClient } from '@supabase/auth-helpers-sveltekit';
-import type { Handle } from '@sveltejs/kit';
+import { createSupabaseClient, supabaseAuth } from '@supabase/auth-helpers-sveltekit';
+import { sequence } from '$lib/sequence';
 
-export const handle: Handle = async ({ event, resolve }) => {
-	event.locals.supabase = createSupabaseServerClient({
-		supabaseUrl: PUBLIC_SUPABASE_URL,
-		supabaseKey: PUBLIC_SUPABASE_ANON_KEY,
-		event,
+export const handle = sequence(
+	supabaseAuth({
 		cookieOptions: {
-			name: 'sb-auth-token',
-			path: '/',
-			maxAge: 1000 * 60 * 60 * 24 * 365
+			maxAge: 3600 * 24 * 365
 		}
-	});
+	}),
+	async ({ event, resolve }) => {
+		event.locals.supabase = createSupabaseClient({
+			supabaseUrl: PUBLIC_SUPABASE_URL,
+			supabaseKey: PUBLIC_SUPABASE_ANON_KEY,
+			options: {
+				global: {
+					fetch: event.fetch
+				}
+			}
+		});
 
-	return resolve(event);
-};
+		return resolve(event);
+	}
+);

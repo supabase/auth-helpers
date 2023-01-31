@@ -117,7 +117,7 @@ importers:
   examples/sveltekit:
     specifiers:
       '@supabase/auth-helpers-sveltekit': workspace:*
-      '@supabase/supabase-js': ^2.4.0
+      '@supabase/supabase-js': ^2.6.0
       '@sveltejs/adapter-auto': ^1.0.0
       '@sveltejs/kit': ^1.0.0
       '@typescript-eslint/eslint-plugin': ^5.48.0
@@ -137,7 +137,7 @@ importers:
       vite: ^4.0.4
     dependencies:
       '@supabase/auth-helpers-sveltekit': link:../../packages/sveltekit
-      '@supabase/supabase-js': 2.4.0
+      '@supabase/supabase-js': 2.6.0
     devDependencies:
       '@sveltejs/adapter-auto': 1.0.0_@sveltejs+kit@1.0.1
       '@sveltejs/kit': 1.0.1_svelte@3.55.0+vite@4.0.4
@@ -160,7 +160,7 @@ importers:
   examples/sveltekit-email-password:
     specifiers:
       '@supabase/auth-helpers-sveltekit': workspace:*
-      '@supabase/supabase-js': ^2.2.3
+      '@supabase/supabase-js': ^2.6.0
       '@sveltejs/adapter-auto': ^1.0.0
       '@sveltejs/kit': ^1.0.0
       '@typescript-eslint/eslint-plugin': ^5.48.0
@@ -180,7 +180,7 @@ importers:
       vite: ^4.0.4
     dependencies:
       '@supabase/auth-helpers-sveltekit': link:../../packages/sveltekit
-      '@supabase/supabase-js': 2.2.3
+      '@supabase/supabase-js': 2.6.0
     devDependencies:
       '@sveltejs/adapter-auto': 1.0.0_@sveltejs+kit@1.0.1
       '@sveltejs/kit': 1.0.1_svelte@3.55.0+vite@4.0.4
@@ -203,7 +203,7 @@ importers:
   examples/sveltekit-magic-link:
     specifiers:
       '@supabase/auth-helpers-sveltekit': workspace:*
-      '@supabase/supabase-js': ^2.2.3
+      '@supabase/supabase-js': ^2.6.0
       '@sveltejs/adapter-auto': ^1.0.0
       '@sveltejs/kit': ^1.0.0
       '@typescript-eslint/eslint-plugin': ^5.48.0
@@ -223,7 +223,7 @@ importers:
       vite: ^4.0.4
     dependencies:
       '@supabase/auth-helpers-sveltekit': link:../../packages/sveltekit
-      '@supabase/supabase-js': 2.2.3
+      '@supabase/supabase-js': 2.6.0
     devDependencies:
       '@sveltejs/adapter-auto': 1.0.0_@sveltejs+kit@1.0.1
       '@sveltejs/kit': 1.0.1_svelte@3.55.0+vite@4.0.4
@@ -369,7 +369,7 @@ importers:
   packages/sveltekit:
     specifiers:
       '@supabase/auth-helpers-shared': workspace:*
-      '@supabase/supabase-js': 2.4.0
+      '@supabase/supabase-js': 2.6.0
       '@sveltejs/kit': 1.1.0
       rimraf: ^4.1.1
       svelte: ^3.54.0
@@ -381,7 +381,7 @@ importers:
     dependencies:
       '@supabase/auth-helpers-shared': link:../shared
     devDependencies:
-      '@supabase/supabase-js': 2.4.0
+      '@supabase/supabase-js': 2.6.0
       '@sveltejs/kit': 1.1.0_svelte@3.55.0+vite@4.0.4
       rimraf: 4.1.1
       svelte: 3.55.0
@@ -3036,12 +3036,20 @@ packages:
     transitivePeerDependencies:
       - encoding
 
+  /@supabase/gotrue-js/2.10.2:
+    resolution: {integrity: sha512-tzfPtEPnLfeghxDvSS28/AiWgBcwNPjG70Tn1owlB2mumsf4xkTfXiZBYUjtCCL65/bUncs8Pbive4tL+vfIgA==}
+    dependencies:
+      cross-fetch: 3.1.5
+    transitivePeerDependencies:
+      - encoding
+
   /@supabase/gotrue-js/2.6.2:
     resolution: {integrity: sha512-ZUSbTe2SPPztOxFA4BjLncYVpAvTATgIdxQj8y1FDd43aqOh30bDzigIM0f1jMRMrGtcVFFOzRpp9TV7HUSitQ==}
     dependencies:
       cross-fetch: 3.1.5
     transitivePeerDependencies:
       - encoding
+    dev: true
 
   /@supabase/postgrest-js/1.1.1:
     resolution: {integrity: sha512-jhdBah1JIxkZUp+5QH5JS7Uq9teGwh0Bs3FzbhnVlH619FSUFquTpHuNDxLsJmqEe8r3Wcnw19Dz0t3wEpkfug==}
@@ -3057,9 +3065,10 @@ packages:
       websocket: 1.0.34
     transitivePeerDependencies:
       - supports-color
+    dev: true
 
-  /@supabase/realtime-js/2.3.1:
-    resolution: {integrity: sha512-AX4pzZozVPvHAWfPcKl0UWj19pqwogD9TnCEHq1x/6oQjVoqA3n6H+1Ea2of9MheSroajHguaQMen3xLEoWrug==}
+  /@supabase/realtime-js/2.6.0:
+    resolution: {integrity: sha512-tOVulMobhpxyDuu8VIImpL8FXmZOKsGNOSyS5ihJdj2xYmPPvYG+D2J51Ewfl+MFF65tweiB6p9N9bNIW1cDNA==}
     dependencies:
       '@types/phoenix': 1.5.4
       websocket: 1.0.34
@@ -3087,27 +3096,13 @@ packages:
       - supports-color
     dev: true
 
-  /@supabase/supabase-js/2.2.3:
-    resolution: {integrity: sha512-UOKnbkwtCGpI/yoW5FbiDqV1tvtP+kJkYROosCGS7M+EAaNhklNYaU3l3wNfxpR5LW7wOO1O17cb+5CSRjv/zg==}
+  /@supabase/supabase-js/2.6.0:
+    resolution: {integrity: sha512-ufCpXqqsJF/+zvqZCHosRK1NMmPNmYysOqWJWgw3WZG0CCmSjmBlHyiyaMVsSALB9UThN8IDHtB0SX7YfRveYQ==}
     dependencies:
       '@supabase/functions-js': 2.0.0
-      '@supabase/gotrue-js': 2.6.2
+      '@supabase/gotrue-js': 2.10.2
       '@supabase/postgrest-js': 1.1.1
-      '@supabase/realtime-js': 2.1.0
-      '@supabase/storage-js': 2.1.0
-      cross-fetch: 3.1.5
-    transitivePeerDependencies:
-      - encoding
-      - supports-color
-    dev: false
-
-  /@supabase/supabase-js/2.4.0:
-    resolution: {integrity: sha512-fouVDoTcxM4/xEsh2iaR0wr0liwER7Pth8pvmbqqm7JVDLd2Z3+ie+k9fesg0OAd8VR1plOi80gdjxYm/ZIYMA==}
-    dependencies:
-      '@supabase/functions-js': 2.0.0
-      '@supabase/gotrue-js': 2.6.2
-      '@supabase/postgrest-js': 1.1.1
-      '@supabase/realtime-js': 2.3.1
+      '@supabase/realtime-js': 2.6.0
       '@supabase/storage-js': 2.1.0
       cross-fetch: 3.1.5
     transitivePeerDependencies:
