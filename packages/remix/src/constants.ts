@@ -1,2 +1,2 @@
 export const PKG_NAME = "@supabase/auth-helpers-remix";
-export const PKG_VERSION = "0.1.3";
+export const PKG_VERSION = "0.1.4";

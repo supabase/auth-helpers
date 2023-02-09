@@ -1,8 +1,8 @@
-import type { ServerLoadEvent } from '@sveltejs/kit';
+import type { RequestEvent, ServerLoadEvent } from '@sveltejs/kit';
 import { getRequestSupabaseClient } from './supabase-request';
 
 export async function getServerSession(
-  event: ServerLoadEvent,
+  event: RequestEvent | ServerLoadEvent,
   expiry_margin = 60
 ) {
   const supabase = getRequestSupabaseClient(event);
