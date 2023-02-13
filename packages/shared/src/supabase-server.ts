@@ -1,6 +1,6 @@
-import { createClient, Session } from '@supabase/supabase-js';
+import { createClient, Session, SupabaseClientOptions } from '@supabase/supabase-js';
 import type { CookieSerializeOptions } from 'cookie';
-import { CookieOptions, SupabaseClientOptionsWithoutAuth } from './types';
+import { CookieOptions } from './types';
 import {
   isSecureEnvironment,
   parseSupabaseCookie,
@@ -18,7 +18,7 @@ export function createServerSupabaseClient<
   getCookie,
   setCookie,
   getRequestHeader,
-  options,
+  options: {auth, ...options} = {},
   cookieOptions: {
     name = 'supabase-auth-token',
     domain,
@@ -37,7 +37,7 @@ export function createServerSupabaseClient<
     options: CookieSerializeOptions
   ) => void;
   getRequestHeader: (name: string) => string | string[] | undefined;
-  options?: SupabaseClientOptionsWithoutAuth<SchemaName>;
+  options?: SupabaseClientOptions<SchemaName>;
   cookieOptions?: CookieOptions;
 }) {
   let currentSession = parseSupabaseCookie(getCookie(name)) ?? null;
@@ -45,6 +45,7 @@ export function createServerSupabaseClient<
   return createClient<Database, SchemaName>(supabaseUrl, supabaseKey, {
     ...options,
     auth: {
+      ...auth,
       detectSessionInUrl: false,
       autoRefreshToken: false,
       storageKey: name,

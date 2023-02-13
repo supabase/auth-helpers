@@ -1,6 +1,6 @@
-import { createClient, Session } from '@supabase/supabase-js';
+import { createClient, Session, SupabaseClientOptions } from '@supabase/supabase-js';
 import { parse, serialize } from 'cookie';
-import { CookieOptions, SupabaseClientOptionsWithoutAuth } from './types';
+import { CookieOptions } from './types';
 import { parseSupabaseCookie, stringifySupabaseSession } from './utils/cookies';
 import { isBrowser } from './utils/helpers';
 
@@ -12,7 +12,7 @@ export function createBrowserSupabaseClient<
 >({
   supabaseUrl,
   supabaseKey,
-  options,
+  options: {auth, ...options} = {},
   cookieOptions: {
     name = 'supabase-auth-token',
     domain,
@@ -24,12 +24,13 @@ export function createBrowserSupabaseClient<
 }: {
   supabaseUrl: string;
   supabaseKey: string;
-  options?: SupabaseClientOptionsWithoutAuth<SchemaName>;
+  options?: SupabaseClientOptions<SchemaName>;
   cookieOptions?: CookieOptions;
 }) {
   return createClient<Database, SchemaName>(supabaseUrl, supabaseKey, {
     ...options,
     auth: {
+      ...auth,
       storageKey: name,
       storage: {
         getItem(key: string) {
