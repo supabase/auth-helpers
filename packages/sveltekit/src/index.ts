@@ -1,2 +1,2 @@
-export { supabaseAuth } from './supabaseAuthHandle';
-export { createSupabaseClient } from './createSupabaseClient';
+export { createSupabaseLoadClient } from './supabaseLoadClient';
+export { createSupabaseServerClient } from './supabaseServerClient';
