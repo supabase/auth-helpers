@@ -8,10 +8,8 @@ interface GitHubOutput {
 	items: any[];
 }
 
-export const load: PageServerLoad = async ({ locals: { supabase } }) => {
-	const {
-		data: { session }
-	} = await supabase.auth.getSession();
+export const load: PageServerLoad = async ({ locals: { getSession } }) => {
+	const session = await getSession();
 	if (!session) {
 		throw redirect(303, '/');
 	}
