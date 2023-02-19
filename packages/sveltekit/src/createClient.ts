@@ -7,7 +7,11 @@ import {
 import { setConfig } from './config';
 import { PKG_NAME, PKG_VERSION } from './constants';
 import type { TypedSupabaseClient } from './types';
-
+/** 
+ * To get proper typings in the SupabaseClient:
+ *  1. Use the CLI to generate the types: https://supabase.com/docs/guides/database/api/generating-types
+ *  2. Add the types to your app.d.ts file as showin in this guide: https://supabase.com/docs/guides/auth/auth-helpers/sveltekit#typings
+ */
 export function createClient(
   supabaseUrl: string,
   supabaseKey: string,
