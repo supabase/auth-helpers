@@ -104,7 +104,8 @@ export function parseSupabaseCookie(
       provider_refresh_token: session[3],
       user: {
         id: sub,
-        ...user
+        factors: session[4],
+        ...user,
       }
     };
   } catch (err) {
@@ -118,6 +119,7 @@ export function stringifySupabaseSession(session: Session): string {
     session.access_token,
     session.refresh_token,
     session.provider_token,
-    session.provider_refresh_token
+    session.provider_refresh_token,
+    session.user.factors,
   ]);
 }
