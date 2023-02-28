@@ -61,6 +61,11 @@ export const handle: Handle = async ({ event, resolve }) => {
   };
 
   return resolve(event, {
+    /**
+     * There´s an issue with `filterSerializedResponseHeaders` not working when using `sequence`
+     *
+     * https://github.com/sveltejs/kit/issues/8061
+     */
     filterSerializedResponseHeaders(name) {
       return name === 'content-range';
     }
@@ -98,11 +103,12 @@ import {
 } from '$env/static/public';
 import { createSupabaseLoadClient } from '@supabase/auth-helpers-sveltekit';
 import type { LayoutLoad } from './$types';
+import type { Database } from '../DatabaseDefinitions';
 
 export const load: LayoutLoad = async ({ fetch, data, depends }) => {
   depends('supabase:auth');
 
-  const supabase = createSupabaseLoadClient({
+  const supabase = createSupabaseLoadClient<Database>({
     supabaseUrl: PUBLIC_SUPABASE_URL,
     supabaseKey: PUBLIC_SUPABASE_ANON_KEY,
     event: { fetch },
@@ -151,30 +157,22 @@ declare global {
 }
 ```
 
-```ts
-// src/routes/+layout.ts
-
-import type { Database } from '../DatabaseDefinitions';
-
-export const load: LayoutLoad = async ({ fetch, data, depends }) => {
-  const supabase = createSupabaseLoadClient<Database>({});
-};
-```
-
 ### Basic Setup
 
 You can now determine if a user is authenticated on the client-side by checking that the `session` object in `$page.data` is defined.
 
 ```html
-<!-- src/routes/+page.svelte -->
-<script>
-  import { page } from '$app/stores';
-</>
+<!-- src/lib/components/Header.svelte -->
+<script lang="ts">
+  import type { Session } from '@supabase/supabase-js';
 
-{#if !$page.data.session}
+  export let session: Session | null;
+</script>
+
+{#if !session}
 <h1>I am not logged in</h1>
 {:else}
-<h1>Welcome {$page.data.session.user.email}</h1>
+<h1>Welcome {session.user.email}</h1>
 <p>I am logged in!</p>
 {/if}
 ```
@@ -198,7 +196,7 @@ For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row
   $: if (data.session) {
     loadData();
   }
-</>
+</script>
 
 {#if data.session}
 <p>client-side data fetching with RLS</p>
@@ -248,14 +246,15 @@ Wrap an API Route to check that the user has a valid session. If they're not log
 ```ts
 // src/routes/api/protected-route/+server.ts
 import type { RequestHandler } from './$types';
-import { json, redirect } from '@sveltejs/kit';
+import { json, error } from '@sveltejs/kit';
 
 export const GET: RequestHandler = async ({
   locals: { supabase, getSession }
 }) => {
   const session = await getSession();
   if (!session) {
-    throw redirect(303, '/');
+    // the user is not signed in
+    throw error(401, { message: 'Unauthorized' });
   }
   const { data } = await supabase.from('test').select('*');
 
@@ -280,7 +279,7 @@ export const actions: Actions = {
 
     if (!session) {
       // the user is not signed in
-      throw error(403, { message: 'Unauthorized' });
+      throw error(401, { message: 'Unauthorized' });
     }
     // we are save, let the user create the post
     const formData = await request.formData();
@@ -366,6 +365,7 @@ export const handle: Handle = async ({ event, resolve }) => {
   if (event.url.pathname.startsWith('/protected-routes')) {
     const session = await event.locals.getSession();
     if (!session) {
+      // the user is not signed in
       throw redirect(303, '/');
     }
   }
@@ -377,6 +377,7 @@ export const handle: Handle = async ({ event, resolve }) => {
   ) {
     const session = await event.locals.getSession();
     if (!session) {
+      // the user is not signed in
       throw error(303, '/');
     }
   }
