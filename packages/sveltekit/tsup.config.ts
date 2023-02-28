@@ -4,8 +4,8 @@ import pkg from './package.json';
 export const tsup: Options = {
   dts: true,
   entryPoints: ['src/index.ts'],
-  external: ['remix', 'react', /^@supabase\//],
-  format: ['cjs'],
+  external: ['svelte', '@sveltejs/kit', /^@supabase\//],
+  format: ['esm'],
   //   inject: ['src/react-shim.js'],
   // ! .cjs/.mjs doesn't work with Angular's webpack4 config by default!
   legacyOutput: false,

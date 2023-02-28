@@ -8,7 +8,6 @@ import {
 } from '@supabase/auth-helpers-shared';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
-import { PKG_NAME, PKG_VERSION } from '../constants';
 import { AddParameters } from '../types';
 
 /**
@@ -68,7 +67,7 @@ export default function withApiAuth<
         options: {
           global: {
             headers: {
-              'X-Client-Info': `${PKG_NAME}@${PKG_VERSION}`
+              'X-Client-Info': `${PACKAGE_NAME}@${PACKAGE_VERSION}`
             }
           }
         },

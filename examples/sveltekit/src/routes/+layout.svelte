@@ -1,27 +1,14 @@
 <script lang="ts">
-	import { supabaseClient } from '$lib/db';
-	import { invalidate } from '$app/navigation';
-	import { onMount } from 'svelte';
-	import { page } from '$app/stores';
+	import type { LayoutData } from './$types';
+
+	export let data: LayoutData;
 
 	function signout() {
-		supabaseClient.auth.signOut();
+		data.supabase.auth.signOut();
 	}
-
-	onMount(() => {
-		const {
-			data: { subscription }
-		} = supabaseClient.auth.onAuthStateChange(() => {
-			invalidate('supabase:auth');
-		});
-
-		return () => {
-			subscription.unsubscribe();
-		};
-	});
 </script>
 
-{#if $page.data.session}
+{#if data.session}
 	<button on:click={signout}>Sign out</button>
 {/if}
 

@@ -1,15 +1,13 @@
-import { getSupabase } from '@supabase/auth-helpers-sveltekit';
 import { AuthApiError } from '@supabase/supabase-js';
 import { fail, type ActionFailure } from '@sveltejs/kit';
 import type { Actions } from './$types';
 
 export const actions: Actions = {
-	async default(
-		event
-	): Promise<ActionFailure<{ error: string; values?: { email: string } }> | { message: string }> {
-		const { request, url } = event;
-		const { supabaseClient } = await getSupabase(event);
-
+	async default({
+		request,
+		url,
+		locals: { supabase }
+	}): Promise<ActionFailure<{ error: string; values?: { email: string } }> | { message: string }> {
 		const formData = await request.formData();
 
 		const email = formData.get('email') as string;
@@ -29,7 +27,7 @@ export const actions: Actions = {
 			});
 		}
 
-		const { error } = await supabaseClient.auth.signUp({
+		const { error } = await supabase.auth.signUp({
 			email,
 			password,
 			options: { emailRedirectTo: url.origin }

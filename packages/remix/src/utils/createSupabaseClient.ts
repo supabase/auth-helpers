@@ -6,7 +6,6 @@ import {
   createBrowserSupabaseClient,
   SupabaseClientOptionsWithoutAuth
 } from '@supabase/auth-helpers-shared';
-import { PKG_NAME, PKG_VERSION } from '../constants';
 import { SupabaseClient } from '@supabase/supabase-js';
 
 /**
@@ -116,7 +115,7 @@ export function createBrowserClient<
         ...options?.global,
         headers: {
           ...options?.global?.headers,
-          'X-Client-Info': `${PKG_NAME}@${PKG_VERSION}`
+          'X-Client-Info': `${PACKAGE_NAME}@${PACKAGE_VERSION}`
         }
       }
     },
@@ -179,7 +178,7 @@ export function createServerClient<
         ...options?.global,
         headers: {
           ...options?.global?.headers,
-          'X-Client-Info': `${PKG_NAME}@${PKG_VERSION}`
+          'X-Client-Info': `${PACKAGE_NAME}@${PACKAGE_VERSION}`
         }
       }
     },

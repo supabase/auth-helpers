@@ -1,11 +1,17 @@
 <script lang="ts">
-	import { supabaseClient } from '$lib/db';
 	import { page } from '$app/stores';
+	import type { PageData } from './$types';
+
+	export let data: PageData;
+	$: supabase = data.supabase;
 
 	let loadedData: any[] = [];
 	async function loadData() {
-		const { data } = await supabaseClient.from('test').select('*').single();
-		loadedData = data;
+		const { data, error } = await supabase.from('test').select('*');
+
+		if (!error) {
+			loadedData = data;
+		}
 	}
 
 	$: if ($page.data.session) {
@@ -19,7 +25,7 @@
 {#if !$page.data.session}
 	<button
 		on:click={() => {
-			supabaseClient.auth.signInWithOAuth({
+			supabase.auth.signInWithOAuth({
 				provider: 'github',
 				options: { scopes: 'public_repo user:email' }
 			});
@@ -29,7 +35,7 @@
 	</button>
 	<button
 		on:click={() => {
-			supabaseClient.auth.signInWithOAuth({
+			supabase.auth.signInWithOAuth({
 				provider: 'google',
 				options: { scopes: 'https://www.googleapis.com/auth/userinfo.email' }
 			});
@@ -42,7 +48,7 @@
 		[<a href="/profile">withPageAuth</a>] | [<a href="/protected-page">supabaseServerClient</a>] | [<a
 			href="/github-provider-token">GitHub Token</a
 		>] |
-		<button on:click={() => supabaseClient.auth.updateUser({ data: { test5: 'updated' } })}>
+		<button on:click={() => supabase.auth.updateUser({ data: { test5: 'updated' } })}>
 			Update
 		</button>
 	</p>

@@ -7,7 +7,6 @@ import {
   serializeCookie
 } from '@supabase/auth-helpers-shared';
 import { SupabaseClient, User } from '@supabase/supabase-js';
-import { PKG_NAME, PKG_VERSION } from '../constants';
 
 class NoPermissionError extends Error {
   constructor(message: string) {
@@ -81,7 +80,7 @@ export const withMiddlewareAuth =
         options: {
           global: {
             headers: {
-              'X-Client-Info': `${PKG_NAME}@${PKG_VERSION}`
+              'X-Client-Info': `${PACKAGE_NAME}@${PACKAGE_VERSION}`
             }
           }
         },
