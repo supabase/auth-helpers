@@ -84,10 +84,10 @@ export function createSupabaseLoadClient<
    * The event listener only runs in the browser.
    */
   onAuthStateChange?: (event: AuthChangeEvent, session: Session | null) => void;
-}) {
+}): SupabaseClient<Database, SchemaName> {
   const browser = isBrowser();
   if (browser && cachedBrowserClient) {
-    return cachedBrowserClient;
+    return cachedBrowserClient as SupabaseClient<Database, SchemaName>;
   }
 
   // this should never happen
