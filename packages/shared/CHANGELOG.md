@@ -1,5 +1,13 @@
 # shared
 
+## 0.3.0
+
+### Minor Changes
+
+- 33c8a81: Adds MFA factors into session
+
+  Factors and identities were removed from session on [PR #350](https://github.com/supabase/auth-helpers/pull/350). When retrieving the `aal` data using `getAuthenticatorAssuranceLevel` wrong data is returned
+
 ## 0.2.4
 
 ### Patch Changes
