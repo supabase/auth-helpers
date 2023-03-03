@@ -10,12 +10,6 @@ Using [npm](https://npmjs.org):
 npm install @supabase/auth-helpers-sveltekit
 ```
 
-Using [yarn](https://yarnpkg.com/):
-
-```sh
-yarn add @supabase/auth-helpers-sveltekit
-```
-
 This library supports the following tooling versions:
 
 - Node.js: `^16.15.0`
@@ -34,7 +28,7 @@ PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 
 ### SupabaseClient setup
 
-Create the server client in the handle hook:
+Create a server supabase client in a handle hook:
 
 ```ts
 // src/hooks.server.ts
@@ -52,7 +46,11 @@ export const handle: Handle = async ({ event, resolve }) => {
     event
   });
 
-  // a little helper to save some lines
+  /**
+   * a little helper that is written for convenience so that instead
+   * of calling `const { data: { session } } = await supabase.auth.getSession()`
+   * you just call this `await getSession()`
+   */
   event.locals.getSession = async () => {
     const {
       data: { session }
@@ -73,7 +71,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 };
 ```
 
-Note that we are specifying `filterSerializedResponseHeaders` here. We need to tell SvelteKit that supabase needs the `content-range` header.
+> Note that we are specifying `filterSerializedResponseHeaders` here. We need to tell SvelteKit that supabase needs the `content-range` header.
 
 ### Send session to client
 
@@ -92,7 +90,7 @@ export const load: LayoutServerLoad = async ({ locals: { getSession } }) => {
 
 #### Shared Load functions and pages
 
-To be able to use supabase in shared load functions and inside pages you need to create a supabase client in the root layout load:
+To be able to use Supabase in shared load functions and inside pages you need to create a Supabase client in the root layout load:
 
 ```ts
 // src/routes/+layout.ts
@@ -132,7 +130,7 @@ The usage of `depends` and `invalidate` tells sveltekit that this load function 
 
 `createSupabaseLoadClient` caches the client when running in a browser environment and therefore does not create a new client for every time the load function runs.
 
-### Typings with v2 from Supabase CLI
+### Generate types from your database
 
 In order to get the most out of TypeScript and it´s intellisense, you should import the generated Database types into the `app.d.ts` type definition file that comes with your SvelteKit project, where `import('./DatabaseDefinitions')` points to the generated types file outlined in [v2 docs here](https://supabase.com/docs/reference/javascript/release-notes#typescript-support) after you have logged in, linked, and generated types through the Supabase CLI.
 
@@ -170,16 +168,16 @@ You can now determine if a user is authenticated on the client-side by checking 
 </script>
 
 {#if !session}
-<h1>I am not logged in</h1>
+  <h1>I am not logged in</h1>
 {:else}
-<h1>Welcome {session.user.email}</h1>
-<p>I am logged in!</p>
+  <h1>Welcome {session.user.email}</h1>
+  <p>I am logged in!</p>
 {/if}
 ```
 
 ## Client-side data fetching with RLS
 
-For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row-level-security) to work properly when fetching data client-side, you need to use supabaseClient from `PageData` and only run your query once the session is defined client-side:
+For [row level security](https://supabase.com/docs/guides/auth/row-level-security) to work properly when fetching data client-side, you need to use supabaseClient from `PageData` and only run your query once the session is defined client-side:
 
 ```html
 <script>
@@ -199,8 +197,8 @@ For [row level security](https://supabase.com/docs/learn/auth-deep-dive/auth-row
 </script>
 
 {#if data.session}
-<p>client-side data fetching with RLS</p>
-<pre>{JSON.stringify(loadedData, null, 2)}</pre>
+  <p>client-side data fetching with RLS</p>
+  <pre>{JSON.stringify(loadedData, null, 2)}</pre>
 {/if}
 ```
 
@@ -262,7 +260,7 @@ export const GET: RequestHandler = async ({
 };
 ```
 
-If you visit `/api/protected-route` without a valid session cookie, you will get a 303 response.
+If you visit `/api/protected-route` without a valid session cookie, you will get a 401 response.
 
 ## Protecting Actions
 
@@ -301,7 +299,7 @@ export const actions: Actions = {
 };
 ```
 
-If you try to submit a form with the action `?/createPost` without a valid session cookie, you will get a 403 error response.
+If you try to submit a form with the action `?/createPost` without a valid session cookie, you will get a 401 error response.
 
 ## Saving and deleting the session
 
