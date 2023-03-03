@@ -1,9 +1,9 @@
 ---
-'@supabase/auth-helpers-sveltekit': major
+'@supabase/auth-helpers-sveltekit': minor
 
 ---
 
-SvelteKit rework, 
+SvelteKit rework: 
  - separate server and client authentication [9bf88f7](https://github.com/supabase/auth-helpers/pull/457/commits/9bf88f76d3124f758394720de84c722052660546)
  - update supabase-js to 2.7.0 [6a18a94](https://github.com/supabase/auth-helpers/pull/457/commits/6a18a940f4e5ffde022580daf37ba40750637ec1)
  - update examples [0bef909](https://github.com/supabase/auth-helpers/pull/457/commits/0bef909d912efdf020b24a9d653d2f34080cd107)
