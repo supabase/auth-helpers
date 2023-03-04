@@ -7,10 +7,6 @@ import type { NextRequest } from 'next/server';
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next();
 
-  // ignoring as I believe this is failing due to v12 vs v13
-  // NextRequest and NextResponse types being slightly different
-  // TODO Remove this ignore when we upgrade Next.js to v13
-  // @ts-ignore
   const supabase = createMiddlewareSupabaseClient({ req, res });
 
   const {
