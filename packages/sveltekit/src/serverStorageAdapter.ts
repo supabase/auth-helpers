@@ -67,5 +67,4 @@ export function supabaseAuthStorageAdapterSveltekitServer({
       });
     }
   };
-  6;
 }
