@@ -1,12 +1,12 @@
 import {
+  BrowserCookieAuthStorageAdapter,
+  CookieAuthStorageAdapter,
   CookieOptions,
-  createServerSupabaseClient,
   parseCookies,
   serializeCookie,
-  createBrowserSupabaseClient,
   SupabaseClientOptionsWithoutAuth
 } from '@supabase/auth-helpers-shared';
-import { SupabaseClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 /**
  * ## Authenticated Supabase client
@@ -106,21 +106,50 @@ export function createBrowserClient<
     );
   }
 
-  return createBrowserSupabaseClient<Database, SchemaName>({
-    supabaseUrl,
-    supabaseKey,
-    options: {
-      ...options,
-      global: {
-        ...options?.global,
-        headers: {
-          ...options?.global?.headers,
-          'X-Client-Info': `${PACKAGE_NAME}@${PACKAGE_VERSION}`
-        }
+  return createClient<Database, SchemaName>(supabaseUrl, supabaseKey, {
+    ...options,
+    global: {
+      ...options?.global,
+      headers: {
+        ...options?.global?.headers,
+        'X-Client-Info': `${PACKAGE_NAME}@${PACKAGE_VERSION}`
       }
     },
-    cookieOptions
+    auth: {
+      storage: new BrowserCookieAuthStorageAdapter(cookieOptions)
+    }
   });
+}
+
+class RemixServerAuthStorageAdapter extends CookieAuthStorageAdapter {
+  constructor(
+    private readonly request: Request,
+    private readonly response: Response,
+    private readonly cookieOptions?: CookieOptions
+  ) {
+    super();
+  }
+
+  protected getCookie(name: string): string | null | undefined {
+    return parseCookies(this.request?.headers?.get('Cookie') ?? '')[name];
+  }
+  protected setCookie(name: string, value: string): void {
+    const cookieStr = serializeCookie(name, value, {
+      ...this.cookieOptions,
+      // Allow supabase-js on the client to read the cookie as well
+      httpOnly: false
+    });
+    this.response.headers.set('set-cookie', cookieStr);
+  }
+  protected deleteCookie(name: string): void {
+    const cookieStr = serializeCookie(name, '', {
+      ...this.cookieOptions,
+      maxAge: 0,
+      // Allow supabase-js on the client to read the cookie as well
+      httpOnly: false
+    });
+    this.response.headers.set('set-cookie', cookieStr);
+  }
 }
 
 export function createServerClient<
@@ -155,33 +184,21 @@ export function createServerClient<
     );
   }
 
-  return createServerSupabaseClient<Database, SchemaName>({
-    supabaseUrl,
-    supabaseKey,
-    getRequestHeader: (key) => {
-      return request.headers.get(key) ?? undefined;
-    },
-    getCookie: (name) => {
-      return parseCookies(request?.headers?.get('Cookie') ?? '')[name];
-    },
-    setCookie(name, value, options) {
-      const cookieStr = serializeCookie(name, value, {
-        ...options,
-        // Allow supabase-js on the client to read the cookie as well
-        httpOnly: false
-      });
-      response.headers.set('set-cookie', cookieStr);
-    },
-    options: {
-      ...options,
-      global: {
-        ...options?.global,
-        headers: {
-          ...options?.global?.headers,
-          'X-Client-Info': `${PACKAGE_NAME}@${PACKAGE_VERSION}`
-        }
+  return createClient<Database, SchemaName>(supabaseUrl, supabaseKey, {
+    ...options,
+    global: {
+      ...options?.global,
+      headers: {
+        ...options?.global?.headers,
+        'X-Client-Info': `${PACKAGE_NAME}@${PACKAGE_VERSION}`
       }
     },
-    cookieOptions
+    auth: {
+      storage: new RemixServerAuthStorageAdapter(
+        request,
+        response,
+        cookieOptions
+      )
+    }
   });
 }

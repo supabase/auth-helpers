@@ -4,7 +4,7 @@ import {
 } from '@supabase/auth-helpers-shared';
 import { createClient } from '@supabase/supabase-js';
 import { RequestEvent } from '@sveltejs/kit';
-import { supabaseAuthStorageAdapterSveltekitServer } from './serverStorageAdapter';
+import { SvelteKitServerAuthStorageAdapter } from './serverStorageAdapter';
 
 /**
  * ## Authenticated Supabase client
@@ -90,11 +90,11 @@ export function createSupabaseServerClient<
       autoRefreshToken: false,
       detectSessionInUrl: false,
       persistSession: true,
-      storage: supabaseAuthStorageAdapterSveltekitServer({
-        cookies: event.cookies,
+      storage: new SvelteKitServerAuthStorageAdapter(
+        event,
         cookieOptions,
         expiryMargin
-      })
+      )
     }
   });
 }

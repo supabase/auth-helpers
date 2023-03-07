@@ -6,7 +6,11 @@ export const handle: Handle = async ({ event, resolve }) => {
 	event.locals.supabase = createSupabaseServerClient({
 		supabaseUrl: PUBLIC_SUPABASE_URL,
 		supabaseKey: PUBLIC_SUPABASE_ANON_KEY,
-		event
+		event,
+		cookieOptions: {
+			path: '/',
+			maxAge: 60 * 60 * 24 * 365
+		}
 	});
 
 	event.locals.getSession = async () => {

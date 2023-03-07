@@ -48,7 +48,7 @@
 		[<a href="/profile">withPageAuth</a>] | [<a href="/protected-page">supabaseServerClient</a>] | [<a
 			href="/github-provider-token">GitHub Token</a
 		>] |
-		<button on:click={() => supabase.auth.updateUser({ data: { test5: 'updated' } })}>
+		<button on:click={() => supabase.auth.updateUser({ data: { test5: 'updated'.repeat(100) } })}>
 			Update
 		</button>
 	</p>

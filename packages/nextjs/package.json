@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/supabase/auth-helpers/tree/main/packages/nextjs#readme",
   "devDependencies": {
+    "@types/set-cookie-parser": "^2.4.2",
     "@supabase/supabase-js": "2.0.4",
     "config": "workspace:*",
     "next": "^12.2.5",
@@ -38,7 +39,8 @@
     "tsup": "^6.5.0"
   },
   "dependencies": {
-    "@supabase/auth-helpers-shared": "workspace:*"
+    "@supabase/auth-helpers-shared": "workspace:*",
+    "set-cookie-parser": "^2.5.1"
   },
   "peerDependencies": {
     "@supabase/supabase-js": "^2.0.4"
