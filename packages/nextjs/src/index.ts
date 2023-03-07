@@ -239,3 +239,6 @@ export function createServerComponentSupabaseClient<
     cookieOptions
   });
 }
+
+export const createRouteHandlerSupabaseClient =
+  createServerComponentSupabaseClient;
