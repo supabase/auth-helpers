@@ -1,5 +1,11 @@
 # @supabase/auth-helpers-nextjs
 
+## 0.5.6
+
+### Patch Changes
+
+- 5ab18fe: Export function to create Supabase Client in Next.js Route Handler functions
+
 ## 0.5.5
 
 ### Patch Changes
