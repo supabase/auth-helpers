@@ -1,5 +1,4 @@
 import { GoTrueClientOptions } from '@supabase/supabase-js';
-import { CookieOptions } from './types';
 
 export interface StorageAdapter
   extends Exclude<GoTrueClientOptions['storage'], undefined> {}

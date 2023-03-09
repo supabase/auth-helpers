@@ -168,10 +168,10 @@ You can now determine if a user is authenticated on the client-side by checking 
 </script>
 
 {#if !session}
-  <h1>I am not logged in</h1>
+<h1>I am not logged in</h1>
 {:else}
-  <h1>Welcome {session.user.email}</h1>
-  <p>I am logged in!</p>
+<h1>Welcome {session.user.email}</h1>
+<p>I am logged in!</p>
 {/if}
 ```
 
@@ -197,8 +197,8 @@ For [row level security](https://supabase.com/docs/guides/auth/row-level-securit
 </script>
 
 {#if data.session}
-  <p>client-side data fetching with RLS</p>
-  <pre>{JSON.stringify(loadedData, null, 2)}</pre>
+<p>client-side data fetching with RLS</p>
+<pre>{JSON.stringify(loadedData, null, 2)}</pre>
 {/if}
 ```
 
