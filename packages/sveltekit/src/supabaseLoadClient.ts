@@ -82,6 +82,9 @@ export function createSupabaseLoadClient<
   cookieOptions?: CookieOptions;
   /**
    * The event listener only runs in the browser.
+   * @deprecated DO NOT USE THIS
+   *
+   * use this instead: https://supabase.com/docs/guides/auth/auth-helpers/sveltekit#setting-up-the-event-listener-on-the-client-side
    */
   onAuthStateChange?: (event: AuthChangeEvent, session: Session | null) => void;
 }): SupabaseClient<Database, SchemaName> {
