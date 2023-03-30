@@ -139,13 +139,15 @@ We need to create an event listener in the root `+layout.svelte` file in order c
 
   export let data: LayoutData;
 
-  $: ({ supabase } = data);
+  $: ({ supabase, session } = data);
 
   onMount(() => {
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(() => {
-      invalidate('supabase:auth');
+    } = supabase.auth.onAuthStateChange((event, _session) => {
+      if (_session?.expires_at !== session?.expires_at) {
+        invalidate('supabase:auth');
+      }
     });
 
     return () => subscription.unsubscribe();
@@ -182,48 +184,31 @@ declare global {
 }
 ```
 
-### Basic Setup
-
-You can now determine if a user is authenticated on the client-side by checking that the `session` object in `$page.data` is defined.
-
-```html
-<!-- src/lib/components/Header.svelte -->
-<script lang="ts">
-  import type { Session } from '@supabase/supabase-js';
-
-  export let session: Session | null;
-</script>
-
-{#if !session}
-  <h1>I am not logged in</h1>
-{:else}
-  <h1>Welcome {session.user.email}</h1>
-  <p>I am logged in!</p>
-{/if}
-```
-
 ## Client-side data fetching with RLS
 
 For [row level security](https://supabase.com/docs/guides/auth/row-level-security) to work properly when fetching data client-side, you need to use supabaseClient from `PageData` and only run your query once the session is defined client-side:
 
 ```html
+<!-- src/routes/profile/+page.svelte -->
 <script lang="ts">
   import type { PageData } from './$types';
 
   export let data: PageData;
 
+  $: ({ supabase, session } = data);
+
   let loadedData = [];
   async function loadData() {
-    const { data } = await data.supabase.from('test').select('*').limit(20);
+    const { data } = await supabase.from('test').select('*').limit(20);
     loadedData = data;
   }
 
-  $: if (data.session) {
+  $: if (session) {
     loadData();
   }
 </script>
 
-{#if data.session}
+{#if session}
   <p>client-side data fetching with RLS</p>
   <pre>{JSON.stringify(loadedData, null, 2)}</pre>
 {/if}
