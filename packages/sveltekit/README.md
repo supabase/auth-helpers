@@ -281,7 +281,7 @@ Wrap an Action to check that the user has a valid session. If they're not logged
 ```ts
 // src/routes/posts/+page.server.ts
 import type { Actions } from './$types';
-import { error, invalid } from '@sveltejs/kit';
+import { error, fail } from '@sveltejs/kit';
 
 export const actions: Actions = {
   createPost: async ({ request, locals: { supabase, getSession } }) => {
@@ -300,7 +300,7 @@ export const actions: Actions = {
       .insert({ content });
 
     if (createPostError) {
-      return invalid(500, {
+      return fail(500, {
         supabaseErrorMessage: createPostError.message
       });
     }
@@ -317,7 +317,7 @@ If you try to submit a form with the action `?/createPost` without a valid sessi
 
 ```ts
 import type { Actions } from './$types';
-import { invalid, redirect } from '@sveltejs/kit';
+import { fail, redirect } from '@sveltejs/kit';
 import { AuthApiError } from '@supabase/supabase-js';
 
 export const actions: Actions = {
@@ -334,14 +334,14 @@ export const actions: Actions = {
 
     if (error) {
       if (error instanceof AuthApiError && error.status === 400) {
-        return invalid(400, {
+        return fail(400, {
           error: 'Invalid credentials.',
           values: {
             email
           }
         });
       }
-      return invalid(500, {
+      return fail(500, {
         error: 'Server error. Try again later.',
         values: {
           email
