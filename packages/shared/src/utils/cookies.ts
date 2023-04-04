@@ -4,25 +4,6 @@ import { parse, serialize } from 'cookie';
 export { parse as parseCookies, serialize as serializeCookie };
 
 /**
- * Filter out the cookies based on a key
- */
-export function filterCookies(cookies: string[], key: string) {
-  const indexes = new Set(
-    cookies
-      .map((cookie) => parse(cookie))
-      .reduce((acc, cookie, i) => {
-        if (key in cookie) {
-          acc.push(i);
-        }
-
-        return acc;
-      }, new Array<number>())
-  );
-
-  return cookies.filter((_, i) => !indexes.has(i));
-}
-
-/**
  * Based on the environment and the request we know if a secure cookie can be set.
  */
 export function isSecureEnvironment(headerHost?: string | string[]) {
@@ -46,7 +27,8 @@ export function isSecureEnvironment(headerHost?: string | string[]) {
 }
 
 export function decodeBase64URL(value: string): string {
-  const key = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+  const key =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
   let base64 = '';
   let chr1, chr2, chr3;
   let enc1, enc2, enc3, enc4;
@@ -110,7 +92,7 @@ export function parseSupabaseCookie(
       user: {
         id: sub,
         factors: session[4],
-        ...user,
+        ...user
       }
     };
   } catch (err) {
@@ -125,6 +107,6 @@ export function stringifySupabaseSession(session: Session): string {
     session.refresh_token,
     session.provider_token,
     session.provider_refresh_token,
-    session.user.factors,
+    session.user.factors
   ]);
 }

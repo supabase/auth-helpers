@@ -3,18 +3,11 @@ import {
   isBrowser,
   SupabaseClientOptionsWithoutAuth
 } from '@supabase/auth-helpers-shared';
-import {
-  AuthChangeEvent,
-  createClient,
-  Session,
-  Subscription,
-  SupabaseClient
-} from '@supabase/supabase-js';
+import { createClient, Session, SupabaseClient } from '@supabase/supabase-js';
 import { LoadEvent } from '@sveltejs/kit';
-import { supabaseAuthStorageAdapterSveltekitLoad } from './loadStorageAdapter';
+import { SvelteKitLoadAuthStorageAdapter } from './loadStorageAdapter';
 
 let cachedBrowserClient: SupabaseClient<any, string> | undefined;
-let onAuthStateChangeSubscription: Subscription | undefined;
 
 /**
  * ## Authenticated Supabase client
@@ -65,8 +58,7 @@ export function createSupabaseLoadClient<
   event,
   serverSession,
   options,
-  cookieOptions,
-  onAuthStateChange
+  cookieOptions
 }: {
   supabaseUrl: string;
   /**
@@ -80,21 +72,11 @@ export function createSupabaseLoadClient<
   serverSession: Session | null;
   options?: SupabaseClientOptionsWithoutAuth<SchemaName>;
   cookieOptions?: CookieOptions;
-  /**
-   * The event listener only runs in the browser.
-   * @deprecated DO NOT USE THIS
-   *
-   * use this instead: https://supabase.com/docs/guides/auth/auth-helpers/sveltekit#setting-up-the-event-listener-on-the-client-side
-   */
-  onAuthStateChange?: (event: AuthChangeEvent, session: Session | null) => void;
 }): SupabaseClient<Database, SchemaName> {
   const browser = isBrowser();
   if (browser && cachedBrowserClient) {
     return cachedBrowserClient as SupabaseClient<Database, SchemaName>;
   }
-
-  // this should never happen
-  onAuthStateChangeSubscription?.unsubscribe();
 
   const client = createClient<Database, SchemaName>(supabaseUrl, supabaseKey, {
     ...options,
@@ -110,20 +92,12 @@ export function createSupabaseLoadClient<
       autoRefreshToken: browser,
       detectSessionInUrl: browser,
       persistSession: true,
-      storage: supabaseAuthStorageAdapterSveltekitLoad({
-        cookieOptions,
-        serverSession
-      })
+      storage: new SvelteKitLoadAuthStorageAdapter(serverSession, cookieOptions)
     }
   });
 
   if (browser) {
     cachedBrowserClient = client;
-    onAuthStateChangeSubscription = onAuthStateChange
-      ? cachedBrowserClient.auth.onAuthStateChange((event, authSession) => {
-          onAuthStateChange?.(event, authSession);
-        }).data.subscription
-      : undefined;
   }
 
   return client;

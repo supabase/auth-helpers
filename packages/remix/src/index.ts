@@ -2,8 +2,7 @@
 export {
   createBrowserClient,
   createServerClient
-} from './utils/createSupabaseClient';
-export { default as logger } from './utils/log';
+} from './createSupabaseClient';
 
 // Types
 export type { Session, User, SupabaseClient } from '@supabase/supabase-js';

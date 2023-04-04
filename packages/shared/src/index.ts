@@ -1,4 +1,12 @@
-export * from './supabase-browser';
-export * from './supabase-server';
+export * from './browserCookieStorage';
+export * from './cookieAuthStorageAdapter';
 export * from './types';
-export * from './utils';
+
+export {
+  parseCookies,
+  serializeCookie,
+  filterCookies,
+  parseSupabaseCookie,
+  stringifySupabaseSession,
+  isBrowser
+} from './utils';
