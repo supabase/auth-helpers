@@ -78,6 +78,10 @@ export const SessionContextProvider = ({
     }
 
     getSession();
+
+    return () => {
+      mounted = false;
+    }
   }, []);
 
   useEffect(() => {
