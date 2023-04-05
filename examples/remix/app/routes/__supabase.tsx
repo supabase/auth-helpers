@@ -56,7 +56,7 @@ export const loader = async ({ request }: LoaderArgs) => {
 
 export default function Supabase() {
   const { env, session } = useLoaderData<typeof loader>();
-  const fetcher = useFetcher();
+  const refreshFetcher = useFetcher();
 
   // it is important to create a single instance of Supabase
   // to use across client components - outlet context 👇
@@ -70,10 +70,10 @@ export default function Supabase() {
     const {
       data: { subscription }
     } = supabase.auth.onAuthStateChange((event, session) => {
-      if (session?.access_token !== serverAccessToken) {
+      if (session?.access_token !== serverAccessToken && refreshFetcher.state === "idle") {
         // server and client are out of sync.
         // Remix recalls active loaders after actions complete
-        fetcher.submit(null, {
+        refreshFetcher.submit(null, {
           method: 'post',
           action: '/handle-supabase-auth'
         });
@@ -83,7 +83,7 @@ export default function Supabase() {
     return () => {
       subscription.unsubscribe();
     };
-  }, [serverAccessToken, supabase, fetcher]);
+  }, [serverAccessToken, supabase, refreshFetcher]);
 
   return (
     <>
