@@ -1,5 +1,11 @@
 # shared
 
+## 0.3.1
+
+### Patch Changes
+
+- f86073d: Update to use custom Buffer implementation
+
 ## 0.3.0
 
 ### Minor Changes

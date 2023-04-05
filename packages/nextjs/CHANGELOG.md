@@ -1,5 +1,12 @@
 # @supabase/auth-helpers-nextjs
 
+## 0.5.7
+
+### Patch Changes
+
+- Updated dependencies [f86073d]
+  - @supabase/auth-helpers-shared@0.3.1
+
 ## 0.5.6
 
 ### Patch Changes
