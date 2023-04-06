@@ -1,5 +1,12 @@
 # @supabase/auth-helpers-sveltekit
 
+## 0.9.3
+
+### Patch Changes
+
+- Updated dependencies [1ea258e]
+  - @supabase/auth-helpers-shared@0.3.3
+
 ## 0.9.2
 
 ### Patch Changes
