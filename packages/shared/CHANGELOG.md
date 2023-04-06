@@ -1,5 +1,11 @@
 # shared
 
+## 0.3.3
+
+### Patch Changes
+
+- 1ea258e: use js-base64
+
 ## 0.3.2
 
 ### Patch Changes
