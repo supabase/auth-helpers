@@ -52,8 +52,32 @@ export function decodeBase64URL(value: string): string {
       base64 = base64 + String.fromCharCode(chr3);
     }
   }
-
   return base64;
+}
+
+export function decodeBase64URL(value: string): string {
+  try {
+    // atob is present in all browsers and nodejs >= 16
+    // but if it is not it will throw a ReferenceError in which case we can try to use Buffer
+    // replace are here to convert the Base64-URL into Base64 which is what atob supports
+    // replace with //g regex acts like replaceAll
+    // Decoding base64 to UTF8 see https://stackoverflow.com/a/30106551/17622044
+    return decodeBase64URL_atob(value);
+  } catch (e) {
+    if (e instanceof ReferenceError) {
+      // running on nodejs < 16
+      // Buffer supports Base64-URL transparently
+      try {
+        return decodeBase64URL_buffer(value);
+      } catch (e) {
+        if (e instanceof ReferenceError) {
+          return decodeBase64URL_custom(value);
+        }
+        throw e;
+      }
+    }
+    throw e;
+  }
 }
 
 export function parseSupabaseCookie(
