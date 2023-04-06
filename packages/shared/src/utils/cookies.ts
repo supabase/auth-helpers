@@ -45,8 +45,22 @@ export function isSecureEnvironment(headerHost?: string | string[]) {
   return true;
 }
 
-export function decodeBase64URL(value: string): string {
-  const key = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+function decodeBase64URL_atob(value: string) {
+  return decodeURIComponent(
+    atob(value.replace(/[-]/g, '+').replace(/[_]/g, '/'))
+      .split('')
+      .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+      .join('')
+  );
+}
+
+function decodeBase64URL_buffer(value: string) {
+  return Buffer.from(value, 'base64').toString('utf-8');
+}
+
+function decodeBase64URL_custom(value: string) {
+  const key =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
   let base64 = '';
   let chr1, chr2, chr3;
   let enc1, enc2, enc3, enc4;
@@ -70,8 +84,32 @@ export function decodeBase64URL(value: string): string {
       base64 = base64 + String.fromCharCode(chr3);
     }
   }
-
   return base64;
+}
+
+export function decodeBase64URL(value: string): string {
+  try {
+    // atob is present in all browsers and nodejs >= 16
+    // but if it is not it will throw a ReferenceError in which case we can try to use Buffer
+    // replace are here to convert the Base64-URL into Base64 which is what atob supports
+    // replace with //g regex acts like replaceAll
+    // Decoding base64 to UTF8 see https://stackoverflow.com/a/30106551/17622044
+    return decodeBase64URL_atob(value);
+  } catch (e) {
+    if (e instanceof ReferenceError) {
+      // running on nodejs < 16
+      // Buffer supports Base64-URL transparently
+      try {
+        return decodeBase64URL_buffer(value);
+      } catch (e) {
+        if (e instanceof ReferenceError) {
+          return decodeBase64URL_custom(value);
+        }
+        throw e;
+      }
+    }
+    throw e;
+  }
 }
 
 export function parseSupabaseCookie(
@@ -110,7 +148,7 @@ export function parseSupabaseCookie(
       user: {
         id: sub,
         factors: session[4],
-        ...user,
+        ...user
       }
     };
   } catch (err) {
@@ -125,6 +163,6 @@ export function stringifySupabaseSession(session: Session): string {
     session.refresh_token,
     session.provider_token,
     session.provider_refresh_token,
-    session.user.factors,
+    session.user.factors
   ]);
 }
