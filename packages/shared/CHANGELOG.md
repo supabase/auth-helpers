@@ -1,5 +1,11 @@
 # shared
 
+## 0.3.2
+
+### Patch Changes
+
+- 185e9cf: fix decodeBase64url
+
 ## 0.3.1
 
 ### Patch Changes
