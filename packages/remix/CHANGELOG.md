@@ -1,5 +1,12 @@
 # @supabase/auth-helpers-remix
 
+## 0.1.8
+
+### Patch Changes
+
+- Updated dependencies [1ea258e]
+  - @supabase/auth-helpers-shared@0.3.3
+
 ## 0.1.7
 
 ### Patch Changes
