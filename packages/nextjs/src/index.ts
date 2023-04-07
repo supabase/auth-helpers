@@ -19,11 +19,6 @@ import { NextRequest, NextResponse } from 'next/server';
 export type { Session, User, SupabaseClient } from '@supabase/supabase-js';
 
 // Methods
-export * from './middleware';
-export { default as withPageAuth } from './utils/withPageAuth';
-export { default as withApiAuth } from './utils/withApiAuth';
-export { default as logger } from './utils/log';
-
 export function createBrowserSupabaseClient<
   Database = any,
   SchemaName extends string & keyof Database = 'public' extends keyof Database
