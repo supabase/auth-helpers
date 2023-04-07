@@ -3,7 +3,7 @@ import pkg from './package.json';
 
 export const tsup: Options = {
   dts: true,
-  entryPoints: ['src/index.ts', 'src/middleware/index.ts'],
+  entryPoints: ['src/index.ts'],
   external: ['next', 'react', /^@supabase\//],
   format: ['cjs'],
   //   inject: ['src/react-shim.js'],
