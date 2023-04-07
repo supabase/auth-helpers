@@ -1,5 +1,11 @@
 # @supabase/auth-helpers-nextjs
 
+## 0.6.0
+
+### Minor Changes
+
+- 50d0a16: Remove deprecated methods from the nextjs package
+
 ## 0.5.9
 
 ### Patch Changes
