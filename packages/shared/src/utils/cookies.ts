@@ -107,6 +107,6 @@ export function stringifySupabaseSession(session: Session): string {
     session.refresh_token,
     session.provider_token,
     session.provider_refresh_token,
-    session.user.factors
+    session.user?.factors ?? null
   ]);
 }

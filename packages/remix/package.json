@@ -30,7 +30,7 @@
     "@remix-run/node": "^1.7.3",
     "@remix-run/react": "^1.7.3",
     "@remix-run/serve": "^1.7.3",
-    "@supabase/supabase-js": "2.0.4",
+    "@supabase/supabase-js": "2.19.0",
     "config": "workspace:*",
     "next": "^12.2.5",
     "react": "^18.0.0",
@@ -44,6 +44,6 @@
     "@supabase/auth-helpers-shared": "workspace:*"
   },
   "peerDependencies": {
-    "@supabase/supabase-js": "^2.0.4"
+    "@supabase/supabase-js": "^2.19.0"
   }
 }

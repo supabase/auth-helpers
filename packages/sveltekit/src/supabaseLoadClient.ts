@@ -1,5 +1,6 @@
 import {
   CookieOptions,
+  DEFAULT_COOKIE_OPTIONS,
   isBrowser,
   SupabaseClientOptionsWithoutAuth
 } from '@supabase/auth-helpers-shared';
@@ -89,10 +90,22 @@ export function createSupabaseLoadClient<
       }
     },
     auth: {
+      flowType: 'pkce',
       autoRefreshToken: browser,
       detectSessionInUrl: browser,
       persistSession: true,
-      storage: new SvelteKitLoadAuthStorageAdapter(serverSession, cookieOptions)
+
+      // fix this in supabase-js
+      ...(cookieOptions?.name
+        ? {
+            storageKey: cookieOptions.name
+          }
+        : {}),
+
+      storage: new SvelteKitLoadAuthStorageAdapter(serverSession, {
+        ...DEFAULT_COOKIE_OPTIONS,
+        ...cookieOptions
+      })
     }
   });
 

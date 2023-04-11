@@ -1,6 +1,7 @@
 import {
   CookieAuthStorageAdapter,
   CookieOptions,
+  DEFAULT_COOKIE_OPTIONS,
   parseCookies,
   serializeCookie,
   SupabaseClientOptionsWithoutAuth
@@ -97,9 +98,21 @@ export function createServerSupabaseClient<
       }
     },
     auth: {
+      flowType: 'pkce',
       autoRefreshToken: false,
       detectSessionInUrl: false,
-      storage: new NextServerAuthStorageAdapter(context, cookieOptions)
+
+      // fix this in supabase-js
+      ...(cookieOptions?.name
+        ? {
+            storageKey: cookieOptions.name
+          }
+        : {}),
+
+      storage: new NextServerAuthStorageAdapter(context, {
+        ...DEFAULT_COOKIE_OPTIONS,
+        ...cookieOptions
+      })
     }
   });
 }

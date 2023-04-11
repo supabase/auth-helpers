@@ -32,8 +32,8 @@ importers:
         specifier: ^0.2.6
         version: 0.2.6(react-dom@17.0.2)(react@17.0.2)
       '@supabase/supabase-js':
-        specifier: ^2.7.0
-        version: 2.7.1(encoding@0.1.13)
+        specifier: ^2.19.0
+        version: 2.19.0(encoding@0.1.13)
       next:
         specifier: ^12.2.5
         version: 12.3.1(@babel/core@7.19.6)(react-dom@17.0.2)(react@17.0.2)
@@ -131,6 +131,9 @@ importers:
       '@supabase/auth-helpers-remix':
         specifier: workspace:*
         version: link:../../packages/remix
+      '@supabase/supabase-js':
+        specifier: ^2.19.0
+        version: 2.19.0(encoding@0.1.13)
       isbot:
         specifier: ^3.5.4
         version: 3.6.5
@@ -166,21 +169,21 @@ importers:
         specifier: workspace:*
         version: link:../../packages/sveltekit
       '@supabase/supabase-js':
-        specifier: ^2.7.0
-        version: 2.7.1(encoding@0.1.13)
+        specifier: ^2.19.0
+        version: 2.19.0(encoding@0.1.13)
     devDependencies:
       '@sveltejs/adapter-auto':
-        specifier: ^1.0.0
-        version: 1.0.0(@sveltejs/kit@1.0.1)
+        specifier: ^2.0.0
+        version: 2.0.0(@sveltejs/kit@1.0.1)
       '@sveltejs/kit':
         specifier: ^1.0.0
         version: 1.0.1(svelte@3.55.0)(vite@4.0.4)
       '@typescript-eslint/eslint-plugin':
         specifier: ^5.48.0
-        version: 5.48.0(@typescript-eslint/parser@5.48.0)(eslint@8.31.0)(typescript@4.9.4)
+        version: 5.48.0(@typescript-eslint/parser@5.48.0)(eslint@8.31.0)(typescript@5.0.4)
       '@typescript-eslint/parser':
         specifier: ^5.48.0
-        version: 5.48.0(eslint@8.31.0)(typescript@4.9.4)
+        version: 5.48.0(eslint@8.31.0)(typescript@5.0.4)
       eslint:
         specifier: ^8.31.0
         version: 8.31.0
@@ -205,9 +208,6 @@ importers:
       svelte-check:
         specifier: ^3.0.1
         version: 3.0.1(svelte@3.55.0)
-      svelte-preprocess:
-        specifier: ^5.0.0
-        version: 5.0.0(svelte@3.55.0)(typescript@4.9.4)
       tsconfig:
         specifier: workspace:*
         version: link:../../packages/tsconfig
@@ -215,8 +215,8 @@ importers:
         specifier: ^2.4.1
         version: 2.4.1
       typescript:
-        specifier: ^4.9.4
-        version: 4.9.4
+        specifier: ^5.0.4
+        version: 5.0.4
       vite:
         specifier: ^4.0.4
         version: 4.0.4
@@ -227,8 +227,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/sveltekit
       '@supabase/supabase-js':
-        specifier: ^2.7.0
-        version: 2.7.1(encoding@0.1.13)
+        specifier: ^2.19.0
+        version: 2.19.0(encoding@0.1.13)
     devDependencies:
       '@sveltejs/adapter-auto':
         specifier: ^1.0.0
@@ -288,8 +288,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/sveltekit
       '@supabase/supabase-js':
-        specifier: ^2.7.0
-        version: 2.7.1(encoding@0.1.13)
+        specifier: ^2.19.0
+        version: 2.19.0(encoding@0.1.13)
     devDependencies:
       '@sveltejs/adapter-auto':
         specifier: ^1.0.0
@@ -384,8 +384,8 @@ importers:
         version: 2.6.0
     devDependencies:
       '@supabase/supabase-js':
-        specifier: 2.0.4
-        version: 2.0.4
+        specifier: 2.19.0
+        version: 2.19.0(encoding@0.1.13)
       '@types/set-cookie-parser':
         specifier: ^2.4.2
         version: 2.4.2
@@ -417,8 +417,8 @@ importers:
   packages/react:
     devDependencies:
       '@supabase/supabase-js':
-        specifier: 2.0.4
-        version: 2.0.4
+        specifier: 2.19.0
+        version: 2.19.0(encoding@0.1.13)
       '@types/react':
         specifier: ^17.0.20
         version: 17.0.51
@@ -463,8 +463,8 @@ importers:
         specifier: ^1.7.3
         version: 1.7.3(react-dom@18.2.0)(react@18.2.0)
       '@supabase/supabase-js':
-        specifier: 2.0.4
-        version: 2.0.4
+        specifier: 2.19.0
+        version: 2.19.0(encoding@0.1.13)
       config:
         specifier: workspace:*
         version: link:../config
@@ -493,8 +493,8 @@ importers:
   packages/shared:
     devDependencies:
       '@supabase/supabase-js':
-        specifier: 2.0.4
-        version: 2.0.4
+        specifier: 2.19.0
+        version: 2.19.0(encoding@0.1.13)
       '@types/cookie':
         specifier: ^0.5.1
         version: 0.5.1
@@ -524,8 +524,8 @@ importers:
         version: link:../shared
     devDependencies:
       '@supabase/supabase-js':
-        specifier: 2.7.1
-        version: 2.7.1(encoding@0.1.13)
+        specifier: 2.19.0
+        version: 2.19.0(encoding@0.1.13)
       '@sveltejs/kit':
         specifier: 1.1.0
         version: 1.1.0(svelte@3.55.0)(vite@4.0.4)
@@ -3188,27 +3188,19 @@ packages:
       fsevents: 2.3.2
     dev: false
 
-  /@supabase/functions-js@2.0.0(encoding@0.1.13):
-    resolution: {integrity: sha512-ozb7bds2yvf5k7NM2ZzUkxvsx4S4i2eRKFSJetdTADV91T65g4gCzEs9L3LUXSrghcGIkUaon03VPzOrFredqg==}
+  /@supabase/functions-js@2.1.0(encoding@0.1.13):
+    resolution: {integrity: sha512-vRziB+AqRXRaGHjEFHwBo0kuNDTuAxI7VUeqU24Fe86ISoD8YEQm0dGdpleJEcqgDGWaO6pxT1tfj1BRY5PwMg==}
     dependencies:
       cross-fetch: 3.1.5(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
 
-  /@supabase/gotrue-js@2.10.2(encoding@0.1.13):
-    resolution: {integrity: sha512-tzfPtEPnLfeghxDvSS28/AiWgBcwNPjG70Tn1owlB2mumsf4xkTfXiZBYUjtCCL65/bUncs8Pbive4tL+vfIgA==}
+  /@supabase/gotrue-js@2.22.0(encoding@0.1.13):
+    resolution: {integrity: sha512-YBxg1AoMgXSFbEuamMyuJhKwscmK/eCkL8K7CenCjJJRVKfNHDYkM9F7VX9+atDDY6ejufdYz1auVfsqRrt9pQ==}
     dependencies:
       cross-fetch: 3.1.5(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
-
-  /@supabase/gotrue-js@2.6.2:
-    resolution: {integrity: sha512-ZUSbTe2SPPztOxFA4BjLncYVpAvTATgIdxQj8y1FDd43aqOh30bDzigIM0f1jMRMrGtcVFFOzRpp9TV7HUSitQ==}
-    dependencies:
-      cross-fetch: 3.1.5(encoding@0.1.13)
-    transitivePeerDependencies:
-      - encoding
-    dev: true
 
   /@supabase/postgrest-js@1.1.1(encoding@0.1.13):
     resolution: {integrity: sha512-jhdBah1JIxkZUp+5QH5JS7Uq9teGwh0Bs3FzbhnVlH619FSUFquTpHuNDxLsJmqEe8r3Wcnw19Dz0t3wEpkfug==}
@@ -3217,52 +3209,30 @@ packages:
     transitivePeerDependencies:
       - encoding
 
-  /@supabase/realtime-js@2.1.0:
-    resolution: {integrity: sha512-iplLCofTeYjnx9FIOsIwHLhMp0+7UVyiA4/sCeq40VdOgN9eTIhjEno9Tgh4dJARi4aaXoKfRX1DTxgZaOpPAw==}
+  /@supabase/realtime-js@2.7.2:
+    resolution: {integrity: sha512-Fi6xAl5PUkqnjl3wo4rdcQIbMG3+yTRX1aUZe/yfvTG84RMvmCXJ1yN6MmafVLeZpU1xkaz5Vx4L0tnHcLiy6w==}
     dependencies:
       '@types/phoenix': 1.5.4
-      websocket: 1.0.34
-    transitivePeerDependencies:
-      - supports-color
-    dev: true
-
-  /@supabase/realtime-js@2.6.0:
-    resolution: {integrity: sha512-tOVulMobhpxyDuu8VIImpL8FXmZOKsGNOSyS5ihJdj2xYmPPvYG+D2J51Ewfl+MFF65tweiB6p9N9bNIW1cDNA==}
-    dependencies:
-      '@types/phoenix': 1.5.4
+      '@types/websocket': 1.0.5
       websocket: 1.0.34
     transitivePeerDependencies:
       - supports-color
 
-  /@supabase/storage-js@2.1.0(encoding@0.1.13):
-    resolution: {integrity: sha512-bRMLWCbkkx84WDAtHAAMN7FAWuayrGZtTHj/WMUK6PsAWuonovvEa5s34a5iux61qJSn+ls3tFkyQgqxunl5ww==}
+  /@supabase/storage-js@2.5.0(encoding@0.1.13):
+    resolution: {integrity: sha512-6brHcFA8Ba8tDw72/mSf+pIgDfWQYkd9BjAra/RSAA0uCy84kALGnxIpxsf6mv40ka2GNRzstRGIKRlUdJgi/g==}
     dependencies:
       cross-fetch: 3.1.5(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
 
-  /@supabase/supabase-js@2.0.4:
-    resolution: {integrity: sha512-Z5uLyJm9bz5LMFnt5d1I6ccxVTdvKbJa0RsYGgKlA+QiyGvBxRRvVh8pqlYP1571DlycGG7bWngNwdv7/pehrg==}
+  /@supabase/supabase-js@2.19.0(encoding@0.1.13):
+    resolution: {integrity: sha512-LO+uMy4lnmLvpdF5vGSEQgurxoj8qx4LiZve555JeAnrnuyubvDLZ8Kk5nU0+9KRi4VGQIeD5znqMh0OaACj4w==}
     dependencies:
-      '@supabase/functions-js': 2.0.0(encoding@0.1.13)
-      '@supabase/gotrue-js': 2.6.2
+      '@supabase/functions-js': 2.1.0(encoding@0.1.13)
+      '@supabase/gotrue-js': 2.22.0(encoding@0.1.13)
       '@supabase/postgrest-js': 1.1.1(encoding@0.1.13)
-      '@supabase/realtime-js': 2.1.0
-      '@supabase/storage-js': 2.1.0(encoding@0.1.13)
-      cross-fetch: 3.1.5(encoding@0.1.13)
-    transitivePeerDependencies:
-      - encoding
-      - supports-color
-    dev: true
-
-  /@supabase/supabase-js@2.7.1(encoding@0.1.13):
-    resolution: {integrity: sha512-Q/e+JAluZEvy7D4ul3aAs3aOiKkGvHlZULy6wjchWQyU9YlJKZLr6VPYcwUeitcnRKZi4al5iTS55LgdJFfqIA==}
-    dependencies:
-      '@supabase/functions-js': 2.0.0(encoding@0.1.13)
-      '@supabase/gotrue-js': 2.10.2(encoding@0.1.13)
-      '@supabase/postgrest-js': 1.1.1(encoding@0.1.13)
-      '@supabase/realtime-js': 2.6.0
-      '@supabase/storage-js': 2.1.0(encoding@0.1.13)
+      '@supabase/realtime-js': 2.7.2
+      '@supabase/storage-js': 2.5.0(encoding@0.1.13)
       cross-fetch: 3.1.5(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
@@ -3270,6 +3240,15 @@ packages:
 
   /@sveltejs/adapter-auto@1.0.0(@sveltejs/kit@1.0.1):
     resolution: {integrity: sha512-yKyPvlLVua1bJ/42FrR3X041mFGdB4GzTZOAEoHUcNBRE5Mhx94+eqHpC3hNvAOiLEDcKfVO0ObyKSu7qldU+w==}
+    peerDependencies:
+      '@sveltejs/kit': ^1.0.0
+    dependencies:
+      '@sveltejs/kit': 1.0.1(svelte@3.55.0)(vite@4.0.4)
+      import-meta-resolve: 2.2.0
+    dev: true
+
+  /@sveltejs/adapter-auto@2.0.0(@sveltejs/kit@1.0.1):
+    resolution: {integrity: sha512-b+gkHFZgD771kgV3aO4avHFd7y1zhmMYy9i6xOK7m/rwmwaRO8gnF5zBc0Rgca80B2PMU1bKNxyBTHA14OzUAQ==}
     peerDependencies:
       '@sveltejs/kit': ^1.0.0
     dependencies:
@@ -3496,7 +3475,6 @@ packages:
 
   /@types/node@17.0.45:
     resolution: {integrity: sha512-w+tIMs3rq2afQdsPJlODhoUEKzFP1ayaoyl1CcnwtIlsVe7K7bA1NGm4s3PraqTLlXnbIN84zuBlxBWo1u9BLw==}
-    dev: true
 
   /@types/node@18.11.9:
     resolution: {integrity: sha512-CRpX21/kGdzjOpFsZSkcrXMGIBWMGNIHXXBVFSH+ggkftxg+XYP20TESbh+zFvFj3EQOl5byk0HTRn1IL6hbqg==}
@@ -3583,6 +3561,11 @@ packages:
     resolution: {integrity: sha512-PBjIUxZHOuj0R15/xuwJYjFi+KZdNFrehocChv4g5hu6aFroHue8m0lBP0POdK2nKzbw0cgV1mws8+V/JAcEkQ==}
     dev: true
 
+  /@types/websocket@1.0.5:
+    resolution: {integrity: sha512-NbsqiNX9CnEfC1Z0Vf4mE1SgAJ07JnRYcNex7AJ9zAVzmiGHmjKFEk7O4TJIsgv2B1sLEb6owKFZrACwdYngsQ==}
+    dependencies:
+      '@types/node': 17.0.45
+
   /@typescript-eslint/eslint-plugin@5.41.0(@typescript-eslint/parser@5.41.0)(eslint@8.27.0)(typescript@4.8.4):
     resolution: {integrity: sha512-DXUS22Y57/LAFSg3x7Vi6RNAuLpTXwxB9S2nIA7msBb/Zt8p7XqMwdpdc1IU7CkOQUPgAqR5fWvxuKCbneKGmA==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
@@ -3632,6 +3615,33 @@ packages:
       semver: 7.3.8
       tsutils: 3.21.0(typescript@4.9.4)
       typescript: 4.9.4
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
+
+  /@typescript-eslint/eslint-plugin@5.48.0(@typescript-eslint/parser@5.48.0)(eslint@8.31.0)(typescript@5.0.4):
+    resolution: {integrity: sha512-SVLafp0NXpoJY7ut6VFVUU9I+YeFsDzeQwtK0WZ+xbRN3mtxJ08je+6Oi2N89qDn087COdO0u3blKZNv9VetRQ==}
+    engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+    peerDependencies:
+      '@typescript-eslint/parser': ^5.0.0
+      eslint: ^6.0.0 || ^7.0.0 || ^8.0.0
+      typescript: '*'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      '@typescript-eslint/parser': 5.48.0(eslint@8.31.0)(typescript@5.0.4)
+      '@typescript-eslint/scope-manager': 5.48.0
+      '@typescript-eslint/type-utils': 5.48.0(eslint@8.31.0)(typescript@5.0.4)
+      '@typescript-eslint/utils': 5.48.0(eslint@8.31.0)(typescript@5.0.4)
+      debug: 4.3.4
+      eslint: 8.31.0
+      ignore: 5.2.0
+      natural-compare-lite: 1.4.0
+      regexpp: 3.2.0
+      semver: 7.3.8
+      tsutils: 3.21.0(typescript@5.0.4)
+      typescript: 5.0.4
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -3694,6 +3704,26 @@ packages:
       - supports-color
     dev: true
 
+  /@typescript-eslint/parser@5.48.0(eslint@8.31.0)(typescript@5.0.4):
+    resolution: {integrity: sha512-1mxNA8qfgxX8kBvRDIHEzrRGrKHQfQlbW6iHyfHYS0Q4X1af+S6mkLNtgCOsGVl8+/LUPrqdHMssAemkrQ01qg==}
+    engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+    peerDependencies:
+      eslint: ^6.0.0 || ^7.0.0 || ^8.0.0
+      typescript: '*'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      '@typescript-eslint/scope-manager': 5.48.0
+      '@typescript-eslint/types': 5.48.0
+      '@typescript-eslint/typescript-estree': 5.48.0(typescript@5.0.4)
+      debug: 4.3.4
+      eslint: 8.31.0
+      typescript: 5.0.4
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
+
   /@typescript-eslint/scope-manager@5.41.0:
     resolution: {integrity: sha512-xOxPJCnuktUkY2xoEZBKXO5DBCugFzjrVndKdUnyQr3+9aDWZReKq9MhaoVnbL+maVwWJu/N0SEtrtEUNb62QQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
@@ -3749,6 +3779,26 @@ packages:
       - supports-color
     dev: true
 
+  /@typescript-eslint/type-utils@5.48.0(eslint@8.31.0)(typescript@5.0.4):
+    resolution: {integrity: sha512-vbtPO5sJyFjtHkGlGK4Sthmta0Bbls4Onv0bEqOGm7hP9h8UpRsHJwsrCiWtCUndTRNQO/qe6Ijz9rnT/DB+7g==}
+    engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+    peerDependencies:
+      eslint: '*'
+      typescript: '*'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      '@typescript-eslint/typescript-estree': 5.48.0(typescript@5.0.4)
+      '@typescript-eslint/utils': 5.48.0(eslint@8.31.0)(typescript@5.0.4)
+      debug: 4.3.4
+      eslint: 8.31.0
+      tsutils: 3.21.0(typescript@5.0.4)
+      typescript: 5.0.4
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
+
   /@typescript-eslint/types@5.41.0:
     resolution: {integrity: sha512-5BejraMXMC+2UjefDvrH0Fo/eLwZRV6859SXRg+FgbhA0R0l6lDqDGAQYhKbXhPN2ofk2kY5sgGyLNL907UXpA==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
@@ -3799,6 +3849,27 @@ packages:
       - supports-color
     dev: true
 
+  /@typescript-eslint/typescript-estree@5.48.0(typescript@5.0.4):
+    resolution: {integrity: sha512-7pjd94vvIjI1zTz6aq/5wwE/YrfIyEPLtGJmRfyNR9NYIW+rOvzzUv3Cmq2hRKpvt6e9vpvPUQ7puzX7VSmsEw==}
+    engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+    peerDependencies:
+      typescript: '*'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      '@typescript-eslint/types': 5.48.0
+      '@typescript-eslint/visitor-keys': 5.48.0
+      debug: 4.3.4
+      globby: 11.1.0
+      is-glob: 4.0.3
+      semver: 7.3.8
+      tsutils: 3.21.0(typescript@5.0.4)
+      typescript: 5.0.4
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
+
   /@typescript-eslint/utils@5.41.0(eslint@8.27.0)(typescript@4.8.4):
     resolution: {integrity: sha512-QlvfwaN9jaMga9EBazQ+5DDx/4sAdqDkcs05AsQHMaopluVCUyu1bTRUVKzXbgjDlrRAQrYVoi/sXJ9fmG+KLQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
@@ -3830,6 +3901,26 @@ packages:
       '@typescript-eslint/scope-manager': 5.48.0
       '@typescript-eslint/types': 5.48.0
       '@typescript-eslint/typescript-estree': 5.48.0(typescript@4.9.4)
+      eslint: 8.31.0
+      eslint-scope: 5.1.1
+      eslint-utils: 3.0.0(eslint@8.31.0)
+      semver: 7.3.8
+    transitivePeerDependencies:
+      - supports-color
+      - typescript
+    dev: true
+
+  /@typescript-eslint/utils@5.48.0(eslint@8.31.0)(typescript@5.0.4):
+    resolution: {integrity: sha512-x2jrMcPaMfsHRRIkL+x96++xdzvrdBCnYRd5QiW5Wgo1OB4kDYPbC1XjWP/TNqlfK93K/lUL92erq5zPLgFScQ==}
+    engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+    peerDependencies:
+      eslint: ^6.0.0 || ^7.0.0 || ^8.0.0
+    dependencies:
+      '@types/json-schema': 7.0.11
+      '@types/semver': 7.3.12
+      '@typescript-eslint/scope-manager': 5.48.0
+      '@typescript-eslint/types': 5.48.0
+      '@typescript-eslint/typescript-estree': 5.48.0(typescript@5.0.4)
       eslint: 8.31.0
       eslint-scope: 5.1.1
       eslint-utils: 3.0.0(eslint@8.31.0)
@@ -10543,6 +10634,16 @@ packages:
       typescript: 4.9.4
     dev: true
 
+  /tsutils@3.21.0(typescript@5.0.4):
+    resolution: {integrity: sha512-mHKK3iUXL+3UF6xL5k0PEhKRUBKPBCv/+RkEOpjRWxxx27KKRBmmA60A9pgOUvMi8GKhRMPEmjBRPzs2W7O1OA==}
+    engines: {node: '>= 6'}
+    peerDependencies:
+      typescript: '>=2.8.0 || >= 3.2.0-dev || >= 3.3.0-dev || >= 3.4.0-dev || >= 3.5.0-dev || >= 3.6.0-dev || >= 3.6.0-beta || >= 3.7.0-dev || >= 3.7.0-beta'
+    dependencies:
+      tslib: 1.14.1
+      typescript: 5.0.4
+    dev: true
+
   /tty-table@4.1.6:
     resolution: {integrity: sha512-kRj5CBzOrakV4VRRY5kUWbNYvo/FpOsz65DzI5op9P+cHov3+IqPbo1JE1ZnQGkHdZgNFDsrEjrfqqy/Ply9fw==}
     engines: {node: '>=8.0.0'}
@@ -10702,6 +10803,12 @@ packages:
   /typescript@4.9.4:
     resolution: {integrity: sha512-Uz+dTXYzxXXbsFpM86Wh3dKCxrQqUcVMxwU54orwlJjOpO3ao8L7j5lH+dWfTwgCwIuM9GQ2kvVotzYJMXTBZg==}
     engines: {node: '>=4.2.0'}
+    hasBin: true
+    dev: true
+
+  /typescript@5.0.4:
+    resolution: {integrity: sha512-cW9T5W9xY37cc+jfEnaUvX91foxtHkza3Nw3wkoF4sSlKn0MONdkdEndig/qPBWXNkmplh3NzayQzCiHM4/hqw==}
+    engines: {node: '>=12.20'}
     hasBin: true
     dev: true
 

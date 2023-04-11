@@ -7,5 +7,6 @@ export {
   serializeCookie,
   parseSupabaseCookie,
   stringifySupabaseSession,
-  isBrowser
+  isBrowser,
+  DEFAULT_COOKIE_OPTIONS
 } from './utils';

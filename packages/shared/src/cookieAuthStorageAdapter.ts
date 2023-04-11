@@ -14,10 +14,21 @@ export abstract class CookieAuthStorageAdapter implements StorageAdapter {
 
     if (!value) return null;
 
+    // pkce code verifier
+    if (key.endsWith('-code-verifier')) {
+      return value;
+    }
+
     return JSON.stringify(parseSupabaseCookie(value));
   }
 
   setItem(key: string, value: string): void | Promise<void> {
+    // pkce code verifier
+    if (key.endsWith('-code-verifier')) {
+      this.setCookie(key, value);
+      return;
+    }
+
     let session: Session = JSON.parse(value);
     const sessionStr = stringifySupabaseSession(session);
 
