@@ -1,12 +1,8 @@
 import { AuthApiError } from '@supabase/supabase-js';
-import { fail, redirect, type ActionFailure } from '@sveltejs/kit';
-import type { Actions } from './$types';
+import { fail } from '@sveltejs/kit';
 
-export const actions: Actions = {
-	async default({
-		request,
-		locals: { supabase }
-	}): Promise<ActionFailure<{ error: string; values?: { email: string } }>> {
+export const actions = {
+	async default({ request, url, locals: { supabase } }) {
 		const formData = await request.formData();
 
 		const email = formData.get('email') as string;
@@ -19,14 +15,18 @@ export const actions: Actions = {
 		}
 		if (!password) {
 			return fail(400, {
-				error: 'Please enter your password',
+				error: 'Please enter a password',
 				values: {
 					email
 				}
 			});
 		}
 
-		const { error } = await supabase.auth.signInWithPassword({ email, password });
+		const { error } = await supabase.auth.signUp({
+			email,
+			password,
+			options: { emailRedirectTo: url.origin }
+		});
 
 		if (error) {
 			if (error instanceof AuthApiError && error.status === 400) {
@@ -37,6 +37,7 @@ export const actions: Actions = {
 					}
 				});
 			}
+
 			return fail(500, {
 				error: 'Server error. Try again later.',
 				values: {
@@ -45,6 +46,8 @@ export const actions: Actions = {
 			});
 		}
 
-		throw redirect(303, '/dashboard');
+		return {
+			message: 'Please check your email for a magic link to log into the website.'
+		};
 	}
 };

@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { applyAction, enhance, type SubmitFunction } from '$app/forms';
-	import type { ActionData } from './$types';
 
-	export let form: ActionData;
+	export let form;
 	let loading = false;
 
 	const handleSubmit: SubmitFunction = () => {

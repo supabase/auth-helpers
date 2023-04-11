@@ -1,3 +1,4 @@
+<!-- src/routes/+layout.svelte -->
 <script lang="ts">
 	import { invalidate } from '$app/navigation';
 	import { onMount } from 'svelte';
@@ -18,14 +19,10 @@
 
 		return () => subscription.unsubscribe();
 	});
-
-	function signout() {
-		supabase.auth.signOut();
-	}
 </script>
 
-{#if session}
-	<button on:click={signout}>Sign out</button>
-{/if}
+<svelte:head>
+	<title>Supabase Auth Helpers Demo</title>
+</svelte:head>
 
 <slot />

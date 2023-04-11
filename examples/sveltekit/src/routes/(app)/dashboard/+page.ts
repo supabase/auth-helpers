@@ -1,7 +1,6 @@
-import type { PageLoad } from './$types';
 import { redirect } from '@sveltejs/kit';
 
-export const load: PageLoad = async ({ parent }) => {
+export const load = async ({ parent }) => {
 	const { session, supabase } = await parent();
 	if (!session) {
 		throw redirect(303, '/');
