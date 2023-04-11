@@ -1,6 +1,7 @@
 import {
   CookieAuthStorageAdapter,
   CookieOptions,
+  DEFAULT_COOKIE_OPTIONS,
   parseCookies,
   serializeCookie,
   SupabaseClientOptionsWithoutAuth
@@ -77,9 +78,21 @@ export function createMiddlewareSupabaseClient<
       }
     },
     auth: {
+      flowType: 'pkce',
       autoRefreshToken: false,
       detectSessionInUrl: false,
-      storage: new NextMiddlewareAuthStorageAdapter(context, cookieOptions)
+
+      // fix this in supabase-js
+      ...(cookieOptions?.name
+        ? {
+            storageKey: cookieOptions.name
+          }
+        : {}),
+
+      storage: new NextMiddlewareAuthStorageAdapter(context, {
+        ...DEFAULT_COOKIE_OPTIONS,
+        ...cookieOptions
+      })
     }
   });
 }

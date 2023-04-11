@@ -27,7 +27,10 @@
 		on:click={() => {
 			supabase.auth.signInWithOAuth({
 				provider: 'github',
-				options: { scopes: 'public_repo user:email' }
+				options: {
+					scopes: 'public_repo user:email',
+					redirectTo: `${$page.url.origin}/api/auth/callback`
+				}
 			});
 		}}
 	>

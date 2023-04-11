@@ -1,5 +1,6 @@
 import {
   CookieOptions,
+  DEFAULT_COOKIE_OPTIONS,
   SupabaseClientOptionsWithoutAuth
 } from '@supabase/auth-helpers-shared';
 import { createClient } from '@supabase/supabase-js';
@@ -77,7 +78,7 @@ export function createSupabaseServerClient<
   cookieOptions?: CookieOptions;
   expiryMargin?: number;
 }) {
-  return createClient<Database, SchemaName>(supabaseUrl, supabaseKey, {
+  const client = createClient<Database, SchemaName>(supabaseUrl, supabaseKey, {
     ...options,
     global: {
       ...options?.global,
@@ -87,14 +88,28 @@ export function createSupabaseServerClient<
       }
     },
     auth: {
+      flowType: 'pkce',
       autoRefreshToken: false,
       detectSessionInUrl: false,
       persistSession: true,
+
+      // fix this in supabase-js
+      ...(cookieOptions?.name
+        ? {
+            storageKey: cookieOptions.name
+          }
+        : {}),
+
       storage: new SvelteKitServerAuthStorageAdapter(
         event,
-        cookieOptions,
+        {
+          ...DEFAULT_COOKIE_OPTIONS,
+          ...cookieOptions
+        },
         expiryMargin
       )
     }
   });
+
+  return client;
 }

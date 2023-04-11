@@ -1,6 +1,7 @@
 import {
   BrowserCookieAuthStorageAdapter,
   CookieOptions,
+  DEFAULT_COOKIE_OPTIONS,
   SupabaseClientOptionsWithoutAuth
 } from '@supabase/auth-helpers-shared';
 import { createClient } from '@supabase/supabase-js';
@@ -37,7 +38,19 @@ export function createBrowserSupabaseClient<
       }
     },
     auth: {
-      storage: new BrowserCookieAuthStorageAdapter(cookieOptions)
+      flowType: 'pkce',
+
+      // fix this in supabase-js
+      ...(cookieOptions?.name
+        ? {
+            storageKey: cookieOptions.name
+          }
+        : {}),
+
+      storage: new BrowserCookieAuthStorageAdapter({
+        ...DEFAULT_COOKIE_OPTIONS,
+        ...cookieOptions
+      })
     }
   });
 }

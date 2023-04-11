@@ -30,7 +30,7 @@
   },
   "homepage": "https://github.com/supabase/auth-helpers#readme",
   "devDependencies": {
-    "@supabase/supabase-js": "2.0.4",
+    "@supabase/supabase-js": "2.19.0",
     "@types/cookie": "^0.5.1",
     "next": "^12.1.5",
     "react": ">=17.0.2 <18.0.0 || >=18.0.0-0 <19.0.0",
@@ -40,6 +40,6 @@
     "cookie": "^0.5.0"
   },
   "peerDependencies": {
-    "@supabase/supabase-js": "^2.0.4"
+    "@supabase/supabase-js": "^2.19.0"
   }
 }

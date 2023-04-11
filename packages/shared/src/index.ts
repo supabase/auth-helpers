@@ -5,8 +5,8 @@ export * from './types';
 export {
   parseCookies,
   serializeCookie,
-  filterCookies,
   parseSupabaseCookie,
   stringifySupabaseSession,
-  isBrowser
+  isBrowser,
+  DEFAULT_COOKIE_OPTIONS
 } from './utils';

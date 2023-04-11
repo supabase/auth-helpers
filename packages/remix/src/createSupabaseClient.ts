@@ -2,6 +2,7 @@ import {
   BrowserCookieAuthStorageAdapter,
   CookieAuthStorageAdapter,
   CookieOptions,
+  DEFAULT_COOKIE_OPTIONS,
   parseCookies,
   serializeCookie,
   SupabaseClientOptionsWithoutAuth
@@ -116,7 +117,19 @@ export function createBrowserClient<
       }
     },
     auth: {
-      storage: new BrowserCookieAuthStorageAdapter(cookieOptions)
+      flowType: 'pkce',
+
+      // fix this in supabase-js
+      ...(cookieOptions?.name
+        ? {
+            storageKey: cookieOptions.name
+          }
+        : {}),
+
+      storage: new BrowserCookieAuthStorageAdapter({
+        ...DEFAULT_COOKIE_OPTIONS,
+        ...cookieOptions
+      })
     }
   });
 }
@@ -194,11 +207,19 @@ export function createServerClient<
       }
     },
     auth: {
-      storage: new RemixServerAuthStorageAdapter(
-        request,
-        response,
-        cookieOptions
-      )
+      flowType: 'pkce',
+
+      // fix this in supabase-js
+      ...(cookieOptions?.name
+        ? {
+            storageKey: cookieOptions.name
+          }
+        : {}),
+
+      storage: new RemixServerAuthStorageAdapter(request, response, {
+        ...DEFAULT_COOKIE_OPTIONS,
+        ...cookieOptions
+      })
     }
   });
 }
