@@ -48,6 +48,7 @@ export function createServerSupabaseClient<
       detectSessionInUrl: false,
       autoRefreshToken: false,
       storageKey: name,
+      flowType: 'pkce',
       storage: {
         getItem(key: string) {
           return JSON.stringify(currentSession);

@@ -31,6 +31,7 @@ export function createBrowserSupabaseClient<
     ...options,
     auth: {
       storageKey: name,
+      flowType: 'pkce',
       storage: {
         getItem(key: string) {
           if (!isBrowser()) {
