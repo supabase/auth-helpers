@@ -1,5 +1,12 @@
 # shared
 
+## 0.4.0-next.0
+
+### Minor Changes
+
+- 65bf8d4: Add cookie storage adapter per library following a shared storage adapter
+- 65bf8d4: Add full server side support to auth helpers through PKCE
+
 ## 0.3.3
 
 ### Patch Changes

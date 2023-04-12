@@ -1,6 +1,6 @@
 {
   "name": "@supabase/auth-helpers-react",
-  "version": "0.3.1",
+  "version": "0.4.0-next.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "publishConfig": {
