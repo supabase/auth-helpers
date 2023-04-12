@@ -34,7 +34,10 @@ const LoginPage: NextPage = () => {
           onClick={() => {
             supabaseClient.auth.signInWithOAuth({
               provider: 'github',
-              options: { scopes: 'repo', redirectTo: 'http://localhost:3000' }
+              options: {
+                scopes: 'repo',
+                redirectTo: 'http://localhost:3000/api/callback'
+              }
             });
           }}
         >

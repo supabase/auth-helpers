@@ -70,7 +70,10 @@ export default function Supabase() {
     const {
       data: { subscription }
     } = supabase.auth.onAuthStateChange((event, session) => {
-      if (session?.access_token !== serverAccessToken) {
+      if (
+        session?.access_token !== serverAccessToken &&
+        fetcher.state === 'idle'
+      ) {
         // server and client are out of sync.
         // Remix recalls active loaders after actions complete
         fetcher.submit(null, {

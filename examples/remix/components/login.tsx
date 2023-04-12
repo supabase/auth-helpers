@@ -20,7 +20,10 @@ export default function Login({
 
   const handleGitHubLogin = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'github'
+      provider: 'github',
+      options: {
+        redirectTo: `${location.origin}/callback`
+      }
     });
 
     if (error) {
