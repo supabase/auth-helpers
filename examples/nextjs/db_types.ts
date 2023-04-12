@@ -9,110 +9,58 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
-      partners: {
+      test: {
         Row: {
+          created_at: string | null;
           id: number;
-          slug: string;
-          type: Database['public']['Enums']['partner_type'];
-          category: string;
-          developer: string;
-          title: string;
-          description: string;
-          logo: string;
-          images: string[];
-          video: string;
-          overview: string;
-          website: string;
-          docs: string;
-          approved: boolean;
         };
         Insert: {
+          created_at?: string | null;
           id?: number;
-          slug?: string;
-          type?: Database['public']['Enums']['partner_type'];
-          category?: string;
-          developer?: string;
-          title?: string;
-          description?: string;
-          logo?: string;
-          images?: string[];
-          video?: string;
-          overview?: string;
-          website?: string;
-          docs?: string;
-          approved?: boolean;
         };
         Update: {
+          created_at?: string | null;
           id?: number;
-          slug?: string;
-          type?: Database['public']['Enums']['partner_type'];
-          category?: string;
-          developer?: string;
-          title?: string;
-          description?: string;
-          logo?: string;
-          images?: string[];
-          video?: string;
-          overview?: string;
-          website?: string;
-          docs?: string;
-          approved?: boolean;
         };
       };
-      partner_contacts: {
+      users: {
         Row: {
-          id: number;
-          type: Database['public']['Enums']['partner_type'];
-          company: string;
-          country: string;
-          details?: string;
-          email: string;
-          first: string;
-          last: string;
-          phone?: string;
-          size?: number;
-          title?: string;
-          website: string;
+          city: string | null;
+          country: string | null;
+          created_at: string;
+          full_name: string | null;
+          id: string;
+          username: string | null;
         };
         Insert: {
-          id?: number;
-          type?: Database['public']['Enums']['partner_type'];
-          company?: string;
-          country?: string;
-          details?: string;
-          email?: string;
-          first?: string;
-          last?: string;
-          phone?: string;
-          size?: number;
-          title?: string;
-          website?: string;
+          city?: string | null;
+          country?: string | null;
+          created_at?: string;
+          full_name?: string | null;
+          id: string;
+          username?: string | null;
         };
         Update: {
-          id?: number;
-          type?: Database['public']['Enums']['partner_type'];
-          company?: string;
-          country?: string;
-          details?: string;
-          email?: string;
-          first?: string;
-          last?: string;
-          phone?: string;
-          size?: number;
-          title?: string;
-          website?: string;
+          city?: string | null;
+          country?: string | null;
+          created_at?: string;
+          full_name?: string | null;
+          id?: string;
+          username?: string | null;
         };
       };
     };
-    Views: {};
+    Views: {
+      [_ in never]: never;
+    };
     Functions: {
-      derive_label_sort_from_label: {
-        Args: { label: string };
-        Returns: string;
-      };
+      [_ in never]: never;
     };
     Enums: {
-      partner_type: 'technology' | 'expert';
+      [_ in never]: never;
+    };
+    CompositeTypes: {
+      [_ in never]: never;
     };
   };
 }

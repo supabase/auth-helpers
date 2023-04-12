@@ -22,5 +22,8 @@
     "server-only": "^0.0.1",
     "tsconfig": "workspace:*",
     "typescript": "4.8.4"
+  },
+  "devDependencies": {
+    "json5": ">=1.0.2"
   }
 }

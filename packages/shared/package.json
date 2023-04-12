@@ -1,6 +1,6 @@
 {
   "name": "@supabase/auth-helpers-shared",
-  "version": "0.3.0",
+  "version": "0.3.3",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -38,6 +38,9 @@
     "tsconfig": "workspace:*",
     "tsup": "^6.5.0",
     "cookie": "^0.5.0"
+  },
+  "dependencies": {
+    "js-base64": "^3.7.5"
   },
   "peerDependencies": {
     "@supabase/supabase-js": "^2.19.0"

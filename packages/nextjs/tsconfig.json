@@ -4,6 +4,6 @@
     "incremental": false,
     "importHelpers": true
   },
-  "include": ["src", "src/middleware"],
+  "include": ["src"],
   "exclude": ["node_modules"]
 }

@@ -1,0 +1,39 @@
+diff --git a/dist/assemble-release-plan.cjs.dev.js b/dist/assemble-release-plan.cjs.dev.js
+index 3a37c62c975518f975c22e1b4b3974d9b325a5da..4aaad4630b4d3cf31738b105d8a1e42a428cee2c 100644
+--- a/dist/assemble-release-plan.cjs.dev.js
++++ b/dist/assemble-release-plan.cjs.dev.js
+@@ -430,7 +430,7 @@ function applyLinks(releases, packagesByName, linked) {
+ 
+ function getPreVersion(version) {
+   let parsed = semver.parse(version);
+-  let preVersion = parsed.prerelease[1] === undefined ? -1 : parsed.prerelease[1];
++  let preVersion = parsed?.prerelease[1] === undefined ? -1 : parsed.prerelease[1];
+ 
+   if (typeof preVersion !== "number") {
+     throw new errors.InternalError("preVersion is not a number");
+diff --git a/dist/assemble-release-plan.cjs.prod.js b/dist/assemble-release-plan.cjs.prod.js
+index 87b4c104bf3fa53ba498ced6f81eda0ed4c86436..bbd6f6a9dadef83b1bb5b95e6883b2fd235fe653 100644
+--- a/dist/assemble-release-plan.cjs.prod.js
++++ b/dist/assemble-release-plan.cjs.prod.js
+@@ -214,7 +214,7 @@ function applyLinks(releases, packagesByName, linked) {
+ }
+ 
+ function getPreVersion(version) {
+-  let parsed = semver.parse(version), preVersion = void 0 === parsed.prerelease[1] ? -1 : parsed.prerelease[1];
++  let parsed = semver.parse(version), preVersion = void 0 === parsed?.prerelease[1] ? -1 : parsed.prerelease[1];
+   if ("number" != typeof preVersion) throw new errors.InternalError("preVersion is not a number");
+   return preVersion++, preVersion;
+ }
+diff --git a/src/index.ts b/src/index.ts
+index 3ffb6fa772b78506bd7de7a4fcb41c004733b00d..54c64132371059e535d9fe2f9b946f1c5d2cee45 100644
+--- a/src/index.ts
++++ b/src/index.ts
+@@ -24,7 +24,7 @@ type SnapshotReleaseParameters = {
+ function getPreVersion(version: string) {
+   let parsed = semver.parse(version)!;
+   let preVersion =
+-    parsed.prerelease[1] === undefined ? -1 : parsed.prerelease[1];
++    parsed?.prerelease[1] === undefined ? -1 : parsed.prerelease[1];
+   if (typeof preVersion !== "number") {
+     throw new InternalError("preVersion is not a number");
+   }

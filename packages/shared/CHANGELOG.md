@@ -1,5 +1,23 @@
 # shared
 
+## 0.3.3
+
+### Patch Changes
+
+- 1ea258e: use js-base64
+
+## 0.3.2
+
+### Patch Changes
+
+- 185e9cf: fix decodeBase64url
+
+## 0.3.1
+
+### Patch Changes
+
+- f86073d: Update to use custom Buffer implementation
+
 ## 0.3.0
 
 ### Minor Changes
