@@ -13,5 +13,8 @@
     "@supabase/auth-helpers-sveltekit": "0.9.3",
     "tsconfig": "0.1.1"
   },
-  "changesets": []
+  "changesets": [
+    "cyan-dancers-care",
+    "violet-frogs-know"
+  ]
 }
