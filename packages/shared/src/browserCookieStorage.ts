@@ -1,11 +1,11 @@
 import { parse, serialize } from 'cookie';
 import { CookieAuthStorageAdapter } from './cookieAuthStorageAdapter';
 import { CookieOptions } from './types';
-import { DEFAULT_COOKIE_OPTIONS, isBrowser } from './utils';
+import { isBrowser } from './utils';
 
 export class BrowserCookieAuthStorageAdapter extends CookieAuthStorageAdapter {
-  constructor(private readonly cookieOptions?: CookieOptions) {
-    super();
+  constructor(cookieOptions?: CookieOptions) {
+    super(cookieOptions);
   }
 
   protected getCookie(name: string) {
@@ -19,7 +19,6 @@ export class BrowserCookieAuthStorageAdapter extends CookieAuthStorageAdapter {
     if (!isBrowser()) return null;
 
     document.cookie = serialize(name, value, {
-      ...DEFAULT_COOKIE_OPTIONS,
       ...this.cookieOptions,
       httpOnly: false
     });
@@ -29,7 +28,6 @@ export class BrowserCookieAuthStorageAdapter extends CookieAuthStorageAdapter {
     if (!isBrowser()) return null;
 
     document.cookie = serialize(name, '', {
-      ...DEFAULT_COOKIE_OPTIONS,
       ...this.cookieOptions,
       maxAge: 0,
       httpOnly: false

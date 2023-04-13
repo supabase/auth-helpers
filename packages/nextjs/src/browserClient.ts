@@ -1,10 +1,9 @@
 import {
   BrowserCookieAuthStorageAdapter,
-  CookieOptions,
-  DEFAULT_COOKIE_OPTIONS,
-  SupabaseClientOptionsWithoutAuth
+  CookieOptionsWithName,
+  SupabaseClientOptionsWithoutAuth,
+  createSupabaseClient
 } from '@supabase/auth-helpers-shared';
-import { createClient } from '@supabase/supabase-js';
 
 export function createBrowserSupabaseClient<
   Database = any,
@@ -20,7 +19,7 @@ export function createBrowserSupabaseClient<
   supabaseUrl?: string;
   supabaseKey?: string;
   options?: SupabaseClientOptionsWithoutAuth<SchemaName>;
-  cookieOptions?: CookieOptions;
+  cookieOptions?: CookieOptionsWithName;
 } = {}) {
   if (!supabaseUrl || !supabaseKey) {
     throw new Error(
@@ -28,7 +27,7 @@ export function createBrowserSupabaseClient<
     );
   }
 
-  return createClient<Database, SchemaName>(supabaseUrl, supabaseKey, {
+  return createSupabaseClient<Database, SchemaName>(supabaseUrl, supabaseKey, {
     ...options,
     global: {
       ...options?.global,
@@ -38,19 +37,8 @@ export function createBrowserSupabaseClient<
       }
     },
     auth: {
-      flowType: 'pkce',
-
-      // fix this in supabase-js
-      ...(cookieOptions?.name
-        ? {
-            storageKey: cookieOptions.name
-          }
-        : {}),
-
-      storage: new BrowserCookieAuthStorageAdapter({
-        ...DEFAULT_COOKIE_OPTIONS,
-        ...cookieOptions
-      })
+      storageKey: cookieOptions?.name,
+      storage: new BrowserCookieAuthStorageAdapter(cookieOptions)
     }
   });
 }

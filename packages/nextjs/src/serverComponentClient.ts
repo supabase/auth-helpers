@@ -1,19 +1,19 @@
 import {
   CookieAuthStorageAdapter,
   CookieOptions,
-  DEFAULT_COOKIE_OPTIONS,
-  SupabaseClientOptionsWithoutAuth
+  CookieOptionsWithName,
+  SupabaseClientOptionsWithoutAuth,
+  createSupabaseClient
 } from '@supabase/auth-helpers-shared';
-import { createClient } from '@supabase/supabase-js';
 
 class NextServerComponentAuthStorageAdapter extends CookieAuthStorageAdapter {
   constructor(
     private readonly context: {
       cookies: () => any; // TODO update this to be ReadonlyHeaders when we upgrade to Next.js 13
     },
-    private readonly cookieOptions?: CookieOptions
+    cookieOptions?: CookieOptions
   ) {
-    super();
+    super(cookieOptions);
   }
 
   protected getCookie(name: string): string | null | undefined {
@@ -53,7 +53,7 @@ export function createServerComponentSupabaseClient<
     supabaseUrl?: string;
     supabaseKey?: string;
     options?: SupabaseClientOptionsWithoutAuth<SchemaName>;
-    cookieOptions?: CookieOptions;
+    cookieOptions?: CookieOptionsWithName;
   } = {}
 ) {
   if (!supabaseUrl || !supabaseKey) {
@@ -62,7 +62,7 @@ export function createServerComponentSupabaseClient<
     );
   }
 
-  return createClient<Database, SchemaName>(supabaseUrl, supabaseKey, {
+  return createSupabaseClient<Database, SchemaName>(supabaseUrl, supabaseKey, {
     ...options,
     global: {
       ...options?.global,
@@ -72,21 +72,8 @@ export function createServerComponentSupabaseClient<
       }
     },
     auth: {
-      flowType: 'pkce',
-      autoRefreshToken: false,
-      detectSessionInUrl: false,
-
-      // fix this in supabase-js
-      ...(cookieOptions?.name
-        ? {
-            storageKey: cookieOptions.name
-          }
-        : {}),
-
-      storage: new NextServerComponentAuthStorageAdapter(context, {
-        ...DEFAULT_COOKIE_OPTIONS,
-        ...cookieOptions
-      })
+      storageKey: cookieOptions?.name,
+      storage: new NextServerComponentAuthStorageAdapter(context, cookieOptions)
     }
   });
 }

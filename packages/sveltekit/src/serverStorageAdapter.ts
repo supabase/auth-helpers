@@ -11,10 +11,10 @@ export class SvelteKitServerAuthStorageAdapter extends CookieAuthStorageAdapter 
 
   constructor(
     private readonly event: Pick<RequestEvent, 'cookies'>,
-    private readonly cookieOptions?: CookieOptions,
+    cookieOptions?: CookieOptions,
     private readonly expiryMargin: number = 60
   ) {
-    super();
+    super(cookieOptions);
   }
 
   protected getCookie(name: string) {

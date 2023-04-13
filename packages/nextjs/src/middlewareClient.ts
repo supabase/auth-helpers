@@ -1,20 +1,20 @@
 import {
   CookieAuthStorageAdapter,
   CookieOptions,
-  DEFAULT_COOKIE_OPTIONS,
+  CookieOptionsWithName,
+  createSupabaseClient,
   parseCookies,
   serializeCookie,
   SupabaseClientOptionsWithoutAuth
 } from '@supabase/auth-helpers-shared';
-import { createClient, SupabaseClientOptions } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 
 class NextMiddlewareAuthStorageAdapter extends CookieAuthStorageAdapter {
   constructor(
     private readonly context: { req: NextRequest; res: NextResponse },
-    private readonly cookieOptions?: CookieOptions
+    cookieOptions?: CookieOptions
   ) {
-    super();
+    super(cookieOptions);
   }
 
   protected getCookie(name: string): string | null | undefined {
@@ -59,7 +59,7 @@ export function createMiddlewareSupabaseClient<
     supabaseUrl?: string;
     supabaseKey?: string;
     options?: SupabaseClientOptionsWithoutAuth<SchemaName>;
-    cookieOptions?: CookieOptions;
+    cookieOptions?: CookieOptionsWithName;
   } = {}
 ) {
   if (!supabaseUrl || !supabaseKey) {
@@ -68,7 +68,7 @@ export function createMiddlewareSupabaseClient<
     );
   }
 
-  return createClient<Database, SchemaName>(supabaseUrl, supabaseKey, {
+  return createSupabaseClient<Database, SchemaName>(supabaseUrl, supabaseKey, {
     ...options,
     global: {
       ...options?.global,
@@ -78,21 +78,8 @@ export function createMiddlewareSupabaseClient<
       }
     },
     auth: {
-      flowType: 'pkce',
-      autoRefreshToken: false,
-      detectSessionInUrl: false,
-
-      // fix this in supabase-js
-      ...(cookieOptions?.name
-        ? {
-            storageKey: cookieOptions.name
-          }
-        : {}),
-
-      storage: new NextMiddlewareAuthStorageAdapter(context, {
-        ...DEFAULT_COOKIE_OPTIONS,
-        ...cookieOptions
-      })
+      storageKey: cookieOptions?.name,
+      storage: new NextMiddlewareAuthStorageAdapter(context, cookieOptions)
     }
   });
 }
