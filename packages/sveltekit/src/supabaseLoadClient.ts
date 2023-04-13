@@ -1,10 +1,10 @@
 import {
-  CookieOptions,
-  DEFAULT_COOKIE_OPTIONS,
+  CookieOptionsWithName,
+  createSupabaseClient,
   isBrowser,
   SupabaseClientOptionsWithoutAuth
 } from '@supabase/auth-helpers-shared';
-import { createClient, Session, SupabaseClient } from '@supabase/supabase-js';
+import { Session, SupabaseClient } from '@supabase/supabase-js';
 import { LoadEvent } from '@sveltejs/kit';
 import { SvelteKitLoadAuthStorageAdapter } from './loadStorageAdapter';
 
@@ -72,42 +72,35 @@ export function createSupabaseLoadClient<
    */
   serverSession: Session | null;
   options?: SupabaseClientOptionsWithoutAuth<SchemaName>;
-  cookieOptions?: CookieOptions;
+  cookieOptions?: CookieOptionsWithName;
 }): SupabaseClient<Database, SchemaName> {
   const browser = isBrowser();
   if (browser && cachedBrowserClient) {
     return cachedBrowserClient as SupabaseClient<Database, SchemaName>;
   }
 
-  const client = createClient<Database, SchemaName>(supabaseUrl, supabaseKey, {
-    ...options,
-    global: {
-      fetch: event.fetch,
-      ...options?.global,
-      headers: {
-        ...options?.global?.headers,
-        'X-Client-Info': `${PACKAGE_NAME}@${PACKAGE_VERSION}`
+  const client = createSupabaseClient<Database, SchemaName>(
+    supabaseUrl,
+    supabaseKey,
+    {
+      ...options,
+      global: {
+        fetch: event.fetch,
+        ...options?.global,
+        headers: {
+          ...options?.global?.headers,
+          'X-Client-Info': `${PACKAGE_NAME}@${PACKAGE_VERSION}`
+        }
+      },
+      auth: {
+        storageKey: cookieOptions?.name,
+        storage: new SvelteKitLoadAuthStorageAdapter(
+          serverSession,
+          cookieOptions
+        )
       }
-    },
-    auth: {
-      flowType: 'pkce',
-      autoRefreshToken: browser,
-      detectSessionInUrl: browser,
-      persistSession: true,
-
-      // fix this in supabase-js
-      ...(cookieOptions?.name
-        ? {
-            storageKey: cookieOptions.name
-          }
-        : {}),
-
-      storage: new SvelteKitLoadAuthStorageAdapter(serverSession, {
-        ...DEFAULT_COOKIE_OPTIONS,
-        ...cookieOptions
-      })
     }
-  });
+  );
 
   if (browser) {
     cachedBrowserClient = client;

@@ -2,12 +2,13 @@ import {
   BrowserCookieAuthStorageAdapter,
   CookieAuthStorageAdapter,
   CookieOptions,
-  DEFAULT_COOKIE_OPTIONS,
+  CookieOptionsWithName,
+  createSupabaseClient,
   parseCookies,
   serializeCookie,
   SupabaseClientOptionsWithoutAuth
 } from '@supabase/auth-helpers-shared';
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { SupabaseClient } from '@supabase/supabase-js';
 
 /**
  * ## Authenticated Supabase client
@@ -98,7 +99,7 @@ export function createBrowserClient<
     cookieOptions
   }: {
     options?: SupabaseClientOptionsWithoutAuth<SchemaName>;
-    cookieOptions?: CookieOptions;
+    cookieOptions?: CookieOptionsWithName;
   } = {}
 ): SupabaseClient<Database, SchemaName> {
   if (!supabaseUrl || !supabaseKey) {
@@ -107,7 +108,7 @@ export function createBrowserClient<
     );
   }
 
-  return createClient<Database, SchemaName>(supabaseUrl, supabaseKey, {
+  return createSupabaseClient<Database, SchemaName>(supabaseUrl, supabaseKey, {
     ...options,
     global: {
       ...options?.global,
@@ -117,19 +118,8 @@ export function createBrowserClient<
       }
     },
     auth: {
-      flowType: 'pkce',
-
-      // fix this in supabase-js
-      ...(cookieOptions?.name
-        ? {
-            storageKey: cookieOptions.name
-          }
-        : {}),
-
-      storage: new BrowserCookieAuthStorageAdapter({
-        ...DEFAULT_COOKIE_OPTIONS,
-        ...cookieOptions
-      })
+      storageKey: cookieOptions?.name,
+      storage: new BrowserCookieAuthStorageAdapter(cookieOptions)
     }
   });
 }
@@ -138,9 +128,9 @@ class RemixServerAuthStorageAdapter extends CookieAuthStorageAdapter {
   constructor(
     private readonly request: Request,
     private readonly response: Response,
-    private readonly cookieOptions?: CookieOptions
+    cookieOptions?: CookieOptions
   ) {
-    super();
+    super(cookieOptions);
   }
 
   protected getCookie(name: string): string | null | undefined {
@@ -152,7 +142,7 @@ class RemixServerAuthStorageAdapter extends CookieAuthStorageAdapter {
       // Allow supabase-js on the client to read the cookie as well
       httpOnly: false
     });
-    this.response.headers.set('set-cookie', cookieStr);
+    this.response.headers.append('set-cookie', cookieStr);
   }
   protected deleteCookie(name: string): void {
     const cookieStr = serializeCookie(name, '', {
@@ -161,7 +151,7 @@ class RemixServerAuthStorageAdapter extends CookieAuthStorageAdapter {
       // Allow supabase-js on the client to read the cookie as well
       httpOnly: false
     });
-    this.response.headers.set('set-cookie', cookieStr);
+    this.response.headers.append('set-cookie', cookieStr);
   }
 }
 
@@ -182,7 +172,7 @@ export function createServerClient<
     request: Request;
     response: Response;
     options?: SupabaseClientOptionsWithoutAuth<SchemaName>;
-    cookieOptions?: CookieOptions;
+    cookieOptions?: CookieOptionsWithName;
   }
 ): SupabaseClient<Database, SchemaName> {
   if (!supabaseUrl || !supabaseKey) {
@@ -197,7 +187,7 @@ export function createServerClient<
     );
   }
 
-  return createClient<Database, SchemaName>(supabaseUrl, supabaseKey, {
+  return createSupabaseClient<Database, SchemaName>(supabaseUrl, supabaseKey, {
     ...options,
     global: {
       ...options?.global,
@@ -207,19 +197,12 @@ export function createServerClient<
       }
     },
     auth: {
-      flowType: 'pkce',
-
-      // fix this in supabase-js
-      ...(cookieOptions?.name
-        ? {
-            storageKey: cookieOptions.name
-          }
-        : {}),
-
-      storage: new RemixServerAuthStorageAdapter(request, response, {
-        ...DEFAULT_COOKIE_OPTIONS,
-        ...cookieOptions
-      })
+      storageKey: cookieOptions?.name,
+      storage: new RemixServerAuthStorageAdapter(
+        request,
+        response,
+        cookieOptions
+      )
     }
   });
 }
