@@ -1,5 +1,11 @@
 # shared
 
+## 0.4.0-next.2
+
+### Patch Changes
+
+- 353be76: remove unused type
+
 ## 0.4.0-next.1
 
 ### Patch Changes
