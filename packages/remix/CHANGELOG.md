@@ -1,5 +1,13 @@
 # @supabase/auth-helpers-remix
 
+## 0.2.0-next.1
+
+### Patch Changes
+
+- 66b13b9: simplifying defaults for storage adapter
+- Updated dependencies [66b13b9]
+  - @supabase/auth-helpers-shared@0.4.0-next.1
+
 ## 0.2.0-next.0
 
 ### Minor Changes
