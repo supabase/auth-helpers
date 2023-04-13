@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
-import { AuthHelperSupabaseClientOptions } from './types';
+import { SupabaseClientOptionsWithoutAuth } from './types';
 import { isBrowser } from './utils';
+import { StorageAdapter } from './cookieAuthStorageAdapter';
 
 export function createSupabaseClient<
   Database = any,
@@ -10,7 +11,12 @@ export function createSupabaseClient<
 >(
   supabaseUrl: string,
   supabaseKey: string,
-  options: AuthHelperSupabaseClientOptions<SchemaName>
+  options: SupabaseClientOptionsWithoutAuth<SchemaName> & {
+    auth: {
+      storage: StorageAdapter;
+      storageKey?: string;
+    };
+  }
 ) {
   const bowser = isBrowser();
 
