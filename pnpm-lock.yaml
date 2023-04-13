@@ -358,9 +358,6 @@ importers:
       config:
         specifier: workspace:*
         version: link:../config
-      next:
-        specifier: ^12.2.5
-        version: 12.3.1(@babel/core@7.19.6)(react-dom@17.0.2)(react@17.0.2)
       react:
         specifier: ^18.0.0
         version: 18.2.0
