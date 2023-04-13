@@ -1,5 +1,11 @@
 # shared
 
+## 0.4.0-next.1
+
+### Patch Changes
+
+- 66b13b9: simplifying defaults for storage adapter
+
 ## 0.4.0-next.0
 
 ### Minor Changes
