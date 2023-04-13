@@ -1,6 +1,6 @@
 {
   "name": "@supabase/auth-helpers-remix",
-  "version": "0.2.0-next.1",
+  "version": "0.2.0-next.2",
   "description": "A collection of framework specific Auth utilities for working with Supabase.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
