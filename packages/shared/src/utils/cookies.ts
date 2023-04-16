@@ -74,7 +74,7 @@ export function parseSupabaseCookie(
 
     return {
       expires_at: exp,
-      expires_in: (exp ?? 0) - Math.round(Date.now() / 1000),
+      expires_in: exp - Math.round(Date.now() / 1000),
       token_type: 'bearer',
       access_token: session[0],
       refresh_token: session[1],
