@@ -1,5 +1,12 @@
 # shared
 
+## 0.3.4
+
+### Patch Changes
+
+- 04a7249: Add jose for it's cross platform base64url decode support
+- 04a7249: Remove js-base64 as its buffer check was causing issues for Vercel Edge Runtime
+
 ## 0.3.3
 
 ### Patch Changes
