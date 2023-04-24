@@ -1,0 +1,45 @@
+{
+  "name": "@supabase/auth-helpers-qwik",
+  "version": "0.0.1",
+  "description": "A collection of framework specific Auth utilities for working with Supabase.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup",
+    "clean:all": "rimraf dist node_modules"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/supabase/auth-helpers.git"
+  },
+  "keywords": [
+    "Supabase",
+    "Auth",
+    "Qwik"
+  ],
+  "author": "Supabase",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/supabase/auth-helpers/issues"
+  },
+  "homepage": "https://github.com/supabase/auth-helpers/tree/main/packages/qwik#readme",
+  "devDependencies": {
+    "@builder.io/qwik-city": "0.103.0",
+    "@builder.io/qwik": "0.103.0",
+    "@supabase/supabase-js": "2.0.4",
+    "config": "workspace:*",
+    "rimraf": "^4.1.1",
+    "tsconfig": "workspace:*",
+    "tslib": "^2.4.1",
+    "tsup": "^6.5.0"
+  },
+  "dependencies": {
+    "@supabase/auth-helpers-shared": "workspace:*"
+  },
+  "peerDependencies": {
+    "@supabase/supabase-js": "^2.0.4"
+  }
+}
