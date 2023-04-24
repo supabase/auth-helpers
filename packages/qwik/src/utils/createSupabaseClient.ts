@@ -147,7 +147,7 @@ export function createServerClient<
     },
     setCookie(name, value, options) {
       requestEv.cookie.set(name, value, {
-        ...options,
+        ...(options as any),
         // Allow supabase-js on the client to read the cookie as well
         httpOnly: false
       });

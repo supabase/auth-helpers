@@ -4,6 +4,7 @@
     { "path": "packages/react" },
     { "path": "packages/nextjs" },
     { "path": "packages/shared" },
-    { "path": "packages/sveltekit" }
+    { "path": "packages/sveltekit" },
+    { "path": "packages/qwik" }
   ]
 }

@@ -12,6 +12,7 @@
     "build:nextjs": "turbo run build --filter=@supabase/auth-helpers-nextjs",
     "build:react": "turbo run build --filter=@supabase/auth-helpers-react",
     "build:remix": "turbo run build --filter=@supabase/auth-helpers-remix",
+    "build:qwik": "turbo run build --filter=@supabase/auth-helpers-qwik",
     "build:shared": "turbo run build --filter=@supabase/auth-helpers-shared",
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
