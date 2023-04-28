@@ -32,15 +32,16 @@
   "devDependencies": {
     "@supabase/supabase-js": "2.19.0",
     "@types/cookie": "^0.5.1",
+    "cookie": "^0.5.0",
     "next": "^12.1.5",
     "react": ">=17.0.2 <18.0.0 || >=18.0.0-0 <19.0.0",
     "react-dom": "^17.0.2 || ^18.0.0-0",
     "tsconfig": "workspace:*",
-    "tsup": "^6.5.0",
-    "cookie": "^0.5.0"
+    "tsup": "^6.5.0"
   },
   "dependencies": {
-    "js-base64": "^3.7.5"
+    "js-base64": "^3.7.5",
+    "jose": "^4.14.3"
   },
   "peerDependencies": {
     "@supabase/supabase-js": "^2.19.0"
