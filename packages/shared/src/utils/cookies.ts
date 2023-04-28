@@ -1,6 +1,6 @@
 import { Session } from '@supabase/supabase-js';
 import { parse, serialize } from 'cookie';
-import { fromBase64 } from 'js-base64';
+import { base64url } from 'jose';
 
 export { parse as parseCookies, serialize as serializeCookie };
 
@@ -48,9 +48,10 @@ export function parseSupabaseCookie(
     }
 
     const [_header, payloadStr, _signature] = session[0].split('.');
-    const payload = fromBase64(payloadStr);
+    const payload = base64url.decode(payloadStr);
+    const decoder = new TextDecoder();
 
-    const { exp, sub, ...user } = JSON.parse(payload);
+    const { exp, sub, ...user } = JSON.parse(decoder.decode(payload));
 
     return {
       expires_at: exp,
