@@ -14,6 +14,7 @@
     "tsconfig": "0.1.1"
   },
   "changesets": [
+    "brave-lizards-thank",
     "cyan-dancers-care",
     "eleven-radios-share",
     "lazy-cows-shake",
