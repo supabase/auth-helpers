@@ -1,5 +1,11 @@
 # @supabase/auth-helpers-nextjs
 
+## 0.7.0-next.4
+
+### Patch Changes
+
+- 165ba70: Fix "Failed to parse cookie string" bug in middleware storage
+
 ## 0.7.0-next.3
 
 ### Patch Changes
