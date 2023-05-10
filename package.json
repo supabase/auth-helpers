@@ -14,7 +14,7 @@
 		"build:remix": "turbo run build --filter=@supabase/auth-helpers-remix",
 		"build:shared": "turbo run build --filter=@supabase/auth-helpers-shared",
 		"dev": "turbo run dev --parallel",
-		"lint": "turbo run lint",
+		"lint": "turbo run lint --filter=!@example/*",
 		"format": "prettier --write \"**/*.{ts,tsx,md}\" --ignore-path .gitignore",
 		"docs": "typedoc",
 		"clean:all": "turbo run clean:all",
@@ -50,8 +50,8 @@
 		}
 	},
 	"lint-staged": {
-		"**/*.{js,jsx,ts,tsx,md}": [
-			"prettier --write"
+		"**/*.{ts,tsx,md}": [
+			"prettier --check"
 		]
 	}
 }
