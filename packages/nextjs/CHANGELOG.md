@@ -1,5 +1,11 @@
 # @supabase/auth-helpers-nextjs
 
+## 0.7.0-next.5
+
+### Patch Changes
+
+- d46c2ed: fix cookie saving in middleware/routeHandler
+
 ## 0.7.0-next.4
 
 ### Patch Changes
