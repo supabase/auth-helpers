@@ -25,10 +25,8 @@ export default function RealtimePosts({ serverPosts }: { serverPosts: Post[] }) 
 		// https://app.supabase.com/project/_/database/replication
 		const channel = supabase
 			.channel('*')
-			.on(
-				'postgres_changes',
-				{ event: 'INSERT', schema: 'public', table: 'posts' },
-				(payload) => setPosts([...posts, payload.new as Post])
+			.on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'posts' }, (payload) =>
+				setPosts([...posts, payload.new as Post])
 			)
 			.subscribe();
 

@@ -56,14 +56,10 @@ const LoginPage: NextPage = () => {
 			<p>
 				[<Link href="/profile">getServerSideProps</Link>] | [
 				<Link href="/protected-page">server-side RLS</Link>] |{' '}
-				<button
-					onClick={() => supabaseClient.auth.updateUser({ data: { test1: 'updated' } })}
-				>
+				<button onClick={() => supabaseClient.auth.updateUser({ data: { test1: 'updated' } })}>
 					Update user metadata
 				</button>
-				<button onClick={() => supabaseClient.auth.refreshSession()}>
-					Refresh session
-				</button>
+				<button onClick={() => supabaseClient.auth.refreshSession()}>Refresh session</button>
 			</p>
 			{isLoading ? <h1>Loading...</h1> : <h1>Loaded!</h1>}
 			<p>user:</p>
