@@ -17,6 +17,8 @@ build
 .DS_Store
 *.pem
 
+pnpm-lock.yaml
+
 # debug
 npm-debug.log*
 yarn-debug.log*
