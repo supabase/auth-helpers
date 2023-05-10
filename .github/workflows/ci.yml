@@ -12,6 +12,7 @@ concurrency:
 
 permissions:
   contents: read # to fetch code (actions/checkout)
+  checks: write
 
 jobs:
   Lint:
