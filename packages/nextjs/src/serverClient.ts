@@ -31,9 +31,7 @@ class NextServerAuthStorageAdapter extends CookieAuthStorageAdapter {
       .map((c) => parseCookies(c)[name])
       .find((c) => !!c);
 
-    // const setCookie = setCookies.find((c) => c.name === name);
     const value = setCookie ?? this.context.req.cookies[name];
-
     return value;
   }
   protected setCookie(name: string, value: string): void {

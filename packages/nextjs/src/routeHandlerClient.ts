@@ -1,4 +1,3 @@
-import { createServerComponentSupabaseClient } from './serverComponentClient';
+import { createMiddlewareSupabaseClient } from './middlewareClient';
 
-export const createRouteHandlerSupabaseClient =
-  createServerComponentSupabaseClient;
+export const createRouteHandlerSupabaseClient = createMiddlewareSupabaseClient;
