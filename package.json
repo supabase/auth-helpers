@@ -48,5 +48,15 @@
 		"patchedDependencies": {
 			"@changesets/assemble-release-plan@5.2.3": "patches/@changesets__assemble-release-plan@5.2.3.patch"
 		}
+	},
+	"lint-staged": {
+		"**/*": [
+			"prettier --write ."
+		]
+	},
+	"husky": {
+		"hooks": {
+			"pre-commit": "lint-staged"
+		}
 	}
 }
