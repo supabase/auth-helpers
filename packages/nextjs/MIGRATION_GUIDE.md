@@ -41,8 +41,7 @@ const ProtectedRoute: NextApiHandler = async (req, res) => {
   if (!session)
     return res.status(401).json({
       error: 'not_authenticated',
-      description:
-        'The user does not have an active session or is not authenticated'
+      description: 'The user does not have an active session or is not authenticated'
     });
 
   // Run queries with RLS on the server
@@ -74,10 +73,7 @@ export const getServerSideProps = withPageAuth({ redirectTo: '/' });
 
 ```tsx
 // pages/profile.js
-import {
-  createServerSupabaseClient,
-  User
-} from '@supabase/auth-helpers-nextjs';
+import { createServerSupabaseClient, User } from '@supabase/auth-helpers-nextjs';
 import { GetServerSidePropsContext } from 'next';
 
 export default function Profile({ user }: { user: User }) {
@@ -188,9 +184,7 @@ export const config = {
 ```tsx
 // client-side
 import type { Database } from 'types_db';
-const [supabaseClient] = useState(() =>
-  createBrowserSupabaseClient<Database>()
-);
+const [supabaseClient] = useState(() => createBrowserSupabaseClient<Database>());
 
 // server-side API route
 import type { NextApiRequest, NextApiResponse } from 'next';
@@ -219,9 +213,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 // Creating a new supabase client object:
 import { Database } from '../db_types';
 
-const [supabaseClient] = useState(() =>
-  createBrowserSupabaseClient<Database>()
-);
+const [supabaseClient] = useState(() => createBrowserSupabaseClient<Database>());
 ```
 
 ```tsx

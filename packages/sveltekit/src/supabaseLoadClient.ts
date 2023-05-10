@@ -1,8 +1,8 @@
 import {
-  CookieOptionsWithName,
-  createSupabaseClient,
-  isBrowser,
-  SupabaseClientOptionsWithoutAuth
+	CookieOptionsWithName,
+	createSupabaseClient,
+	isBrowser,
+	SupabaseClientOptionsWithoutAuth
 } from '@supabase/auth-helpers-shared';
 import { Session, SupabaseClient } from '@supabase/supabase-js';
 import { LoadEvent } from '@sveltejs/kit';
@@ -49,62 +49,55 @@ let cachedBrowserClient: SupabaseClient<any, string> | undefined;
  * ```
  */
 export function createSupabaseLoadClient<
-  Database = any,
-  SchemaName extends string & keyof Database = 'public' extends keyof Database
-    ? 'public'
-    : string & keyof Database
+	Database = any,
+	SchemaName extends string & keyof Database = 'public' extends keyof Database
+		? 'public'
+		: string & keyof Database
 >({
-  supabaseUrl,
-  supabaseKey,
-  event,
-  serverSession,
-  options,
-  cookieOptions
+	supabaseUrl,
+	supabaseKey,
+	event,
+	serverSession,
+	options,
+	cookieOptions
 }: {
-  supabaseUrl: string;
-  /**
-   * The supabase key. Make sure you **always** use the ANON_KEY.
-   */
-  supabaseKey: string;
-  event: Pick<LoadEvent, 'fetch'>;
-  /**
-   * The initial session from the server.
-   */
-  serverSession: Session | null;
-  options?: SupabaseClientOptionsWithoutAuth<SchemaName>;
-  cookieOptions?: CookieOptionsWithName;
+	supabaseUrl: string;
+	/**
+	 * The supabase key. Make sure you **always** use the ANON_KEY.
+	 */
+	supabaseKey: string;
+	event: Pick<LoadEvent, 'fetch'>;
+	/**
+	 * The initial session from the server.
+	 */
+	serverSession: Session | null;
+	options?: SupabaseClientOptionsWithoutAuth<SchemaName>;
+	cookieOptions?: CookieOptionsWithName;
 }): SupabaseClient<Database, SchemaName> {
-  const browser = isBrowser();
-  if (browser && cachedBrowserClient) {
-    return cachedBrowserClient as SupabaseClient<Database, SchemaName>;
-  }
+	const browser = isBrowser();
+	if (browser && cachedBrowserClient) {
+		return cachedBrowserClient as SupabaseClient<Database, SchemaName>;
+	}
 
-  const client = createSupabaseClient<Database, SchemaName>(
-    supabaseUrl,
-    supabaseKey,
-    {
-      ...options,
-      global: {
-        fetch: event.fetch,
-        ...options?.global,
-        headers: {
-          ...options?.global?.headers,
-          'X-Client-Info': `${PACKAGE_NAME}@${PACKAGE_VERSION}`
-        }
-      },
-      auth: {
-        storageKey: cookieOptions?.name,
-        storage: new SvelteKitLoadAuthStorageAdapter(
-          serverSession,
-          cookieOptions
-        )
-      }
-    }
-  );
+	const client = createSupabaseClient<Database, SchemaName>(supabaseUrl, supabaseKey, {
+		...options,
+		global: {
+			fetch: event.fetch,
+			...options?.global,
+			headers: {
+				...options?.global?.headers,
+				'X-Client-Info': `${PACKAGE_NAME}@${PACKAGE_VERSION}`
+			}
+		},
+		auth: {
+			storageKey: cookieOptions?.name,
+			storage: new SvelteKitLoadAuthStorageAdapter(serverSession, cookieOptions)
+		}
+	});
 
-  if (browser) {
-    cachedBrowserClient = client;
-  }
+	if (browser) {
+		cachedBrowserClient = client;
+	}
 
-  return client;
+	return client;
 }

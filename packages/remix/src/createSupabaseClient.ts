@@ -1,12 +1,12 @@
 import {
-  BrowserCookieAuthStorageAdapter,
-  CookieAuthStorageAdapter,
-  CookieOptions,
-  CookieOptionsWithName,
-  createSupabaseClient,
-  parseCookies,
-  serializeCookie,
-  SupabaseClientOptionsWithoutAuth
+	BrowserCookieAuthStorageAdapter,
+	CookieAuthStorageAdapter,
+	CookieOptions,
+	CookieOptionsWithName,
+	createSupabaseClient,
+	parseCookies,
+	serializeCookie,
+	SupabaseClientOptionsWithoutAuth
 } from '@supabase/auth-helpers-shared';
 import { SupabaseClient } from '@supabase/supabase-js';
 
@@ -87,122 +87,118 @@ import { SupabaseClient } from '@supabase/supabase-js';
  */
 
 export function createBrowserClient<
-  Database = any,
-  SchemaName extends string & keyof Database = 'public' extends keyof Database
-    ? 'public'
-    : string & keyof Database
+	Database = any,
+	SchemaName extends string & keyof Database = 'public' extends keyof Database
+		? 'public'
+		: string & keyof Database
 >(
-  supabaseUrl: string,
-  supabaseKey: string,
-  {
-    options,
-    cookieOptions
-  }: {
-    options?: SupabaseClientOptionsWithoutAuth<SchemaName>;
-    cookieOptions?: CookieOptionsWithName;
-  } = {}
+	supabaseUrl: string,
+	supabaseKey: string,
+	{
+		options,
+		cookieOptions
+	}: {
+		options?: SupabaseClientOptionsWithoutAuth<SchemaName>;
+		cookieOptions?: CookieOptionsWithName;
+	} = {}
 ): SupabaseClient<Database, SchemaName> {
-  if (!supabaseUrl || !supabaseKey) {
-    throw new Error(
-      'supabaseUrl and supabaseKey are required to create a Supabase client! Find these under `Settings` > `API` in your Supabase dashboard.'
-    );
-  }
+	if (!supabaseUrl || !supabaseKey) {
+		throw new Error(
+			'supabaseUrl and supabaseKey are required to create a Supabase client! Find these under `Settings` > `API` in your Supabase dashboard.'
+		);
+	}
 
-  return createSupabaseClient<Database, SchemaName>(supabaseUrl, supabaseKey, {
-    ...options,
-    global: {
-      ...options?.global,
-      headers: {
-        ...options?.global?.headers,
-        'X-Client-Info': `${PACKAGE_NAME}@${PACKAGE_VERSION}`
-      }
-    },
-    auth: {
-      storageKey: cookieOptions?.name,
-      storage: new BrowserCookieAuthStorageAdapter(cookieOptions)
-    }
-  });
+	return createSupabaseClient<Database, SchemaName>(supabaseUrl, supabaseKey, {
+		...options,
+		global: {
+			...options?.global,
+			headers: {
+				...options?.global?.headers,
+				'X-Client-Info': `${PACKAGE_NAME}@${PACKAGE_VERSION}`
+			}
+		},
+		auth: {
+			storageKey: cookieOptions?.name,
+			storage: new BrowserCookieAuthStorageAdapter(cookieOptions)
+		}
+	});
 }
 
 class RemixServerAuthStorageAdapter extends CookieAuthStorageAdapter {
-  constructor(
-    private readonly request: Request,
-    private readonly response: Response,
-    cookieOptions?: CookieOptions
-  ) {
-    super(cookieOptions);
-  }
+	constructor(
+		private readonly request: Request,
+		private readonly response: Response,
+		cookieOptions?: CookieOptions
+	) {
+		super(cookieOptions);
+	}
 
-  protected getCookie(name: string): string | null | undefined {
-    return parseCookies(this.request?.headers?.get('Cookie') ?? '')[name];
-  }
-  protected setCookie(name: string, value: string): void {
-    const cookieStr = serializeCookie(name, value, {
-      ...this.cookieOptions,
-      // Allow supabase-js on the client to read the cookie as well
-      httpOnly: false
-    });
-    this.response.headers.append('set-cookie', cookieStr);
-  }
-  protected deleteCookie(name: string): void {
-    const cookieStr = serializeCookie(name, '', {
-      ...this.cookieOptions,
-      maxAge: 0,
-      // Allow supabase-js on the client to read the cookie as well
-      httpOnly: false
-    });
-    this.response.headers.append('set-cookie', cookieStr);
-  }
+	protected getCookie(name: string): string | null | undefined {
+		return parseCookies(this.request?.headers?.get('Cookie') ?? '')[name];
+	}
+	protected setCookie(name: string, value: string): void {
+		const cookieStr = serializeCookie(name, value, {
+			...this.cookieOptions,
+			// Allow supabase-js on the client to read the cookie as well
+			httpOnly: false
+		});
+		this.response.headers.append('set-cookie', cookieStr);
+	}
+	protected deleteCookie(name: string): void {
+		const cookieStr = serializeCookie(name, '', {
+			...this.cookieOptions,
+			maxAge: 0,
+			// Allow supabase-js on the client to read the cookie as well
+			httpOnly: false
+		});
+		this.response.headers.append('set-cookie', cookieStr);
+	}
 }
 
 export function createServerClient<
-  Database = any,
-  SchemaName extends string & keyof Database = 'public' extends keyof Database
-    ? 'public'
-    : string & keyof Database
+	Database = any,
+	SchemaName extends string & keyof Database = 'public' extends keyof Database
+		? 'public'
+		: string & keyof Database
 >(
-  supabaseUrl: string,
-  supabaseKey: string,
-  {
-    request,
-    response,
-    options,
-    cookieOptions
-  }: {
-    request: Request;
-    response: Response;
-    options?: SupabaseClientOptionsWithoutAuth<SchemaName>;
-    cookieOptions?: CookieOptionsWithName;
-  }
+	supabaseUrl: string,
+	supabaseKey: string,
+	{
+		request,
+		response,
+		options,
+		cookieOptions
+	}: {
+		request: Request;
+		response: Response;
+		options?: SupabaseClientOptionsWithoutAuth<SchemaName>;
+		cookieOptions?: CookieOptionsWithName;
+	}
 ): SupabaseClient<Database, SchemaName> {
-  if (!supabaseUrl || !supabaseKey) {
-    throw new Error(
-      'supabaseUrl and supabaseKey are required to create a Supabase client! Find these under `Settings` > `API` in your Supabase dashboard.'
-    );
-  }
+	if (!supabaseUrl || !supabaseKey) {
+		throw new Error(
+			'supabaseUrl and supabaseKey are required to create a Supabase client! Find these under `Settings` > `API` in your Supabase dashboard.'
+		);
+	}
 
-  if (!request || !response) {
-    throw new Error(
-      'request and response must be passed to createSupabaseClient function, when called from loader or action'
-    );
-  }
+	if (!request || !response) {
+		throw new Error(
+			'request and response must be passed to createSupabaseClient function, when called from loader or action'
+		);
+	}
 
-  return createSupabaseClient<Database, SchemaName>(supabaseUrl, supabaseKey, {
-    ...options,
-    global: {
-      ...options?.global,
-      headers: {
-        ...options?.global?.headers,
-        'X-Client-Info': `${PACKAGE_NAME}@${PACKAGE_VERSION}`
-      }
-    },
-    auth: {
-      storageKey: cookieOptions?.name,
-      storage: new RemixServerAuthStorageAdapter(
-        request,
-        response,
-        cookieOptions
-      )
-    }
-  });
+	return createSupabaseClient<Database, SchemaName>(supabaseUrl, supabaseKey, {
+		...options,
+		global: {
+			...options?.global,
+			headers: {
+				...options?.global?.headers,
+				'X-Client-Info': `${PACKAGE_NAME}@${PACKAGE_VERSION}`
+			}
+		},
+		auth: {
+			storageKey: cookieOptions?.name,
+			storage: new RemixServerAuthStorageAdapter(request, response, cookieOptions)
+		}
+	});
 }

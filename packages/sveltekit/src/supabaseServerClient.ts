@@ -1,7 +1,7 @@
 import {
-  CookieOptionsWithName,
-  SupabaseClientOptionsWithoutAuth,
-  createSupabaseClient
+	CookieOptionsWithName,
+	SupabaseClientOptionsWithoutAuth,
+	createSupabaseClient
 } from '@supabase/auth-helpers-shared';
 import { RequestEvent } from '@sveltejs/kit';
 import { SvelteKitServerAuthStorageAdapter } from './serverStorageAdapter';
@@ -58,47 +58,39 @@ import { SvelteKitServerAuthStorageAdapter } from './serverStorageAdapter';
  * ```
  */
 export function createSupabaseServerClient<
-  Database = any,
-  SchemaName extends string & keyof Database = 'public' extends keyof Database
-    ? 'public'
-    : string & keyof Database
+	Database = any,
+	SchemaName extends string & keyof Database = 'public' extends keyof Database
+		? 'public'
+		: string & keyof Database
 >({
-  supabaseUrl,
-  supabaseKey,
-  event,
-  options,
-  cookieOptions,
-  expiryMargin
+	supabaseUrl,
+	supabaseKey,
+	event,
+	options,
+	cookieOptions,
+	expiryMargin
 }: {
-  supabaseUrl: string;
-  supabaseKey: string;
-  event: Pick<RequestEvent, 'cookies'>;
-  options?: SupabaseClientOptionsWithoutAuth<SchemaName>;
-  cookieOptions?: CookieOptionsWithName;
-  expiryMargin?: number;
+	supabaseUrl: string;
+	supabaseKey: string;
+	event: Pick<RequestEvent, 'cookies'>;
+	options?: SupabaseClientOptionsWithoutAuth<SchemaName>;
+	cookieOptions?: CookieOptionsWithName;
+	expiryMargin?: number;
 }) {
-  const client = createSupabaseClient<Database, SchemaName>(
-    supabaseUrl,
-    supabaseKey,
-    {
-      ...options,
-      global: {
-        ...options?.global,
-        headers: {
-          ...options?.global?.headers,
-          'X-Client-Info': `${PACKAGE_NAME}@${PACKAGE_VERSION}`
-        }
-      },
-      auth: {
-        storageKey: cookieOptions?.name,
-        storage: new SvelteKitServerAuthStorageAdapter(
-          event,
-          cookieOptions,
-          expiryMargin
-        )
-      }
-    }
-  );
+	const client = createSupabaseClient<Database, SchemaName>(supabaseUrl, supabaseKey, {
+		...options,
+		global: {
+			...options?.global,
+			headers: {
+				...options?.global?.headers,
+				'X-Client-Info': `${PACKAGE_NAME}@${PACKAGE_VERSION}`
+			}
+		},
+		auth: {
+			storageKey: cookieOptions?.name,
+			storage: new SvelteKitServerAuthStorageAdapter(event, cookieOptions, expiryMargin)
+		}
+	});
 
-  return client;
+	return client;
 }
