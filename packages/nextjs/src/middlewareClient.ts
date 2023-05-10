@@ -8,6 +8,7 @@ import {
   SupabaseClientOptionsWithoutAuth
 } from '@supabase/auth-helpers-shared';
 import { NextRequest, NextResponse } from 'next/server';
+import { splitCookiesString } from 'set-cookie-parser';
 
 class NextMiddlewareAuthStorageAdapter extends CookieAuthStorageAdapter {
   constructor(
@@ -18,6 +19,16 @@ class NextMiddlewareAuthStorageAdapter extends CookieAuthStorageAdapter {
   }
 
   protected getCookie(name: string): string | null | undefined {
+    const setCookie = splitCookiesString(
+      this.context.res.headers.get('set-cookie')?.toString() ?? ''
+    )
+      .map((c) => parseCookies(c)[name])
+      .find((c) => !!c);
+
+    if (setCookie) {
+      return setCookie;
+    }
+
     const cookies = parseCookies(this.context.req.headers.get('cookie') ?? '');
     return cookies[name];
   }
@@ -38,7 +49,7 @@ class NextMiddlewareAuthStorageAdapter extends CookieAuthStorageAdapter {
       httpOnly: false
     });
 
-    this.context.res.headers.set('set-cookie', newSessionStr);
+    this.context.res.headers.append('set-cookie', newSessionStr);
   }
 }
 
