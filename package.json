@@ -50,13 +50,8 @@
 		}
 	},
 	"lint-staged": {
-		"**/*": [
+		"**/*.{js,jsx,ts,tsx,md}": [
 			"prettier --write ."
 		]
-	},
-	"husky": {
-		"hooks": {
-			"pre-commit": "lint-staged"
-		}
 	}
 }
