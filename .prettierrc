@@ -1,7 +1,6 @@
 {
 	"useTabs": true,
 	"singleQuote": true,
-	"tabWidth": 4,
 	"trailingComma": "none",
 	"printWidth": 100,
 	"overrides": [
@@ -12,7 +11,7 @@
 			}
 		},
 		{
-			"files": ["*.md"],
+			"files": ["*.md", "*.yaml", "*.yml"],
 			"options": {
 				"useTabs": false,
 				"tabWidth": 2
