@@ -1,48 +1,49 @@
 {
-  "name": "@supabase/auth-helpers-nextjs",
-  "version": "0.7.0-next.5",
-  "description": "A collection of framework specific Auth utilities for working with Supabase.",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "publishConfig": {
-    "access": "public"
-  },
-  "scripts": {
-    "build": "tsup",
-    "clean:all": "rimraf dist node_modules"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/supabase/auth-helpers.git"
-  },
-  "keywords": [
-    "Supabase",
-    "Auth",
-    "Nextjs"
-  ],
-  "author": "Supabase",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/supabase/auth-helpers/issues"
-  },
-  "homepage": "https://github.com/supabase/auth-helpers/tree/main/packages/nextjs#readme",
-  "devDependencies": {
-    "@types/set-cookie-parser": "^2.4.2",
-    "@supabase/supabase-js": "2.19.0",
-    "config": "workspace:*",
-    "next": "^12.2.5",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "rimraf": "^4.1.1",
-    "tsconfig": "workspace:*",
-    "tslib": "^2.4.1",
-    "tsup": "^6.5.0"
-  },
-  "dependencies": {
-    "@supabase/auth-helpers-shared": "workspace:*",
-    "set-cookie-parser": "^2.6.0"
-  },
-  "peerDependencies": {
-    "@supabase/supabase-js": "^2.19.0"
-  }
+	"name": "@supabase/auth-helpers-nextjs",
+	"version": "0.7.0-next.5",
+	"description": "A collection of framework specific Auth utilities for working with Supabase.",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"publishConfig": {
+		"access": "public"
+	},
+	"scripts": {
+		"lint": "tsc",
+		"build": "tsup",
+		"clean:all": "rimraf dist node_modules"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/supabase/auth-helpers.git"
+	},
+	"keywords": [
+		"Supabase",
+		"Auth",
+		"Nextjs"
+	],
+	"author": "Supabase",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/supabase/auth-helpers/issues"
+	},
+	"homepage": "https://github.com/supabase/auth-helpers/tree/main/packages/nextjs#readme",
+	"devDependencies": {
+		"@types/set-cookie-parser": "^2.4.2",
+		"@supabase/supabase-js": "2.19.0",
+		"config": "workspace:*",
+		"next": "^12.2.5",
+		"react": "^18.0.0",
+		"react-dom": "^18.0.0",
+		"rimraf": "^4.1.1",
+		"tsconfig": "workspace:*",
+		"tslib": "^2.4.1",
+		"tsup": "^6.5.0"
+	},
+	"dependencies": {
+		"@supabase/auth-helpers-shared": "workspace:*",
+		"set-cookie-parser": "^2.6.0"
+	},
+	"peerDependencies": {
+		"@supabase/supabase-js": "^2.19.0"
+	}
 }

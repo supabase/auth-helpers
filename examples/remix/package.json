@@ -1,31 +1,31 @@
 {
-  "name": "@example/remix",
-  "private": true,
-  "sideEffects": false,
-  "scripts": {
-    "build:example": "remix build",
-    "dev": "PORT=3004 remix dev",
-    "start": "PORT=3004 remix-serve build"
-  },
-  "dependencies": {
-    "@remix-run/node": "^1.7.6",
-    "@remix-run/react": "^1.7.6",
-    "@remix-run/serve": "^1.7.6",
-    "@supabase/auth-helpers-remix": "workspace:*",
-    "@supabase/supabase-js": "^2.19.0",
-    "isbot": "^3.5.4",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
-  },
-  "devDependencies": {
-    "@remix-run/dev": "^1.7.6",
-    "@remix-run/eslint-config": "^1.7.6",
-    "@types/react": "^18.0.25",
-    "@types/react-dom": "^18.0.8",
-    "eslint": "^8.27.0",
-    "typescript": "^4.8.4"
-  },
-  "engines": {
-    "node": ">=14"
-  }
+	"name": "@example/remix",
+	"private": true,
+	"sideEffects": false,
+	"scripts": {
+		"build:example": "remix build",
+		"dev": "PORT=3004 remix dev",
+		"start": "PORT=3004 remix-serve build"
+	},
+	"dependencies": {
+		"@remix-run/node": "^1.7.6",
+		"@remix-run/react": "^1.7.6",
+		"@remix-run/serve": "^1.7.6",
+		"@supabase/auth-helpers-remix": "workspace:*",
+		"@supabase/supabase-js": "^2.19.0",
+		"isbot": "^3.5.4",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0"
+	},
+	"devDependencies": {
+		"@remix-run/dev": "^1.7.6",
+		"@remix-run/eslint-config": "^1.7.6",
+		"@types/react": "^18.0.25",
+		"@types/react-dom": "^18.0.8",
+		"eslint": "^8.27.0",
+		"typescript": "^4.8.4"
+	},
+	"engines": {
+		"node": ">=14"
+	}
 }

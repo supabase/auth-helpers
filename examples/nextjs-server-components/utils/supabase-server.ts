@@ -3,7 +3,7 @@ import { createServerComponentSupabaseClient } from '@supabase/auth-helpers-next
 import { Database } from '../db_types';
 
 export const createServerClient = () =>
-  createServerComponentSupabaseClient<Database>({
-    headers,
-    cookies
-  });
+	createServerComponentSupabaseClient<Database>({
+		headers,
+		cookies
+	});

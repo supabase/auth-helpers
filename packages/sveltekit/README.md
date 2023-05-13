@@ -32,10 +32,7 @@ Create a server supabase client in a handle hook:
 
 ```ts
 // src/hooks.server.ts
-import {
-  PUBLIC_SUPABASE_URL,
-  PUBLIC_SUPABASE_ANON_KEY
-} from '$env/static/public';
+import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public';
 import { createSupabaseServerClient } from '@supabase/auth-helpers-sveltekit';
 import type { Handle } from '@sveltejs/kit';
 
@@ -94,10 +91,7 @@ To be able to use Supabase in shared load functions and inside pages you need to
 
 ```ts
 // src/routes/+layout.ts
-import {
-  PUBLIC_SUPABASE_ANON_KEY,
-  PUBLIC_SUPABASE_URL
-} from '$env/static/public';
+import { PUBLIC_SUPABASE_ANON_KEY, PUBLIC_SUPABASE_URL } from '$env/static/public';
 import { createSupabaseLoadClient } from '@supabase/auth-helpers-sveltekit';
 import type { LayoutLoad } from './$types';
 import type { Database } from '../DatabaseDefinitions';
@@ -209,8 +203,8 @@ For [row level security](https://supabase.com/docs/guides/auth/row-level-securit
 </script>
 
 {#if session}
-  <p>client-side data fetching with RLS</p>
-  <pre>{JSON.stringify(loadedData, null, 2)}</pre>
+<p>client-side data fetching with RLS</p>
+<pre>{JSON.stringify(loadedData, null, 2)}</pre>
 {/if}
 ```
 
@@ -258,9 +252,7 @@ Wrap an API Route to check that the user has a valid session. If they're not log
 import type { RequestHandler } from './$types';
 import { json, error } from '@sveltejs/kit';
 
-export const GET: RequestHandler = async ({
-  locals: { supabase, getSession }
-}) => {
+export const GET: RequestHandler = async ({ locals: { supabase, getSession } }) => {
   const session = await getSession();
   if (!session) {
     // the user is not signed in
@@ -381,10 +373,7 @@ export const handle: Handle = async ({ event, resolve }) => {
   }
 
   // protect POST requests to all routes that start with /protected-posts
-  if (
-    event.url.pathname.startsWith('/protected-posts') &&
-    event.request.method === 'POST'
-  ) {
+  if (event.url.pathname.startsWith('/protected-posts') && event.request.method === 'POST') {
     const session = await event.locals.getSession();
     if (!session) {
       // the user is not signed in

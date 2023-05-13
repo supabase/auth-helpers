@@ -1,50 +1,58 @@
 {
-  "name": "@supabase/auth-helpers",
-  "version": "0.0.0",
-  "private": true,
-  "scripts": {
-    "build": "turbo run build",
-    "build:example": "turbo run build:example",
-    "build:example:sveltekit": "turbo run build:example --filter=@example/sveltekit",
-    "build:example:nextjs": "turbo run build:example --filter=@example/nextjs",
-    "build:sveltekit": "turbo run build --filter=@supabase/auth-helpers-sveltekit",
-    "build:sveltekit:watch": "turbo run build:watch --filter=@supabase/auth-helpers-sveltekit",
-    "build:nextjs": "turbo run build --filter=@supabase/auth-helpers-nextjs",
-    "build:react": "turbo run build --filter=@supabase/auth-helpers-react",
-    "build:remix": "turbo run build --filter=@supabase/auth-helpers-remix",
-    "build:shared": "turbo run build --filter=@supabase/auth-helpers-shared",
-    "dev": "turbo run dev --parallel",
-    "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\" --ignore-path .gitignore",
-    "docs": "typedoc",
-    "clean:all": "turbo run clean:all",
-    "ci:version": "changeset version",
-    "ci:release": "changeset publish"
-  },
-  "devDependencies": {
-    "@changesets/cli": "^2.22.0",
-    "prettier": "^2.5.1",
-    "turbo": "^1.8.3",
-    "typedoc": "^0.22.17",
-    "typescript": "4.0.x || 4.1.x || 4.2.x || 4.3.x || 4.4.x || 4.5.x || 4.6.x"
-  },
-  "engines": {
-    "npm": ">=7.0.0",
-    "node": ">=16.0.0"
-  },
-  "packageManager": "pnpm@7.1.7",
-  "peerDependencies": {
-    "typescript": "4.0.x || 4.1.x || 4.2.x || 4.3.x || 4.4.x || 4.5.x || 4.6.x"
-  },
-  "pnpm": {
-    "overrides": {
-      "@changesets/assemble-release-plan": "5.2.3"
-    },
-    "overrides-notes": {
-      "@changesets/assemble-release-plan": "patched until https://github.com/changesets/changesets/issues/835 is resolved"
-    },
-    "patchedDependencies": {
-      "@changesets/assemble-release-plan@5.2.3": "patches/@changesets__assemble-release-plan@5.2.3.patch"
-    }
-  }
+	"name": "@supabase/auth-helpers",
+	"version": "0.0.0",
+	"private": true,
+	"scripts": {
+		"build": "turbo run build",
+		"build:example": "turbo run build:example",
+		"build:example:sveltekit": "turbo run build:example --filter=@example/sveltekit",
+		"build:example:nextjs": "turbo run build:example --filter=@example/nextjs",
+		"build:sveltekit": "turbo run build --filter=@supabase/auth-helpers-sveltekit",
+		"build:sveltekit:watch": "turbo run build:watch --filter=@supabase/auth-helpers-sveltekit",
+		"build:nextjs": "turbo run build --filter=@supabase/auth-helpers-nextjs",
+		"build:react": "turbo run build --filter=@supabase/auth-helpers-react",
+		"build:remix": "turbo run build --filter=@supabase/auth-helpers-remix",
+		"build:shared": "turbo run build --filter=@supabase/auth-helpers-shared",
+		"dev": "turbo run dev --parallel",
+		"lint": "turbo run lint --filter=!@example/*",
+		"check": "prettier --check .",
+		"format": "prettier --write .",
+		"docs": "typedoc",
+		"clean:all": "turbo run clean:all",
+		"ci:version": "changeset version",
+		"ci:release": "changeset publish",
+		"prepare": "husky install"
+	},
+	"devDependencies": {
+		"@changesets/cli": "^2.22.0",
+		"prettier": "^2.5.1",
+		"turbo": "^1.8.3",
+		"typedoc": "^0.22.17",
+		"typescript": "4.0.x || 4.1.x || 4.2.x || 4.3.x || 4.4.x || 4.5.x || 4.6.x",
+		"husky": "^8.0.0"
+	},
+	"engines": {
+		"npm": ">=7.0.0",
+		"node": ">=16.0.0"
+	},
+	"packageManager": "pnpm@7.1.7",
+	"peerDependencies": {
+		"typescript": "4.0.x || 4.1.x || 4.2.x || 4.3.x || 4.4.x || 4.5.x || 4.6.x"
+	},
+	"pnpm": {
+		"overrides": {
+			"@changesets/assemble-release-plan": "5.2.3"
+		},
+		"overrides-notes": {
+			"@changesets/assemble-release-plan": "patched until https://github.com/changesets/changesets/issues/835 is resolved"
+		},
+		"patchedDependencies": {
+			"@changesets/assemble-release-plan@5.2.3": "patches/@changesets__assemble-release-plan@5.2.3.patch"
+		}
+	},
+	"lint-staged": {
+		"**/*.{ts,tsx,md}": [
+			"prettier --check"
+		]
+	}
 }
