@@ -6,12 +6,13 @@ import {
 	createSupabaseClient
 } from '@supabase/auth-helpers-shared';
 
-import type { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
+import type { WritableRequestCookies } from './index';
+import { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
 
-class NextServerComponentAuthStorageAdapter extends CookieAuthStorageAdapter {
+class NextServerActionAuthStorageAdapter extends CookieAuthStorageAdapter {
 	constructor(
 		private readonly context: {
-			cookies: () => any; // TODO update this to be ReadonlyHeaders when we upgrade to Next.js 13
+			cookies: () => WritableRequestCookies;
 		},
 		cookieOptions?: CookieOptions
 	) {
@@ -23,27 +24,26 @@ class NextServerComponentAuthStorageAdapter extends CookieAuthStorageAdapter {
 		return nextCookies.get(name)?.value;
 	}
 	protected setCookie(name: string, value: string): void {
-		// Note: The Next.js team at Vercel is working on adding the ability to
-		// set cookies in addition to the cookies function.
-		// https://beta.nextjs.org/docs/api-reference/cookies
+		const nextCookies = this.context.cookies();
+		nextCookies.set(name, value);
 	}
 	protected deleteCookie(name: string): void {
-		// Note: The Next.js team at Vercel is working on adding the ability to
-		// set cookies in addition to the cookies function.
-		// https://beta.nextjs.org/docs/api-reference/cookies
+		const nextCookies = this.context.cookies();
+		nextCookies.set(name, '', {
+			maxAge: 0
+		});
 	}
 }
 
-export const createRouteHandlerSupabaseClient = createServerComponentSupabaseClient;
-
-export function createServerComponentSupabaseClient<
+export function createServerActionSupabaseClient<
 	Database = any,
 	SchemaName extends string & keyof Database = 'public' extends keyof Database
 		? 'public'
 		: string & keyof Database
 >(
 	context: {
-		cookies: () => ReadonlyRequestCookies;
+		// TODO! Remove `ReadonlyRequestCookies` when Next.js fixes ts defs for Route Handlers and Server Actions
+		cookies: () => ReadonlyRequestCookies | WritableRequestCookies;
 	},
 	{
 		supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -63,6 +63,12 @@ export function createServerComponentSupabaseClient<
 		);
 	}
 
+	// TODO! Remove this type narrowing statement 👇 when Next.js fixes ts defs for Route Handlers and Server Actions
+	const narrowedContext = {
+		...context,
+		cookies: context.cookies as () => WritableRequestCookies
+	};
+
 	return createSupabaseClient<Database, SchemaName>(supabaseUrl, supabaseKey, {
 		...options,
 		global: {
@@ -74,7 +80,7 @@ export function createServerComponentSupabaseClient<
 		},
 		auth: {
 			storageKey: cookieOptions?.name,
-			storage: new NextServerComponentAuthStorageAdapter(context, cookieOptions)
+			storage: new NextServerActionAuthStorageAdapter(narrowedContext, cookieOptions)
 		}
 	});
 }
