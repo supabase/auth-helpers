@@ -1,3 +1,3 @@
-import { createMiddlewareSupabaseClient } from './middlewareClient';
+import { createServerActionSupabaseClient } from './serverActionClient';
 
-export const createRouteHandlerSupabaseClient = createMiddlewareSupabaseClient;
+export const createRouteHandlerSupabaseClient = createServerActionSupabaseClient;
