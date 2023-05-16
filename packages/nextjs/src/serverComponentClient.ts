@@ -6,6 +6,8 @@ import {
 	createSupabaseClient
 } from '@supabase/auth-helpers-shared';
 
+import type { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
+
 class NextServerComponentAuthStorageAdapter extends CookieAuthStorageAdapter {
 	constructor(
 		private readonly context: {
@@ -41,7 +43,7 @@ export function createServerComponentSupabaseClient<
 		: string & keyof Database
 >(
 	context: {
-		cookies: () => any; // TODO update this to be ReadonlyHeaders when we upgrade to Next.js 13
+		cookies: () => ReadonlyRequestCookies;
 	},
 	{
 		supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL,
