@@ -11,7 +11,7 @@ import type { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension
 class NextServerComponentAuthStorageAdapter extends CookieAuthStorageAdapter {
 	constructor(
 		private readonly context: {
-			cookies: () => any; // TODO update this to be ReadonlyHeaders when we upgrade to Next.js 13
+			cookies: () => ReadonlyRequestCookies;
 		},
 		cookieOptions?: CookieOptions
 	) {
