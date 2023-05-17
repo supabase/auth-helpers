@@ -35,7 +35,7 @@ class NextRouteHandlerAuthStorageAdapter extends CookieAuthStorageAdapter {
 	}
 }
 
-export function createRouteHandlerSupabaseClient<
+export function createRouteHandlerClient<
 	Database = any,
 	SchemaName extends string & keyof Database = 'public' extends keyof Database
 		? 'public'

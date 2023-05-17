@@ -5,7 +5,7 @@ import {
 	createSupabaseClient
 } from '@supabase/auth-helpers-shared';
 
-export function createBrowserSupabaseClient<
+export function createClientComponentClient<
 	Database = any,
 	SchemaName extends string & keyof Database = 'public' extends keyof Database
 		? 'public'

@@ -53,7 +53,7 @@ class NextMiddlewareAuthStorageAdapter extends CookieAuthStorageAdapter {
 	}
 }
 
-export function createMiddlewareSupabaseClient<
+export function createMiddlewareClient<
 	Database = any,
 	SchemaName extends string & keyof Database = 'public' extends keyof Database
 		? 'public'
