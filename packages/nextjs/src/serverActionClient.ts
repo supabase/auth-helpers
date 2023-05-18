@@ -1,3 +1,3 @@
-import { createRouteHandlerSupabaseClient } from './routeHandlerClient';
+import { createRouteHandlerClient } from './routeHandlerClient';
 
-export const createServerActionSupabaseClient = createRouteHandlerSupabaseClient;
+export const createServerActionClient = createRouteHandlerClient;

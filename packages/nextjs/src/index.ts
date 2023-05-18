@@ -9,9 +9,17 @@ export type WritableRequestCookies = ReadonlyRequestCookies & {
 	set: (name: string, value: string, options?: CookieOptions) => void;
 };
 
-export { createBrowserSupabaseClient } from './browserClient';
-export { createServerSupabaseClient } from './serverClient';
-export { createMiddlewareSupabaseClient } from './middlewareClient';
-export { createServerComponentSupabaseClient } from './serverComponentClient';
-export { createRouteHandlerSupabaseClient } from './routeHandlerClient';
-export { createServerActionSupabaseClient } from './serverActionClient';
+export { createPagesBrowserClient } from './pagesBrowserClient';
+export { createPagesServerClient } from './pagesServerClient';
+export { createMiddlewareClient } from './middlewareClient';
+export { createClientComponentClient } from './clientComponentClient';
+export { createServerComponentClient } from './serverComponentClient';
+export { createRouteHandlerClient } from './routeHandlerClient';
+export { createServerActionClient } from './serverActionClient';
+
+// Deprecated Functions
+export {
+	createBrowserSupabaseClient,
+	createServerSupabaseClient,
+	createMiddlewareSupabaseClient
+} from './deprecated';

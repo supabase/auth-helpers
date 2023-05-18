@@ -53,7 +53,7 @@ class NextServerAuthStorageAdapter extends CookieAuthStorageAdapter {
 	}
 }
 
-export function createServerSupabaseClient<
+export function createPagesServerClient<
 	Database = any,
 	SchemaName extends string & keyof Database = 'public' extends keyof Database
 		? 'public'

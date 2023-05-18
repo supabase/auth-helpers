@@ -34,9 +34,7 @@ class NextServerComponentAuthStorageAdapter extends CookieAuthStorageAdapter {
 	}
 }
 
-export const createRouteHandlerSupabaseClient = createServerComponentSupabaseClient;
-
-export function createServerComponentSupabaseClient<
+export function createServerComponentClient<
 	Database = any,
 	SchemaName extends string & keyof Database = 'public' extends keyof Database
 		? 'public'
