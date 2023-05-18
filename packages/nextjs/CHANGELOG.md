@@ -1,5 +1,11 @@
 # @supabase/auth-helpers-nextjs
 
+## 0.7.0-next.6
+
+### Patch Changes
+
+- d90866f: [BREAKING CHANGES]: Renamed createBrowserSupabaseClient to createPagesBrowserClient, createServerSupabaseClient to createPagesServerClient and createMiddlewareSupabaseClient to createMiddlewareClient
+
 ## 0.7.0-next.5
 
 ### Patch Changes
