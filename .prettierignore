@@ -41,3 +41,7 @@ docs/
 
 # svelte kit
 .svelte-kit
+
+# changesets and github
+.changeset/
+.github/
