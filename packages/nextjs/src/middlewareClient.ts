@@ -50,6 +50,7 @@ class NextMiddlewareAuthStorageAdapter extends CookieAuthStorageAdapter {
 		});
 
 		this.context.res.headers.append('set-cookie', newSessionStr);
+		this.context.res.headers.append('cookie', newSessionStr);
 	}
 }
 
