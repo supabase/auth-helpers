@@ -4,6 +4,9 @@ import {
 	SupabaseClientOptionsWithoutAuth,
 	createSupabaseClient
 } from '@supabase/auth-helpers-shared';
+import { SupabaseClient } from '@supabase/supabase-js';
+
+let supabase: SupabaseClient | undefined;
 
 export function createClientComponentClient<
 	Database = any,
@@ -27,18 +30,27 @@ export function createClientComponentClient<
 		);
 	}
 
-	return createSupabaseClient<Database, SchemaName>(supabaseUrl, supabaseKey, {
-		...options,
-		global: {
-			...options?.global,
-			headers: {
-				...options?.global?.headers,
-				'X-Client-Info': `${PACKAGE_NAME}@${PACKAGE_VERSION}`
+	const _supabase =
+		supabase ??
+		createSupabaseClient<Database, SchemaName>(supabaseUrl, supabaseKey, {
+			...options,
+			global: {
+				...options?.global,
+				headers: {
+					...options?.global?.headers,
+					'X-Client-Info': `${PACKAGE_NAME}@${PACKAGE_VERSION}`
+				}
+			},
+			auth: {
+				storageKey: cookieOptions?.name,
+				storage: new BrowserCookieAuthStorageAdapter(cookieOptions)
 			}
-		},
-		auth: {
-			storageKey: cookieOptions?.name,
-			storage: new BrowserCookieAuthStorageAdapter(cookieOptions)
-		}
-	});
+		});
+
+	// For SSG and SSR always create a new Supabase client
+	if (typeof window === 'undefined') return _supabase;
+	// Create the Supabase client once in the client
+	if (!supabase) supabase = _supabase;
+
+	return supabase;
 }
