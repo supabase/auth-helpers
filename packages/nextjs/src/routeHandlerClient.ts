@@ -6,13 +6,12 @@ import {
 	createSupabaseClient
 } from '@supabase/auth-helpers-shared';
 
-import type { WritableRequestCookies } from './index';
-import { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
+import type { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
 
 class NextRouteHandlerAuthStorageAdapter extends CookieAuthStorageAdapter {
 	constructor(
 		private readonly context: {
-			cookies: () => WritableRequestCookies;
+			cookies: () => ReadonlyRequestCookies;
 		},
 		cookieOptions?: CookieOptions
 	) {
@@ -29,6 +28,7 @@ class NextRouteHandlerAuthStorageAdapter extends CookieAuthStorageAdapter {
 	}
 	protected deleteCookie(name: string): void {
 		const nextCookies = this.context.cookies();
+		// @ts-expect-error Next.js need to fix their type for cookie options (3rd parameter on .set method)
 		nextCookies.set(name, '', {
 			maxAge: 0
 		});
@@ -42,8 +42,7 @@ export function createRouteHandlerClient<
 		: string & keyof Database
 >(
 	context: {
-		// TODO! Remove `ReadonlyRequestCookies` when Next.js fixes ts defs for Route Handlers and Server Actions
-		cookies: () => ReadonlyRequestCookies | WritableRequestCookies;
+		cookies: () => ReadonlyRequestCookies;
 	},
 	{
 		supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -63,12 +62,6 @@ export function createRouteHandlerClient<
 		);
 	}
 
-	// TODO! Remove this type narrowing statement 👇 when Next.js fixes ts defs for Route Handlers and Server Actions
-	const narrowedContext = {
-		...context,
-		cookies: context.cookies as () => WritableRequestCookies
-	};
-
 	return createSupabaseClient<Database, SchemaName>(supabaseUrl, supabaseKey, {
 		...options,
 		global: {
@@ -80,7 +73,7 @@ export function createRouteHandlerClient<
 		},
 		auth: {
 			storageKey: cookieOptions?.name,
-			storage: new NextRouteHandlerAuthStorageAdapter(narrowedContext, cookieOptions)
+			storage: new NextRouteHandlerAuthStorageAdapter(context, cookieOptions)
 		}
 	});
 }
