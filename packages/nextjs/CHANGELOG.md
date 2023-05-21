@@ -1,5 +1,13 @@
 # @supabase/auth-helpers-nextjs
 
+## 0.7.0-next.7
+
+### Patch Changes
+
+- 067402a: Set cookie header to make new session from middleware available to server component
+- 008a08c: Implement singleton pattern for createClientComponentClient to simplify implementation
+- 1086021: Upgrade Next.js and remove custom type for WritableRequestCookies
+
 ## 0.7.0-next.6
 
 ### Patch Changes
