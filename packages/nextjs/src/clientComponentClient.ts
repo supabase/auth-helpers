@@ -6,7 +6,7 @@ import {
 } from '@supabase/auth-helpers-shared';
 import { SupabaseClient } from '@supabase/supabase-js';
 
-let supabase: SupabaseClient | undefined;
+let supabase: SupabaseClient<any, string> | undefined;
 
 export function createClientComponentClient<
 	Database = any,
