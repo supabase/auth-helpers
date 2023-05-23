@@ -7,6 +7,7 @@ import {
 import { Session, SupabaseClient } from '@supabase/supabase-js';
 import { LoadEvent } from '@sveltejs/kit';
 import { SvelteKitLoadAuthStorageAdapter } from './loadStorageAdapter';
+import { GenericSchema } from '@supabase/supabase-js/dist/module/lib/types';
 
 let cachedBrowserClient: SupabaseClient<any, string> | undefined;
 
@@ -52,7 +53,10 @@ export function createSupabaseLoadClient<
 	Database = any,
 	SchemaName extends string & keyof Database = 'public' extends keyof Database
 		? 'public'
-		: string & keyof Database
+		: string & keyof Database,
+	Schema extends GenericSchema = Database[SchemaName] extends GenericSchema
+		? Database[SchemaName]
+		: any
 >({
 	supabaseUrl,
 	supabaseKey,
@@ -73,13 +77,13 @@ export function createSupabaseLoadClient<
 	serverSession: Session | null;
 	options?: SupabaseClientOptionsWithoutAuth<SchemaName>;
 	cookieOptions?: CookieOptionsWithName;
-}): SupabaseClient<Database, SchemaName> {
+}): SupabaseClient<Database, SchemaName, Schema> {
 	const browser = isBrowser();
 	if (browser && cachedBrowserClient) {
-		return cachedBrowserClient as SupabaseClient<Database, SchemaName>;
+		return cachedBrowserClient as SupabaseClient<Database, SchemaName, Schema>;
 	}
 
-	const client = createSupabaseClient<Database, SchemaName>(supabaseUrl, supabaseKey, {
+	const client = createSupabaseClient<Database, SchemaName, Schema>(supabaseUrl, supabaseKey, {
 		...options,
 		global: {
 			fetch: event.fetch,

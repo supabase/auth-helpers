@@ -5,6 +5,8 @@ import {
 } from '@supabase/auth-helpers-shared';
 import { RequestEvent } from '@sveltejs/kit';
 import { SvelteKitServerAuthStorageAdapter } from './serverStorageAdapter';
+import { GenericSchema } from '@supabase/supabase-js/dist/module/lib/types';
+import { SupabaseClient } from '@supabase/supabase-js';
 
 /**
  * ## Authenticated Supabase client
@@ -61,7 +63,10 @@ export function createSupabaseServerClient<
 	Database = any,
 	SchemaName extends string & keyof Database = 'public' extends keyof Database
 		? 'public'
-		: string & keyof Database
+		: string & keyof Database,
+	Schema extends GenericSchema = Database[SchemaName] extends GenericSchema
+		? Database[SchemaName]
+		: any
 >({
 	supabaseUrl,
 	supabaseKey,
@@ -76,8 +81,8 @@ export function createSupabaseServerClient<
 	options?: SupabaseClientOptionsWithoutAuth<SchemaName>;
 	cookieOptions?: CookieOptionsWithName;
 	expiryMargin?: number;
-}) {
-	const client = createSupabaseClient<Database, SchemaName>(supabaseUrl, supabaseKey, {
+}): SupabaseClient<Database, SchemaName, Schema> {
+	const client = createSupabaseClient<Database, SchemaName, Schema>(supabaseUrl, supabaseKey, {
 		...options,
 		global: {
 			...options?.global,
