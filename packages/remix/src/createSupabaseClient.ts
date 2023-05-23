@@ -9,6 +9,7 @@ import {
 	SupabaseClientOptionsWithoutAuth
 } from '@supabase/auth-helpers-shared';
 import { SupabaseClient } from '@supabase/supabase-js';
+import { GenericSchema } from '@supabase/supabase-js/dist/module/lib/types';
 
 /**
  * ## Authenticated Supabase client
@@ -90,7 +91,10 @@ export function createBrowserClient<
 	Database = any,
 	SchemaName extends string & keyof Database = 'public' extends keyof Database
 		? 'public'
-		: string & keyof Database
+		: string & keyof Database,
+	Schema extends GenericSchema = Database[SchemaName] extends GenericSchema
+		? Database[SchemaName]
+		: any
 >(
 	supabaseUrl: string,
 	supabaseKey: string,
@@ -101,14 +105,14 @@ export function createBrowserClient<
 		options?: SupabaseClientOptionsWithoutAuth<SchemaName>;
 		cookieOptions?: CookieOptionsWithName;
 	} = {}
-): SupabaseClient<Database, SchemaName> {
+): SupabaseClient<Database, SchemaName, Schema> {
 	if (!supabaseUrl || !supabaseKey) {
 		throw new Error(
 			'supabaseUrl and supabaseKey are required to create a Supabase client! Find these under `Settings` > `API` in your Supabase dashboard.'
 		);
 	}
 
-	return createSupabaseClient<Database, SchemaName>(supabaseUrl, supabaseKey, {
+	return createSupabaseClient<Database, SchemaName, Schema>(supabaseUrl, supabaseKey, {
 		...options,
 		global: {
 			...options?.global,
@@ -159,7 +163,10 @@ export function createServerClient<
 	Database = any,
 	SchemaName extends string & keyof Database = 'public' extends keyof Database
 		? 'public'
-		: string & keyof Database
+		: string & keyof Database,
+	Schema extends GenericSchema = Database[SchemaName] extends GenericSchema
+		? Database[SchemaName]
+		: any
 >(
 	supabaseUrl: string,
 	supabaseKey: string,
@@ -174,7 +181,7 @@ export function createServerClient<
 		options?: SupabaseClientOptionsWithoutAuth<SchemaName>;
 		cookieOptions?: CookieOptionsWithName;
 	}
-): SupabaseClient<Database, SchemaName> {
+): SupabaseClient<Database, SchemaName, Schema> {
 	if (!supabaseUrl || !supabaseKey) {
 		throw new Error(
 			'supabaseUrl and supabaseKey are required to create a Supabase client! Find these under `Settings` > `API` in your Supabase dashboard.'
@@ -187,7 +194,7 @@ export function createServerClient<
 		);
 	}
 
-	return createSupabaseClient<Database, SchemaName>(supabaseUrl, supabaseKey, {
+	return createSupabaseClient<Database, SchemaName, Schema>(supabaseUrl, supabaseKey, {
 		...options,
 		global: {
 			...options?.global,
