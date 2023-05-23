@@ -6,6 +6,8 @@ import {
 	createSupabaseClient
 } from '@supabase/auth-helpers-shared';
 
+import type { SupabaseClient } from '@supabase/supabase-js';
+import type { GenericSchema } from '@supabase/supabase-js/dist/module/lib/types';
 import type { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
 
 class NextServerComponentAuthStorageAdapter extends CookieAuthStorageAdapter {
@@ -23,14 +25,12 @@ class NextServerComponentAuthStorageAdapter extends CookieAuthStorageAdapter {
 		return nextCookies.get(name)?.value;
 	}
 	protected setCookie(name: string, value: string): void {
-		// Note: The Next.js team at Vercel is working on adding the ability to
-		// set cookies in addition to the cookies function.
-		// https://beta.nextjs.org/docs/api-reference/cookies
+		// Server Components cannot set cookies. Must use Middleware, Server Action or Route Handler
+		// https://github.com/vercel/next.js/discussions/41745#discussioncomment-5198848
 	}
 	protected deleteCookie(name: string): void {
-		// Note: The Next.js team at Vercel is working on adding the ability to
-		// set cookies in addition to the cookies function.
-		// https://beta.nextjs.org/docs/api-reference/cookies
+		// Server Components cannot set cookies. Must use Middleware, Server Action or Route Handler
+		// https://github.com/vercel/next.js/discussions/41745#discussioncomment-5198848
 	}
 }
 
@@ -38,7 +38,10 @@ export function createServerComponentClient<
 	Database = any,
 	SchemaName extends string & keyof Database = 'public' extends keyof Database
 		? 'public'
-		: string & keyof Database
+		: string & keyof Database,
+	Schema extends GenericSchema = Database[SchemaName] extends GenericSchema
+		? Database[SchemaName]
+		: any
 >(
 	context: {
 		cookies: () => ReadonlyRequestCookies;
@@ -54,14 +57,14 @@ export function createServerComponentClient<
 		options?: SupabaseClientOptionsWithoutAuth<SchemaName>;
 		cookieOptions?: CookieOptionsWithName;
 	} = {}
-) {
+): SupabaseClient<Database, SchemaName, Schema> {
 	if (!supabaseUrl || !supabaseKey) {
 		throw new Error(
 			'either NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY env variables or supabaseUrl and supabaseKey are required!'
 		);
 	}
 
-	return createSupabaseClient<Database, SchemaName>(supabaseUrl, supabaseKey, {
+	return createSupabaseClient<Database, SchemaName, Schema>(supabaseUrl, supabaseKey, {
 		...options,
 		global: {
 			...options?.global,
