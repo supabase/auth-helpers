@@ -1,5 +1,11 @@
 # @supabase/auth-helpers-nextjs
 
+## 0.7.0-next.8
+
+### Patch Changes
+
+- a128b9e: Fix typedefs and add deprecated functions for App Router createClient functions
+
 ## 0.7.0-next.7
 
 ### Patch Changes
