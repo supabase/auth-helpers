@@ -4,15 +4,21 @@ import {
 	SupabaseClientOptionsWithoutAuth,
 	createSupabaseClient
 } from '@supabase/auth-helpers-shared';
-import { SupabaseClient } from '@supabase/supabase-js';
 
-let supabase: SupabaseClient<any, string> | undefined;
+import type { SupabaseClient } from '@supabase/supabase-js';
+import type { GenericSchema } from '@supabase/supabase-js/dist/module/lib/types';
+
+// can't type this properly as `Database`, `SchemaName` and `Schema` are only available within `createClientComponentClient` function
+let supabase: any;
 
 export function createClientComponentClient<
 	Database = any,
 	SchemaName extends string & keyof Database = 'public' extends keyof Database
 		? 'public'
-		: string & keyof Database
+		: string & keyof Database,
+	Schema extends GenericSchema = Database[SchemaName] extends GenericSchema
+		? Database[SchemaName]
+		: any
 >({
 	supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL,
 	supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
@@ -23,7 +29,7 @@ export function createClientComponentClient<
 	supabaseKey?: string;
 	options?: SupabaseClientOptionsWithoutAuth<SchemaName>;
 	cookieOptions?: CookieOptionsWithName;
-} = {}) {
+} = {}): SupabaseClient<Database, SchemaName, Schema> {
 	if (!supabaseUrl || !supabaseKey) {
 		throw new Error(
 			'either NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY env variables or supabaseUrl and supabaseKey are required!'
@@ -32,7 +38,7 @@ export function createClientComponentClient<
 
 	const _supabase =
 		supabase ??
-		createSupabaseClient<Database, SchemaName>(supabaseUrl, supabaseKey, {
+		createSupabaseClient<Database, SchemaName, Schema>(supabaseUrl, supabaseKey, {
 			...options,
 			global: {
 				...options?.global,

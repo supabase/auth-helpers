@@ -7,8 +7,12 @@ import {
 	serializeCookie,
 	SupabaseClientOptionsWithoutAuth
 } from '@supabase/auth-helpers-shared';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { splitCookiesString } from 'set-cookie-parser';
+
+import type { NextRequest } from 'next/server';
+import type { GenericSchema } from '@supabase/supabase-js/dist/module/lib/types';
+import type { SupabaseClient } from '@supabase/supabase-js';
 
 class NextMiddlewareAuthStorageAdapter extends CookieAuthStorageAdapter {
 	constructor(
@@ -60,7 +64,10 @@ export function createMiddlewareClient<
 	Database = any,
 	SchemaName extends string & keyof Database = 'public' extends keyof Database
 		? 'public'
-		: string & keyof Database
+		: string & keyof Database,
+	Schema extends GenericSchema = Database[SchemaName] extends GenericSchema
+		? Database[SchemaName]
+		: any
 >(
 	context: { req: NextRequest; res: NextResponse },
 	{
@@ -74,14 +81,14 @@ export function createMiddlewareClient<
 		options?: SupabaseClientOptionsWithoutAuth<SchemaName>;
 		cookieOptions?: CookieOptionsWithName;
 	} = {}
-) {
+): SupabaseClient<Database, SchemaName, Schema> {
 	if (!supabaseUrl || !supabaseKey) {
 		throw new Error(
 			'either NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY env variables or supabaseUrl and supabaseKey are required!'
 		);
 	}
 
-	return createSupabaseClient<Database, SchemaName>(supabaseUrl, supabaseKey, {
+	return createSupabaseClient<Database, SchemaName, Schema>(supabaseUrl, supabaseKey, {
 		...options,
 		global: {
 			...options?.global,
