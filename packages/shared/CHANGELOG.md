@@ -1,5 +1,19 @@
 # shared
 
+## 0.4.0
+
+### Minor Changes
+
+- 65bf8d4: Add cookie storage adapter per library following a shared storage adapter
+- 65bf8d4: Add full server side support to auth helpers through PKCE
+
+### Patch Changes
+
+- 353be76: remove unused type
+- 56db807: Add jose for it's cross platform base64url decode support
+- 56db807: Remove js-base64 as its buffer check was causing issues for Vercel Edge Runtime
+- 66b13b9: simplifying defaults for storage adapter
+
 ## 0.4.0-next.3
 
 ### Patch Changes
@@ -75,10 +89,10 @@ WARNING: this patch changes the structure of the `supabase-auth-token` cookie. I
 ```js
 // The new shape of the `supabase-auth-token` cookie.
 JSON.stringify([
-  session.access_token,
-  session.refresh_token,
-  session.provider_token,
-  session.provider_refresh_token
+	session.access_token,
+	session.refresh_token,
+	session.provider_token,
+	session.provider_refresh_token
 ]);
 ```
 
