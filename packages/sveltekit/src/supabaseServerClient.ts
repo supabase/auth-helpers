@@ -1,10 +1,12 @@
 import {
-  CookieOptions,
-  SupabaseClientOptionsWithoutAuth
+	CookieOptionsWithName,
+	SupabaseClientOptionsWithoutAuth,
+	createSupabaseClient
 } from '@supabase/auth-helpers-shared';
-import { createClient } from '@supabase/supabase-js';
 import { RequestEvent } from '@sveltejs/kit';
-import { supabaseAuthStorageAdapterSveltekitServer } from './serverStorageAdapter';
+import { SvelteKitServerAuthStorageAdapter } from './serverStorageAdapter';
+import { GenericSchema } from '@supabase/supabase-js/dist/module/lib/types';
+import { SupabaseClient } from '@supabase/supabase-js';
 
 /**
  * ## Authenticated Supabase client
@@ -58,43 +60,42 @@ import { supabaseAuthStorageAdapterSveltekitServer } from './serverStorageAdapte
  * ```
  */
 export function createSupabaseServerClient<
-  Database = any,
-  SchemaName extends string & keyof Database = 'public' extends keyof Database
-    ? 'public'
-    : string & keyof Database
+	Database = any,
+	SchemaName extends string & keyof Database = 'public' extends keyof Database
+		? 'public'
+		: string & keyof Database,
+	Schema extends GenericSchema = Database[SchemaName] extends GenericSchema
+		? Database[SchemaName]
+		: any
 >({
-  supabaseUrl,
-  supabaseKey,
-  event,
-  options,
-  cookieOptions,
-  expiryMargin
+	supabaseUrl,
+	supabaseKey,
+	event,
+	options,
+	cookieOptions,
+	expiryMargin
 }: {
-  supabaseUrl: string;
-  supabaseKey: string;
-  event: Pick<RequestEvent, 'cookies'>;
-  options?: SupabaseClientOptionsWithoutAuth<SchemaName>;
-  cookieOptions?: CookieOptions;
-  expiryMargin?: number;
-}) {
-  return createClient<Database, SchemaName>(supabaseUrl, supabaseKey, {
-    ...options,
-    global: {
-      ...options?.global,
-      headers: {
-        ...options?.global?.headers,
-        'X-Client-Info': `${PACKAGE_NAME}@${PACKAGE_VERSION}`
-      }
-    },
-    auth: {
-      autoRefreshToken: false,
-      detectSessionInUrl: false,
-      persistSession: true,
-      storage: supabaseAuthStorageAdapterSveltekitServer({
-        cookies: event.cookies,
-        cookieOptions,
-        expiryMargin
-      })
-    }
-  });
+	supabaseUrl: string;
+	supabaseKey: string;
+	event: Pick<RequestEvent, 'cookies'>;
+	options?: SupabaseClientOptionsWithoutAuth<SchemaName>;
+	cookieOptions?: CookieOptionsWithName;
+	expiryMargin?: number;
+}): SupabaseClient<Database, SchemaName, Schema> {
+	const client = createSupabaseClient<Database, SchemaName, Schema>(supabaseUrl, supabaseKey, {
+		...options,
+		global: {
+			...options?.global,
+			headers: {
+				...options?.global?.headers,
+				'X-Client-Info': `${PACKAGE_NAME}@${PACKAGE_VERSION}`
+			}
+		},
+		auth: {
+			storageKey: cookieOptions?.name,
+			storage: new SvelteKitServerAuthStorageAdapter(event, cookieOptions, expiryMargin)
+		}
+	});
+
+	return client;
 }

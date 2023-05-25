@@ -1,70 +1,62 @@
-import {
-  CookieOptions,
-  parseSupabaseCookie,
-  stringifySupabaseSession
-} from '@supabase/auth-helpers-shared';
+import { CookieAuthStorageAdapter, CookieOptions } from '@supabase/auth-helpers-shared';
+import { Session } from '@supabase/supabase-js';
 import { RequestEvent } from '@sveltejs/kit';
-import { GoTrueClientOptions, Session } from '@supabase/supabase-js';
 
-export function supabaseAuthStorageAdapterSveltekitServer({
-  cookies,
-  cookieOptions: {
-    name = 'sb-auth-token',
-    domain,
-    maxAge = 60 * 60 * 24 * 365,
-    path = '/',
-    sameSite,
-    secure,
-    httpOnly = false
-  } = {},
-  expiryMargin = 60
-}: {
-  cookies: RequestEvent['cookies'];
-  cookieOptions?: CookieOptions & { httpOnly?: boolean };
-  expiryMargin?: number;
-}): GoTrueClientOptions['storage'] {
-  let currentSession: Partial<Session> | null;
-  let isInitialDelete = true;
+export class SvelteKitServerAuthStorageAdapter extends CookieAuthStorageAdapter {
+	private isInitialDelete = true;
+	private currentSession: Partial<Session> | null = null;
 
-  return {
-    async getItem() {
-      const sessionStr = cookies.get(name);
-      const session = (currentSession = parseSupabaseCookie(sessionStr));
-      if (session?.expires_at) {
-        // shorten the session lifetime so it does not expire on the server
-        session.expires_at -= expiryMargin;
-      }
-      return JSON.stringify(session);
-    },
-    async setItem(_key: string, value: string) {
-      const session = JSON.parse(value);
-      const sessionStr = stringifySupabaseSession(session);
-      cookies.set(name, sessionStr, {
-        domain,
-        maxAge,
-        path,
-        sameSite,
-        secure,
-        httpOnly
-      });
-    },
-    async removeItem() {
-      // workaround until https://github.com/supabase/gotrue-js/pull/598
-      if (isInitialDelete && currentSession?.expires_at) {
-        const now = Math.round(Date.now() / 1000);
-        if (currentSession.expires_at < now + 10) {
-          isInitialDelete = false;
-          return;
-        }
-      }
-      cookies.delete(name, {
-        domain,
-        maxAge,
-        path,
-        sameSite,
-        secure,
-        httpOnly
-      });
-    }
-  };
+	constructor(
+		private readonly event: Pick<RequestEvent, 'cookies'>,
+		cookieOptions?: CookieOptions,
+		private readonly expiryMargin: number = 60
+	) {
+		super(cookieOptions);
+	}
+
+	protected getCookie(name: string) {
+		return this.event.cookies.get(name);
+	}
+
+	protected setCookie(name: string, value: string) {
+		this.event.cookies.set(name, value, {
+			httpOnly: false,
+			...this.cookieOptions
+		});
+	}
+
+	protected deleteCookie(name: string) {
+		this.event.cookies.delete(name, {
+			httpOnly: false,
+			...this.cookieOptions
+		});
+	}
+
+	async getItem(key: string) {
+		const sessionStr = await super.getItem(key);
+		if (!sessionStr) {
+			this.currentSession = null;
+			return null;
+		}
+
+		const session: Session | null = JSON.parse(sessionStr);
+		this.currentSession = session;
+
+		if (session?.expires_at) {
+			// shorten the session lifetime so it does not expire on the server
+			session.expires_at -= this.expiryMargin;
+		}
+		return JSON.stringify(session);
+	}
+
+	removeItem(key: string) {
+		if (this.isInitialDelete && this.currentSession?.expires_at) {
+			const now = Math.round(Date.now() / 1000);
+			if (this.currentSession.expires_at < now + 10) {
+				this.isInitialDelete = false;
+				return;
+			}
+		}
+		super.removeItem(key);
+	}
 }

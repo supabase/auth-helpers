@@ -1,40 +1,40 @@
-# create-svelte
+# Supabase Email and Password Server-side login with SvelteKit
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+## Getting started
 
-## Creating a project
-
-If you're seeing this, you've probably already done this step. Congrats!
+Install the dependencies for this project by running the following command from this repository root directory in your terminal
 
 ```bash
-# create a new project in the current directory
-npm init svelte@next
-
-# create a new project in my-app
-npm init svelte@next my-app
+pnpm install
 ```
 
-> Note: the `@next` is temporary
+## Project setup
 
-## Developing
+1. Create a project on the Supabase dashboard
+2. Get the `URL` and `anon` key from your [Settings > API](https://app.supabase.com/project/_/settings/api) section
+3. Copy the `.env.example` file in this project and create a new `.env` file from it
+4. Replace `PUBLIC_SUPABASE_URL` with the `URL` from step 2 and `PUBLIC_SUPABASE_ANON_KEY` with `anon` key from step 2
+5. Copy the `SQL` below and paste it inside of the [SQL Editor](https://app.supabase.com/project/_/sql) section
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+```sql
+DROP TABLE IF EXISTS "public"."test";
+
+-- Table Definition
+CREATE TABLE "public"."test" (
+    "id" int8 NOT NULL,
+    "created_at" timestamptz DEFAULT now(),
+    PRIMARY KEY ("id")
+);
+```
+
+6. Build the package that this example relies on using the following command
 
 ```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+pnpm build:sveltekit
 ```
 
-## Building
-
-To create a production version of your app:
+7. Run the following command from the repository root
 
 ```bash
-npm run build
+pnpm dev --filter=@example/sveltekit-email-password -- --open
 ```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.

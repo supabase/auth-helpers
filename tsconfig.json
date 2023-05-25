@@ -1,9 +1,10 @@
 {
-  "files": [],
-  "references": [
-    { "path": "packages/react" },
-    { "path": "packages/nextjs" },
-    { "path": "packages/shared" },
-    { "path": "packages/sveltekit" }
-  ]
+	"files": [],
+	"references": [
+		{ "path": "packages/shared" },
+		{ "path": "packages/react" },
+		{ "path": "packages/nextjs" },
+		{ "path": "packages/sveltekit" },
+		{ "path": "packages/remix" }
+	]
 }

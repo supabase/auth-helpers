@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - '**'
+
+# cancel in-progress runs on new commits to same PR (gitub.event.number)
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number || github.sha }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read # to fetch code (actions/checkout)
+  checks: write
+
+jobs:
+  Lint:
+    strategy:
+      matrix:
+        node: ['18']
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: pnpm/action-setup@v2.2.3
+        with:
+          version: 8.1.0
+
+      - name: Set up Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node }}
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - uses: wearerequired/lint-action@v2
+        with:
+          tsc: true
+          prettier: true
+
+  # Lint:
+  #   strategy:
+  #     matrix:
+  #       node: ['18']
+
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+
+  #     - uses: pnpm/action-setup@v2
+  #       with:
+  #         version: 8.1.0
+
+  #     - uses: actions/setup-node@v3
+  #       with:
+  #         node-version: 18.x
+  #         cache: pnpm
+
+  #     - run: pnpm install --frozen-lockfile
+  #     - run: pnpm run lint
+  #     - run: pnpm run check

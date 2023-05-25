@@ -1,39 +1,40 @@
 {
-  "name": "@supabase/auth-helpers-react",
-  "version": "0.3.1",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "publishConfig": {
-    "access": "public"
-  },
-  "scripts": {
-    "build": "tsup",
-    "clean:all": "rimraf dist node_modules"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/supabase/auth-helpers.git"
-  },
-  "keywords": [
-    "Supabase",
-    "Auth",
-    "React"
-  ],
-  "author": "Supabase",
-  "license": "MIT",
-  "devDependencies": {
-    "@supabase/supabase-js": "2.0.4",
-    "@types/react": "^17.0.20",
-    "@types/react-dom": "^17.0.9",
-    "config": "workspace:*",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "rimraf": "^4.1.1",
-    "tsconfig": "workspace:*",
-    "tsup": "^6.5.0",
-    "typescript": "^4.9.4"
-  },
-  "peerDependencies": {
-    "@supabase/supabase-js": "^2.0.4"
-  }
+	"name": "@supabase/auth-helpers-react",
+	"version": "0.4.0",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"publishConfig": {
+		"access": "public"
+	},
+	"scripts": {
+		"lint": "tsc",
+		"build": "tsup",
+		"clean:all": "rimraf dist node_modules"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/supabase/auth-helpers.git"
+	},
+	"keywords": [
+		"Supabase",
+		"Auth",
+		"React"
+	],
+	"author": "Supabase",
+	"license": "MIT",
+	"devDependencies": {
+		"@supabase/supabase-js": "2.19.0",
+		"@types/react": "^17.0.20",
+		"@types/react-dom": "^17.0.9",
+		"config": "workspace:*",
+		"react": "^17.0.2",
+		"react-dom": "^17.0.2",
+		"rimraf": "^4.1.1",
+		"tsconfig": "workspace:*",
+		"tsup": "^6.5.0",
+		"typescript": "^4.9.4"
+	},
+	"peerDependencies": {
+		"@supabase/supabase-js": "^2.19.0"
+	}
 }

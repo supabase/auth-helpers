@@ -1,20 +1,15 @@
 import {
-  CookieOptions,
-  isBrowser,
-  SupabaseClientOptionsWithoutAuth
+	CookieOptionsWithName,
+	createSupabaseClient,
+	isBrowser,
+	SupabaseClientOptionsWithoutAuth
 } from '@supabase/auth-helpers-shared';
-import {
-  AuthChangeEvent,
-  createClient,
-  Session,
-  Subscription,
-  SupabaseClient
-} from '@supabase/supabase-js';
+import { Session, SupabaseClient } from '@supabase/supabase-js';
 import { LoadEvent } from '@sveltejs/kit';
-import { supabaseAuthStorageAdapterSveltekitLoad } from './loadStorageAdapter';
+import { SvelteKitLoadAuthStorageAdapter } from './loadStorageAdapter';
+import { GenericSchema } from '@supabase/supabase-js/dist/module/lib/types';
 
 let cachedBrowserClient: SupabaseClient<any, string> | undefined;
-let onAuthStateChangeSubscription: Subscription | undefined;
 
 /**
  * ## Authenticated Supabase client
@@ -55,76 +50,58 @@ let onAuthStateChangeSubscription: Subscription | undefined;
  * ```
  */
 export function createSupabaseLoadClient<
-  Database = any,
-  SchemaName extends string & keyof Database = 'public' extends keyof Database
-    ? 'public'
-    : string & keyof Database
+	Database = any,
+	SchemaName extends string & keyof Database = 'public' extends keyof Database
+		? 'public'
+		: string & keyof Database,
+	Schema extends GenericSchema = Database[SchemaName] extends GenericSchema
+		? Database[SchemaName]
+		: any
 >({
-  supabaseUrl,
-  supabaseKey,
-  event,
-  serverSession,
-  options,
-  cookieOptions,
-  onAuthStateChange
+	supabaseUrl,
+	supabaseKey,
+	event,
+	serverSession,
+	options,
+	cookieOptions
 }: {
-  supabaseUrl: string;
-  /**
-   * The supabase key. Make sure you **always** use the ANON_KEY.
-   */
-  supabaseKey: string;
-  event: Pick<LoadEvent, 'fetch'>;
-  /**
-   * The initial session from the server.
-   */
-  serverSession: Session | null;
-  options?: SupabaseClientOptionsWithoutAuth<SchemaName>;
-  cookieOptions?: CookieOptions;
-  /**
-   * The event listener only runs in the browser.
-   * @deprecated DO NOT USE THIS
-   *
-   * use this instead: https://supabase.com/docs/guides/auth/auth-helpers/sveltekit#setting-up-the-event-listener-on-the-client-side
-   */
-  onAuthStateChange?: (event: AuthChangeEvent, session: Session | null) => void;
-}): SupabaseClient<Database, SchemaName> {
-  const browser = isBrowser();
-  if (browser && cachedBrowserClient) {
-    return cachedBrowserClient as SupabaseClient<Database, SchemaName>;
-  }
+	supabaseUrl: string;
+	/**
+	 * The supabase key. Make sure you **always** use the ANON_KEY.
+	 */
+	supabaseKey: string;
+	event: Pick<LoadEvent, 'fetch'>;
+	/**
+	 * The initial session from the server.
+	 */
+	serverSession: Session | null;
+	options?: SupabaseClientOptionsWithoutAuth<SchemaName>;
+	cookieOptions?: CookieOptionsWithName;
+}): SupabaseClient<Database, SchemaName, Schema> {
+	const browser = isBrowser();
+	if (browser && cachedBrowserClient) {
+		return cachedBrowserClient as SupabaseClient<Database, SchemaName, Schema>;
+	}
 
-  // this should never happen
-  onAuthStateChangeSubscription?.unsubscribe();
+	const client = createSupabaseClient<Database, SchemaName, Schema>(supabaseUrl, supabaseKey, {
+		...options,
+		global: {
+			fetch: event.fetch,
+			...options?.global,
+			headers: {
+				...options?.global?.headers,
+				'X-Client-Info': `${PACKAGE_NAME}@${PACKAGE_VERSION}`
+			}
+		},
+		auth: {
+			storageKey: cookieOptions?.name,
+			storage: new SvelteKitLoadAuthStorageAdapter(serverSession, cookieOptions)
+		}
+	});
 
-  const client = createClient<Database, SchemaName>(supabaseUrl, supabaseKey, {
-    ...options,
-    global: {
-      fetch: event.fetch,
-      ...options?.global,
-      headers: {
-        ...options?.global?.headers,
-        'X-Client-Info': `${PACKAGE_NAME}@${PACKAGE_VERSION}`
-      }
-    },
-    auth: {
-      autoRefreshToken: browser,
-      detectSessionInUrl: browser,
-      persistSession: true,
-      storage: supabaseAuthStorageAdapterSveltekitLoad({
-        cookieOptions,
-        serverSession
-      })
-    }
-  });
+	if (browser) {
+		cachedBrowserClient = client;
+	}
 
-  if (browser) {
-    cachedBrowserClient = client;
-    onAuthStateChangeSubscription = onAuthStateChange
-      ? cachedBrowserClient.auth.onAuthStateChange((event, authSession) => {
-          onAuthStateChange?.(event, authSession);
-        }).data.subscription
-      : undefined;
-  }
-
-  return client;
+	return client;
 }
