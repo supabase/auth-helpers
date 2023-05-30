@@ -1,23 +1,17 @@
 import { useRouter } from 'next/router';
-import { createBrowserSupabaseClient, Session } from '@supabase/auth-helpers-nextjs';
-import { SessionContextProvider } from '@supabase/auth-helpers-react';
+import { createPagesBrowserClient, Session } from '@supabase/auth-helpers-nextjs';
 import type { AppProps } from 'next/app';
-import { useState } from 'react';
-import { Database } from '../db_types';
 import '../styles/globals.css';
 
 function MyApp({ Component, pageProps }: AppProps<{ initialSession: Session }>) {
 	const router = useRouter();
-	const [supabaseClient] = useState(() => createBrowserSupabaseClient<Database>());
+	const supabase = createPagesBrowserClient<Database>();
 
 	return (
-		<SessionContextProvider
-			supabaseClient={supabaseClient}
-			initialSession={pageProps.initialSession}
-		>
+		<>
 			<button
 				onClick={async () => {
-					await supabaseClient.auth.signOut();
+					await supabase.auth.signOut();
 					router.push('/');
 				}}
 			>
@@ -25,7 +19,7 @@ function MyApp({ Component, pageProps }: AppProps<{ initialSession: Session }>) 
 			</button>
 
 			<Component {...pageProps} />
-		</SessionContextProvider>
+		</>
 	);
 }
 

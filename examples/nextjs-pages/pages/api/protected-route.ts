@@ -1,10 +1,10 @@
 // pages/api/protected-route.ts
 import { NextApiHandler } from 'next';
-import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
+import { createPagesServerClient } from '@supabase/auth-helpers-nextjs';
 
 const ProtectedRoute: NextApiHandler = async (req, res) => {
 	// Create authenticated Supabase Client
-	const supabase = createServerSupabaseClient({ req, res });
+	const supabase = createPagesServerClient<Database>({ req, res });
 	// Check if we have a session
 	const {
 		data: { session }

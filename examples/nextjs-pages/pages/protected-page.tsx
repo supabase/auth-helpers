@@ -1,5 +1,4 @@
-// pages/protected-page.js
-import { createServerSupabaseClient, User } from '@supabase/auth-helpers-nextjs';
+import { createPagesServerClient, User } from '@supabase/auth-helpers-nextjs';
 import { GetServerSidePropsContext } from 'next';
 import Link from 'next/link';
 
@@ -20,7 +19,7 @@ export default function ProtectedPage({ user, data }: { user: User; data: any })
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 	// Create authenticated Supabase Client
-	const supabase = createServerSupabaseClient(ctx);
+	const supabase = createPagesServerClient<Database>(ctx);
 	// Check if we have a session
 	const {
 		data: { session }
