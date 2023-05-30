@@ -1,18 +1,14 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useSupabase } from '../../components/supabase-provider';
-
-import type { Database } from '../../db_types';
-
-type Post = Database['public']['Tables']['posts']['Row'];
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 
 // realtime subscriptions need to be set up client-side
 // this component takes initial posts as props and automatically
 // updates when new posts are inserted into Supabase's `posts` table
 export default function RealtimePosts({ serverPosts }: { serverPosts: Post[] }) {
 	const [posts, setPosts] = useState(serverPosts);
-	const { supabase } = useSupabase();
+	const supabase = createClientComponentClient<Database>();
 
 	useEffect(() => {
 		// this overwrites `posts` any time the `serverPosts` prop changes

@@ -1,10 +1,10 @@
 'use client';
 
-import { useSupabase } from './supabase-provider';
+import { Session, createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 
 // Supabase auth needs to be triggered client-side
-export default function Login() {
-	const { supabase, session } = useSupabase();
+export default function Login({ session }: { session: Session | null }) {
+	const supabase = createClientComponentClient<Database>();
 
 	const handleEmailLogin = async () => {
 		const { error } = await supabase.auth.signInWithPassword({

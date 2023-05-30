@@ -12,8 +12,8 @@ A collection of framework specific Auth utilities for working with Supabase.
 ### Examples and Packages
 
 - Examples
-  - `@examples/nextjs`: a [Next.js](https://nextjs.org) app
-  - `@examples/nextjs-server-components`: a [Next.js](https://nextjs.org) 13 app with Server Components and `app` directory
+  - `@examples/nextjs`: a [Next.js](https://nextjs.org) app using App Router
+  - `@examples/nextjs-pages`: a [Next.js](https://nextjs.org) app using Pages Router
   - `@examples/sveltekit`: a [SvelteKit](https://kit.svelte.dev) app
   - `@examples/sveltekit-email-password`: a [SvelteKit](https://kit.svelte.dev) app with SSR sign in
   - `@examples/sveltekit-magic-link`: a [SvelteKit](https://kit.svelte.dev) app with magic links
