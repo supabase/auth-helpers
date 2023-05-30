@@ -30,7 +30,6 @@ class NextRouteHandlerAuthStorageAdapter extends CookieAuthStorageAdapter {
 	}
 	protected deleteCookie(name: string): void {
 		const nextCookies = this.context.cookies();
-		// @ts-expect-error Next.js need to fix their type for cookie options (3rd parameter on .set method)
 		nextCookies.set(name, '', {
 			maxAge: 0
 		});
