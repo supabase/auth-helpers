@@ -23,12 +23,14 @@ export function createClientComponentClient<
 	supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL,
 	supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
 	options,
-	cookieOptions
+	cookieOptions,
+	isSingleton = true
 }: {
 	supabaseUrl?: string;
 	supabaseKey?: string;
 	options?: SupabaseClientOptionsWithoutAuth<SchemaName>;
 	cookieOptions?: CookieOptionsWithName;
+	isSingleton?: boolean;
 } = {}): SupabaseClient<Database, SchemaName, Schema> {
 	if (!supabaseUrl || !supabaseKey) {
 		throw new Error(
@@ -36,8 +38,7 @@ export function createClientComponentClient<
 		);
 	}
 
-	const _supabase =
-		supabase ??
+	const createNewClient = () =>
 		createSupabaseClient<Database, SchemaName, Schema>(supabaseUrl, supabaseKey, {
 			...options,
 			global: {
@@ -53,10 +54,19 @@ export function createClientComponentClient<
 			}
 		});
 
-	// For SSG and SSR always create a new Supabase client
-	if (typeof window === 'undefined') return _supabase;
-	// Create the Supabase client once in the client
-	if (!supabase) supabase = _supabase;
+	if (isSingleton) {
+		// The `Singleton` pattern is the default to simplify the instantiation
+		// of a Supabase client across Client Components.
+		const _supabase = supabase ?? createNewClient();
+		// For SSG and SSR always create a new Supabase client
+		if (typeof window === 'undefined') return _supabase;
+		// Create the Supabase client once in the client
+		if (!supabase) supabase = _supabase;
+		return supabase;
+	}
 
-	return supabase;
+	// This allows for multiple Supabase clients, which may be required when using
+	// multiple schemas. The user will be responsible for ensuring a single
+	// instance of Supabase is used across Client Components, for each schema.
+	return createNewClient();
 }
