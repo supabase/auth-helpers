@@ -1,5 +1,11 @@
 # @supabase/auth-helpers-nextjs
 
+## 0.7.1
+
+### Patch Changes
+
+- b20cc32: Allow user to opt out of singleton pattern for Client Components
+
 ## 0.7.0
 
 ### Minor Changes
