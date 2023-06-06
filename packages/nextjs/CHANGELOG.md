@@ -1,5 +1,13 @@
 # @supabase/auth-helpers-nextjs
 
+## 0.7.2
+
+### Patch Changes
+
+- d33aa1b: Upgrade patch version of Next.js to fix TS def for `cookies().set()`
+- Updated dependencies [97e5541]
+  - @supabase/auth-helpers-shared@0.4.1
+
 ## 0.7.1
 
 ### Patch Changes
