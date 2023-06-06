@@ -1,5 +1,5 @@
 {
-	"name": "nextjs-pages",
+	"name": "@example/nextjs-pages",
 	"version": "0.0.0",
 	"private": true,
 	"scripts": {

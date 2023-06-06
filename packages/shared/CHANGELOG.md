@@ -1,5 +1,11 @@
 # shared
 
+## 0.4.1
+
+### Patch Changes
+
+- 97e5541: Fix isBrowser helper function on deno
+
 ## 0.4.0
 
 ### Minor Changes
