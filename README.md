@@ -39,6 +39,6 @@ This turborepo has some additional tools already setup for you:
 
 ## Development & Contributing
 
-Read the [development.md](./development.md) guide for more information on local setup, testing, and preparaing a release.
+Read the [development.md](./development.md) guide for more information on local setup, testing, and preparing a release.
 
 Using a `@supabase/auth-helpers-[framework-name]` naming convention for packages
