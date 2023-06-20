@@ -36,5 +36,5 @@ pnpm build:sveltekit
 7. Run the following command from the repository root
 
 ```bash
-pnpm dev --filter=@example/sveltekit-email-password -- --open
+pnpm dev --filter=@example/sveltekit -- --open
 ```
