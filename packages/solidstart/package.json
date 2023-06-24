@@ -1,0 +1,49 @@
+{
+	"name": "@supabase/auth-helpers-solidstart",
+	"version": "0.2.1",
+	"description": "A collection of framework specific Auth utilities for working with Supabase.",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"publishConfig": {
+		"access": "public"
+	},
+	"scripts": {
+		"lint": "tsc",
+		"build": "tsup",
+		"clean:all": "rimraf dist node_modules"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/supabase/auth-helpers.git"
+	},
+	"keywords": [
+		"Supabase",
+		"Auth",
+		"Solid Start",
+		"SolidStart",
+		"Solid",
+		"SolidJS"
+	],
+	"author": "Supabase",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/supabase/auth-helpers/issues"
+	},
+	"homepage": "https://github.com/supabase/auth-helpers/tree/main/packages/solidstart#readme",
+	"devDependencies": {
+		"@remix-run/node": "^1.7.3",
+		"@remix-run/serve": "^1.7.3",
+		"@supabase/supabase-js": "2.19.0",
+		"config": "workspace:*",
+		"rimraf": "^4.1.1",
+		"tsconfig": "workspace:*",
+		"tslib": "^2.4.1",
+		"tsup": "^6.5.0"
+	},
+	"dependencies": {
+		"@supabase/auth-helpers-shared": "workspace:*"
+	},
+	"peerDependencies": {
+		"@supabase/supabase-js": "^2.19.0"
+	}
+}
