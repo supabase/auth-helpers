@@ -26,7 +26,7 @@ class NextRouteHandlerAuthStorageAdapter extends CookieAuthStorageAdapter {
 	}
 	protected setCookie(name: string, value: string): void {
 		const nextCookies = this.context.cookies();
-		nextCookies.set(name, value);
+		nextCookies.set(name, value, this.cookieOptions);
 	}
 	protected deleteCookie(name: string): void {
 		const nextCookies = this.context.cookies();
