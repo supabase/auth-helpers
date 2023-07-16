@@ -17,7 +17,7 @@ export abstract class CookieAuthStorageAdapter implements StorageAdapter {
 	protected abstract getCookie(
 		name: string
 	): string | undefined | null | Promise<string | undefined | null>;
-	protected abstract setCookie(name: string, value: string): void | Promise<void>;
+	protected abstract setCookie(name: string, value: string): void;
 	protected abstract deleteCookie(name: string): void;
 
 	async getItem(key: string): Promise<string | null> {
