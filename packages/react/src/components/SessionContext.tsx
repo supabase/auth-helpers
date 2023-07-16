@@ -56,6 +56,12 @@ export const SessionContextProvider = ({
 	const [error, setError] = useState<AuthError>();
 
 	useEffect(() => {
+		if (!session && initialSession) {
+			setSession(initialSession)
+		}
+	}, [session, initialSession]);
+	
+	useEffect(() => {
 		let mounted = true;
 
 		async function getSession() {
