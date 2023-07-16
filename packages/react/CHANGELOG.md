@@ -1,5 +1,11 @@
 # @supabase/auth-helpers-react
 
+## 0.4.1
+
+### Patch Changes
+
+- 1dc9c9c: fix: Handle initialSession changes in context provider
+
 ## 0.4.0
 
 ### Minor Changes
