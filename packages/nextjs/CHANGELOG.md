@@ -1,5 +1,11 @@
 # @supabase/auth-helpers-nextjs
 
+## 0.7.3
+
+### Patch Changes
+
+- 1619e93: Add cookie options to set cookie for route handler
+
 ## 0.7.2
 
 ### Patch Changes
