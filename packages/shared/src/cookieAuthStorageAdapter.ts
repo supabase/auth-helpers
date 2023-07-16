@@ -14,12 +14,14 @@ export abstract class CookieAuthStorageAdapter implements StorageAdapter {
 		};
 	}
 
-	protected abstract getCookie(name: string): string | undefined | null;
-	protected abstract setCookie(name: string, value: string): void;
+	protected abstract getCookie(
+		name: string
+	): string | undefined | null | Promise<string | undefined | null>;
+	protected abstract setCookie(name: string, value: string): void | Promise<void>;
 	protected abstract deleteCookie(name: string): void;
 
-	getItem(key: string): string | Promise<string | null> | null {
-		const value = this.getCookie(key);
+	async getItem(key: string): Promise<string | null> {
+		const value = await this.getCookie(key);
 
 		if (!value) return null;
 
