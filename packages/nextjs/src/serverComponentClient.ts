@@ -5,15 +5,15 @@ import {
 	SupabaseClientOptionsWithoutAuth,
 	createSupabaseClient
 } from '@supabase/auth-helpers-shared';
+import { cookies } from 'next/headers';
 
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { GenericSchema } from '@supabase/supabase-js/dist/module/lib/types';
-import type { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
 
 class NextServerComponentAuthStorageAdapter extends CookieAuthStorageAdapter {
 	constructor(
 		private readonly context: {
-			cookies: () => ReadonlyRequestCookies;
+			cookies: () => ReturnType<typeof cookies>;
 		},
 		cookieOptions?: CookieOptions
 	) {
@@ -44,7 +44,7 @@ export function createServerComponentClient<
 		: any
 >(
 	context: {
-		cookies: () => ReadonlyRequestCookies;
+		cookies: () => ReturnType<typeof cookies>;
 	},
 	{
 		supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL,

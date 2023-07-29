@@ -57,10 +57,10 @@ export const SessionContextProvider = ({
 
 	useEffect(() => {
 		if (!session && initialSession) {
-			setSession(initialSession)
+			setSession(initialSession);
 		}
 	}, [session, initialSession]);
-	
+
 	useEffect(() => {
 		let mounted = true;
 

@@ -9,13 +9,11 @@ import { createMiddlewareClient } from './middlewareClient';
 import { createClientComponentClient } from './clientComponentClient';
 import { createServerComponentClient } from './serverComponentClient';
 import { createRouteHandlerClient } from './routeHandlerClient';
-import { createServerActionClient } from './serverActionClient';
+import { headers, cookies } from 'next/headers';
 
 import type { GetServerSidePropsContext, NextApiRequest, NextApiResponse } from 'next';
 import type { NextRequest } from 'next/server';
 import type { GenericSchema } from '@supabase/supabase-js/dist/module/lib/types';
-import type { ReadonlyHeaders } from 'next/dist/server/web/spec-extension/adapters/headers';
-import type { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
 
 /**
  * @deprecated utilize the `createPagesBrowserClient` function instead
@@ -169,7 +167,10 @@ export function createServerComponentSupabaseClient<
 		? Database[SchemaName]
 		: any
 >(
-	context: { headers: () => ReadonlyHeaders; cookies: () => ReadonlyRequestCookies },
+	context: {
+		headers: () => ReturnType<typeof headers>;
+		cookies: () => ReturnType<typeof cookies>;
+	},
 	{
 		supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL,
 		supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
@@ -209,7 +210,7 @@ export function createRouteHandlerSupabaseClient<
 		? Database[SchemaName]
 		: any
 >(
-	context: { headers: () => ReadonlyHeaders; cookies: () => ReadonlyRequestCookies },
+	context: { headers: () => ReturnType<typeof headers>; cookies: () => ReturnType<typeof cookies> },
 	{
 		supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL,
 		supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
