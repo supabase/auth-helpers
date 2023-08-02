@@ -1,5 +1,11 @@
 # @supabase/auth-helpers-nextjs
 
+## 0.7.4
+
+### Patch Changes
+
+- 8c77550: Fix type for next.js cookies and headers functions
+
 ## 0.7.3
 
 ### Patch Changes

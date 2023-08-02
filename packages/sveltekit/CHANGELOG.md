@@ -1,5 +1,11 @@
 # @supabase/auth-helpers-sveltekit
 
+## 0.10.2
+
+### Patch Changes
+
+- 002e6f9: Fix export fields in package.json
+
 ## 0.10.1
 
 ### Patch Changes
