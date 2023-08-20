@@ -22,14 +22,14 @@ export function createSupabaseClient<
 		};
 	}
 ) {
-	const bowser = isBrowser();
+	const browser = isBrowser();
 
 	return createClient<Database, SchemaName, Schema>(supabaseUrl, supabaseKey, {
 		...options,
 		auth: {
 			flowType: 'pkce',
-			autoRefreshToken: bowser,
-			detectSessionInUrl: bowser,
+			autoRefreshToken: browser,
+			detectSessionInUrl: browser,
 			persistSession: true,
 			storage: options.auth.storage,
 
