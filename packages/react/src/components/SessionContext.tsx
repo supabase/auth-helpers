@@ -94,7 +94,10 @@ export const SessionContextProvider = ({
 		const {
 			data: { subscription }
 		} = supabaseClient.auth.onAuthStateChange((event, session) => {
-			if (session && (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED' || event === 'USER_UPDATED')) {
+			if (
+				session &&
+				(event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED' || event === 'USER_UPDATED')
+			) {
 				setSession(session);
 			}
 
