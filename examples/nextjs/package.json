@@ -23,6 +23,6 @@
 		"typescript": "5.0.4"
 	},
 	"devDependencies": {
-		"json5": ">=1.0.2"
+		"json5": "^2.2.3"
 	}
 }
