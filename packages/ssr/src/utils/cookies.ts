@@ -4,24 +4,6 @@ import { base64url } from 'jose';
 
 export { parse as parseCookies, serialize as serializeCookie };
 
-/**
- * Based on the environment and the request we know if a secure cookie can be set.
- */
-export function isSecureEnvironment(headerHost?: string | string[]) {
-	if (!headerHost) {
-		throw new Error('The "host" request header is not available');
-	}
-
-	const headerHostStr = Array.isArray(headerHost) ? headerHost[0] : headerHost;
-
-	const host = (headerHostStr.indexOf(':') > -1 && headerHostStr.split(':')[0]) || headerHostStr;
-	if (['localhost', '127.0.0.1'].indexOf(host) > -1 || host.endsWith('.local')) {
-		return false;
-	}
-
-	return true;
-}
-
 export function parseSupabaseCookie(str: string | null | undefined): Partial<Session> | null {
 	if (!str) {
 		return null;
