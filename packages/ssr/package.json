@@ -39,9 +39,6 @@
 		"tsconfig": "workspace:*",
 		"tsup": "^6.7.0"
 	},
-	"dependencies": {
-		"jose": "^4.14.4"
-	},
 	"peerDependencies": {
 		"@supabase/supabase-js": "^2.33.1"
 	}

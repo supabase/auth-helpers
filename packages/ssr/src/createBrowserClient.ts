@@ -8,7 +8,7 @@ import type {
 	GenericSchema,
 	SupabaseClientOptions
 } from '@supabase/supabase-js/dist/module/lib/types';
-import type { CookieOptionsWithName } from './types';
+import type { BrowserCookieMethods, CookieOptionsWithName } from './types';
 
 let cachedBrowserClient: SupabaseClient<any, string> | undefined;
 
@@ -24,6 +24,7 @@ export function createBrowserClient<
 	supabaseUrl: string,
 	supabaseKey: string,
 	options?: SupabaseClientOptions<SchemaName> & {
+		cookies: BrowserCookieMethods;
 		cookieOptions?: CookieOptionsWithName;
 		isSingleton?: boolean;
 	}
@@ -34,12 +35,13 @@ export function createBrowserClient<
 		);
 	}
 
+	let cookies: BrowserCookieMethods = { get: () => null };
 	let isSingleton = true;
 	let cookieOptions: CookieOptionsWithName | undefined;
 	let userDefinedClientOptions;
 
 	if (options) {
-		({ isSingleton = true, cookieOptions, ...userDefinedClientOptions } = options);
+		({ cookies, isSingleton = true, cookieOptions, ...userDefinedClientOptions } = options);
 	}
 
 	const cookieClientOptions = {
@@ -54,13 +56,13 @@ export function createBrowserClient<
 			detectSessionInUrl: isBrowser(),
 			persistSession: true,
 			storage: {
-				getItem: (key: string) => {
+				getItem: async (key: string) => {
 					if (isBrowser()) {
-						const cookies = parse(document.cookie);
-						return cookies[key];
+						const cookie = parse(document.cookie);
+						return cookie[key];
 					}
 
-					return null;
+					return (await cookies.get(key)) ?? null;
 				},
 				setItem: (key: string, value: string) => {
 					if (isBrowser()) {

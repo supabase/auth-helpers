@@ -6,7 +6,7 @@ import type {
 	GenericSchema,
 	SupabaseClientOptions
 } from '@supabase/supabase-js/dist/module/lib/types';
-import type { CookieOptions, CookieOptionsWithName } from './types';
+import type { CookieOptionsWithName, ServerCookieMethods } from './types';
 
 export function createServerClient<
 	Database = any,
@@ -20,11 +20,7 @@ export function createServerClient<
 	supabaseUrl: string,
 	supabaseKey: string,
 	options: SupabaseClientOptions<SchemaName> & {
-		cookies: {
-			get: (key: string) => Promise<string | null | undefined> | string | null | undefined;
-			set: (key: string, value: string, options?: CookieOptions) => Promise<void> | void;
-			remove: (key: string) => Promise<void> | void;
-		};
+		cookies: ServerCookieMethods;
 		cookieOptions?: CookieOptionsWithName;
 	}
 ) {
@@ -58,7 +54,8 @@ export function createServerClient<
 				getItem: async (key: string) => (await cookies.get(key)) ?? null,
 				setItem: async (key: string, value: string) =>
 					await cookies.set(key, value, { ...DEFAULT_COOKIE_OPTIONS, ...cookieOptions }),
-				removeItem: async (key: string) => await cookies.remove(key)
+				removeItem: async (key: string) =>
+					await cookies.remove(key, { ...DEFAULT_COOKIE_OPTIONS, maxAge: 0, ...cookieOptions })
 			}
 		}
 	};
