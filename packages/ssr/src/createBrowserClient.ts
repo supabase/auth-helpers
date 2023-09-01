@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { mergeDeepRight } from 'ramda';
-import { isBrowser } from './utils';
+import { DEFAULT_COOKIE_OPTIONS, isBrowser } from './utils';
 import { parse, serialize } from 'cookie';
 
 import type { SupabaseClient } from '@supabase/supabase-js';
@@ -23,7 +23,7 @@ export function createBrowserClient<
 >(
 	supabaseUrl: string,
 	supabaseKey: string,
-	options: SupabaseClientOptions<SchemaName> & {
+	options?: SupabaseClientOptions<SchemaName> & {
 		cookieOptions?: CookieOptionsWithName;
 		isSingleton?: boolean;
 	}
@@ -34,7 +34,13 @@ export function createBrowserClient<
 		);
 	}
 
-	const { isSingleton = true, cookieOptions, ...userDefinedClientOptions } = options;
+	let isSingleton = true;
+	let cookieOptions: CookieOptionsWithName | undefined;
+	let userDefinedClientOptions;
+
+	if (options) {
+		({ isSingleton = true, cookieOptions, ...userDefinedClientOptions } = options);
+	}
 
 	const cookieClientOptions = {
 		global: {
@@ -60,6 +66,7 @@ export function createBrowserClient<
 					if (isBrowser()) {
 						document.cookie = serialize(key, value, {
 							httpOnly: false,
+							...DEFAULT_COOKIE_OPTIONS,
 							...cookieOptions
 						});
 					}
@@ -67,6 +74,7 @@ export function createBrowserClient<
 				removeItem: (key: string) => {
 					if (isBrowser()) {
 						document.cookie = serialize(key, '', {
+							...DEFAULT_COOKIE_OPTIONS,
 							maxAge: 0,
 							httpOnly: false,
 							...cookieOptions

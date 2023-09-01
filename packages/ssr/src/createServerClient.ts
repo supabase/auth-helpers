@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { mergeDeepRight } from 'ramda';
-import { isBrowser } from './utils';
+import { DEFAULT_COOKIE_OPTIONS, isBrowser } from './utils';
 
 import type {
 	GenericSchema,
@@ -56,7 +56,8 @@ export function createServerClient<
 			persistSession: true,
 			storage: {
 				getItem: async (key: string) => (await cookies.get(key)) ?? null,
-				setItem: async (key: string, value: string) => await cookies.set(key, value, cookieOptions),
+				setItem: async (key: string, value: string) =>
+					await cookies.set(key, value, { ...DEFAULT_COOKIE_OPTIONS, ...cookieOptions }),
 				removeItem: async (key: string) => await cookies.remove(key)
 			}
 		}
