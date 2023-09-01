@@ -65,7 +65,6 @@ export function createBrowserClient<
 				setItem: (key: string, value: string) => {
 					if (isBrowser()) {
 						document.cookie = serialize(key, value, {
-							httpOnly: false,
 							...DEFAULT_COOKIE_OPTIONS,
 							...cookieOptions
 						});
@@ -76,7 +75,6 @@ export function createBrowserClient<
 						document.cookie = serialize(key, '', {
 							...DEFAULT_COOKIE_OPTIONS,
 							maxAge: 0,
-							httpOnly: false,
 							...cookieOptions
 						});
 					}
