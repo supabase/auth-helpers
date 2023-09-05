@@ -8,11 +8,8 @@
 	const handleLogout: SubmitFunction = () => {
 		loading = true;
 		return async ({ result }) => {
-			if (result.type === 'redirect') {
-				await invalidate('supabase:auth');
-			} else {
-				await applyAction(result);
-			}
+			await invalidate('supabase:auth');
+			await applyAction(result);
 			loading = false;
 		};
 	};
