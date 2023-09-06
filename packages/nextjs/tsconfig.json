@@ -3,7 +3,7 @@
 	"compilerOptions": {
 		"incremental": false,
 		"importHelpers": true,
-		"types": ["@types/react/experimental.d.ts"]
+		"types": ["@types/react/experimental"]
 	},
 	"include": ["src"],
 	"exclude": ["node_modules"]
