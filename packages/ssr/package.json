@@ -21,8 +21,10 @@
 	"keywords": [
 		"Supabase",
 		"Auth",
+		"Next.js",
 		"Svelte Kit",
-		"Svelte"
+		"Remix",
+		"Express"
 	],
 	"author": "Supabase",
 	"license": "MIT",

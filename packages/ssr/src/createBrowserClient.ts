@@ -35,7 +35,7 @@ export function createBrowserClient<
 		);
 	}
 
-	let cookies: BrowserCookieMethods = { get: () => null };
+	let cookies: BrowserCookieMethods = {};
 	let isSingleton = true;
 	let cookieOptions: CookieOptionsWithName | undefined;
 	let userDefinedClientOptions;
@@ -57,14 +57,23 @@ export function createBrowserClient<
 			persistSession: true,
 			storage: {
 				getItem: async (key: string) => {
+					if (typeof cookies.get === 'function') {
+						return (await cookies.get(key)) ?? null;
+					}
+
 					if (isBrowser()) {
 						const cookie = parse(document.cookie);
 						return cookie[key];
 					}
-
-					return (await cookies.get(key)) ?? null;
 				},
-				setItem: (key: string, value: string) => {
+				setItem: async (key: string, value: string) => {
+					if (typeof cookies.set === 'function') {
+						return await cookies.set(key, value, {
+							...DEFAULT_COOKIE_OPTIONS,
+							...cookieOptions
+						});
+					}
+
 					if (isBrowser()) {
 						document.cookie = serialize(key, value, {
 							...DEFAULT_COOKIE_OPTIONS,
@@ -72,7 +81,15 @@ export function createBrowserClient<
 						});
 					}
 				},
-				removeItem: (key: string) => {
+				removeItem: async (key: string) => {
+					if (typeof cookies.remove === 'function') {
+						return await cookies.remove(key, {
+							...DEFAULT_COOKIE_OPTIONS,
+							maxAge: 0,
+							...cookieOptions
+						});
+					}
+
 					if (isBrowser()) {
 						document.cookie = serialize(key, '', {
 							...DEFAULT_COOKIE_OPTIONS,
