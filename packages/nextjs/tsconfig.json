@@ -2,7 +2,8 @@
 	"extends": "tsconfig/base.json",
 	"compilerOptions": {
 		"incremental": false,
-		"importHelpers": true
+		"importHelpers": true,
+		"types": ["@types/react/experimental.d.ts"]
 	},
 	"include": ["src"],
 	"exclude": ["node_modules"]

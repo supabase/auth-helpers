@@ -29,6 +29,7 @@
 	"homepage": "https://github.com/supabase/auth-helpers/tree/main/packages/nextjs#readme",
 	"devDependencies": {
 		"@supabase/supabase-js": "2.19.0",
+		"@types/react": "^18.2.21",
 		"@types/set-cookie-parser": "^2.4.3",
 		"config": "workspace:*",
 		"next": "^13.4.19",
