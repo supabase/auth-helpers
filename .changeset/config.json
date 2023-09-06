@@ -5,7 +5,9 @@
 	"fixed": [],
 	"linked": [],
 	"access": "restricted",
-	"baseBranch": "next",
+	"baseBranch": "main",
 	"updateInternalDependencies": "patch",
-	"ignore": ["@example/*"]
+	"ignore": [
+		"@example/*"
+	]
 }
