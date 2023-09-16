@@ -1,16 +1,17 @@
 import { GoTrueClientOptions, Session } from '@supabase/supabase-js';
 import { DEFAULT_COOKIE_OPTIONS, parseSupabaseCookie, stringifySupabaseSession } from './utils';
-import { CookieOptions } from './types';
+import { CookieOptions, DefaultCookieOptions } from './types';
 
 export interface StorageAdapter extends Exclude<GoTrueClientOptions['storage'], undefined> {}
 
 export abstract class CookieAuthStorageAdapter implements StorageAdapter {
-	protected readonly cookieOptions: CookieOptions;
+	protected readonly cookieOptions: DefaultCookieOptions;
 
 	constructor(cookieOptions?: CookieOptions) {
 		this.cookieOptions = {
 			...DEFAULT_COOKIE_OPTIONS,
-			...cookieOptions
+			...cookieOptions,
+			maxAge: DEFAULT_COOKIE_OPTIONS.maxAge
 		};
 	}
 
