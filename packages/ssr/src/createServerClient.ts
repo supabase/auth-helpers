@@ -53,9 +53,13 @@ export function createServerClient<
 			storage: {
 				getItem: async (key: string) => (await cookies.get(key)) ?? null,
 				setItem: async (key: string, value: string) =>
-					await cookies.set(key, value, { ...DEFAULT_COOKIE_OPTIONS, ...cookieOptions }),
+					await cookies.set(key, value, {
+						...DEFAULT_COOKIE_OPTIONS,
+						...cookieOptions,
+						maxAge: DEFAULT_COOKIE_OPTIONS.maxAge
+					}),
 				removeItem: async (key: string) =>
-					await cookies.remove(key, { ...DEFAULT_COOKIE_OPTIONS, maxAge: 0, ...cookieOptions })
+					await cookies.remove(key, { ...DEFAULT_COOKIE_OPTIONS, ...cookieOptions, maxAge: 0 })
 			}
 		}
 	};
