@@ -1,7 +1,9 @@
 import type { CookieSerializeOptions } from 'cookie';
 import type { SupabaseClientOptions } from '@supabase/supabase-js';
 
-export type CookieOptions = Pick<
+export type CookieOptions = Pick<CookieSerializeOptions, 'domain' | 'secure' | 'path' | 'sameSite'>;
+
+export type DefaultCookieOptions = Pick<
 	CookieSerializeOptions,
 	'domain' | 'secure' | 'path' | 'sameSite' | 'maxAge'
 >;

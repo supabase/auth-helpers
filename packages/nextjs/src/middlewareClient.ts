@@ -3,6 +3,7 @@ import {
 	CookieOptions,
 	CookieOptionsWithName,
 	createSupabaseClient,
+	DefaultCookieOptions,
 	parseCookies,
 	serializeCookie,
 	SupabaseClientOptionsWithoutAuth
@@ -45,7 +46,7 @@ class NextMiddlewareAuthStorageAdapter extends CookieAuthStorageAdapter {
 		});
 	}
 
-	private _setCookie(name: string, value: string, options?: CookieOptions) {
+	private _setCookie(name: string, value: string, options?: DefaultCookieOptions) {
 		const newSessionStr = serializeCookie(name, value, {
 			...this.cookieOptions,
 			...options,

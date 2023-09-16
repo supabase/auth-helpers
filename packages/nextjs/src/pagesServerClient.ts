@@ -3,6 +3,7 @@ import {
 	CookieOptions,
 	CookieOptionsWithName,
 	createSupabaseClient,
+	DefaultCookieOptions,
 	parseCookies,
 	serializeCookie,
 	SupabaseClientOptionsWithoutAuth
@@ -40,7 +41,7 @@ class NextServerAuthStorageAdapter extends CookieAuthStorageAdapter {
 		});
 	}
 
-	private _setCookie(name: string, value: string, options?: CookieOptions) {
+	private _setCookie(name: string, value: string, options?: DefaultCookieOptions) {
 		const setCookies = splitCookiesString(
 			this.context.res.getHeader('set-cookie')?.toString() ?? ''
 		).filter((c) => !(name in parseCookies(c)));
