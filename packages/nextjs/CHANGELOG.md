@@ -1,5 +1,16 @@
 # @supabase/auth-helpers-nextjs
 
+## 0.8.0
+
+### Minor Changes
+
+- c48bb87: Remove max-age option from cookieOptions
+
+### Patch Changes
+
+- Updated dependencies [c48bb87]
+  - @supabase/auth-helpers-shared@0.5.0
+
 ## 0.7.4
 
 ### Patch Changes
