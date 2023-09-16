@@ -70,14 +70,16 @@ export function createBrowserClient<
 					if (typeof cookies.set === 'function') {
 						return await cookies.set(key, value, {
 							...DEFAULT_COOKIE_OPTIONS,
-							...cookieOptions
+							...cookieOptions,
+							maxAge: DEFAULT_COOKIE_OPTIONS.maxAge
 						});
 					}
 
 					if (isBrowser()) {
 						document.cookie = serialize(key, value, {
 							...DEFAULT_COOKIE_OPTIONS,
-							...cookieOptions
+							...cookieOptions,
+							maxAge: DEFAULT_COOKIE_OPTIONS.maxAge
 						});
 					}
 				},
@@ -85,16 +87,16 @@ export function createBrowserClient<
 					if (typeof cookies.remove === 'function') {
 						return await cookies.remove(key, {
 							...DEFAULT_COOKIE_OPTIONS,
-							maxAge: 0,
-							...cookieOptions
+							...cookieOptions,
+							maxAge: 0
 						});
 					}
 
 					if (isBrowser()) {
 						document.cookie = serialize(key, '', {
 							...DEFAULT_COOKIE_OPTIONS,
-							maxAge: 0,
-							...cookieOptions
+							...cookieOptions,
+							maxAge: 0
 						});
 					}
 				}
