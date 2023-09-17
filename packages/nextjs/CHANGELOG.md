@@ -1,5 +1,11 @@
 # @supabase/auth-helpers-nextjs
 
+## 0.8.1
+
+### Patch Changes
+
+- dfff00a: Remove the appending of a cookie to the response
+
 ## 0.8.0
 
 ### Minor Changes
