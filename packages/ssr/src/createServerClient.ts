@@ -1,12 +1,36 @@
 import { createClient } from '@supabase/supabase-js';
+import { CookieAuthStorageAdapter } from '@supabase/auth-helpers-shared';
 import { mergeDeepRight } from 'ramda';
-import { DEFAULT_COOKIE_OPTIONS, isBrowser } from './utils';
+import { isBrowser } from './utils';
+import type { CookieOptionsWithName, ServerCookieMethods } from './types';
 
 import type {
 	GenericSchema,
 	SupabaseClientOptions
 } from '@supabase/supabase-js/dist/module/lib/types';
-import type { CookieOptionsWithName, ServerCookieMethods } from './types';
+
+class ServerCookieAuthStorageAdapter extends CookieAuthStorageAdapter {
+	constructor(
+		private readonly context: {
+			cookies: ServerCookieMethods;
+		},
+		cookieOptions?: CookieOptionsWithName
+	) {
+		super(cookieOptions);
+	}
+
+	protected getCookie(
+		name: string
+	): string | undefined | null | Promise<string | undefined | null> {
+		return this.context.cookies.get(name) ?? null;
+	}
+	protected setCookie(name: string, value: string): void {
+		this.context.cookies.set(name, value, this.cookieOptions);
+	}
+	protected deleteCookie(name: string): void {
+		this.context.cookies.remove(name, this.cookieOptions);
+	}
+}
 
 export function createServerClient<
 	Database = any,
@@ -50,17 +74,7 @@ export function createServerClient<
 			autoRefreshToken: isBrowser(),
 			detectSessionInUrl: isBrowser(),
 			persistSession: true,
-			storage: {
-				getItem: async (key: string) => (await cookies.get(key)) ?? null,
-				setItem: async (key: string, value: string) =>
-					await cookies.set(key, value, {
-						...DEFAULT_COOKIE_OPTIONS,
-						...cookieOptions,
-						maxAge: DEFAULT_COOKIE_OPTIONS.maxAge
-					}),
-				removeItem: async (key: string) =>
-					await cookies.remove(key, { ...DEFAULT_COOKIE_OPTIONS, ...cookieOptions, maxAge: 0 })
-			}
+			storage: new ServerCookieAuthStorageAdapter({ cookies: cookies }, cookieOptions)
 		}
 	};
 

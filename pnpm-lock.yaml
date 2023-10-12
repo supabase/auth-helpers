@@ -408,6 +408,9 @@ importers:
 
   packages/ssr:
     dependencies:
+      '@supabase/auth-helpers-shared':
+        specifier: workspace:*
+        version: link:../shared
       cookie:
         specifier: ^0.5.0
         version: 0.5.0
