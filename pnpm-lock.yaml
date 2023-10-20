@@ -4,14 +4,6 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-overrides:
-  '@changesets/assemble-release-plan': 5.2.3
-
-patchedDependencies:
-  '@changesets/assemble-release-plan@5.2.3':
-    hash: oi6v6io33uxvojef6ezqzay4oy
-    path: patches/@changesets__assemble-release-plan@5.2.3.patch
-
 importers:
 
   .:
@@ -1778,7 +1770,7 @@ packages:
       semver: 7.5.4
     dev: true
 
-  /@changesets/assemble-release-plan@5.2.3(patch_hash=oi6v6io33uxvojef6ezqzay4oy):
+  /@changesets/assemble-release-plan@5.2.3:
     resolution: {integrity: sha512-g7EVZCmnWz3zMBAdrcKhid4hkHT+Ft1n0mLussFMcB1dE2zCuwcvGoy9ec3yOgPGF4hoMtgHaMIk3T3TBdvU9g==}
     dependencies:
       '@babel/runtime': 7.22.11
@@ -1788,7 +1780,17 @@ packages:
       '@manypkg/get-packages': 1.1.3
       semver: 5.7.2
     dev: true
-    patched: true
+
+  /@changesets/assemble-release-plan@5.2.4:
+    resolution: {integrity: sha512-xJkWX+1/CUaOUWTguXEbCDTyWJFECEhmdtbkjhn5GVBGxdP/JwaHBIU9sW3FR6gD07UwZ7ovpiPclQZs+j+mvg==}
+    dependencies:
+      '@babel/runtime': 7.22.11
+      '@changesets/errors': 0.1.4
+      '@changesets/get-dependents-graph': 1.3.6
+      '@changesets/types': 5.2.1
+      '@manypkg/get-packages': 1.1.3
+      semver: 7.5.4
+    dev: true
 
   /@changesets/changelog-git@0.1.14:
     resolution: {integrity: sha512-+vRfnKtXVWsDDxGctOfzJsPhaCdXRYoe+KyWYoq5X/GqoISREiat0l3L8B0a453B2B4dfHGcZaGyowHbp9BSaA==}
@@ -1802,7 +1804,7 @@ packages:
     dependencies:
       '@babel/runtime': 7.22.11
       '@changesets/apply-release-plan': 6.1.4
-      '@changesets/assemble-release-plan': 5.2.3(patch_hash=oi6v6io33uxvojef6ezqzay4oy)
+      '@changesets/assemble-release-plan': 5.2.3
       '@changesets/changelog-git': 0.1.14
       '@changesets/config': 2.3.1
       '@changesets/errors': 0.1.4
@@ -1866,7 +1868,7 @@ packages:
     resolution: {integrity: sha512-6IwKTubNEgoOZwDontYc2x2cWXfr6IKxP3IhKeK+WjyD6y3M4Gl/jdQvBw+m/5zWILSOCAaGLu2ZF6Q+WiPniw==}
     dependencies:
       '@babel/runtime': 7.22.11
-      '@changesets/assemble-release-plan': 5.2.3(patch_hash=oi6v6io33uxvojef6ezqzay4oy)
+      '@changesets/assemble-release-plan': 5.2.4
       '@changesets/config': 2.3.1
       '@changesets/pre': 1.0.14
       '@changesets/read': 0.5.9

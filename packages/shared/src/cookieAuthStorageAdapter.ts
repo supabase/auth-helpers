@@ -6,9 +6,6 @@ import { combineChunk, createChunks } from './chunker';
 export interface StorageAdapter extends Exclude<GoTrueClientOptions['storage'], undefined> {}
 
 export abstract class CookieAuthStorageAdapter implements StorageAdapter {
-	// No clue why, but 3600 matches 4kb in the browser
-	static MAX_COOKIE_SIZE = 3600;
-
 	protected readonly cookieOptions: DefaultCookieOptions;
 
 	constructor(cookieOptions?: CookieOptions) {
