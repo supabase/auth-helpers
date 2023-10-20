@@ -52,13 +52,9 @@ export abstract class CookieAuthStorageAdapter implements StorageAdapter {
 		// split session string before setting cookie
 		const sessionChunks = createChunks(key, sessionStr);
 
-		if (!Array.isArray(sessionChunks)) {
-			this.setCookie(key, sessionChunks);
-		} else {
-			sessionChunks.forEach((sess) => {
-				this.setCookie(sess.name, sess.value);
-			});
-		}
+		sessionChunks.forEach((sess) => {
+			this.setCookie(sess.name, sess.value);
+		});
 	}
 
 	removeItem(key: string): void | Promise<void> {
