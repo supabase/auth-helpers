@@ -40,17 +40,6 @@
 	"peerDependencies": {
 		"typescript": "4.0.x || 4.1.x || 4.2.x || 4.3.x || 4.4.x || 4.5.x || 4.6.x"
 	},
-	"pnpm": {
-		"overrides": {
-			"@changesets/assemble-release-plan": "5.2.3"
-		},
-		"overrides-notes": {
-			"@changesets/assemble-release-plan": "patched until https://github.com/changesets/changesets/issues/835 is resolved"
-		},
-		"patchedDependencies": {
-			"@changesets/assemble-release-plan@5.2.3": "patches/@changesets__assemble-release-plan@5.2.3.patch"
-		}
-	},
 	"lint-staged": {
 		"**/*.{ts,tsx,md}": [
 			"prettier --check"

@@ -1,10 +1,14 @@
 import { GoTrueClientOptions, Session } from '@supabase/supabase-js';
 import { DEFAULT_COOKIE_OPTIONS, parseSupabaseCookie, stringifySupabaseSession } from './utils';
 import { CookieOptions, DefaultCookieOptions } from './types';
+import { combineChunk, createChunks } from './chunker';
 
 export interface StorageAdapter extends Exclude<GoTrueClientOptions['storage'], undefined> {}
 
 export abstract class CookieAuthStorageAdapter implements StorageAdapter {
+	// No clue why, but 3600 matches 4kb in the browser
+	static MAX_COOKIE_SIZE = 3600;
+
 	protected readonly cookieOptions: DefaultCookieOptions;
 
 	constructor(cookieOptions?: CookieOptions) {
@@ -22,14 +26,20 @@ export abstract class CookieAuthStorageAdapter implements StorageAdapter {
 	getItem(key: string): string | Promise<string | null> | null {
 		const value = this.getCookie(key);
 
-		if (!value) return null;
-
 		// pkce code verifier
-		if (key.endsWith('-code-verifier')) {
+		if (key.endsWith('-code-verifier') && value) {
 			return value;
 		}
 
-		return JSON.stringify(parseSupabaseCookie(value));
+		if (value) {
+			return JSON.stringify(parseSupabaseCookie(value));
+		}
+
+		const chunks = combineChunk(key, (chunkName) => {
+			return this.getCookie(chunkName);
+		});
+
+		return chunks !== null ? JSON.stringify(parseSupabaseCookie(chunks)) : null;
 	}
 
 	setItem(key: string, value: string): void | Promise<void> {
@@ -42,10 +52,38 @@ export abstract class CookieAuthStorageAdapter implements StorageAdapter {
 		let session: Session = JSON.parse(value);
 		const sessionStr = stringifySupabaseSession(session);
 
-		this.setCookie(key, sessionStr);
+		// split session string before setting cookie
+		const sessionChunks = createChunks(key, sessionStr);
+
+		if (!Array.isArray(sessionChunks)) {
+			this.setCookie(key, sessionChunks);
+		} else {
+			sessionChunks.forEach((sess) => {
+				this.setCookie(sess.name, sess.value);
+			});
+		}
 	}
 
 	removeItem(key: string): void | Promise<void> {
-		this.deleteCookie(key);
+		this._deleteSingleCookie(key);
+		this._deleteChunkedCookies(key);
+	}
+
+	private _deleteSingleCookie(key: string) {
+		if (this.getCookie(key)) {
+			this.deleteCookie(key);
+		}
+	}
+
+	private _deleteChunkedCookies(key: string, from = 0) {
+		for (let i = from; ; i++) {
+			const cookieName = `${key}.${i}`;
+			const value = this.getCookie(cookieName);
+
+			if (value === undefined) {
+				break;
+			}
+			this.deleteCookie(cookieName);
+		}
 	}
 }

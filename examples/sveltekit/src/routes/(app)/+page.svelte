@@ -27,7 +27,7 @@
 		{/if}
 
 		{#if $page.url.searchParams.get('auth-type') === 'magiclink'}
-			<form action="/?/create-magiclink" method="post" use:enhance={handleSubmit}>
+			<form action="/?/send-magiclink" method="post" use:enhance={handleSubmit}>
 				<div class="field">
 					<label for="email" class="label">Email</label>
 					<p class="control">
