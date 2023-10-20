@@ -1,22 +1,26 @@
 // No clue why, but 3600 matches 4kb in the browser
 const MAX_CHUNK_SIZE = 3600;
+const re = new RegExp('.{1,' + MAX_CHUNK_SIZE + '}', 'g');
 
 interface Chunk {
 	name: string;
 	value: string;
 }
 
-// Get cookie as chunks to set in the browser
-export function createChunks(key: string, value: string) {
-	// check the length and then split
+/**
+ * create chunks from a string and return an array of object
+ */
+export function createChunks(key: string, value: string): Chunk[] {
+	// check the length of the string to work out if it should be returned or chunked
 	const chunkCount = Math.ceil(value.length / MAX_CHUNK_SIZE);
 
 	if (chunkCount === 1) {
-		return value;
+		return [{ name: key, value }];
 	}
 
 	const chunks: Chunk[] = [];
-	const values = value.match(new RegExp('.{1,' + MAX_CHUNK_SIZE + '}', 'g'));
+	// split string into a array based on the regex
+	const values = value.match(re);
 
 	values?.forEach((value, i) => {
 		const name: string = `${key}.${i}`;
