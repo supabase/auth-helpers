@@ -32,13 +32,6 @@ export function createServerClient<
 
 	const { cookies, cookieOptions, ...userDefinedClientOptions } = options;
 
-	if (!cookies.get || !cookies.set || !cookies.remove) {
-		// todo: point to helpful docs in error message, once they have been written! 😏
-		throw new Error(
-			'The Supabase client requires functions to get, set, and remove cookies in your specific framework!'
-		);
-	}
-
 	const cookieClientOptions = {
 		global: {
 			headers: {
@@ -51,15 +44,25 @@ export function createServerClient<
 			detectSessionInUrl: isBrowser(),
 			persistSession: true,
 			storage: {
-				getItem: async (key: string) => (await cookies.get(key)) ?? null,
-				setItem: async (key: string, value: string) =>
-					await cookies.set(key, value, {
-						...DEFAULT_COOKIE_OPTIONS,
-						...cookieOptions,
-						maxAge: DEFAULT_COOKIE_OPTIONS.maxAge
-					}),
-				removeItem: async (key: string) =>
-					await cookies.remove(key, { ...DEFAULT_COOKIE_OPTIONS, ...cookieOptions, maxAge: 0 })
+				getItem: async (key: string) => {
+					if (typeof cookies.get === 'function') {
+						return cookies.get(key);
+					}
+				},
+				setItem: async (key: string, value: string) => {
+					if (typeof cookies.set === 'function') {
+						await cookies.set(key, value, {
+							...DEFAULT_COOKIE_OPTIONS,
+							...cookieOptions,
+							maxAge: DEFAULT_COOKIE_OPTIONS.maxAge
+						});
+					}
+				},
+				removeItem: async (key: string) => {
+					if (typeof cookies.remove === 'function') {
+						await cookies.remove(key, { ...DEFAULT_COOKIE_OPTIONS, ...cookieOptions, maxAge: 0 });
+					}
+				}
 			}
 		}
 	};

@@ -58,7 +58,7 @@ export function createBrowserClient<
 			storage: {
 				getItem: async (key: string) => {
 					if (typeof cookies.get === 'function') {
-						return (await cookies.get(key)) ?? null;
+						return cookies.get(key);
 					}
 
 					if (isBrowser()) {
