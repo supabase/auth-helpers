@@ -16,6 +16,8 @@
 		"build:ssr": "turbo run build --filter=@supabase/ssr",
 		"dev": "turbo run dev --parallel",
 		"lint": "turbo run lint --filter=!@example/*",
+		"test": "turbo run test",
+		"test:watch": "turbo run test:watch",
 		"check": "prettier --check .",
 		"format": "prettier --write .",
 		"docs": "typedoc",
