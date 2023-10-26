@@ -6,7 +6,7 @@ import type {
 	GenericSchema,
 	SupabaseClientOptions
 } from '@supabase/supabase-js/dist/module/lib/types';
-import type { CookieOptionsWithName, ServerCookieMethods } from './types';
+import type { CookieOptionsWithName, CookieMethods } from './types';
 
 export function createServerClient<
 	Database = any,
@@ -20,7 +20,7 @@ export function createServerClient<
 	supabaseUrl: string,
 	supabaseKey: string,
 	options: SupabaseClientOptions<SchemaName> & {
-		cookies: ServerCookieMethods;
+		cookies: CookieMethods;
 		cookieOptions?: CookieOptionsWithName;
 	}
 ) {
