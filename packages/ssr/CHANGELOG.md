@@ -1,5 +1,11 @@
 # @supabase/ssr
 
+## 0.0.4
+
+### Patch Changes
+
+- 4e5df45: Await get cookie function
+
 ## 0.0.3
 
 ### Patch Changes
