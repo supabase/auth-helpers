@@ -1,5 +1,11 @@
 # @supabase/auth-helpers-nextjs
 
+## 0.8.2
+
+### Patch Changes
+
+- c8a121d: include cookie options for deleteCookie
+
 ## 0.8.1
 
 ### Patch Changes
