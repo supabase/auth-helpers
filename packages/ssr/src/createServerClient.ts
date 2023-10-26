@@ -46,7 +46,7 @@ export function createServerClient<
 			storage: {
 				getItem: async (key: string) => {
 					if (typeof cookies.get === 'function') {
-						return cookies.get(key);
+						return await cookies.get(key);
 					}
 				},
 				setItem: async (key: string, value: string) => {
