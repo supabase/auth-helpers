@@ -1,5 +1,11 @@
 # @supabase/ssr
 
+## 0.0.3
+
+### Patch Changes
+
+- b9099fd: Fixed types for cookie methods
+
 ## 0.0.2
 
 ### Patch Changes
