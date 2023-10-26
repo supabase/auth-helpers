@@ -21,6 +21,10 @@
 		},
 		"dev": {
 			"cache": false
+		},
+		"test": {},
+		"test:watch": {
+			"cache": false
 		}
 	},
 	"globalDependencies": ["tsconfig.json", ".env.*"]

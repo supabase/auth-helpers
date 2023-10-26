@@ -99,7 +99,7 @@ export const actions = {
 			}
 		});
 
-		if (!error) {
+		if (error) {
 			return fail(500, {
 				createMagicLink: {
 					values: {
