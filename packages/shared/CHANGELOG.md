@@ -1,5 +1,11 @@
 # shared
 
+## 0.6.0
+
+### Minor Changes
+
+- 9fa8f2b: Add cookie chunking for large JWTs
+
 ## 0.5.0
 
 ### Minor Changes
