@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { setMaxChunkSize, combineChunk, createChunks } from '../src/chunker';
+import { combineChunk, createChunks } from '../src/chunker';
 import { CHUNK_STRING } from './helper';
 
 describe('chunker', () => {
@@ -9,8 +9,7 @@ describe('chunker', () => {
 	});
 
 	it('should chunk and return two chunks', () => {
-		setMaxChunkSize(2000);
-		const chunked = createChunks('my-chunks', CHUNK_STRING);
+		const chunked = createChunks('my-chunks', CHUNK_STRING, 2000);
 		const combined = combineChunk('my-chunks', (name) => {
 			let chunk = chunked.find((chunk) => {
 				return chunk.name === name;
@@ -22,8 +21,7 @@ describe('chunker', () => {
 	});
 
 	it('should chunk and return twelve chunks', () => {
-		setMaxChunkSize(320);
-		const chunked = createChunks('my-chunks', CHUNK_STRING);
+		const chunked = createChunks('my-chunks', CHUNK_STRING, 320);
 		const combined = combineChunk('my-chunks', (name) => {
 			let chunk = chunked.find((chunk) => {
 				return chunk.name === name;
@@ -35,8 +33,7 @@ describe('chunker', () => {
 	});
 
 	it('should chunk and return one hundred and one chunks', () => {
-		setMaxChunkSize(36);
-		const chunked = createChunks('my-chunks', CHUNK_STRING);
+		const chunked = createChunks('my-chunks', CHUNK_STRING, 36);
 		const combined = combineChunk('my-chunks', (name) => {
 			let chunk = chunked.find((chunk) => {
 				return chunk.name === name;

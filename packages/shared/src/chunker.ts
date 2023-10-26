@@ -1,24 +1,20 @@
-// No clue why, but 3600 matches 4kb in the browser
-let MAX_CHUNK_SIZE = 3600;
-let re: RegExp | null = new RegExp('.{1,' + MAX_CHUNK_SIZE + '}', 'g');
-
 interface Chunk {
 	name: string;
 	value: string;
 }
 
-export function setMaxChunkSize(size: number) {
-	MAX_CHUNK_SIZE = size;
-	re = null;
+function createChunkRegExp(chunkSize: number) {
+	return new RegExp('.{1,' + chunkSize + '}', 'g');
 }
+
+const MAX_CHUNK_SIZE = 3600;
+const MAX_CHUNK_REGEXP = createChunkRegExp(MAX_CHUNK_SIZE);
 
 /**
  * create chunks from a string and return an array of object
  */
-export function createChunks(key: string, value: string): Chunk[] {
-	if (re === null) {
-		re = new RegExp('.{1,' + MAX_CHUNK_SIZE + '}', 'g');
-	}
+export function createChunks(key: string, value: string, chunkSize?: number): Chunk[] {
+	const re = chunkSize !== undefined ? createChunkRegExp(chunkSize) : MAX_CHUNK_REGEXP;
 
 	// check the length of the string to work out if it should be returned or chunked
 	const chunkCount = Math.ceil(value.length / MAX_CHUNK_SIZE);
