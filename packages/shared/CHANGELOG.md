@@ -1,5 +1,11 @@
 # shared
 
+## 0.6.1
+
+### Patch Changes
+
+- 841fce0: Fix chunkCount to get the correct number of chunks
+
 ## 0.6.0
 
 ### Minor Changes
