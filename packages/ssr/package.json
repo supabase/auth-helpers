@@ -12,7 +12,9 @@
 	],
 	"scripts": {
 		"lint": "tsc",
-		"build": "tsup"
+		"build": "tsup",
+		"test": "vitest run",
+		"test:watch": "vitest"
 	},
 	"repository": {
 		"type": "git",
@@ -41,7 +43,8 @@
 		"@types/cookie": "^0.5.1",
 		"@types/ramda": "^0.29.3",
 		"tsconfig": "workspace:*",
-		"tsup": "^6.7.0"
+		"tsup": "^6.7.0",
+		"vitest": "^0.34.6"
 	},
 	"peerDependencies": {
 		"@supabase/supabase-js": "^2.33.1"
