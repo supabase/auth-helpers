@@ -1,5 +1,11 @@
 # @supabase/ssr
 
+## 0.0.5
+
+### Patch Changes
+
+- 841fce0: Add cookie chunker methods and expose them to the SDK
+
 ## 0.0.4
 
 ### Patch Changes
