@@ -35,12 +35,23 @@ export function createChunks(key: string, value: string, chunkSize?: number): Ch
 }
 
 // Get fully constructed chunks
-export function combineChunk(
+export function combineChunks(
 	key: string,
 	retrieveChunk: (name: string) => string | null | undefined = () => {
 		return null;
 	}
 ) {
+	const value = retrieveChunk(key);
+
+	// pkce code verifier
+	if (key.endsWith('-code-verifier') && value) {
+		return value;
+	}
+
+	if (value) {
+		return value;
+	}
+
 	let values: string[] = [];
 	for (let i = 0; ; i++) {
 		const chunkName = `${key}.${i}`;
@@ -54,4 +65,30 @@ export function combineChunk(
 	}
 
 	return values.length ? values.join('') : null;
+}
+
+export function deleteChunks(
+	key: string,
+	retrieveChunk: (name: string) => string | null | undefined = () => {
+		return null;
+	},
+	removeChunk: (name: string) => void = () => {}
+) {
+	const value = retrieveChunk(key);
+
+	if (value) {
+		removeChunk(key);
+		return;
+	}
+
+	for (let i = 0; ; i++) {
+		const chunkName = `${key}.${i}`;
+		const chunk = retrieveChunk(chunkName);
+
+		if (!chunk) {
+			break;
+		}
+
+		removeChunk(chunkName);
+	}
 }
