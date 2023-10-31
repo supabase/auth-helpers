@@ -17,7 +17,7 @@ export function createChunks(key: string, value: string, chunkSize?: number): Ch
 	const re = chunkSize !== undefined ? createChunkRegExp(chunkSize) : MAX_CHUNK_REGEXP;
 
 	// check the length of the string to work out if it should be returned or chunked
-	const chunkCount = Math.ceil(value.length / MAX_CHUNK_SIZE);
+	const chunkCount = Math.ceil(value.length / (chunkSize ?? MAX_CHUNK_SIZE));
 
 	if (chunkCount === 1) {
 		return [{ name: key, value }];
