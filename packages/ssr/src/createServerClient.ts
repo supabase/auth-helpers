@@ -28,6 +28,7 @@ export function createServerClient<
 	options: SupabaseClientOptions<SchemaName> & {
 		cookies: CookieMethods;
 		cookieOptions?: CookieOptionsWithName;
+		useCookieChunking?: boolean;
 	}
 ) {
 	if (!supabaseUrl || !supabaseKey) {
@@ -36,7 +37,7 @@ export function createServerClient<
 		);
 	}
 
-	const { cookies, cookieOptions, ...userDefinedClientOptions } = options;
+	const { cookies, useCookieChunking = true, cookieOptions, ...userDefinedClientOptions } = options;
 
 	const cookieClientOptions = {
 		global: {
@@ -52,8 +53,8 @@ export function createServerClient<
 			storage: {
 				getItem: async (key: string) => {
 					if (typeof cookies.get === 'function') {
-						if (cookies.mode === 'chunk') {
-							const chunkedCookie = await combineChunks(key, async (chunkName: string) => {
+						if (useCookieChunking) {
+							const chunkedCookie = await combineChunks(key, async (chunkName) => {
 								// @ts-ignore we check this above
 								return await cookies.get(chunkName);
 							});
@@ -65,18 +66,15 @@ export function createServerClient<
 				},
 				setItem: async (key: string, value: string) => {
 					if (typeof cookies.set === 'function') {
-						if (cookies.mode === 'chunk') {
+						if (useCookieChunking) {
 							const chunks = createChunks(key, value);
-							await Promise.all(
-								chunks.map(async (chunk) => {
-									// @ts-ignore we check this above
-									await cookies.set(chunk.name, chunk.value, {
-										...DEFAULT_COOKIE_OPTIONS,
-										...cookieOptions,
-										maxAge: DEFAULT_COOKIE_OPTIONS.maxAge
-									});
-								})
-							);
+							for (const chunk of chunks) {
+								await cookies.set(chunk.name, chunk.value, {
+									...DEFAULT_COOKIE_OPTIONS,
+									...cookieOptions,
+									maxAge: DEFAULT_COOKIE_OPTIONS.maxAge
+								});
+							}
 						} else {
 							await cookies.set(key, value, {
 								...DEFAULT_COOKIE_OPTIONS,
@@ -88,11 +86,11 @@ export function createServerClient<
 				},
 				removeItem: async (key: string) => {
 					if (typeof cookies.remove === 'function') {
-						if (cookies.mode === 'chunk') {
+						if (useCookieChunking) {
 							if (typeof cookies.get !== 'function') {
 								throw new Error('Removing chunked cookie without a get method is not supported');
 							}
-							deleteChunks(
+							await deleteChunks(
 								key,
 								// @ts-ignore we check this above
 								async (chunkName) => await cookies.get(chunkName),

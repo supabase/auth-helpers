@@ -33,6 +33,7 @@ export function createBrowserClient<
 		cookies: CookieMethods;
 		cookieOptions?: CookieOptionsWithName;
 		isSingleton?: boolean;
+		useCookieChunking?: boolean;
 	}
 ) {
 	if (!supabaseUrl || !supabaseKey) {
@@ -43,11 +44,18 @@ export function createBrowserClient<
 
 	let cookies: CookieMethods = {};
 	let isSingleton = true;
+	let useCookieChunking = true;
 	let cookieOptions: CookieOptionsWithName | undefined;
 	let userDefinedClientOptions;
 
 	if (options) {
-		({ cookies, isSingleton = true, cookieOptions, ...userDefinedClientOptions } = options);
+		({
+			cookies,
+			isSingleton = true,
+			useCookieChunking = true,
+			cookieOptions,
+			...userDefinedClientOptions
+		} = options);
 	}
 
 	const cookieClientOptions = {
@@ -64,7 +72,7 @@ export function createBrowserClient<
 			storage: {
 				getItem: async (key: string) => {
 					if (typeof cookies.get === 'function') {
-						if (cookies.mode === 'chunk') {
+						if (useCookieChunking) {
 							const chunkedCookie = await combineChunks(key, async (chunkName) => {
 								// @ts-ignore we check this above
 								return await cookies.get(chunkName);
@@ -76,7 +84,7 @@ export function createBrowserClient<
 					}
 
 					if (isBrowser()) {
-						if (cookies.mode === 'chunk') {
+						if (useCookieChunking) {
 							const chunkedCookie = await combineChunks(key, (chunkName) => {
 								const documentCookies = parse(document.cookie);
 								return documentCookies[chunkName];
@@ -90,7 +98,7 @@ export function createBrowserClient<
 				},
 				setItem: async (key: string, value: string) => {
 					if (typeof cookies.set === 'function') {
-						if (cookies.mode === 'chunk') {
+						if (useCookieChunking) {
 							const chunks = await createChunks(key, value);
 							await Promise.all(
 								chunks.map(async (chunk) => {
@@ -112,7 +120,7 @@ export function createBrowserClient<
 					}
 
 					if (isBrowser()) {
-						if (cookies.mode === 'chunk') {
+						if (useCookieChunking) {
 							const chunks = await createChunks(key, value);
 							await Promise.all(
 								chunks.map(async (chunk) => {
@@ -134,7 +142,7 @@ export function createBrowserClient<
 				},
 				removeItem: async (key: string) => {
 					if (typeof cookies.remove === 'function') {
-						if (cookies.mode === 'chunk') {
+						if (useCookieChunking) {
 							if (typeof cookies.get !== 'function') {
 								throw new Error('Removing chunked cookie without a get method is not supported');
 							}
@@ -160,7 +168,7 @@ export function createBrowserClient<
 					}
 
 					if (isBrowser()) {
-						if (cookies.mode === 'chunk') {
+						if (useCookieChunking) {
 							await deleteChunks(
 								key,
 								(chunkName) => {
