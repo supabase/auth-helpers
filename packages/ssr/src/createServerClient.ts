@@ -1,6 +1,12 @@
 import { createClient } from '@supabase/supabase-js';
 import { mergeDeepRight } from 'ramda';
-import { DEFAULT_COOKIE_OPTIONS, isBrowser } from './utils';
+import {
+	DEFAULT_COOKIE_OPTIONS,
+	combineChunks,
+	createChunks,
+	deleteChunks,
+	isBrowser
+} from './utils';
 
 import type {
 	GenericSchema,
@@ -22,6 +28,7 @@ export function createServerClient<
 	options: SupabaseClientOptions<SchemaName> & {
 		cookies: CookieMethods;
 		cookieOptions?: CookieOptionsWithName;
+		mode?: 'chunk';
 	}
 ) {
 	if (!supabaseUrl || !supabaseKey) {
@@ -46,21 +53,61 @@ export function createServerClient<
 			storage: {
 				getItem: async (key: string) => {
 					if (typeof cookies.get === 'function') {
-						return await cookies.get(key);
+						if (options.mode === 'chunk') {
+							const chunkedCookie = await combineChunks(key, async (chunkName: string) => {
+								// @ts-ignore we check this above
+								return await cookies.get(chunkName);
+							});
+							return chunkedCookie;
+						} else {
+							return await cookies.get(key);
+						}
 					}
 				},
 				setItem: async (key: string, value: string) => {
 					if (typeof cookies.set === 'function') {
-						await cookies.set(key, value, {
-							...DEFAULT_COOKIE_OPTIONS,
-							...cookieOptions,
-							maxAge: DEFAULT_COOKIE_OPTIONS.maxAge
-						});
+						if (options.mode === 'chunk') {
+							const chunks = createChunks(key, value);
+							await Promise.all(
+								chunks.map(async (chunk) => {
+									// @ts-ignore we check this above
+									await cookies.set(chunk.name, chunk.value, {
+										...DEFAULT_COOKIE_OPTIONS,
+										...cookieOptions,
+										maxAge: DEFAULT_COOKIE_OPTIONS.maxAge
+									});
+								})
+							);
+						} else {
+							await cookies.set(key, value, {
+								...DEFAULT_COOKIE_OPTIONS,
+								...cookieOptions,
+								maxAge: DEFAULT_COOKIE_OPTIONS.maxAge
+							});
+						}
 					}
 				},
 				removeItem: async (key: string) => {
 					if (typeof cookies.remove === 'function') {
-						await cookies.remove(key, { ...DEFAULT_COOKIE_OPTIONS, ...cookieOptions, maxAge: 0 });
+						if (options.mode === 'chunk') {
+							if (typeof cookies.get !== 'function') {
+								throw new Error('Removing chunked cookie without a get method is not supported');
+							}
+							deleteChunks(
+								key,
+								// @ts-ignore we check this above
+								async (chunkName: string) => (await cookies.get(chunkName))?.value,
+								async (chunkName: string) =>
+									// @ts-ignore we check this above
+									await cookies.remove(chunkName, {
+										...DEFAULT_COOKIE_OPTIONS,
+										...cookieOptions,
+										maxAge: 0
+									})
+							);
+						} else {
+							await cookies.remove(key, { ...DEFAULT_COOKIE_OPTIONS, ...cookieOptions, maxAge: 0 });
+						}
 					}
 				}
 			}
