@@ -73,6 +73,13 @@ export function createServerClient<
 					);
 				},
 				removeItem: async (key: string) => {
+					if (typeof cookies.remove === 'function' && typeof cookies.get !== 'function') {
+						console.log(
+							'Removing chunked cookie without a `get` method is not supported.\n\n\tWhen you call the `createServerClient` function from the `@supabase/ssr` package, make sure you declare both a `get` and `remove` method on the `cookies` object.\n\nhttps://supabase.com/docs/guides/auth/server-side/creating-a-client'
+						);
+						return;
+					}
+
 					deleteChunks(
 						key,
 						async (chunkName) => {

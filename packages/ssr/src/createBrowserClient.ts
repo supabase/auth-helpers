@@ -64,13 +64,12 @@ export function createBrowserClient<
 			storage: {
 				getItem: async (key: string) => {
 					const chunkedCookie = await combineChunks(key, async (chunkName) => {
+						if (typeof cookies.get === 'function') {
+							return await cookies.get(chunkName);
+						}
 						if (isBrowser()) {
 							const cookie = parse(document.cookie);
 							return cookie[chunkName];
-						} else {
-							if (typeof cookies.get === 'function') {
-								return await cookies.get(chunkName);
-							}
 						}
 					});
 					return chunkedCookie;
@@ -79,15 +78,15 @@ export function createBrowserClient<
 					const chunks = await createChunks(key, value);
 					await Promise.all(
 						chunks.map(async (chunk) => {
-							if (isBrowser()) {
-								document.cookie = serialize(key, value, {
+							if (typeof cookies.set === 'function') {
+								await cookies.set(chunk.name, chunk.value, {
 									...DEFAULT_COOKIE_OPTIONS,
 									...cookieOptions,
 									maxAge: DEFAULT_COOKIE_OPTIONS.maxAge
 								});
 							} else {
-								if (typeof cookies.set === 'function') {
-									await cookies.set(chunk.name, chunk.value, {
+								if (isBrowser()) {
+									document.cookie = serialize(chunk.name, chunk.value, {
 										...DEFAULT_COOKIE_OPTIONS,
 										...cookieOptions,
 										maxAge: DEFAULT_COOKIE_OPTIONS.maxAge
@@ -98,31 +97,34 @@ export function createBrowserClient<
 					);
 				},
 				removeItem: async (key: string) => {
-					if (!isBrowser() && typeof cookies.get !== 'function') {
-						throw new Error('Removing chunked cookie without a get method is not supported');
+					if (typeof cookies.remove === 'function' && typeof cookies.get !== 'function') {
+						console.log(
+							'Removing chunked cookie without a `get` method is not supported.\n\n\tWhen you call the `createBrowserClient` function from the `@supabase/ssr` package, make sure you declare both a `get` and `remove` method on the `cookies` object.\n\nhttps://supabase.com/docs/guides/auth/server-side/creating-a-client'
+						);
+						return;
 					}
 
 					await deleteChunks(
 						key,
 						async (chunkName) => {
+							if (typeof cookies.get === 'function') {
+								return await cookies.get(chunkName);
+							}
 							if (isBrowser()) {
 								const documentCookies = parse(document.cookie);
 								return documentCookies[chunkName];
 							}
-							if (typeof cookies.get === 'function') {
-								return await cookies.get(chunkName);
-							}
 						},
 						async (chunkName) => {
-							if (isBrowser()) {
-								document.cookie = serialize(chunkName, '', {
+							if (typeof cookies.remove === 'function') {
+								await cookies.remove(chunkName, {
 									...DEFAULT_COOKIE_OPTIONS,
 									...cookieOptions,
 									maxAge: 0
 								});
 							} else {
-								if (typeof cookies.remove === 'function') {
-									await cookies.remove(chunkName, {
+								if (isBrowser()) {
+									document.cookie = serialize(chunkName, '', {
 										...DEFAULT_COOKIE_OPTIONS,
 										...cookieOptions,
 										maxAge: 0

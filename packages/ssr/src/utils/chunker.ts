@@ -15,7 +15,6 @@ const MAX_CHUNK_REGEXP = createChunkRegExp(MAX_CHUNK_SIZE);
  */
 export function createChunks(key: string, value: string, chunkSize?: number): Chunk[] {
 	const re = chunkSize !== undefined ? createChunkRegExp(chunkSize) : MAX_CHUNK_REGEXP;
-
 	// check the length of the string to work out if it should be returned or chunked
 	const chunkCount = Math.ceil(value.length / (chunkSize ?? MAX_CHUNK_SIZE));
 
@@ -27,7 +26,7 @@ export function createChunks(key: string, value: string, chunkSize?: number): Ch
 	// split string into a array based on the regex
 	const values = value.match(re);
 	values?.forEach((value, i) => {
-		const name: string = `${key}.${i}`;
+		const name = `${key}.${i}`;
 		chunks.push({ name, value });
 	});
 
@@ -37,24 +36,16 @@ export function createChunks(key: string, value: string, chunkSize?: number): Ch
 // Get fully constructed chunks
 export async function combineChunks(
 	key: string,
-	retrieveChunk: (
-		name: string
-	) => Promise<string | null | undefined> | string | null | undefined = async () => {
-		return null;
-	}
+	retrieveChunk: (name: string) => Promise<string | null | undefined> | string | null | undefined
 ) {
 	const value = await retrieveChunk(key);
-
-	// pkce code verifier
-	if (key.endsWith('-code-verifier') && value) {
-		return value;
-	}
 
 	if (value) {
 		return value;
 	}
 
 	let values: string[] = [];
+
 	for (let i = 0; ; i++) {
 		const chunkName = `${key}.${i}`;
 		const chunk = await retrieveChunk(chunkName);
@@ -66,22 +57,20 @@ export async function combineChunks(
 		values.push(chunk);
 	}
 
-	return values.length ? values.join('') : null;
+	if (values.length > 0) {
+		return values.join('');
+	}
 }
 
 export async function deleteChunks(
 	key: string,
-	retrieveChunk: (
-		name: string
-	) => Promise<string | null | undefined> | string | null | undefined = async () => {
-		return null;
-	},
-	removeChunk: (name: string) => void = () => {}
+	retrieveChunk: (name: string) => Promise<string | null | undefined> | string | null | undefined,
+	removeChunk: (name: string) => Promise<void> | void
 ) {
 	const value = await retrieveChunk(key);
 
 	if (value) {
-		removeChunk(key);
+		await removeChunk(key);
 		return;
 	}
 
@@ -93,6 +82,6 @@ export async function deleteChunks(
 			break;
 		}
 
-		removeChunk(chunkName);
+		await removeChunk(chunkName);
 	}
 }
