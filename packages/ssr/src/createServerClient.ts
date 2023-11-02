@@ -28,7 +28,6 @@ export function createServerClient<
 	options: SupabaseClientOptions<SchemaName> & {
 		cookies: CookieMethods;
 		cookieOptions?: CookieOptionsWithName;
-		mode?: 'chunk';
 	}
 ) {
 	if (!supabaseUrl || !supabaseKey) {
@@ -53,7 +52,7 @@ export function createServerClient<
 			storage: {
 				getItem: async (key: string) => {
 					if (typeof cookies.get === 'function') {
-						if (options.mode === 'chunk') {
+						if (cookies.mode === 'chunk') {
 							const chunkedCookie = await combineChunks(key, async (chunkName: string) => {
 								// @ts-ignore we check this above
 								return await cookies.get(chunkName);
@@ -66,7 +65,7 @@ export function createServerClient<
 				},
 				setItem: async (key: string, value: string) => {
 					if (typeof cookies.set === 'function') {
-						if (options.mode === 'chunk') {
+						if (cookies.mode === 'chunk') {
 							const chunks = createChunks(key, value);
 							await Promise.all(
 								chunks.map(async (chunk) => {
@@ -89,15 +88,15 @@ export function createServerClient<
 				},
 				removeItem: async (key: string) => {
 					if (typeof cookies.remove === 'function') {
-						if (options.mode === 'chunk') {
+						if (cookies.mode === 'chunk') {
 							if (typeof cookies.get !== 'function') {
 								throw new Error('Removing chunked cookie without a get method is not supported');
 							}
 							deleteChunks(
 								key,
 								// @ts-ignore we check this above
-								async (chunkName: string) => (await cookies.get(chunkName))?.value,
-								async (chunkName: string) =>
+								async (chunkName) => await cookies.get(chunkName),
+								async (chunkName) =>
 									// @ts-ignore we check this above
 									await cookies.remove(chunkName, {
 										...DEFAULT_COOKIE_OPTIONS,
