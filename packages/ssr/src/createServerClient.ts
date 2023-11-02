@@ -1,6 +1,12 @@
 import { createClient } from '@supabase/supabase-js';
 import { mergeDeepRight } from 'ramda';
-import { DEFAULT_COOKIE_OPTIONS, isBrowser } from './utils';
+import {
+	DEFAULT_COOKIE_OPTIONS,
+	combineChunks,
+	createChunks,
+	deleteChunks,
+	isBrowser
+} from './utils';
 
 import type {
 	GenericSchema,
@@ -45,23 +51,45 @@ export function createServerClient<
 			persistSession: true,
 			storage: {
 				getItem: async (key: string) => {
-					if (typeof cookies.get === 'function') {
-						return await cookies.get(key);
-					}
+					const chunkedCookie = await combineChunks(key, async (chunkName: string) => {
+						if (typeof cookies.get === 'function') {
+							return await cookies.get(chunkName);
+						}
+					});
+					return chunkedCookie;
 				},
 				setItem: async (key: string, value: string) => {
-					if (typeof cookies.set === 'function') {
-						await cookies.set(key, value, {
-							...DEFAULT_COOKIE_OPTIONS,
-							...cookieOptions,
-							maxAge: DEFAULT_COOKIE_OPTIONS.maxAge
-						});
-					}
+					const chunks = createChunks(key, value);
+					await Promise.all(
+						chunks.map(async (chunk) => {
+							if (typeof cookies.set === 'function') {
+								await cookies.set(chunk.name, chunk.value, {
+									...DEFAULT_COOKIE_OPTIONS,
+									...cookieOptions,
+									maxAge: DEFAULT_COOKIE_OPTIONS.maxAge
+								});
+							}
+						})
+					);
 				},
 				removeItem: async (key: string) => {
-					if (typeof cookies.remove === 'function') {
-						await cookies.remove(key, { ...DEFAULT_COOKIE_OPTIONS, ...cookieOptions, maxAge: 0 });
-					}
+					deleteChunks(
+						key,
+						async (chunkName) => {
+							if (typeof cookies.get === 'function') {
+								return await cookies.get(chunkName);
+							}
+						},
+						async (chunkName) => {
+							if (typeof cookies.remove === 'function') {
+								return await cookies.remove(chunkName, {
+									...DEFAULT_COOKIE_OPTIONS,
+									...cookieOptions,
+									maxAge: 0
+								});
+							}
+						}
+					);
 				}
 			}
 		}

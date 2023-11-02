@@ -7,7 +7,7 @@ function createChunkRegExp(chunkSize: number) {
 	return new RegExp('.{1,' + chunkSize + '}', 'g');
 }
 
-const MAX_CHUNK_SIZE = 3600;
+const MAX_CHUNK_SIZE = 1600;
 const MAX_CHUNK_REGEXP = createChunkRegExp(MAX_CHUNK_SIZE);
 
 /**
@@ -35,13 +35,15 @@ export function createChunks(key: string, value: string, chunkSize?: number): Ch
 }
 
 // Get fully constructed chunks
-export function combineChunks(
+export async function combineChunks(
 	key: string,
-	retrieveChunk: (name: string) => string | null | undefined = () => {
+	retrieveChunk: (
+		name: string
+	) => Promise<string | null | undefined> | string | null | undefined = async () => {
 		return null;
 	}
 ) {
-	const value = retrieveChunk(key);
+	const value = await retrieveChunk(key);
 
 	// pkce code verifier
 	if (key.endsWith('-code-verifier') && value) {
@@ -55,7 +57,7 @@ export function combineChunks(
 	let values: string[] = [];
 	for (let i = 0; ; i++) {
 		const chunkName = `${key}.${i}`;
-		const chunk = retrieveChunk(chunkName);
+		const chunk = await retrieveChunk(chunkName);
 
 		if (!chunk) {
 			break;
@@ -67,14 +69,16 @@ export function combineChunks(
 	return values.length ? values.join('') : null;
 }
 
-export function deleteChunks(
+export async function deleteChunks(
 	key: string,
-	retrieveChunk: (name: string) => string | null | undefined = () => {
+	retrieveChunk: (
+		name: string
+	) => Promise<string | null | undefined> | string | null | undefined = async () => {
 		return null;
 	},
 	removeChunk: (name: string) => void = () => {}
 ) {
-	const value = retrieveChunk(key);
+	const value = await retrieveChunk(key);
 
 	if (value) {
 		removeChunk(key);
@@ -83,7 +87,7 @@ export function deleteChunks(
 
 	for (let i = 0; ; i++) {
 		const chunkName = `${key}.${i}`;
-		const chunk = retrieveChunk(chunkName);
+		const chunk = await retrieveChunk(chunkName);
 
 		if (!chunk) {
 			break;
