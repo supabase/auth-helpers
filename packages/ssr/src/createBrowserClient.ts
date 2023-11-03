@@ -1,6 +1,12 @@
 import { createClient } from '@supabase/supabase-js';
 import { mergeDeepRight } from 'ramda';
-import { DEFAULT_COOKIE_OPTIONS, isBrowser } from './utils';
+import {
+	DEFAULT_COOKIE_OPTIONS,
+	combineChunks,
+	createChunks,
+	deleteChunks,
+	isBrowser
+} from './utils';
 import { parse, serialize } from 'cookie';
 
 import type { SupabaseClient } from '@supabase/supabase-js';
@@ -57,48 +63,76 @@ export function createBrowserClient<
 			persistSession: true,
 			storage: {
 				getItem: async (key: string) => {
-					if (typeof cookies.get === 'function') {
-						return await cookies.get(key);
-					}
-
-					if (isBrowser()) {
-						const cookie = parse(document.cookie);
-						return cookie[key];
-					}
+					const chunkedCookie = await combineChunks(key, async (chunkName) => {
+						if (typeof cookies.get === 'function') {
+							return await cookies.get(chunkName);
+						}
+						if (isBrowser()) {
+							const cookie = parse(document.cookie);
+							return cookie[chunkName];
+						}
+					});
+					return chunkedCookie;
 				},
 				setItem: async (key: string, value: string) => {
-					if (typeof cookies.set === 'function') {
-						return await cookies.set(key, value, {
-							...DEFAULT_COOKIE_OPTIONS,
-							...cookieOptions,
-							maxAge: DEFAULT_COOKIE_OPTIONS.maxAge
-						});
-					}
-
-					if (isBrowser()) {
-						document.cookie = serialize(key, value, {
-							...DEFAULT_COOKIE_OPTIONS,
-							...cookieOptions,
-							maxAge: DEFAULT_COOKIE_OPTIONS.maxAge
-						});
-					}
+					const chunks = await createChunks(key, value);
+					await Promise.all(
+						chunks.map(async (chunk) => {
+							if (typeof cookies.set === 'function') {
+								await cookies.set(chunk.name, chunk.value, {
+									...DEFAULT_COOKIE_OPTIONS,
+									...cookieOptions,
+									maxAge: DEFAULT_COOKIE_OPTIONS.maxAge
+								});
+							} else {
+								if (isBrowser()) {
+									document.cookie = serialize(chunk.name, chunk.value, {
+										...DEFAULT_COOKIE_OPTIONS,
+										...cookieOptions,
+										maxAge: DEFAULT_COOKIE_OPTIONS.maxAge
+									});
+								}
+							}
+						})
+					);
 				},
 				removeItem: async (key: string) => {
-					if (typeof cookies.remove === 'function') {
-						return await cookies.remove(key, {
-							...DEFAULT_COOKIE_OPTIONS,
-							...cookieOptions,
-							maxAge: 0
-						});
+					if (typeof cookies.remove === 'function' && typeof cookies.get !== 'function') {
+						console.log(
+							'Removing chunked cookie without a `get` method is not supported.\n\n\tWhen you call the `createBrowserClient` function from the `@supabase/ssr` package, make sure you declare both a `get` and `remove` method on the `cookies` object.\n\nhttps://supabase.com/docs/guides/auth/server-side/creating-a-client'
+						);
+						return;
 					}
 
-					if (isBrowser()) {
-						document.cookie = serialize(key, '', {
-							...DEFAULT_COOKIE_OPTIONS,
-							...cookieOptions,
-							maxAge: 0
-						});
-					}
+					await deleteChunks(
+						key,
+						async (chunkName) => {
+							if (typeof cookies.get === 'function') {
+								return await cookies.get(chunkName);
+							}
+							if (isBrowser()) {
+								const documentCookies = parse(document.cookie);
+								return documentCookies[chunkName];
+							}
+						},
+						async (chunkName) => {
+							if (typeof cookies.remove === 'function') {
+								await cookies.remove(chunkName, {
+									...DEFAULT_COOKIE_OPTIONS,
+									...cookieOptions,
+									maxAge: 0
+								});
+							} else {
+								if (isBrowser()) {
+									document.cookie = serialize(chunkName, '', {
+										...DEFAULT_COOKIE_OPTIONS,
+										...cookieOptions,
+										maxAge: 0
+									});
+								}
+							}
+						}
+					);
 				}
 			}
 		}
