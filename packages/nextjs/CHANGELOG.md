@@ -1,5 +1,11 @@
 # @supabase/auth-helpers-nextjs
 
+## 0.8.5
+
+### Patch Changes
+
+- 7abfe9b: Fix header and cookie trying to read undefined response body
+
 ## 0.8.4
 
 ### Patch Changes
