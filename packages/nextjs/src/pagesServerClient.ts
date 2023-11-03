@@ -25,11 +25,13 @@ class NextServerAuthStorageAdapter extends CookieAuthStorageAdapter {
 	}
 
 	protected getCookie(name: string): string | null | undefined {
-		const setCookie = splitCookiesString(this.context.res.getHeader('set-cookie')?.toString() ?? '')
+		const setCookie = splitCookiesString(
+			this.context.res?.getHeader('set-cookie')?.toString() ?? ''
+		)
 			.map((c) => parseCookies(c)[name])
 			.find((c) => !!c);
 
-		const value = setCookie ?? this.context.req.cookies[name];
+		const value = setCookie ?? this.context.req?.cookies[name];
 		return value;
 	}
 	protected setCookie(name: string, value: string): void {
