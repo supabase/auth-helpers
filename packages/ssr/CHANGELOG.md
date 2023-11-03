@@ -1,5 +1,11 @@
 # @supabase/ssr
 
+## 0.0.6
+
+### Patch Changes
+
+- 1c7f7e8: Implement cookie chunking
+
 ## 0.0.5
 
 ### Patch Changes
