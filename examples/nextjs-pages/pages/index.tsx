@@ -2,7 +2,7 @@ import {
 	Session,
 	createPagesBrowserClient,
 	createPagesServerClient
-} from '@/../../packages/nextjs/dist';
+} from '@supabase/auth-helpers-nextjs';
 import type { GetServerSidePropsContext, NextPage } from 'next';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
