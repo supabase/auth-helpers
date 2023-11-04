@@ -197,9 +197,6 @@ export function createServerClient<
 		);
 	}
 
-	const storageKey = cookieOptions?.name;
-	delete cookieOptions?.name;
-
 	return createSupabaseClient<Database, SchemaName, Schema>(supabaseUrl, supabaseKey, {
 		...options,
 		global: {
@@ -210,7 +207,6 @@ export function createServerClient<
 			}
 		},
 		auth: {
-			storageKey,
 			storage: new RemixServerAuthStorageAdapter(request, response, cookieOptions)
 		}
 	});

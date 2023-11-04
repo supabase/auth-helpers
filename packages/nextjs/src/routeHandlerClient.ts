@@ -67,9 +67,6 @@ export function createRouteHandlerClient<
 		);
 	}
 
-	const storageKey = cookieOptions?.name;
-	delete cookieOptions?.name;
-
 	return createSupabaseClient<Database, SchemaName, Schema>(supabaseUrl, supabaseKey, {
 		...options,
 		global: {
@@ -80,7 +77,6 @@ export function createRouteHandlerClient<
 			}
 		},
 		auth: {
-			storageKey,
 			storage: new NextRouteHandlerAuthStorageAdapter(context, cookieOptions)
 		}
 	});

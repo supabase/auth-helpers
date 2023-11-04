@@ -82,10 +82,6 @@ export function createSupabaseLoadClient<
 	if (browser && cachedBrowserClient) {
 		return cachedBrowserClient as SupabaseClient<Database, SchemaName, Schema>;
 	}
-
-	const storageKey = cookieOptions?.name;
-	delete cookieOptions?.name;
-
 	const client = createSupabaseClient<Database, SchemaName, Schema>(supabaseUrl, supabaseKey, {
 		...options,
 		global: {
@@ -97,7 +93,6 @@ export function createSupabaseLoadClient<
 			}
 		},
 		auth: {
-			storageKey,
 			storage: new SvelteKitLoadAuthStorageAdapter(serverSession, cookieOptions)
 		}
 	});

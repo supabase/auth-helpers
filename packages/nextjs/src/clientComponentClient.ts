@@ -38,9 +38,6 @@ export function createClientComponentClient<
 		);
 	}
 
-	const storageKey = cookieOptions?.name;
-	delete cookieOptions?.name;
-
 	const createNewClient = () =>
 		createSupabaseClient<Database, SchemaName, Schema>(supabaseUrl, supabaseKey, {
 			...options,
@@ -52,7 +49,6 @@ export function createClientComponentClient<
 				}
 			},
 			auth: {
-				storageKey,
 				storage: new BrowserCookieAuthStorageAdapter(cookieOptions)
 			}
 		});
