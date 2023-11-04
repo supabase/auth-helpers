@@ -1,5 +1,13 @@
 # @supabase/auth-helpers-sveltekit
 
+## 0.10.7
+
+### Patch Changes
+
+- f7e5c2d: Revert cookie name to storage key change
+- Updated dependencies [f7e5c2d]
+  - @supabase/auth-helpers-shared@0.6.3
+
 ## 0.10.6
 
 ### Patch Changes
