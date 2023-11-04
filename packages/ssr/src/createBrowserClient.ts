@@ -44,16 +44,19 @@ export function createBrowserClient<
 	let cookies: CookieMethods = {};
 	let isSingleton = true;
 	let cookieOptions: CookieOptionsWithName | undefined;
+	let storageKey: string | undefined = undefined;
 	let userDefinedClientOptions;
 
 	if (options) {
 		({ cookies, isSingleton = true, cookieOptions, ...userDefinedClientOptions } = options);
+		storageKey = cookieOptions?.name;
+		delete cookieOptions?.name;
 	}
 
 	const cookieClientOptions = {
 		global: {
 			headers: {
-				'X-Client-Info': `${PACKAGE_NAME}@${PACKAGE_VERSION}`
+				'X-Client-Info': `${PACKAGE_NAME}/${PACKAGE_VERSION}`
 			}
 		},
 		auth: {
@@ -61,6 +64,7 @@ export function createBrowserClient<
 			autoRefreshToken: isBrowser(),
 			detectSessionInUrl: isBrowser(),
 			persistSession: true,
+			storageKey,
 			storage: {
 				getItem: async (key: string) => {
 					const chunkedCookie = await combineChunks(key, async (chunkName) => {
