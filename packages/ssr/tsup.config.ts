@@ -14,7 +14,7 @@ export const tsup: Options = {
 	bundle: true,
 	clean: true,
 	define: {
-		PACKAGE_NAME: JSON.stringify(pkg.name),
+		PACKAGE_NAME: JSON.stringify(pkg.name.replace('@', '').replace('/', '-')),
 		PACKAGE_VERSION: JSON.stringify(pkg.version)
 	}
 };

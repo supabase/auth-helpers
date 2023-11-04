@@ -1,7 +1,7 @@
 import { GoTrueClientOptions, Session } from '@supabase/supabase-js';
 import { DEFAULT_COOKIE_OPTIONS, parseSupabaseCookie, stringifySupabaseSession } from './utils';
 import { CookieOptions, DefaultCookieOptions } from './types';
-import { combineChunk, createChunks } from './chunker';
+import { combineChunks, createChunks } from './chunker';
 
 export interface StorageAdapter extends Exclude<GoTrueClientOptions['storage'], undefined> {}
 
@@ -32,7 +32,7 @@ export abstract class CookieAuthStorageAdapter implements StorageAdapter {
 			return JSON.stringify(parseSupabaseCookie(value));
 		}
 
-		const chunks = combineChunk(key, (chunkName) => {
+		const chunks = combineChunks(key, (chunkName) => {
 			return this.getCookie(chunkName);
 		});
 

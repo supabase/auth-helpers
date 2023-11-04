@@ -7,7 +7,7 @@ function createChunkRegExp(chunkSize: number) {
 	return new RegExp('.{1,' + chunkSize + '}', 'g');
 }
 
-const MAX_CHUNK_SIZE = 3600;
+const MAX_CHUNK_SIZE = 3180;
 const MAX_CHUNK_REGEXP = createChunkRegExp(MAX_CHUNK_SIZE);
 
 /**
@@ -35,7 +35,7 @@ export function createChunks(key: string, value: string, chunkSize?: number): Ch
 }
 
 // Get fully constructed chunks
-export function combineChunk(
+export function combineChunks(
 	key: string,
 	retrieveChunk: (name: string) => string | null | undefined = () => {
 		return null;

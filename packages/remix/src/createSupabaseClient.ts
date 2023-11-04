@@ -112,6 +112,9 @@ export function createBrowserClient<
 		);
 	}
 
+	const storageKey = cookieOptions?.name;
+	delete cookieOptions?.name;
+
 	return createSupabaseClient<Database, SchemaName, Schema>(supabaseUrl, supabaseKey, {
 		...options,
 		global: {
@@ -122,7 +125,7 @@ export function createBrowserClient<
 			}
 		},
 		auth: {
-			storageKey: cookieOptions?.name,
+			storageKey,
 			storage: new BrowserCookieAuthStorageAdapter(cookieOptions)
 		}
 	});
@@ -194,6 +197,9 @@ export function createServerClient<
 		);
 	}
 
+	const storageKey = cookieOptions?.name;
+	delete cookieOptions?.name;
+
 	return createSupabaseClient<Database, SchemaName, Schema>(supabaseUrl, supabaseKey, {
 		...options,
 		global: {
@@ -204,7 +210,7 @@ export function createServerClient<
 			}
 		},
 		auth: {
-			storageKey: cookieOptions?.name,
+			storageKey,
 			storage: new RemixServerAuthStorageAdapter(request, response, cookieOptions)
 		}
 	});

@@ -64,6 +64,9 @@ export function createServerComponentClient<
 		);
 	}
 
+	const storageKey = cookieOptions?.name;
+	delete cookieOptions?.name;
+
 	return createSupabaseClient<Database, SchemaName, Schema>(supabaseUrl, supabaseKey, {
 		...options,
 		global: {
@@ -74,7 +77,7 @@ export function createServerComponentClient<
 			}
 		},
 		auth: {
-			storageKey: cookieOptions?.name,
+			storageKey,
 			storage: new NextServerComponentAuthStorageAdapter(context, cookieOptions)
 		}
 	});
