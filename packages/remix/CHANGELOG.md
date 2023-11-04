@@ -1,5 +1,13 @@
 # @supabase/auth-helpers-remix
 
+## 0.2.6
+
+### Patch Changes
+
+- f7e5c2d: Revert cookie name to storage key change
+- Updated dependencies [f7e5c2d]
+  - @supabase/auth-helpers-shared@0.6.3
+
 ## 0.2.5
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @supabase/ssr
 
+## 0.0.9
+
+### Patch Changes
+
+- f7e5c2d: Revert cookie name to storage key change
+
 ## 0.0.8
 
 ### Patch Changes

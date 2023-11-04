@@ -1,5 +1,11 @@
 # shared
 
+## 0.6.3
+
+### Patch Changes
+
+- f7e5c2d: Revert cookie name to storage key change
+
 ## 0.6.2
 
 ### Patch Changes
