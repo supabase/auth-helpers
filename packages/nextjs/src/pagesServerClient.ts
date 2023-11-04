@@ -87,9 +87,6 @@ export function createPagesServerClient<
 		);
 	}
 
-	const storageKey = cookieOptions?.name;
-	delete cookieOptions?.name;
-
 	return createSupabaseClient<Database, SchemaName, Schema>(supabaseUrl, supabaseKey, {
 		...options,
 		global: {
@@ -100,7 +97,6 @@ export function createPagesServerClient<
 			}
 		},
 		auth: {
-			storageKey,
 			storage: new NextServerAuthStorageAdapter(context, cookieOptions)
 		}
 	});

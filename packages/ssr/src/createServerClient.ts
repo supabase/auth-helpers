@@ -38,9 +38,6 @@ export function createServerClient<
 
 	const { cookies, cookieOptions, ...userDefinedClientOptions } = options;
 
-	const storageKey = cookieOptions?.name;
-	delete cookieOptions?.name;
-
 	const cookieClientOptions = {
 		global: {
 			headers: {
@@ -52,7 +49,6 @@ export function createServerClient<
 			autoRefreshToken: isBrowser(),
 			detectSessionInUrl: isBrowser(),
 			persistSession: true,
-			storageKey,
 			storage: {
 				getItem: async (key: string) => {
 					const chunkedCookie = await combineChunks(key, async (chunkName: string) => {

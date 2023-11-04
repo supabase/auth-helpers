@@ -88,9 +88,6 @@ export function createMiddlewareClient<
 		);
 	}
 
-	const storageKey = cookieOptions?.name;
-	delete cookieOptions?.name;
-
 	return createSupabaseClient<Database, SchemaName, Schema>(supabaseUrl, supabaseKey, {
 		...options,
 		global: {
@@ -101,7 +98,6 @@ export function createMiddlewareClient<
 			}
 		},
 		auth: {
-			storageKey,
 			storage: new NextMiddlewareAuthStorageAdapter(context, cookieOptions)
 		}
 	});

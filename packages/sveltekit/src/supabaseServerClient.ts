@@ -82,9 +82,6 @@ export function createSupabaseServerClient<
 	cookieOptions?: CookieOptionsWithName;
 	expiryMargin?: number;
 }): SupabaseClient<Database, SchemaName, Schema> {
-	const storageKey = cookieOptions?.name;
-	delete cookieOptions?.name;
-
 	const client = createSupabaseClient<Database, SchemaName, Schema>(supabaseUrl, supabaseKey, {
 		...options,
 		global: {
@@ -95,7 +92,6 @@ export function createSupabaseServerClient<
 			}
 		},
 		auth: {
-			storageKey,
 			storage: new SvelteKitServerAuthStorageAdapter(event, cookieOptions, expiryMargin)
 		}
 	});
