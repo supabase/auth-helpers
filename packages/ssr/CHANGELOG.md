@@ -1,5 +1,11 @@
 # @supabase/ssr
 
+## 0.0.8
+
+### Patch Changes
+
+- 5893215: Update storage key name with cookie name
+
 ## 0.0.7
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # @supabase/auth-helpers-nextjs
 
+## 0.8.6
+
+### Patch Changes
+
+- 5893215: Update storage key name with cookie name
+- Updated dependencies [5893215]
+  - @supabase/auth-helpers-shared@0.6.2
+
 ## 0.8.5
 
 ### Patch Changes
