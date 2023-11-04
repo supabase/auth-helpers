@@ -1,5 +1,11 @@
 # shared
 
+## 0.6.2
+
+### Patch Changes
+
+- 5893215: Reduce cookie chunk size
+
 ## 0.6.1
 
 ### Patch Changes
