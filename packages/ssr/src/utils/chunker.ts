@@ -4,7 +4,7 @@ interface Chunk {
 }
 
 function createChunkRegExp(chunkSize: number) {
-	return new RegExp('.{1,' + chunkSize + '}', 'g');
+	return new RegExp(`(.{1,${chunkSize}})(?=%[0-9A-Fa-f]{2}|$)`, 'g');
 }
 
 const MAX_CHUNK_SIZE = 3180;
@@ -13,24 +13,21 @@ const MAX_CHUNK_REGEXP = createChunkRegExp(MAX_CHUNK_SIZE);
 /**
  * create chunks from a string and return an array of object
  */
+
 export function createChunks(key: string, value: string, chunkSize?: number): Chunk[] {
 	const re = chunkSize !== undefined ? createChunkRegExp(chunkSize) : MAX_CHUNK_REGEXP;
-	// check the length of the string to work out if it should be returned or chunked
-	const chunkCount = Math.ceil(value.length / (chunkSize ?? MAX_CHUNK_SIZE));
+	const encodedValue = encodeURIComponent(value);
 
-	if (chunkCount === 1) {
+	if (encodedValue.length <= (chunkSize ?? MAX_CHUNK_SIZE)) {
 		return [{ name: key, value }];
 	}
 
-	const chunks: Chunk[] = [];
-	// split string into a array based on the regex
-	const values = value.match(re);
-	values?.forEach((value, i) => {
-		const name = `${key}.${i}`;
-		chunks.push({ name, value });
-	});
+	const encodedChunks = encodedValue.match(re) || [];
 
-	return chunks;
+	return encodedChunks.map((chunk, index) => ({
+		name: `${key}.${index}`,
+		value: decodeURIComponent(chunk)
+	}));
 }
 
 // Get fully constructed chunks
