@@ -1,5 +1,11 @@
 # @supabase/ssr
 
+## 0.0.10
+
+### Patch Changes
+
+- 1e079c3: Set cookie default to httpOnly: false
+
 ## 0.0.9
 
 ### Patch Changes
