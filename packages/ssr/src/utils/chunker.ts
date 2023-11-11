@@ -4,7 +4,7 @@ interface Chunk {
 }
 
 function createChunkRegExp(chunkSize: number) {
-	return new RegExp(`(.{1,${chunkSize}})(?=%[0-9A-Fa-f]{2}|$)`, 'g');
+	return new RegExp('.{1,' + chunkSize + '}', 'g');
 }
 
 const MAX_CHUNK_SIZE = 3180;
