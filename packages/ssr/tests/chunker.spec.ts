@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { combineChunks, createChunks } from '../src/utils/chunker';
-import { CHUNK_STRING, DOUBLE_CHUNK_STRING, len } from './helper';
+import { CHUNK_STRING, DOUBLE_CHUNK_STRING, len, UNICODE_CHUNK_STRING } from './helper';
 
 describe('chunker', () => {
 	it('should not chunk and return one item', () => {
@@ -43,6 +43,21 @@ describe('chunker', () => {
 		});
 		expect(chunked.length).toBe(101);
 		expect(combined).toBe(CHUNK_STRING);
+	});
+
+	it('should maintain chunk size due to percent encoding', () => {
+		const chunked = createChunks('my-chunks', UNICODE_CHUNK_STRING, 10);
+
+		console.log(
+			'fixedValues',
+			chunked.map((chunk) => [
+				chunk.value,
+				encodeURIComponent(chunk.value),
+				encodeURIComponent(chunk.value).length
+			])
+		);
+
+		expect(chunked.some((chunk) => encodeURIComponent(chunk.value).length <= 10)).toBeTruthy();
 	});
 
 	it('should chunk and return correct size chunks', async () => {

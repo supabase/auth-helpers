@@ -3,7 +3,7 @@ interface Chunk {
 	value: string;
 }
 
-function createChunkRegExp(chunkSize: number) {
+function createChunkRegExp(chunkSize: number): RegExp {
 	return new RegExp('.{1,' + chunkSize + '}', 'g');
 }
 
@@ -14,20 +14,45 @@ const MAX_CHUNK_REGEXP = createChunkRegExp(MAX_CHUNK_SIZE);
  * create chunks from a string and return an array of object
  */
 
-export function createChunks(key: string, value: string, chunkSize?: number): Chunk[] {
-	const re = chunkSize !== undefined ? createChunkRegExp(chunkSize) : MAX_CHUNK_REGEXP;
-	const encodedValue = encodeURIComponent(value);
-
-	if (encodedValue.length <= (chunkSize ?? MAX_CHUNK_SIZE)) {
+export function createChunks(
+	key: string,
+	value: string,
+	chunkSize: number = MAX_CHUNK_SIZE
+): Chunk[] {
+	// If the value is within the chunk size limit, return it as is
+	if (encodeURIComponent(value).length <= chunkSize) {
 		return [{ name: key, value }];
 	}
 
-	const encodedChunks = encodedValue.match(re) || [];
+	// Split the value into chunks based on the regular expression
+	const re = chunkSize !== MAX_CHUNK_SIZE ? createChunkRegExp(chunkSize) : MAX_CHUNK_REGEXP;
+	const initialChunks = value.match(re) || [];
 
-	return encodedChunks.map((chunk, index) => ({
-		name: `${key}.${index}`,
-		value: decodeURIComponent(chunk)
-	}));
+	// Recursively handle chunks that are still too large
+	return initialChunks.flatMap((chunk, index) => {
+		return splitChunkIfNeeded(key + '.' + index, chunk, chunkSize);
+	});
+}
+
+function splitChunkIfNeeded(key: string, chunk: string, chunkSize: number): Chunk[] {
+	if (encodeURIComponent(chunk).length <= chunkSize) {
+		return [{ name: key, value: chunk }];
+	}
+
+	// If the chunk is too large, split it into smaller chunks recursively
+	const midPoint = Math.floor(chunk.length / 2);
+	if (midPoint < 2) {
+		// If the chunk is too small to split, return it as is
+		// Maybe we should throw an error here?
+		return [{ name: key, value: chunk }];
+	}
+	const leftChunk = chunk.substring(0, midPoint);
+	const rightChunk = chunk.substring(midPoint);
+
+	return [
+		...splitChunkIfNeeded(key + '.1', leftChunk, chunkSize),
+		...splitChunkIfNeeded(key + '.2', rightChunk, chunkSize)
+	];
 }
 
 // Get fully constructed chunks
