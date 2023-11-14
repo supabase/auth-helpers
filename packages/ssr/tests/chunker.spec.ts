@@ -47,16 +47,6 @@ describe('chunker', () => {
 
 	it('should maintain chunk size due to percent encoding', () => {
 		const chunked = createChunks('my-chunks', UNICODE_CHUNK_STRING, 10);
-
-		console.log(
-			'fixedValues',
-			chunked.map((chunk) => [
-				chunk.value,
-				encodeURIComponent(chunk.value),
-				encodeURIComponent(chunk.value).length
-			])
-		);
-
 		expect(chunked.some((chunk) => encodeURIComponent(chunk.value).length <= 10)).toBeTruthy();
 	});
 

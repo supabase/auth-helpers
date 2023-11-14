@@ -19,39 +19,40 @@ export function createChunks(
 	value: string,
 	chunkSize: number = MAX_CHUNK_SIZE
 ): Chunk[] {
-	// If the value is within the chunk size limit, return it as is
 	if (encodeURIComponent(value).length <= chunkSize) {
 		return [{ name: key, value }];
 	}
 
-	// Split the value into chunks based on the regular expression
 	const re = chunkSize !== MAX_CHUNK_SIZE ? createChunkRegExp(chunkSize) : MAX_CHUNK_REGEXP;
 	const initialChunks = value.match(re) || [];
 
-	// Recursively handle chunks that are still too large
-	return initialChunks.flatMap((chunk, index) => {
-		return splitChunkIfNeeded(key + '.' + index, chunk, chunkSize);
+	const splitChunks = initialChunks.map((chunk, index) => splitChunkIfNeeded(chunk, chunkSize));
+	const resultChunks = splitChunks.flat();
+
+	return resultChunks.map((chunk, index) => {
+		return {
+			name: `${key}.${index}`,
+			value: chunk
+		};
 	});
 }
 
-function splitChunkIfNeeded(key: string, chunk: string, chunkSize: number): Chunk[] {
+function splitChunkIfNeeded(chunk: string, chunkSize: number): string[] {
 	if (encodeURIComponent(chunk).length <= chunkSize) {
-		return [{ name: key, value: chunk }];
+		return [chunk];
 	}
 
-	// If the chunk is too large, split it into smaller chunks recursively
 	const midPoint = Math.floor(chunk.length / 2);
 	if (midPoint < 2) {
-		// If the chunk is too small to split, return it as is
-		// Maybe we should throw an error here?
-		return [{ name: key, value: chunk }];
+		return [chunk];
 	}
+
 	const leftChunk = chunk.substring(0, midPoint);
 	const rightChunk = chunk.substring(midPoint);
 
 	return [
-		...splitChunkIfNeeded(key + '.1', leftChunk, chunkSize),
-		...splitChunkIfNeeded(key + '.2', rightChunk, chunkSize)
+		...splitChunkIfNeeded(leftChunk, chunkSize),
+		...splitChunkIfNeeded(rightChunk, chunkSize)
 	];
 }
 
