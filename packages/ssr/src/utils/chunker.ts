@@ -3,7 +3,7 @@ interface Chunk {
 	value: string;
 }
 
-function createChunkRegExp(chunkSize: number): RegExp {
+function createChunkRegExp(chunkSize: number) {
 	return new RegExp('.{1,' + chunkSize + '}', 'g');
 }
 
@@ -13,47 +13,24 @@ const MAX_CHUNK_REGEXP = createChunkRegExp(MAX_CHUNK_SIZE);
 /**
  * create chunks from a string and return an array of object
  */
+export function createChunks(key: string, value: string, chunkSize?: number): Chunk[] {
+	const re = chunkSize !== undefined ? createChunkRegExp(chunkSize) : MAX_CHUNK_REGEXP;
+	// check the length of the string to work out if it should be returned or chunked
+	const chunkCount = Math.ceil(value.length / (chunkSize ?? MAX_CHUNK_SIZE));
 
-export function createChunks(
-	key: string,
-	value: string,
-	chunkSize: number = MAX_CHUNK_SIZE
-): Chunk[] {
-	if (encodeURIComponent(value).length <= chunkSize) {
+	if (chunkCount === 1) {
 		return [{ name: key, value }];
 	}
 
-	const re = chunkSize !== MAX_CHUNK_SIZE ? createChunkRegExp(chunkSize) : MAX_CHUNK_REGEXP;
-	const initialChunks = value.match(re) || [];
-
-	const splitChunks = initialChunks.map((chunk, index) => splitChunkIfNeeded(chunk, chunkSize));
-	const resultChunks = splitChunks.flat();
-
-	return resultChunks.map((chunk, index) => {
-		return {
-			name: `${key}.${index}`,
-			value: chunk
-		};
+	const chunks: Chunk[] = [];
+	// split string into a array based on the regex
+	const values = value.match(re);
+	values?.forEach((value, i) => {
+		const name = `${key}.${i}`;
+		chunks.push({ name, value });
 	});
-}
 
-function splitChunkIfNeeded(chunk: string, chunkSize: number): string[] {
-	if (encodeURIComponent(chunk).length <= chunkSize) {
-		return [chunk];
-	}
-
-	const midPoint = Math.floor(chunk.length / 2);
-	if (midPoint < 2) {
-		return [chunk];
-	}
-
-	const leftChunk = chunk.substring(0, midPoint);
-	const rightChunk = chunk.substring(midPoint);
-
-	return [
-		...splitChunkIfNeeded(leftChunk, chunkSize),
-		...splitChunkIfNeeded(rightChunk, chunkSize)
-	];
+	return chunks;
 }
 
 // Get fully constructed chunks
