@@ -28,7 +28,8 @@ export function parseSupabaseCookie(str: string | null | undefined): Partial<Ses
 	}
 
 	try {
-		const session = JSON.parse(str);
+		const decoder = new TextDecoder();
+		const session = JSON.parse(decoder.decode(base64url.decode(str)));
 		if (!session) {
 			return null;
 		}
@@ -42,7 +43,6 @@ export function parseSupabaseCookie(str: string | null | undefined): Partial<Ses
 
 		const [_header, payloadStr, _signature] = session[0].split('.');
 		const payload = base64url.decode(payloadStr);
-		const decoder = new TextDecoder();
 
 		const { exp, sub, ...user } = JSON.parse(decoder.decode(payload));
 
@@ -67,11 +67,13 @@ export function parseSupabaseCookie(str: string | null | undefined): Partial<Ses
 }
 
 export function stringifySupabaseSession(session: Session): string {
-	return JSON.stringify([
-		session.access_token,
-		session.refresh_token,
-		session.provider_token,
-		session.provider_refresh_token,
-		session.user?.factors ?? null
-	]);
+	return base64url.encode(
+		JSON.stringify([
+			session.access_token,
+			session.refresh_token,
+			session.provider_token,
+			session.provider_refresh_token,
+			session.user?.factors ?? null
+		])
+	);
 }
