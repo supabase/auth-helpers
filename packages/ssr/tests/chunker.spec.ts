@@ -16,12 +16,12 @@ describe('chunker', () => {
 			});
 			return chunk?.value;
 		});
-		expect(len(`my-chunks=${CHUNK_STRING}`)).toBe(3621);
+		expect(len(`my-chunks=${CHUNK_STRING}`)).toBe(3921);
 		expect(chunked.length).toBe(2);
 		expect(combined).toBe(CHUNK_STRING);
 	});
 
-	it('should chunk and return twelve chunks', async () => {
+	it('should chunk and return thirteen chunks', async () => {
 		const chunked = createChunks('my-chunks', CHUNK_STRING, 320);
 		const combined = await combineChunks('my-chunks', (name) => {
 			let chunk = chunked.find((chunk) => {
@@ -29,11 +29,11 @@ describe('chunker', () => {
 			});
 			return chunk?.value;
 		});
-		expect(chunked.length).toBe(12);
+		expect(chunked.length).toBe(13);
 		expect(combined).toBe(CHUNK_STRING);
 	});
 
-	it('should chunk and return one hundred and one chunks', async () => {
+	it('should chunk and return one hundred and nine chunks', async () => {
 		const chunked = createChunks('my-chunks', CHUNK_STRING, 36);
 		const combined = await combineChunks('my-chunks', (name) => {
 			let chunk = chunked.find((chunk) => {
@@ -41,7 +41,7 @@ describe('chunker', () => {
 			});
 			return chunk?.value;
 		});
-		expect(chunked.length).toBe(101);
+		expect(chunked.length).toBe(109);
 		expect(combined).toBe(CHUNK_STRING);
 	});
 
@@ -57,11 +57,11 @@ describe('chunker', () => {
 
 		chunked.forEach((chunk, i) => {
 			expect(chunk.name).toBe(`${key}.${i}`);
-			expect([3217, 3217, 899]).toContain(len(`${chunk.name}=${chunk.value}`));
+			expect([3837, 3837, 259]).toContain(len(`${chunk.name}=${chunk.value}`));
 		});
 
 		expect(chunked.length).toBe(3);
-		expect(len(`${key}=${DOUBLE_CHUNK_STRING}`)).toBe(7257);
+		expect(len(`${key}=${DOUBLE_CHUNK_STRING}`)).toBe(7857);
 		expect(combined).toBe(DOUBLE_CHUNK_STRING);
 	});
 });

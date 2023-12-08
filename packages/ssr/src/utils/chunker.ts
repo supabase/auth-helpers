@@ -7,7 +7,7 @@ function createChunkRegExp(chunkSize: number) {
 	return new RegExp('.{1,' + chunkSize + '}', 'g');
 }
 
-const MAX_CHUNK_SIZE = 3180;
+const MAX_CHUNK_SIZE = 3800;
 const MAX_CHUNK_REGEXP = createChunkRegExp(MAX_CHUNK_SIZE);
 
 /**
