@@ -4,7 +4,9 @@ import {
 	DEFAULT_COOKIE_OPTIONS,
 	combineChunks,
 	createChunks,
+	decodeBase64Url,
 	deleteChunks,
+	encodeBase64Url,
 	isBrowser
 } from './utils';
 import { parse, serialize } from 'cookie';
@@ -72,10 +74,10 @@ export function createBrowserClient<
 							return cookie[chunkName];
 						}
 					});
-					return chunkedCookie;
+					return decodeBase64Url(chunkedCookie);
 				},
 				setItem: async (key: string, value: string) => {
-					const chunks = await createChunks(key, value);
+					const chunks = await createChunks(key, encodeBase64Url(value));
 					await Promise.all(
 						chunks.map(async (chunk) => {
 							if (typeof cookies.set === 'function') {
