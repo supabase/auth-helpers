@@ -1,5 +1,11 @@
 # @supabase/auth-helpers-sveltekit
 
+## 0.11.0
+
+### Minor Changes
+
+- dee94aa: add support for sveltekit 2
+
 ## 0.10.7
 
 ### Patch Changes
