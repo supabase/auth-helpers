@@ -21,6 +21,7 @@ export class SvelteKitServerAuthStorageAdapter extends CookieAuthStorageAdapter 
 	protected setCookie(name: string, value: string) {
 		this.event.cookies.set(name, value, {
 			httpOnly: false,
+			path: '/',
 			...this.cookieOptions
 		});
 	}
@@ -28,6 +29,7 @@ export class SvelteKitServerAuthStorageAdapter extends CookieAuthStorageAdapter 
 	protected deleteCookie(name: string) {
 		this.event.cookies.delete(name, {
 			httpOnly: false,
+			path: '/',
 			...this.cookieOptions
 		});
 	}
