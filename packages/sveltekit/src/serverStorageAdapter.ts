@@ -3,6 +3,8 @@ import { Session } from '@supabase/supabase-js';
 import { RequestEvent } from '@sveltejs/kit';
 
 export class SvelteKitServerAuthStorageAdapter extends CookieAuthStorageAdapter {
+	readonly isServer = true;
+
 	private isInitialDelete = true;
 	private currentSession: Partial<Session> | null = null;
 

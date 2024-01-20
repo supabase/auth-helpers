@@ -11,6 +11,8 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import type { GenericSchema } from '@supabase/supabase-js/dist/module/lib/types';
 
 class NextServerComponentAuthStorageAdapter extends CookieAuthStorageAdapter {
+	readonly isServer = true;
+
 	constructor(
 		private readonly context: {
 			cookies: () => ReturnType<typeof cookies>;
