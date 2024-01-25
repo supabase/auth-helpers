@@ -3,34 +3,62 @@ interface Chunk {
 	value: string;
 }
 
-function createChunkRegExp(chunkSize: number) {
-	return new RegExp('.{1,' + chunkSize + '}', 'g');
-}
-
 const MAX_CHUNK_SIZE = 3180;
-const MAX_CHUNK_REGEXP = createChunkRegExp(MAX_CHUNK_SIZE);
 
 /**
  * create chunks from a string and return an array of object
  */
 export function createChunks(key: string, value: string, chunkSize?: number): Chunk[] {
-	const re = chunkSize !== undefined ? createChunkRegExp(chunkSize) : MAX_CHUNK_REGEXP;
-	// check the length of the string to work out if it should be returned or chunked
-	const chunkCount = Math.ceil(value.length / (chunkSize ?? MAX_CHUNK_SIZE));
+	const resolvedChunkSize = chunkSize ?? MAX_CHUNK_SIZE;
 
-	if (chunkCount === 1) {
+	let encodedValue = encodeURIComponent(value);
+
+	if (encodedValue.length <= resolvedChunkSize) {
 		return [{ name: key, value }];
 	}
 
-	const chunks: Chunk[] = [];
-	// split string into a array based on the regex
-	const values = value.match(re);
-	values?.forEach((value, i) => {
-		const name = `${key}.${i}`;
-		chunks.push({ name, value });
-	});
+	const chunks = [];
 
-	return chunks;
+	while (encodedValue.length > 0) {
+		let encodedChunkHead = encodedValue.slice(0, resolvedChunkSize);
+
+		const lastEscapePos = encodedChunkHead.lastIndexOf('%');
+
+		// Check if the last escaped character is truncated.
+		if (lastEscapePos > resolvedChunkSize - 3) {
+			// If so, reslice the string to exclude the whole escape sequence.
+			// We only reduce the size of the string as the chunk must
+			// be smaller than the chunk size.
+			encodedChunkHead = encodedChunkHead.slice(0, lastEscapePos);
+		}
+
+		let valueHead;
+
+		// Check if the chunk was split along a valid unicode boundary.
+		while (encodedChunkHead.length > 0) {
+			try {
+				// Try to decode the chunk back and see if it is valid.
+				// Stop when the chunk is valid.
+				valueHead = decodeURIComponent(encodedChunkHead);
+				break;
+			} catch (error) {
+				if (
+					error instanceof URIError &&
+					encodedChunkHead.at(-3) === '%' &&
+					encodedChunkHead.length > 3
+				) {
+					encodedChunkHead = encodedChunkHead.slice(0, encodedChunkHead.length - 3);
+				} else {
+					throw error;
+				}
+			}
+		}
+
+		chunks.push(valueHead);
+		encodedValue = encodedValue.slice(encodedChunkHead.length);
+	}
+
+	return chunks.map((value, i) => ({ name: `${key}.${i}`, value }));
 }
 
 // Get fully constructed chunks
