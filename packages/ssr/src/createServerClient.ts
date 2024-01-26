@@ -38,6 +38,14 @@ export function createServerClient<
 
 	const { cookies, cookieOptions, ...userDefinedClientOptions } = options;
 
+	// use the cookie name as the storageKey value if it's set
+	if (cookieOptions?.name) {
+		userDefinedClientOptions.auth = {
+			...userDefinedClientOptions.auth,
+			storageKey: cookieOptions.name
+		};
+	}
+
 	const cookieClientOptions = {
 		global: {
 			headers: {
