@@ -17,7 +17,7 @@ export function createChunks(key: string, value: string, chunkSize?: number): Ch
 		return [{ name: key, value }];
 	}
 
-	const chunks = [];
+	const chunks: string[] = [];
 
 	while (encodedValue.length > 0) {
 		let encodedChunkHead = encodedValue.slice(0, resolvedChunkSize);
@@ -32,7 +32,7 @@ export function createChunks(key: string, value: string, chunkSize?: number): Ch
 			encodedChunkHead = encodedChunkHead.slice(0, lastEscapePos);
 		}
 
-		let valueHead;
+		let valueHead: string;
 
 		// Check if the chunk was split along a valid unicode boundary.
 		while (encodedChunkHead.length > 0) {
