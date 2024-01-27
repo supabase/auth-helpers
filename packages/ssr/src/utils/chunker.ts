@@ -32,7 +32,7 @@ export function createChunks(key: string, value: string, chunkSize?: number): Ch
 			encodedChunkHead = encodedChunkHead.slice(0, lastEscapePos);
 		}
 
-		let valueHead: string;
+		let valueHead: string = '';
 
 		// Check if the chunk was split along a valid unicode boundary.
 		while (encodedChunkHead.length > 0) {
