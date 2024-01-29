@@ -14,7 +14,7 @@
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^2.1.0",
-		"@sveltejs/kit": "^1.23.0",
+		"@sveltejs/kit": "^1.30.3",
 		"@typescript-eslint/eslint-plugin": "^5.62.0",
 		"@typescript-eslint/parser": "^5.62.0",
 		"eslint": "^8.47.0",
@@ -28,7 +28,7 @@
 		"tsconfig": "workspace:*",
 		"tslib": "^2.6.2",
 		"typescript": "^5.2.2",
-		"vite": "^4.4.9"
+		"vite": "^5.0.0"
 	},
 	"type": "module",
 	"dependencies": {
