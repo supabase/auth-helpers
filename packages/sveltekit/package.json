@@ -56,6 +56,6 @@
 	},
 	"peerDependencies": {
 		"@supabase/supabase-js": "^2.19.0",
-		"@sveltejs/kit": "^1.15.4 || ^2.0.0"
+		"@sveltejs/kit": "^1.30.3 || ^2.0.0"
 	}
 }
