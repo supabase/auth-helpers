@@ -132,6 +132,8 @@ export function createBrowserClient<
 }
 
 class RemixServerAuthStorageAdapter extends CookieAuthStorageAdapter {
+	readonly isServer = true;
+
 	constructor(
 		private readonly request: Request,
 		private readonly response: Response,

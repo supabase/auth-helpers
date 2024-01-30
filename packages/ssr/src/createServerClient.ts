@@ -58,6 +58,8 @@ export function createServerClient<
 			detectSessionInUrl: isBrowser(),
 			persistSession: true,
 			storage: {
+				// to signal to the libraries that these cookies are coming from a server environment and their value should not be trusted
+				isServer: true,
 				getItem: async (key: string) => {
 					const chunkedCookie = await combineChunks(key, async (chunkName: string) => {
 						if (typeof cookies.get === 'function') {

@@ -62,6 +62,8 @@ export function createBrowserClient<
 			detectSessionInUrl: isBrowser(),
 			persistSession: true,
 			storage: {
+				// this client is used on the browser so cookies can be trusted
+				isServer: false,
 				getItem: async (key: string) => {
 					const chunkedCookie = await combineChunks(key, async (chunkName) => {
 						if (typeof cookies.get === 'function') {
