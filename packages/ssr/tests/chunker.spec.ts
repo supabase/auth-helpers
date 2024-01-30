@@ -64,4 +64,83 @@ describe('chunker', () => {
 		expect(len(`${key}=${DOUBLE_CHUNK_STRING}`)).toBe(7257);
 		expect(combined).toBe(DOUBLE_CHUNK_STRING);
 	});
+
+	it('should correctly break between unicode boundaries in escaped characters', () => {
+		const test = '   ';
+		const chunks = createChunks('key', test, 4);
+		expect(chunks).toEqual([
+			{
+				name: 'key.0',
+				value: ' '
+			},
+			{
+				name: 'key.1',
+				value: ' '
+			},
+			{
+				name: 'key.2',
+				value: ' '
+			}
+		]);
+
+		expect(chunks.map((char) => char.value).join('')).toEqual(test);
+	});
+
+	describe('should correctly break between unicode boundaries in long unicode', () => {
+		it('should correctly break between unicode boundaries in long unicode (4 bytes)', () => {
+			const test = '🤦🏻‍♂️';
+			const chunksAtStartBorder = createChunks('key', test, 12);
+			const chunksAtEndBorder = createChunks('key', test, 17);
+			expect(chunksAtStartBorder).toEqual(chunksAtEndBorder);
+			expect(chunksAtStartBorder).toEqual([
+				{
+					name: 'key.0',
+					value: '🤦'
+				},
+				{
+					name: 'key.1',
+					value: '🏻'
+				},
+				{
+					name: 'key.2',
+					value: '‍'
+				},
+				{
+					name: 'key.3',
+					value: '♂'
+				},
+				{
+					name: 'key.4',
+					value: '️'
+				}
+			]);
+			expect(chunksAtStartBorder.map((char) => char.value).join('')).toEqual(test);
+		});
+
+		it('should correctly break between unicode boundaries in long unicode (5 bytes)', () => {
+			const test = '🤦🏻‍♂️';
+			const chunksAtStartBorder = createChunks('key', test, 18);
+			const chunksAtEndBorder = createChunks('key', test, 20);
+			expect(chunksAtStartBorder).toEqual(chunksAtEndBorder);
+			expect(chunksAtStartBorder).toEqual([
+				{
+					name: 'key.0',
+					value: '🤦'
+				},
+				{
+					name: 'key.1',
+					value: '🏻'
+				},
+				{
+					name: 'key.2',
+					value: '‍♂'
+				},
+				{
+					name: 'key.3',
+					value: '️'
+				}
+			]);
+			expect(chunksAtStartBorder.map((char) => char.value).join('')).toEqual(test);
+		});
+	});
 });
