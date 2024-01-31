@@ -1,5 +1,11 @@
 # @supabase/auth-helpers-sveltekit
 
+## 0.12.0
+
+### Minor Changes
+
+- 18327fc: add isServer property to server-side storage adaptors
+
 ## 0.11.0
 
 ### Minor Changes

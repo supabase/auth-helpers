@@ -1,5 +1,11 @@
 # @supabase/auth-helpers-nextjs
 
+## 0.9.0
+
+### Minor Changes
+
+- 18327fc: add isServer property to server-side storage adaptors
+
 ## 0.8.7
 
 ### Patch Changes
