@@ -1,5 +1,11 @@
 # @supabase/auth-helpers-remix
 
+## 0.3.0
+
+### Minor Changes
+
+- 18327fc: add isServer property to server-side storage adaptors
+
 ## 0.2.6
 
 ### Patch Changes

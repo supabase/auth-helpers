@@ -1,5 +1,13 @@
 # @supabase/ssr
 
+## 0.1.0
+
+### Minor Changes
+
+- 18327fc: add isServer property to server-side storage adaptors
+- 18327fc: fix cookie chunking length calculation
+- 8ed42ff: use custom cookie name set
+
 ## 0.0.10
 
 ### Patch Changes
