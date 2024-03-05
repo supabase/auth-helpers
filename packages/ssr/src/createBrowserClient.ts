@@ -50,6 +50,13 @@ export function createBrowserClient<
 		({ cookies, isSingleton = true, cookieOptions, ...userDefinedClientOptions } = options);
 	}
 
+	if (cookieOptions?.name) {
+		userDefinedClientOptions.auth = {
+			...userDefinedClientOptions.auth,
+			storageKey: cookieOptions.name
+		};
+	}
+
 	const cookieClientOptions = {
 		global: {
 			headers: {
