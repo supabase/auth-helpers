@@ -30,7 +30,7 @@ export function createBrowserClient<
 	supabaseUrl: string,
 	supabaseKey: string,
 	options?: SupabaseClientOptions<SchemaName> & {
-		cookies: CookieMethods;
+		cookies?: CookieMethods;
 		cookieOptions?: CookieOptionsWithName;
 		isSingleton?: boolean;
 	}
@@ -47,7 +47,7 @@ export function createBrowserClient<
 	let userDefinedClientOptions;
 
 	if (options) {
-		({ cookies, isSingleton = true, cookieOptions, ...userDefinedClientOptions } = options);
+		({ cookies = {}, isSingleton = true, cookieOptions, ...userDefinedClientOptions } = options);
 	}
 
 	const cookieClientOptions = {
