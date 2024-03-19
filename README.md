@@ -2,6 +2,10 @@
 
 A collection of framework specific Auth utilities for working with Supabase.
 
+### SSR
+
+We generally recommend using the new `@supabase/ssr` package instead of `auth-helpers`. `@supabase/ssr` takes the core concepts of the Auth Helpers package and makes them available to any server framework. You can read more about `ssr` in our [documentation](https://supabase.com/docs/guides/auth/auth-helpers).
+
 ## Supported Frameworks
 
 - [Next.js](https://nextjs.org) [[Documentation](https://supabase.com/docs/guides/auth/auth-helpers/nextjs)]
