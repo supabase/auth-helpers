@@ -74,7 +74,7 @@ export function createSupabaseLoadClient<
 	/**
 	 * The initial session from the server.
 	 */
-	serverSession: Session | null;
+	serverSession: Session | null | undefined;
 	options?: SupabaseClientOptionsWithoutAuth<SchemaName>;
 	cookieOptions?: CookieOptionsWithName;
 }): SupabaseClient<Database, SchemaName, Schema> {
