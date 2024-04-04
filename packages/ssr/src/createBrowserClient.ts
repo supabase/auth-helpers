@@ -48,7 +48,7 @@ export function createBrowserClient<
 
 	if (options) {
 		({ cookies, isSingleton = true, cookieOptions, ...userDefinedClientOptions } = options);
-		cookies = cookies || {}; 
+		cookies = cookies || {};
 	}
 
 	const cookieClientOptions = {
