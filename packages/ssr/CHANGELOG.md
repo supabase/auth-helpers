@@ -1,5 +1,11 @@
 # @supabase/ssr
 
+## 0.2.0
+
+### Minor Changes
+
+- faf9eac: Miscellaneous fixes to createBrowserClient
+
 ## 0.1.0
 
 ### Minor Changes
