@@ -1,5 +1,16 @@
 # @supabase/auth-helpers-nextjs
 
+## 0.10.0
+
+### Minor Changes
+
+- 9e7ff76: upgrade supabase-js version to v2.42.0
+
+### Patch Changes
+
+- Updated dependencies [9e7ff76]
+  - @supabase/auth-helpers-shared@0.7.0
+
 ## 0.9.0
 
 ### Minor Changes

@@ -1,5 +1,12 @@
 # @supabase/ssr
 
+## 0.3.0
+
+### Minor Changes
+
+- 8d85be4: fix custom cookie options in browser client
+- 9e7ff76: upgrade supabase-js version to v2.42.0
+
 ## 0.2.0
 
 ### Minor Changes

@@ -1,5 +1,11 @@
 # @supabase/auth-helpers-react
 
+## 0.5.0
+
+### Minor Changes
+
+- 9e7ff76: upgrade supabase-js version to v2.42.0
+
 ## 0.4.2
 
 ### Patch Changes
