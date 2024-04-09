@@ -40,7 +40,7 @@
 	},
 	"homepage": "https://github.com/supabase/auth-helpers/tree/main/packages/sveltekit#readme",
 	"devDependencies": {
-		"@supabase/supabase-js": "2.39.8",
+		"@supabase/supabase-js": "2.42.0",
 		"@sveltejs/kit": "^2.4.3",
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
 		"rimraf": "^4.4.1",
