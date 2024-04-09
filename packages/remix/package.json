@@ -31,7 +31,7 @@
 		"@remix-run/node": "^1.19.3",
 		"@remix-run/react": "^1.19.3",
 		"@remix-run/serve": "^1.19.3",
-		"@supabase/supabase-js": "2.39.8",
+		"@supabase/supabase-js": "2.42.0",
 		"config": "workspace:*",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
