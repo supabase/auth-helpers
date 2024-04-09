@@ -51,6 +51,13 @@ export function createBrowserClient<
 		cookies = cookies || {};
 	}
 
+	if (cookieOptions?.name) {
+		userDefinedClientOptions.auth = {
+			...userDefinedClientOptions.auth,
+			storageKey: cookieOptions.name
+		};
+	}
+
 	const cookieClientOptions = {
 		global: {
 			headers: {
