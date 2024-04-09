@@ -264,8 +264,8 @@ importers:
         version: 2.6.0
     devDependencies:
       '@supabase/supabase-js':
-        specifier: 2.19.0
-        version: 2.19.0
+        specifier: 2.39.8
+        version: 2.39.8
       '@types/set-cookie-parser':
         specifier: ^2.4.3
         version: 2.4.7
@@ -297,8 +297,8 @@ importers:
   packages/react:
     devDependencies:
       '@supabase/supabase-js':
-        specifier: 2.19.0
-        version: 2.19.0
+        specifier: 2.39.8
+        version: 2.39.8
       '@types/react':
         specifier: ^17.0.65
         version: 17.0.75
@@ -343,8 +343,8 @@ importers:
         specifier: ^1.19.3
         version: 1.19.3
       '@supabase/supabase-js':
-        specifier: 2.19.0
-        version: 2.19.0
+        specifier: 2.39.8
+        version: 2.39.8
       config:
         specifier: workspace:*
         version: link:../config
@@ -374,8 +374,8 @@ importers:
         version: 4.15.4
     devDependencies:
       '@supabase/supabase-js':
-        specifier: 2.19.0
-        version: 2.19.0
+        specifier: 2.39.8
+        version: 2.39.8
       '@types/cookie':
         specifier: ^0.5.1
         version: 0.5.4
@@ -436,8 +436,8 @@ importers:
         version: link:../shared
     devDependencies:
       '@supabase/supabase-js':
-        specifier: 2.19.0
-        version: 2.19.0
+        specifier: 2.39.8
+        version: 2.39.8
       '@sveltejs/kit':
         specifier: ^2.4.3
         version: 2.5.0(@sveltejs/vite-plugin-svelte@3.0.1)(svelte@4.2.9)(vite@5.0.12)
@@ -3320,21 +3320,6 @@ packages:
     dependencies:
       '@supabase/node-fetch': 2.6.15
 
-  /@supabase/supabase-js@2.19.0:
-    resolution: {integrity: sha512-LO+uMy4lnmLvpdF5vGSEQgurxoj8qx4LiZve555JeAnrnuyubvDLZ8Kk5nU0+9KRi4VGQIeD5znqMh0OaACj4w==}
-    dependencies:
-      '@supabase/functions-js': 2.1.5
-      '@supabase/gotrue-js': 2.62.2
-      '@supabase/postgrest-js': 1.9.2
-      '@supabase/realtime-js': 2.9.3
-      '@supabase/storage-js': 2.5.5
-      cross-fetch: 3.1.8
-    transitivePeerDependencies:
-      - bufferutil
-      - encoding
-      - utf-8-validate
-    dev: true
-
   /@supabase/supabase-js@2.33.1:
     resolution: {integrity: sha512-jA00rquPTppPOHpBB6KABW98lfg0gYXcuGqP3TB1iiduznRVsi3GGk2qBKXPDLMYSe0kRlQp5xCwWWthaJr8eA==}
     dependencies:
@@ -3363,6 +3348,20 @@ packages:
       - bufferutil
       - utf-8-validate
     dev: false
+
+  /@supabase/supabase-js@2.39.8:
+    resolution: {integrity: sha512-WpiawHjseIRcCQTZbMJtHUSOepz5+M9qE1jP9BDmg8X7ehALFwgEkiKyHAu59qm/pKP2ryyQXLtu2XZNRbUarw==}
+    dependencies:
+      '@supabase/functions-js': 2.1.5
+      '@supabase/gotrue-js': 2.62.2
+      '@supabase/node-fetch': 2.6.15
+      '@supabase/postgrest-js': 1.9.2
+      '@supabase/realtime-js': 2.9.3
+      '@supabase/storage-js': 2.5.5
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+    dev: true
 
   /@sveltejs/adapter-auto@2.1.1(@sveltejs/kit@1.30.3):
     resolution: {integrity: sha512-nzi6x/7/3Axh5VKQ8Eed3pYxastxoa06Y/bFhWb7h3Nu+nGRVxKAy3+hBJgmPCwWScy8n0TsstZjSVKfyrIHkg==}
