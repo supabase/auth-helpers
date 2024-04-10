@@ -46,6 +46,26 @@ export function createServerClient<
 		};
 	}
 
+	const deleteAllChunks = async (key: string) => {
+		await deleteChunks(
+			key,
+			async (chunkName) => {
+				if (typeof cookies.get === 'function') {
+					return await cookies.get(chunkName);
+				}
+			},
+			async (chunkName) => {
+				if (typeof cookies.remove === 'function') {
+					return await cookies.remove(chunkName, {
+						...DEFAULT_COOKIE_OPTIONS,
+						...cookieOptions,
+						maxAge: 0
+					});
+				}
+			}
+		);
+	};
+
 	const cookieClientOptions = {
 		global: {
 			headers: {
@@ -69,18 +89,22 @@ export function createServerClient<
 					return chunkedCookie;
 				},
 				setItem: async (key: string, value: string) => {
-					const chunks = createChunks(key, value);
-					await Promise.all(
-						chunks.map(async (chunk) => {
-							if (typeof cookies.set === 'function') {
-								await cookies.set(chunk.name, chunk.value, {
-									...DEFAULT_COOKIE_OPTIONS,
-									...cookieOptions,
-									maxAge: DEFAULT_COOKIE_OPTIONS.maxAge
-								});
-							}
-						})
-					);
+					if (typeof cookies.set === 'function') {
+						// first delete all chunks so that there would be no overlap
+						await deleteAllChunks(key);
+
+						const chunks = createChunks(key, value);
+
+						for (let i = 0; i < chunks.length; i += 1) {
+							const chunk = chunks[i];
+
+							await cookies.set(chunk.name, chunk.value, {
+								...DEFAULT_COOKIE_OPTIONS,
+								...cookieOptions,
+								maxAge: DEFAULT_COOKIE_OPTIONS.maxAge
+							});
+						}
+					}
 				},
 				removeItem: async (key: string) => {
 					if (typeof cookies.remove === 'function' && typeof cookies.get !== 'function') {
@@ -90,23 +114,7 @@ export function createServerClient<
 						return;
 					}
 
-					deleteChunks(
-						key,
-						async (chunkName) => {
-							if (typeof cookies.get === 'function') {
-								return await cookies.get(chunkName);
-							}
-						},
-						async (chunkName) => {
-							if (typeof cookies.remove === 'function') {
-								return await cookies.remove(chunkName, {
-									...DEFAULT_COOKIE_OPTIONS,
-									...cookieOptions,
-									maxAge: 0
-								});
-							}
-						}
-					);
+					await deleteAllChunks(key);
 				}
 			}
 		}

@@ -99,7 +99,6 @@ export async function deleteChunks(
 
 	if (value) {
 		await removeChunk(key);
-		return;
 	}
 
 	for (let i = 0; ; i++) {
