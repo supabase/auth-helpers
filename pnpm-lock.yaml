@@ -370,8 +370,8 @@ importers:
   packages/shared:
     dependencies:
       jose:
-        specifier: ^4.14.4
-        version: 4.15.4
+        specifier: ^4.15.5
+        version: 4.15.5
     devDependencies:
       '@supabase/supabase-js':
         specifier: 2.42.0
@@ -7341,8 +7341,8 @@ packages:
     hasBin: true
     dev: false
 
-  /jose@4.15.4:
-    resolution: {integrity: sha512-W+oqK4H+r5sITxfxpSU+MMdr/YSWGvgZMQDIsNoBDGGy4i7GBPTtvFKibQzW06n3U3TqHjhvBJsirShsEJ6eeQ==}
+  /jose@4.15.5:
+    resolution: {integrity: sha512-jc7BFxgKPKi94uOvEmzlSWFFe2+vASyXaKUpdQKatWAESU2MWjDfFf0fdfc83CDKcA5QecabZeNLyfhe3yKNkg==}
     dev: false
 
   /joycon@3.1.1:
