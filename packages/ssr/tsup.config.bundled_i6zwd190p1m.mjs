@@ -40,7 +40,7 @@ var package_default = {
 	},
   dependencies: {
     cookie: "^0.5.0",
-		moderndash: "^3.11.1"
+    moderndash: "^3.11.1"
   },
   devDependencies: {
     "@supabase/supabase-js": "2.33.1",
