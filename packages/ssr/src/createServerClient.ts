@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
-import { mergeDeepRight } from 'ramda';
+import { merge } from 'moderndash';
 import {
 	DEFAULT_COOKIE_OPTIONS,
 	combineChunks,
@@ -121,7 +121,7 @@ export function createServerClient<
 	};
 
 	// Overwrites default client config with any user defined options
-	const clientOptions = mergeDeepRight(
+	const clientOptions = merge(
 		cookieClientOptions,
 		userDefinedClientOptions
 	) as SupabaseClientOptions<SchemaName>;

@@ -35,20 +35,23 @@ var package_default = {
     url: "https://github.com/supabase/auth-helpers/issues"
   },
   homepage: "https://github.com/supabase/auth-helpers#readme",
+  engines: {
+		node: ">=16.15"
+	},
   dependencies: {
     cookie: "^0.5.0",
-    ramda: "^0.29.0"
+		moderndash: "^3.11.1"
   },
   devDependencies: {
     "@supabase/supabase-js": "2.33.1",
     "@types/cookie": "^0.5.1",
-    "@types/ramda": "^0.29.3",
     tsconfig: "workspace:*",
     tsup: "^6.7.0",
     vitest: "^0.34.6"
   },
   peerDependencies: {
-    "@supabase/supabase-js": "^2.33.1"
+    "@supabase/supabase-js": "^2.33.1",
+		typescript: ">=4.8"
   }
 };
 
