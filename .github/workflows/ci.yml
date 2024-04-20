@@ -41,24 +41,24 @@ jobs:
           tsc: true
           prettier: true
 
-  # Lint:
-  #   strategy:
-  #     matrix:
-  #       node: ['18']
+  Build:
+    strategy:
+      matrix:
+        node: ['20']
 
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v3
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
 
-  #     - uses: pnpm/action-setup@v2
-  #       with:
-  #         version: 8.1.0
+      - uses: pnpm/action-setup@v2.2.3
+        with:
+          version: 8.14.0
 
-  #     - uses: actions/setup-node@v3
-  #       with:
-  #         node-version: 18.x
-  #         cache: pnpm
+      - name: Set up Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node }}
+          cache: pnpm
 
-  #     - run: pnpm install --frozen-lockfile
-  #     - run: pnpm run lint
-  #     - run: pnpm run check
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
