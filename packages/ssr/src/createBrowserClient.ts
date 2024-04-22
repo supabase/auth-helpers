@@ -1,11 +1,11 @@
 import { createClient } from '@supabase/supabase-js';
-import { merge } from 'moderndash';
 import {
 	DEFAULT_COOKIE_OPTIONS,
 	combineChunks,
 	createChunks,
 	deleteChunks,
-	isBrowser
+	isBrowser,
+	merge
 } from './utils';
 import { parse, serialize } from 'cookie';
 

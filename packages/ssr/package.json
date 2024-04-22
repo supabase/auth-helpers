@@ -38,8 +38,7 @@
 		"node": ">=16.15"
 	},
 	"dependencies": {
-		"cookie": "^0.5.0",
-		"moderndash": "^3.11.1"
+		"cookie": "^0.5.0"
 	},
 	"devDependencies": {
 		"@supabase/supabase-js": "2.42.0",
