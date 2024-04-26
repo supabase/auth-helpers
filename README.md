@@ -3,6 +3,7 @@
 A collection of framework specific Auth utilities for working with Supabase.
 
 ### Maintenance mode
+
 The Auth helpers package is in maintenance mode and we won’t be actively improving it. We strongly recommend using the new `@supabase/ssr` package instead of `auth-helpers`. `@supabase/ssr` takes the core concepts of the Auth Helpers package and makes them available to any server framework. Check out the [migration doc](/docs/guides/auth/server-side/migrating-to-ssr-from-auth-helpers) to learn more.
 
 ## Supported Frameworks
