@@ -35,8 +35,7 @@
 	},
 	"homepage": "https://github.com/supabase/auth-helpers#readme",
 	"dependencies": {
-		"cookie": "^0.5.0",
-		"ramda": "^0.29.0"
+		"cookie": "^0.5.0"
 	},
 	"devDependencies": {
 		"@supabase/supabase-js": "2.42.0",

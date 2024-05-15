@@ -5,6 +5,20 @@ interface Chunk {
 
 const MAX_CHUNK_SIZE = 3180;
 
+const CHUNK_LIKE_REGEX = /^(.*)[.](0|[1-9][0-9]*)$/;
+export function isChunkLike(cookieName: string, key: string) {
+	if (cookieName === key) {
+		return true;
+	}
+
+	const chunkLike = cookieName.match(CHUNK_LIKE_REGEX);
+	if (chunkLike && chunkLike[1] === key) {
+		return true;
+	}
+
+	return false;
+}
+
 /**
  * create chunks from a string and return an array of object
  */

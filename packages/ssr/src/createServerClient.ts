@@ -1,12 +1,13 @@
 import { createClient } from '@supabase/supabase-js';
-import { mergeDeepRight } from 'ramda';
 import {
 	DEFAULT_COOKIE_OPTIONS,
 	combineChunks,
 	createChunks,
 	deleteChunks,
-	isBrowser
+	isBrowser,
+	isChunkLike
 } from './utils';
+import { createStorageFromOptions } from './common';
 
 import type {
 	GenericSchema,
@@ -36,95 +37,74 @@ export function createServerClient<
 		);
 	}
 
-	const { cookies, cookieOptions, ...userDefinedClientOptions } = options;
+	const { storage, getAll, setAll, setItems, removedItems } = createStorageFromOptions(
+		options || null,
+		true
+	);
 
-	// use the cookie name as the storageKey value if it's set
-	if (cookieOptions?.name) {
-		userDefinedClientOptions.auth = {
-			...userDefinedClientOptions.auth,
-			storageKey: cookieOptions.name
-		};
-	}
-
-	const deleteAllChunks = async (key: string) => {
-		await deleteChunks(
-			key,
-			async (chunkName) => {
-				if (typeof cookies.get === 'function') {
-					return await cookies.get(chunkName);
-				}
-			},
-			async (chunkName) => {
-				if (typeof cookies.remove === 'function') {
-					return await cookies.remove(chunkName, {
-						...DEFAULT_COOKIE_OPTIONS,
-						...cookieOptions,
-						maxAge: 0
-					});
-				}
-			}
-		);
-	};
-
-	const cookieClientOptions = {
+	const client = createClient<Database, SchemaName, Schema>(supabaseUrl, supabaseKey, {
+		...options,
 		global: {
+			...options?.global,
 			headers: {
+				...options?.global?.headers,
 				'X-Client-Info': `${PACKAGE_NAME}/${PACKAGE_VERSION}`
 			}
 		},
 		auth: {
+			...(options?.cookieOptions?.name ? { storageKey: options.cookieOptions.name } : null),
+			...options?.auth,
 			flowType: 'pkce',
-			autoRefreshToken: isBrowser(),
-			detectSessionInUrl: isBrowser(),
+			autoRefreshToken: false,
+			detectSessionInUrl: false,
 			persistSession: true,
-			storage: {
-				// to signal to the libraries that these cookies are coming from a server environment and their value should not be trusted
-				isServer: true,
-				getItem: async (key: string) => {
-					const chunkedCookie = await combineChunks(key, async (chunkName: string) => {
-						if (typeof cookies.get === 'function') {
-							return await cookies.get(chunkName);
-						}
-					});
-					return chunkedCookie;
-				},
-				setItem: async (key: string, value: string) => {
-					if (typeof cookies.set === 'function') {
-						// first delete all chunks so that there would be no overlap
-						await deleteAllChunks(key);
-
-						const chunks = createChunks(key, value);
-
-						for (let i = 0; i < chunks.length; i += 1) {
-							const chunk = chunks[i];
-
-							await cookies.set(chunk.name, chunk.value, {
-								...DEFAULT_COOKIE_OPTIONS,
-								...cookieOptions,
-								maxAge: DEFAULT_COOKIE_OPTIONS.maxAge
-							});
-						}
-					}
-				},
-				removeItem: async (key: string) => {
-					if (typeof cookies.remove === 'function' && typeof cookies.get !== 'function') {
-						console.log(
-							'Removing chunked cookie without a `get` method is not supported.\n\n\tWhen you call the `createServerClient` function from the `@supabase/ssr` package, make sure you declare both a `get` and `remove` method on the `cookies` object.\n\nhttps://supabase.com/docs/guides/auth/server-side/creating-a-client'
-						);
-						return;
-					}
-
-					await deleteAllChunks(key);
-				}
-			}
+			storage
 		}
-	};
+	});
 
-	// Overwrites default client config with any user defined options
-	const clientOptions = mergeDeepRight(
-		cookieClientOptions,
-		userDefinedClientOptions
-	) as SupabaseClientOptions<SchemaName>;
+	client.auth.onAuthStateChange(async (event) => {
+		if (event === 'TOKEN_REFRESHED' || event === 'USER_UPDATED' || event === 'SIGNED_OUT') {
+			const allCookies = await getAll([
+				...(setItems ? (Object.keys(setItems) as string[]) : []),
+				...(removedItems ? (Object.keys(removedItems) as string[]) : [])
+			]);
+			const cookieNames = allCookies?.map(({ name }) => name) || [];
 
-	return createClient<Database, SchemaName, Schema>(supabaseUrl, supabaseKey, clientOptions);
+			const removeCookies: string[] = [];
+
+			const setCookies = Object.keys(setItems).flatMap((itemName) => {
+				const removeExistingCookiesForItem = new Set(
+					cookieNames.filter((name) => isChunkLike(name, itemName))
+				);
+
+				const chunks = createChunks(itemName, setItems[itemName]);
+
+				chunks.forEach((chunk) => {
+					removeExistingCookiesForItem.delete(chunk.name);
+				});
+
+				removeCookies.push(...removeExistingCookiesForItem);
+
+				return chunks;
+			});
+
+			const removeCookieOptions = {
+				...DEFAULT_COOKIE_OPTIONS,
+				...options?.cookieOptions,
+				maxAge: 0
+			};
+			const setCookieOptions = {
+				...DEFAULT_COOKIE_OPTIONS,
+				...options?.cookieOptions,
+				maxAge: DEFAULT_COOKIE_OPTIONS.maxAge
+			};
+
+			await setAll([
+				...removeCookies.map((name) => ({ name, value: '', options: removeCookieOptions })),
+				...setCookies.map(({ name, value }) => ({ name, value, options: setCookieOptions }))
+			]);
+		}
+	});
+
+	return client;
 }
