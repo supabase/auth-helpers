@@ -1,5 +1,17 @@
 # @supabase/auth-helpers-nextjs
 
+## 0.11.0
+
+### Minor Changes
+
+- 98438ff: resolve dependabot alerts
+
+### Patch Changes
+
+- Updated dependencies [0816b0b]
+- Updated dependencies [98438ff]
+  - @supabase/auth-helpers-shared@0.8.0
+
 ## 0.10.0
 
 ### Minor Changes
