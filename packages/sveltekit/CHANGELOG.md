@@ -1,5 +1,17 @@
 # @supabase/auth-helpers-sveltekit
 
+## 0.14.0
+
+### Minor Changes
+
+- 0816b0b: fix dependabot issues
+
+### Patch Changes
+
+- Updated dependencies [0816b0b]
+- Updated dependencies [98438ff]
+  - @supabase/auth-helpers-shared@0.8.0
+
 ## 0.13.0
 
 ### Minor Changes

@@ -1,5 +1,11 @@
 # @supabase/ssr
 
+## 0.4.0
+
+### Minor Changes
+
+- ef61542: Improves the cookie chunker in @supabase/ssr to get rid of edge cases in saving and removing cookies.
+
 ## 0.3.0
 
 ### Minor Changes
