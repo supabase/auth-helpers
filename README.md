@@ -1,4 +1,6 @@
-# @supabase/auth-helpers
+# @supabase/auth-helpers ⚠️ Deprecated ⚠️
+
+⚠️ This package is now deprecated - please use the [`@supabase/ssr`](https://github.com/supabase/ssr) package instead. ⚠️
 
 A collection of framework specific Auth utilities for working with Supabase.
 
