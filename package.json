@@ -27,10 +27,10 @@
 		"prepare": "husky install"
 	},
 	"devDependencies": {
-		"@changesets/cli": "^2.27.1",
+		"@changesets/cli": "^2.27.9",
 		"husky": "^8.0.3",
 		"prettier": "^2.8.8",
-		"turbo": "^1.13.2",
+		"turbo": "^1.13.4",
 		"typedoc": "^0.24.8",
 		"typescript": "^4.9.5"
 	},
